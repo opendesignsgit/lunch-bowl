@@ -10,6 +10,8 @@ import {
   FormControlLabel,
   IconButton,
   Divider,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   ChevronLeft,
@@ -48,22 +50,23 @@ const subscriptionEnd = dayjs("2025-06-25");
 
 const MenuCalendar = () => {
   const today = dayjs();
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [currentMonth, setCurrentMonth] = useState(today.month());
   const [currentYear, setCurrentYear] = useState(today.year());
   const [selectedDate, setSelectedDate] = useState(today.date());
   const [menuSelections, setMenuSelections] = useState({});
   const [activeChild, setActiveChild] = useState(0);
 
-  const formatDate = (day) => {
-    return `${currentYear}-${String(currentMonth + 1).padStart(
-      2,
-      "0"
-    )}-${String(day).padStart(2, "0")}`;
-  };
+  const formatDate = (day) =>
+    `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
 
   const isHoliday = (day) => {
     const date = dayjs(formatDate(day));
-    const isWeekend = date.day() === 0 || date.day() === 6; // Sunday=0, Saturday=6
+    const isWeekend = date.day() === 0 || date.day() === 6;
     const isCustomHoliday = dummyHolidays.find(
       (h) => h.date === formatDate(day)
     );
@@ -150,18 +153,21 @@ const MenuCalendar = () => {
   return (
     <Box
       display="flex"
+      flexDirection={isSmall ? "column" : "row"}
       bgcolor="#fff"
       maxWidth="1100px"
       mx="auto"
       borderRadius={2}
       boxShadow={2}
+      overflow="hidden"
     >
       {/* Left Panel */}
       <Box
-        width="30%"
-        borderRight="1px solid #ddd"
+        width={isSmall ? "100%" : "30%"}
+        borderRight={isSmall ? "none" : "1px solid #ddd"}
+        borderBottom={isSmall ? "1px solid #ddd" : "none"}
         p={2}
-        maxHeight="600px"
+        maxHeight={isSmall ? "none" : "600px"}
         overflow="auto"
       >
         <Typography fontWeight="bold" align="center" mb={1}>
@@ -214,7 +220,9 @@ const MenuCalendar = () => {
         </Box>
 
         {Array.from(
-          { length: dayjs(`${currentYear}-${currentMonth + 1}`).daysInMonth() },
+          {
+            length: dayjs(`${currentYear}-${currentMonth + 1}`).daysInMonth(),
+          },
           (_, i) => i + 1
         ).map((day) => {
           const dateKey = formatDate(day);
@@ -247,7 +255,7 @@ const MenuCalendar = () => {
       </Box>
 
       {/* Center Panel */}
-      <Box width="40%" p={2}>
+      <Box width={isSmall ? "100%" : "40%"} p={2}>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -351,7 +359,7 @@ const MenuCalendar = () => {
 
       {/* Right Panel */}
       <Box
-        width="30%"
+        width={isSmall ? "100%" : "30%"}
         bgcolor="#f97316"
         color="#fff"
         p={3}
@@ -430,6 +438,13 @@ const MenuCalendar = () => {
                       variant="standard"
                       disableUnderline
                       sx={{ fontSize: "0.875rem", color: "#000" }}
+                      MenuProps={{
+                        PaperProps: {
+                          style: {
+                            maxHeight: 48 * 4.5, // each item ~48px height, show 4 items max before scroll
+                          },
+                        },
+                      }}
                     >
                       <MenuItem value="">Select your Child’s Dish</MenuItem>
                       {dummyMenus.map((menu, i) => (
