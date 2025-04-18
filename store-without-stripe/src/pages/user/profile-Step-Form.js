@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Box, Typography, Divider, Button } from "@mui/material";
+import { Box, Typography, Divider } from "@mui/material";
 import ParentDetailsStep from "../../components/profile-Step-Form/ParentDetailsStep";
+import ChildDetailsStep from "../../components/profile-Step-Form/childDetailsStep";
 
 const StepHeader = ({ step }) => {
   const labels = [
@@ -57,7 +58,7 @@ const StepHeader = ({ step }) => {
 };
 
 const MultiStepForm = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -66,6 +67,7 @@ const MultiStepForm = () => {
     mobile: "",
     email: "",
     address: "",
+    children: [], // assuming an array of child objects
   });
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -94,15 +96,15 @@ const MultiStepForm = () => {
         )}
 
         {step === 2 && (
-          <Box>
-            <Typography variant="body1">
-              Step 2: Children Details (Coming Soon)
-            </Typography>
-            <Button variant="outlined" sx={{ mt: 4 }} onClick={prevStep}>
-              Back
-            </Button>
-          </Box>
+          <ChildDetailsStep
+            formData={formData}
+            setFormData={setFormData}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
         )}
+
+        {/* Steps 3 and 4 would go here */}
       </Box>
     </Box>
   );
