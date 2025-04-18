@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -7,10 +7,14 @@ import {
   Box,
   Divider,
   MenuItem,
+  Tabs,
+  Tab,
+  IconButton,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import CloseIcon from "@mui/icons-material/Close";
 import stepTwo from "../../../public/profileStepImages/stepTwo.png";
 
 const schema = yup.object().shape({
@@ -25,33 +29,122 @@ const schema = yup.object().shape({
   allergies: yup.string(),
 });
 
-const ChildDetailsStep = ({ childData, setChildData, nextStep, prevStep }) => {
+const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [children, setChildren] = useState(
+    formData.children.length > 0
+      ? formData.children
+      : [
+          {
+            childFirstName: "",
+            childLastName: "",
+            dob: "",
+            lunchTime: "",
+            school: "",
+            location: "",
+            childClass: "",
+            section: "",
+            allergies: "",
+          },
+        ]
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
+    watch,
+    control,
+    setValue,
   } = useForm({
-    defaultValues: childData,
+    defaultValues: children[activeTab],
     resolver: yupResolver(schema),
     mode: "onTouched",
   });
 
-  const onSubmit = (data) => {
-    setChildData(data);
-    nextStep();
+  useEffect(() => {
+    reset(children[activeTab]);
+  }, [activeTab]);
+
+  useEffect(() => {
+    const subscription = watch((values) => {
+      setChildren((prevChildren) => {
+        const updated = [...prevChildren];
+        updated[activeTab] = { ...updated[activeTab], ...values };
+        return updated;
+      });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, activeTab]);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
   };
+
+  const addChild = () => {
+    const newChild = {
+      childFirstName: "",
+      childLastName: "",
+      dob: "",
+      lunchTime: "",
+      school: "",
+      location: "",
+      childClass: "",
+      section: "",
+      allergies: "",
+    };
+    setChildren([...children, newChild]);
+    setActiveTab(children.length);
+  };
+
+  const removeChild = (index) => {
+    if (children.length === 1) return;
+    const updatedChildren = children.filter((_, i) => i !== index);
+    setChildren(updatedChildren);
+    if (index === activeTab && activeTab > 0) {
+      setActiveTab(activeTab - 1);
+    } else if (index < activeTab) {
+      setActiveTab(activeTab - 1);
+    }
+  };
+
+  const onSubmit = () => {
+    const validateAll = async () => {
+      const results = await Promise.all(
+        children.map((child) =>
+          schema.validate(child, { abortEarly: false }).catch((err) => err)
+        )
+      );
+      const hasErrors = results.some((res) => res.name === "ValidationError");
+      if (hasErrors) {
+        const firstInvalidIndex = results.findIndex(
+          (res) => res.name === "ValidationError"
+        );
+        setActiveTab(firstInvalidIndex);
+        return;
+      }
+      setFormData({ ...formData, children });
+      nextStep();
+    };
+    validateAll();
+  };
+
+  const dropdownFields = [
+    ["CHILD'S LUNCH TIME*", "lunchTime", "Select Lunch Time", ["10:00 AM", "12:00 PM", "1:00 PM"]],
+    ["SCHOOL*", "school", "Select School", ["Greenwood", "Springfield"]],
+    ["LOCATION*", "location", "Select Location", ["Campus A", "Campus B"]],
+    ["CHILD CLASS*", "childClass", "Select Class", ["Nursery", "KG", "Grade 1"]],
+    ["CHILD SECTION*", "section", "Select Section", ["A", "B", "C"]],
+  ];
 
   return (
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        gap: 2, // space between the image and form fields
-      }}
+      sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}
     >
-      {/* Image Section */}
+      {/* Image Side */}
       <Box
         sx={{
           width: { xs: "100%", md: "46%" },
@@ -59,145 +152,137 @@ const ChildDetailsStep = ({ childData, setChildData, nextStep, prevStep }) => {
           backgroundRepeat: "no-repeat",
           backgroundSize: "contain",
           backgroundPosition: "center",
-          minHeight: 400, // Adjust height as needed
+          minHeight: 500,
         }}
       />
 
-      {/* Form Section */}
-      <Box sx={{ width: { xs: "100%", md: "54%" }, pr: { md: 2 } }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#000", mb: 0 }}>
-          CHILD 1:
+      {/* Form Side */}
+      <Box sx={{ width: { xs: "100%", md: "54%" } }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0, paddingBottom: "20px" }}>
+          CHILD DETAILS :
         </Typography>
+
+        {/* Tabs */}
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{
+              minHeight: "auto",
+              "& .MuiTab-root": {
+                minHeight: "auto",
+                py: 1,
+                px: 2,
+                fontSize: "0.875rem",
+                textTransform: "none",
+              },
+            }}
+          >
+            {children.map((child, index) => (
+              <Tab
+                key={index}
+                label={
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography>CHILD {index + 1}</Typography>
+                    {children.length > 1 && (
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeChild(index);
+                        }}
+                        sx={{ ml: 1 }}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    )}
+                  </Box>
+                }
+                sx={{
+                  bgcolor: activeTab === index ? "#FF6A00" : "transparent",
+                  color: activeTab === index ? "#fff" : "inherit",
+                  borderRadius: 1,
+                  mr: 1,
+                }}
+              />
+            ))}
+          </Tabs>
+          <Button
+            variant="outlined"
+            onClick={addChild}
+            sx={{
+              ml: 2,
+              px: 2,
+              py: 1,
+              borderRadius: 0,
+              borderColor: "#FF6A00",
+              color: "#FF6A00",
+              "&:hover": {
+                borderColor: "#FF6A00",
+                backgroundColor: "rgba(255, 106, 0, 0.08)",
+              },
+            }}
+          >
+            Add Child
+          </Button>
+        </Box>
+
         <Divider sx={{ borderBottom: "1px solid #C0C0C0", mb: 3, width: "85%" }} />
+
         <Grid container spacing={2}>
-          {/* Row 1: First Name & Last Name */}
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              CHILD'S FIRST NAME*
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder="Enter Child's First Name"
-              {...register("childFirstName")}
-              error={!!errors.childFirstName}
-              helperText={errors.childFirstName?.message}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              CHILD'S LAST NAME*
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder="Enter Child's Last Name"
-              {...register("childLastName")}
-              error={!!errors.childLastName}
-              helperText={errors.childLastName?.message}
-            />
-          </Grid>
+          {/* Text Inputs */}
+          {[
+            ["CHILD'S FIRST NAME*", "childFirstName", "Enter Child's First Name"],
+            ["CHILD'S LAST NAME*", "childLastName", "Enter Child's Last Name"],
+            ["DATE OF BIRTH*", "dob", "DD/MM/YYYY"],
+          ].map(([label, name, placeholder]) => (
+            <Grid item xs={12} sm={6} key={name}>
+              <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
+              <TextField
+                fullWidth
+                placeholder={placeholder}
+                {...register(name)}
+                error={!!errors[name]}
+                helperText={errors[name]?.message}
+                sx={{ width: "300px", minWidth: "300px" }}
+              />
+            </Grid>
+          ))}
 
-          {/* Row 2: DOB & Lunch Time */}
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              DATE OF BIRTH*
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder="DD/MM/YYYY"
-              {...register("dob")}
-              error={!!errors.dob}
-              helperText={errors.dob?.message}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              CHILD'S LUNCH TIME*
-            </Typography>
-            <TextField
-              select
-              fullWidth
-              placeholder="Select Lunch Time"
-              {...register("lunchTime")}
-              error={!!errors.lunchTime}
-              helperText={errors.lunchTime?.message}
-            >
-              <MenuItem value="10:00 AM">10:00 AM</MenuItem>
-              <MenuItem value="12:00 PM">12:00 PM</MenuItem>
-              <MenuItem value="1:00 PM">1:00 PM</MenuItem>
-            </TextField>
-          </Grid>
+          {/* Dropdowns */}
+          {dropdownFields.map(([label, name, placeholder, options]) => (
+            <Grid item xs={12} sm={6} key={name}>
+              <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
+              <Controller
+                name={name}
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    select
+                    fullWidth
+                    label={placeholder}
+                    {...field}
+                    error={!!errors[name]}
+                    helperText={errors[name]?.message}
+                    sx={{ width: "300px", minWidth: "300px" }}
+                  >
+                    <MenuItem value="" disabled>
+                      {placeholder}
+                    </MenuItem>
+                    {options.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid>
+          ))}
 
-          {/* Row 3: School & Location */}
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              SCHOOL*
-            </Typography>
-            <TextField
-              select
-              fullWidth
-              placeholder="Select School"
-              {...register("school")}
-              error={!!errors.school}
-              helperText={errors.school?.message}
-            >
-              <MenuItem value="Greenwood">Greenwood</MenuItem>
-              <MenuItem value="Springfield">Springfield</MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              LOCATION*
-            </Typography>
-            <TextField
-              select
-              fullWidth
-              placeholder="Select Location"
-              {...register("location")}
-              error={!!errors.location}
-              helperText={errors.location?.message}
-            >
-              <MenuItem value="Campus A">Campus A</MenuItem>
-              <MenuItem value="Campus B">Campus B</MenuItem>
-            </TextField>
-          </Grid>
-
-          {/* Row 4: Class & Section */}
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              CHILD CLASS*
-            </Typography>
-            <TextField
-              select
-              fullWidth
-              placeholder="Select Class"
-              {...register("childClass")}
-              error={!!errors.childClass}
-              helperText={errors.childClass?.message}
-            >
-              <MenuItem value="Nursery">Nursery</MenuItem>
-              <MenuItem value="KG">KG</MenuItem>
-              <MenuItem value="Grade 1">Grade 1</MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
-              CHILD SECTION*
-            </Typography>
-            <TextField
-              select
-              fullWidth
-              placeholder="Select Section"
-              {...register("section")}
-              error={!!errors.section}
-              helperText={errors.section?.message}
-            >
-              <MenuItem value="A">A</MenuItem>
-              <MenuItem value="B">B</MenuItem>
-              <MenuItem value="C">C</MenuItem>
-            </TextField>
-          </Grid>
-
-          {/* Row 5: Allergies (full width) */}
+          {/* Allergies */}
           <Grid item xs={12}>
             <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
               DOES THE CHILD HAVE ANY ALLERGIES?
@@ -210,6 +295,7 @@ const ChildDetailsStep = ({ childData, setChildData, nextStep, prevStep }) => {
               {...register("allergies")}
               error={!!errors.allergies}
               helperText={errors.allergies?.message}
+              sx={{ width: "625px", minWidth: "625px" }}
             />
           </Grid>
         </Grid>
@@ -229,7 +315,9 @@ const ChildDetailsStep = ({ childData, setChildData, nextStep, prevStep }) => {
               px: 5,
               py: 1.5,
               borderRadius: 0,
-              "&:hover": { backgroundColor: "#e65c00" },
+              "&:hover": {
+                backgroundColor: "#e65c00",
+              },
             }}
           >
             Next ↗
