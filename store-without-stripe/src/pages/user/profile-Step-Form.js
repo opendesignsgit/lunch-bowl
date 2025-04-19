@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import ParentDetailsStep from "../../components/profile-Step-Form/ParentDetailsStep";
 import ChildDetailsStep from "../../components/profile-Step-Form/childDetailsStep";
+import SubscriptionPlanStep from "../../components/profile-Step-Form/subscriptionPlanStep";
+
 
 const StepHeader = ({ step }) => {
   const labels = [
@@ -16,7 +18,7 @@ const StepHeader = ({ step }) => {
       <Box
         sx={{
           display: "flex",
-          columnGap: 8,
+          columnGap: 20,
           rowGap: 0,
           flexWrap: "wrap",
           justifyContent: "center",
@@ -44,7 +46,7 @@ const StepHeader = ({ step }) => {
           </Box>
         ))}
       </Box>
-      <Box sx={{ width: "75%", mx: "auto", mt: 2, paddingBottom: "30px" }}>
+      <Box sx={{ width: "100%", mx: "auto", mt: 2, paddingBottom: "30px" }}>
         <Divider
           sx={{
             borderStyle: "dotted",
@@ -58,7 +60,7 @@ const StepHeader = ({ step }) => {
 };
 
 const MultiStepForm = () => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(3);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -102,6 +104,10 @@ const MultiStepForm = () => {
             nextStep={nextStep}
             prevStep={prevStep}
           />
+        )}
+
+        {step === 3 && (
+          <SubscriptionPlanStep nextStep={nextStep} prevStep={prevStep} />
         )}
 
         {/* Steps 3 and 4 would go here */}
