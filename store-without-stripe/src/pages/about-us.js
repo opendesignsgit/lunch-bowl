@@ -1,335 +1,122 @@
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
+import Breadcrumbs from "@layout/Breadcrumbs";
+import Mainheader from '@layout/header/Mainheader';
+import Mainfooter from '@layout/footer/Mainfooter';
+import hintroImgOne from "../../public/home/hintroImg-one.jpg"
+import hintroImgTwo from "../../public/home/hintroImg-two.jpg"
 
-//internal import
-import Layout from "@layout/Layout";
-import useGetSetting from "@hooks/useGetSetting";
-import PageHeader from "@components/header/PageHeader";
-import CMSkeleton from "@components/preloader/CMSkeleton";
-import useUtilsFunction from "@hooks/useUtilsFunction";
 
 const AboutUs = () => {
-  const { storeCustomizationSetting, loading, error } = useGetSetting();
-  const { showingTranslateValue } = useUtilsFunction();
-
-  return (
-    <Layout title="About Us" description="This is about us page">
-      <PageHeader
-        headerBg={storeCustomizationSetting?.about_us?.header_bg}
-        title={showingTranslateValue(
-          storeCustomizationSetting?.about_us?.title
-        )}
-      />
-
-      <div className="bg-white">
-        <div className="max-w-screen-2xl mx-auto lg:py-20 py-10 px-4 sm:px-10">
-          <div className="grid grid-flow-row lg:grid-cols-2 gap-4 lg:gap-16 items-center">
-            <div className="">
-              <h3 className="text-xl lg:text-3xl mb-2 font-serif font-semibold">
-                {/* {t("common:about-section-title")} */}
-
-                <CMSkeleton
-                  count={1}
-                  height={50}
-                  loading={loading}
-                  data={storeCustomizationSetting?.about_us?.top_title}
-                />
-              </h3>
-              <div className="mt-3 text-base opacity-90 leading-7">
-                <p>
-                  <CMSkeleton
-                    count={5}
-                    height={20}
-                    loading={loading}
-                    data={storeCustomizationSetting?.about_us?.top_description}
-                  />
-                </p>
-              </div>
-              <div className="grid md:grid-cols-2 gap-6 lg:grid-cols-2 xl:gap-6 mt-8">
-                <div className="p-8 bg-indigo-50 shadow-sm rounded-lg">
-                  {loading ? (
-                    <CMSkeleton
-                      count={8}
-                      height={20}
-                      error={error}
-                      loading={loading}
-                    />
-                  ) : (
-                    <>
-                      <span className="text-3xl block font-extrabold font-serif mb-4 text-gray-800">
-                        {showingTranslateValue(
-                          storeCustomizationSetting?.about_us?.card_two_title
-                        )}
-                      </span>
-                      <h4 className="text-lg font-serif font-bold mb-1">
-                        {showingTranslateValue(
-                          storeCustomizationSetting?.about_us?.card_two_sub
-                        )}
-                      </h4>
-                      <p className="mb-0 opacity-90 leading-7">
-                        {showingTranslateValue(
-                          storeCustomizationSetting?.about_us
-                            ?.card_two_description
-                        )}
-                      </p>
-                    </>
-                  )}
+  return ( 
+    <div className="aboutuspage">    
+      <Mainheader  title="Home" description="This is Home page"/>
+          <div className='pagebody'>
+              <section className="pagebansec aboutbanersec">
+                <div className='container mx-auto relative h-full' >
+                  <div className='pageinconter relative h-full w-full flex items-center'>
+                    <div className='hworkTitle combtntb comtilte'>
+                        <h1 className='flex flex-col textFF6514'> <span className='block'>The Story Behind</span> <span className='block'>Every Bite</span> </h1>
+                        <p className=''>As food is an emotion, there will be a story <br/>behind every recipe. Let’s explore!</p>
+                        <Breadcrumbs/>
+                    </div>
+                  </div>
                 </div>
-                <div className="p-8 bg-indigo-50 shadow-sm rounded-lg">
-                  {loading ? (
-                    <CMSkeleton
-                      count={8}
-                      height={20}
-                      error={error}
-                      loading={loading}
-                    />
-                  ) : (
-                    <>
-                      <span className="text-3xl block font-extrabold font-serif mb-4 text-gray-800">
-                        {showingTranslateValue(
-                          storeCustomizationSetting?.about_us?.card_one_title
-                        )}
-                      </span>
-                      <h4 className="text-lg font-serif font-bold mb-1">
-                        {showingTranslateValue(
-                          storeCustomizationSetting?.about_us?.card_one_sub
-                        )}
-                      </h4>
-                      <p className="mb-0 opacity-90 leading-7">
-                        {showingTranslateValue(
-                          storeCustomizationSetting?.about_us
-                            ?.card_one_description
-                        )}
-                      </p>
-                    </>
-                  )}
+              </section>
+              <section className='HintroSec aboutintrosec introbrsec relative bg-white flex py-[12vh]'>
+                <div className='container mx-auto' >
+                    <div className='flex items-center max-md:flex-col-reverse' >
+                        <div className='flex-1 hbanLeft flex justify-center flex-col' >
+                            <div className='hintroimgone rounded-[50%] overflow-hidden' >
+                                <Image className="w-full h-auto" priority src= {hintroImgOne} alt="logo" />
+                            </div>
+                            <div className='hintroimgtwo rounded-[50%] overflow-hidden self-end' >
+                                <Image className="w-full h-auto" priority src= {hintroImgTwo} alt="logo" />
+                            </div>
+                        </div>
+                        <div className='flex-1 flex items-center hintroRight relative px-[4vw]'>
+                            <div className='hintroLeft combtntb comtilte'>
+                                <h4>The Mission Behind</h4>
+                                <h3 className='flex flex-col text4AB138'>
+                                    <span className='block'>Lunch Bowl</span> 
+                                </h3>
+                                <p>The goal of Lunch Bowl is to transform how kids get <br/>wholesome meals during the school day while directly <br/>addressing the difficulties experienced by working parents. <br/>In order to guarantee that every kid receives a nutritious, <br/>tasty meal that supports their learning and development, <br/>we are dedicated to delivering freshly made, healthful <br/>meals directly to schools.</p>
+                                <p>By doing that, we ensure that all parents are relieved of <br/>this worry and can rest easy knowing that their child is <br/>getting all the nutrients they need from their meal.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="mt-10 lg:mt-0">
-              <img
-                width={920}
-                height={750}
-                src={
-                  storeCustomizationSetting?.about_us?.content_right_img ||
-                  "/about-us.jpg"
-                }
-                alt="logo"
-              />
-            </div>
+              </section>
+              <section className='HmteamSec relative bg-white flex py-[12vh]'>
+                <div className='container mx-auto' >
+                    <div className='hintroLeft combtntb comtilte text-center'>
+                        <h4>Meet the team</h4>
+                        <h3 className='flex flex-col text4AB138'>
+                            <span className='block'>Behind the Magic</span> 
+                        </h3>
+                        <p>Experts in creating kid-friendly meals who combined inventiveness and fresh <br/>ingredients to create a nourishing and enchanted lunchtime experience.</p>
+                    </div>
+                    <div className='flex items-center max-md:flex-col-reverse' >
+                        <div className='flex-1 flex mteambox'>
+                            <div className="mteamfront">
+                              <div className="mteamimg">
+                                <Image className="w-full h-auto" priority src= {hintroImgTwo} alt="logo" />
+                              </div>
+                              <h3>Chef. Aravind Kumar</h3>
+                            </div>
+                            <div className="mteamback">
+                                <h3>Chef. Aravind Kumar</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur. Placerat proin eu amet amet egestas aenean. Nunc dictumst enim eleifend ullamcorper sed ac neque. Vitae cras nisl varius aliquet pharetra.Imperdiet bibendum at vestibulum ut eget quam facilisis. </p>
+                                <p><Link href="/"><span>LinkedIn</span></Link></p>
+                            </div>
+                        </div>
+                        <div className='flex-1 flex mteambox'>
+                            <div className="mteamfront">
+                              <div className="mteamimg">
+                                <Image className="w-full h-auto" priority src= {hintroImgTwo} alt="logo" />
+                              </div>
+                              <h3>Chef. Aravind Kumar</h3>
+                            </div>
+                            <div className="mteamback">
+                                <h3>Chef. Aravind Kumar</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur. Placerat proin eu amet amet egestas aenean. Nunc dictumst enim eleifend ullamcorper sed ac neque. Vitae cras nisl varius aliquet pharetra.Imperdiet bibendum at vestibulum ut eget quam facilisis. </p>
+                                <p><Link href="/"><span>LinkedIn</span></Link></p>
+                            </div>
+                        </div>
+                        <div className='flex-1 flex mteambox'>
+                            <div className="mteamfront">
+                              <div className="mteamimg">
+                                <Image className="w-full h-auto" priority src= {hintroImgTwo} alt="logo" />
+                              </div>
+                              <h3>Chef. Aravind Kumar</h3>
+                            </div>
+                            <div className="mteamback">
+                                <h3>Chef. Aravind Kumar</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur. Placerat proin eu amet amet egestas aenean. Nunc dictumst enim eleifend ullamcorper sed ac neque. Vitae cras nisl varius aliquet pharetra.Imperdiet bibendum at vestibulum ut eget quam facilisis. </p>
+                                <p><Link href="/"><span>LinkedIn</span></Link></p>
+                            </div>
+                        </div>
+                        <div className='flex-1 flex mteambox'>
+                            <div className="mteamfront">
+                              <div className="mteamimg">
+                                <Image className="w-full h-auto" priority src= {hintroImgTwo} alt="logo" />
+                              </div>
+                              <h3>Chef. Aravind Kumar</h3>
+                            </div>
+                            <div className="mteamback">
+                                <h3>Chef. Aravind Kumar</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur. Placerat proin eu amet amet egestas aenean. Nunc dictumst enim eleifend ullamcorper sed ac neque. Vitae cras nisl varius aliquet pharetra.Imperdiet bibendum at vestibulum ut eget quam facilisis. </p>
+                                <p><Link href="/"><span>LinkedIn</span></Link></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </section>
           </div>
-          <div className="mt-10 lg:mt-16 text-base opacity-90 leading-7">
-            <p>
-              <CMSkeleton
-                count={5}
-                height={20}
-                loading={loading}
-                data={
-                  storeCustomizationSetting?.about_us?.middle_description_one
-                }
-              />
-            </p>
-
-            <p>
-              <CMSkeleton
-                count={8}
-                height={20}
-                error={error}
-                loading={loading}
-                data={
-                  storeCustomizationSetting?.about_us?.middle_description_two
-                }
-              />
-            </p>
-          </div>
-          <div className="mt-10 lg:mt-12 flex flex-col sm:grid gap-4">
-            <Image
-              width={1920}
-              height={570}
-              src={
-                storeCustomizationSetting?.about_us?.content_middle_Img ||
-                "/about-banner.jpg"
-              }
-              alt="logo"
-              className="block rounded-lg"
-            />
-          </div>
-        </div>
-        <div className="bg-gray-50 lg:py-20 py-10">
-          <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
-            <div className="relative flex flex-col sm:flex-row sm:items-end justify-between mb-8">
-              <div className="max-w-2xl">
-                <h3 className="text-xl lg:text-3xl mb-2 font-serif font-semibold">
-                  <CMSkeleton
-                    count={1}
-                    height={50}
-                    loading={loading}
-                    data={storeCustomizationSetting?.about_us?.founder_title}
-                  />
-                </h3>
-                <p className="mt-2 md:mt-3 font-normal block text-base">
-                  <CMSkeleton
-                    count={3}
-                    height={20}
-                    loading={loading}
-                    data={
-                      storeCustomizationSetting?.about_us?.founder_description
-                    }
-                  />
-                </p>
-              </div>
-            </div>
-            <div className="grid sm:grid-cols-2 gap-x-5 gap-y-8 lg:grid-cols-6 xl:gap-x-8">
-              <div className="max-w-sm">
-                <Image
-                  width={420}
-                  height={420}
-                  src={
-                    storeCustomizationSetting?.about_us?.founder_one_img ||
-                    "/team/team-1.jpg"
-                  }
-                  alt="team-1"
-                  className="block rounded-lg"
-                />
-                <div className="py-4">
-                  <h5 className="text-lg font-semibold font-serif">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_one_name
-                    )}
-                  </h5>
-                  <span className="opacity-75 text-sm">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_one_sub
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="max-w-sm">
-                <Image
-                  width={420}
-                  height={420}
-                  src={
-                    storeCustomizationSetting?.about_us?.founder_two_img ||
-                    "/team/team-2.jpg"
-                  }
-                  alt="team-2"
-                  className="block rounded-lg"
-                />
-                <div className="py-4">
-                  <h5 className="text-lg font-semibold font-serif">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_two_name
-                    )}
-                  </h5>
-                  <span className="opacity-75 text-sm">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_two_sub
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="max-w-sm">
-                <Image
-                  width={420}
-                  height={420}
-                  src={
-                    storeCustomizationSetting?.about_us?.founder_three_img ||
-                    "/team/team-3.jpg"
-                  }
-                  alt="team-3"
-                  className="block rounded-lg"
-                />
-                <div className="py-4">
-                  <h5 className="text-lg font-semibold font-serif">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_three_name
-                    )}
-                  </h5>
-                  <span className="opacity-75 text-sm">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_three_sub
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="max-w-sm">
-                <Image
-                  width={420}
-                  height={420}
-                  src={
-                    storeCustomizationSetting?.about_us?.founder_four_img ||
-                    "/team/team-4.jpg"
-                  }
-                  alt="team-4"
-                  className="block rounded-lg"
-                />
-                <div className="py-4">
-                  <h5 className="text-lg font-semibold font-serif">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_four_name
-                    )}
-                  </h5>
-                  <span className="opacity-75 text-sm">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_four_sub
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="max-w-sm">
-                <Image
-                  width={420}
-                  height={420}
-                  src={
-                    storeCustomizationSetting?.about_us?.founder_five_img ||
-                    "/team/team-5.jpg"
-                  }
-                  alt="team-5"
-                  className="block rounded-lg"
-                />
-                <div className="py-4">
-                  <h5 className="text-lg font-semibold font-serif">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_five_name
-                    )}
-                  </h5>
-                  <span className="opacity-75 text-sm">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_five_sub
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="max-w-sm">
-                <Image
-                  width={420}
-                  height={420}
-                  src={
-                    storeCustomizationSetting?.about_us?.founder_six_img ||
-                    "/team/team-6.jpg"
-                  }
-                  alt="team-6"
-                  className="block rounded-lg"
-                />
-                <div className="py-4">
-                  <h5 className="text-lg font-semibold font-serif">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_six_name
-                    )}
-                  </h5>
-                  <span className="opacity-75 text-sm">
-                    {showingTranslateValue(
-                      storeCustomizationSetting?.about_us?.founder_six_sub
-                    )}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Layout>
+      <Mainfooter/>
+    </div>
   );
 };
 
