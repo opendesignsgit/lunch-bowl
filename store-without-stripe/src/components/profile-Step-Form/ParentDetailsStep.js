@@ -51,34 +51,36 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        gap: 1, // reduced the spacing between image and form
+        gap: 2,
       }}
     >
       {/* Image */}
       <Box
         sx={{
-          width: { xs: "100%", md: "46%" }, // reduced from 48%
+          width: { xs: "100%", md: "46%" },
           backgroundImage: `url(${stepOne.src})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "contain",
           backgroundPosition: "center",
-          minHeight: 400,
+          minHeight: 500,
         }}
       />
 
       {/* Form Fields */}
-      <Box sx={{ width: { xs: "100%", md: "46%" }, pr: { md: 2 } }}>
+      <Box sx={{ width: { xs: "100%", md: "54%" } }}>
         <Typography
           variant="h6"
-          sx={{ fontWeight: "bold", color: "#000", mb: 0 }}
+          sx={{ fontWeight: "bold", color: "#000", mb: 0, paddingBottom: "20px" }}
         >
-          PARENT’S DETAILS:
+          PARENT'S DETAILS:
         </Typography>
         <Divider
-          sx={{ borderBottom: "1px solid #C0C0C0", mb: 2, width: "85%" }}
+          sx={{ borderBottom: "1px solid #C0C0C0", mb: 3, width: "95%" }}
         />
+        
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
+          {/* Parent Names */}
+          <Grid item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -92,9 +94,10 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               {...register("firstName")}
               error={!!errors.firstName}
               helperText={errors.firstName?.message}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -108,11 +111,12 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               {...register("lastName")}
               error={!!errors.lastName}
               helperText={errors.lastName?.message}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
 
-          {/* NEW FIELDS: Mother First & Last Name */}
-          <Grid item xs={12} md={6}>
+          {/* Mother Names */}
+          <Grid item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -126,9 +130,10 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               {...register("motherFirstName")}
               error={!!errors.motherFirstName}
               helperText={errors.motherFirstName?.message}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -142,10 +147,12 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               {...register("motherLastName")}
               error={!!errors.motherLastName}
               helperText={errors.motherLastName?.message}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          {/* Contact Info */}
+          <Grid item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -159,9 +166,10 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               {...register("mobile")}
               error={!!errors.mobile}
               helperText={errors.mobile?.message}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -176,9 +184,12 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               {...register("email")}
               error={!!errors.email}
               helperText={errors.email?.message}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
-          <Grid item xs={12} sx={{ width: "100%" }}>
+
+          {/* Address (full width) */}
+          <Grid item xs={12}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -193,14 +204,13 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               rows={5}
               placeholder="Enter your Residential Address"
               {...register("address")}
-              sx={{
-                width: "85%", // Decrease width
-              }}
+              sx={{ width: "625px", minWidth: "625px" }}
               error={!!errors.address}
               helperText={errors.address?.message}
             />
           </Grid>
         </Grid>
+
         <Box sx={{ mt: 4, textAlign: "left" }}>
           <Button
             type="submit"
