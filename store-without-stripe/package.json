@@ -11,11 +11,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@date-io/dayjs": "^3.2.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.5",
+    "@mui/icons-material": "^7.0.2",
+    "@mui/material": "^7.0.2",
     "@hookform/resolvers": "^5.0.1",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
@@ -66,6 +70,7 @@
     "react-redux": "^8.0.2",
     "react-responsive-carousel": "^3.2.23",
     "react-share": "^5.1.2",
+    "react-slick": "^0.30.3",
     "react-spinners": "0.13.8",
     "react-switch": "^7.0.0",
     "react-timer-hook": "^3.0.5",
