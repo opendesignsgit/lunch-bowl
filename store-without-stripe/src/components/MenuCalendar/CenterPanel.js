@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Divider,
-} from "@mui/material";
+import { Box, Typography, IconButton, Divider } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import dayjs from "dayjs";
 
@@ -20,9 +15,16 @@ const CenterPanel = ({
   dummyHolidays,
   subscriptionStart,
   subscriptionEnd,
+  sx,
 }) => {
   return (
-    <Box width={isSmall ? "100%" : "40%"} p={2}>
+    <Box
+      sx={{
+        width: isSmall ? "100%" : "45%",
+        p: 2,
+        ...sx,
+      }}
+    >
       <Box
         display="flex"
         justifyContent="space-between"
@@ -117,11 +119,19 @@ const CenterPanel = ({
           🔸 {dayjs(h.date).format("MMM DD")} - {h.name}
         </Typography>
       ))}
-      <Box display="flex" justifyContent="flex-end">
-        <Typography variant="caption" mt={1} display="block">
-          (<span style={{ color: "#e53935" }}>◯</span>) Denotes Holiday.
-        </Typography>
-      </Box>
+      <Box display="flex" justifyContent="flex-end" alignItems="center" mt={1}>
+  <Box
+    sx={{
+      width: 12,
+      height: 12,
+      borderRadius: "50%",
+      backgroundColor: "#FFE9E1",
+      mr: 1,
+    }}
+  />
+  <Typography variant="caption">Denotes Holiday.</Typography>
+</Box>
+
     </Box>
   );
 };

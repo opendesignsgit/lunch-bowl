@@ -18,6 +18,7 @@ const LeftPanel = ({
   menuSelections,
   subscriptionStart,
   subscriptionEnd,
+  sx,
 }) => {
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
@@ -26,12 +27,15 @@ const LeftPanel = ({
 
   return (
     <Box
-      width={isSmall ? "100%" : "30%"}
-      borderRight={isSmall ? "none" : "1px solid #ddd"}
-      borderBottom={isSmall ? "1px solid #ddd" : "none"}
-      p={2}
-      maxHeight={isSmall ? "none" : "600px"}
-      overflow="auto"
+      sx={{
+        width: isSmall ? "100%" : "30%",
+        borderRight: isSmall ? "none" : "1px solid #ddd",
+        borderBottom: isSmall ? "1px solid #ddd" : "none",
+        p: 2,
+        maxHeight: isSmall ? "none" : "600px",
+        overflow: "auto",
+        ...sx,
+      }}
     >
       <Typography fontWeight="bold" align="center" mb={1}>
         {dayjs(`${currentYear}-${currentMonth + 1}`)

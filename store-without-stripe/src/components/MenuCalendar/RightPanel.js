@@ -23,6 +23,7 @@ const RightPanel = ({
   dummyMenus,
   formatDate,
   onClose,
+  sx,
 }) => {
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
@@ -32,13 +33,16 @@ const RightPanel = ({
 
   return (
     <Box
-      width="100%"
-      bgcolor="#f97316"
-      color="#fff"
-      p={3}
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
+      sx={{
+        width: isSmall ? "100%" : "25%",
+        bgcolor: "#f97316",
+        color: "#fff",
+        p: 3,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        ...sx,
+      }}
     >
       {isSmall && (
         <Box display="flex" justifyContent="flex-end">
@@ -48,10 +52,10 @@ const RightPanel = ({
         </Box>
       )}
       
-      <Typography fontSize="3rem" fontWeight="bold" textAlign="center">
+      <Typography fontSize="2.5rem" fontWeight="bold" textAlign="center">
         {String(selectedDate).padStart(2, "0")}
       </Typography>
-      <Typography fontSize="1rem" fontWeight="500" textAlign="center" mb={2}>
+      <Typography fontSize="0.9rem" fontWeight="500" textAlign="center" mb={2}>
         {getDayName(selectedDate).toUpperCase()}
       </Typography>
 
@@ -66,7 +70,7 @@ const RightPanel = ({
               textAlign="center"
               mb={2}
             >
-              <Typography fontWeight="bold">
+              <Typography fontWeight="bold" fontSize="0.9rem">
                 Orders must be placed at least 48 hours in advance.
               </Typography>
             </Box>
@@ -83,7 +87,7 @@ const RightPanel = ({
               textAlign="center"
               mb={2}
             >
-              <Typography fontWeight="bold">
+              <Typography fontWeight="bold" fontSize="0.9rem">
                 The Lunch Bowl is closed on Sundays.
               </Typography>
             </Box>
@@ -92,15 +96,15 @@ const RightPanel = ({
 
         return (
           <>
-            <Typography fontWeight="bold" textAlign="center" mb={2}>
+            <Typography fontWeight="bold" textAlign="center" mb={2} fontSize="0.9rem">
               SELECT YOUR CHILD'S MENU
             </Typography>
             {dummyChildren.map((child) => (
               <Box key={child.id} mb={2}>
-                <Typography fontWeight="500" mb={0.5}>
+                <Typography fontSize="0.9rem" fontWeight="500" mb={0.5}>
                   {child.name.toUpperCase()}
                 </Typography>
-                <Box bgcolor="#fff" borderRadius={2} px={1.5} py={0.5}>
+                <Box bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
                   <Select
                     value={
                       menuSelections[formatDate(selectedDate)]?.[child.id] || ""
@@ -109,7 +113,11 @@ const RightPanel = ({
                     fullWidth
                     variant="standard"
                     disableUnderline
-                    sx={{ fontSize: "0.875rem", color: "#000" }}
+                    sx={{ 
+                      fontSize: "0.8rem", 
+                      color: "#000",
+                      maxWidth: "100%",
+                    }}
                     MenuProps={{
                       PaperProps: {
                         style: {
@@ -118,7 +126,7 @@ const RightPanel = ({
                       },
                     }}
                   >
-                    <MenuItem value="">Select your Child's Dish</MenuItem>
+                    <MenuItem value="">Select Dish</MenuItem>
                     {dummyMenus.map((menu, i) => (
                       <MenuItem key={i} value={menu}>
                         {menu}
@@ -131,15 +139,15 @@ const RightPanel = ({
 
             {isSelectedHoliday ? (
               <Box mb={2}>
-                <Typography variant="body2" fontStyle="italic">
+                <Typography variant="body2" fontStyle="italic" fontSize="0.8rem">
                   Note: This day is a holiday – additional charges apply.
                 </Typography>
               </Box>
             ) : (
               <FormControlLabel
-                control={<Checkbox sx={{ color: "white" }} />}
+                control={<Checkbox sx={{ color: "white" }} size="small" />}
                 label={
-                  <Typography variant="body2">
+                  <Typography variant="body2" fontSize="0.8rem">
                     Save Selected Menus for Upcoming Months
                   </Typography>
                 }
@@ -147,19 +155,20 @@ const RightPanel = ({
               />
             )}
 
-            <Box display="flex" justifyContent="space-between">
+            <Box display="flex" justifyContent="space-between" gap={1}>
               <Button
                 variant="outlined"
+                onClick={onClose}
                 sx={{
                   bgcolor: "#fff",
                   color: "#f97316",
                   borderColor: "#fff",
                   textTransform: "none",
-                  px: 3,
+                  px: 2,
+                  fontSize: "0.8rem",
                   fontWeight: "bold",
                   "&:hover": { bgcolor: "#f5f5f5" },
                 }}
-                onClick={onClose}
               >
                 Cancel
               </Button>
@@ -171,7 +180,8 @@ const RightPanel = ({
                   color: "#f97316",
                   borderColor: "#fff",
                   textTransform: "none",
-                  px: 3,
+                  px: 2,
+                  fontSize: "0.8rem",
                   fontWeight: "bold",
                   boxShadow: 1,
                   "&:hover": { bgcolor: "#f5f5f5" },

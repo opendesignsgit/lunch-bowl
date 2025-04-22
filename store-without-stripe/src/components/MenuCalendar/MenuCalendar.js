@@ -181,7 +181,7 @@ const MenuCalendar = () => {
         />
       )}
 
-      {/* Desktop view: Normal order */}
+      {/* Desktop view: Normal order with adjusted widths */}
       {!isSmall && (
         <>
           <LeftPanel
@@ -194,6 +194,7 @@ const MenuCalendar = () => {
             menuSelections={menuSelections}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
+            sx={{ width: "30%" }}
           />
 
           <CenterPanel
@@ -208,6 +209,7 @@ const MenuCalendar = () => {
             dummyHolidays={dummyHolidays}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
+            sx={{ width: "45%" }}
           />
 
           <RightPanel
@@ -220,6 +222,7 @@ const MenuCalendar = () => {
             handleMenuChange={handleMenuChange}
             dummyMenus={dummyMenus}
             formatDate={formatDate}
+            sx={{ width: "25%" }}
           />
         </>
       )}
