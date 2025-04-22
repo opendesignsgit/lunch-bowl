@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -23,6 +23,8 @@ const RightPanel = ({
   dummyMenus,
   formatDate,
   onClose,
+  editMode,
+  setEditMode,
   sx,
 }) => {
   const selectedDateObj = dayjs(formatDate(selectedDate));
@@ -30,6 +32,16 @@ const RightPanel = ({
   const isSelectedHoliday = !!holiday;
   const lessThan48Hours =
     isSelectedHoliday && selectedDateObj.diff(dayjs(), "hour") < 48;
+
+  useEffect(() => {
+    if (editMode && dummyChildren.length > 0) {
+      const firstChildId = dummyChildren[0].id;
+      const currentSelection = menuSelections[formatDate(selectedDate)]?.[firstChildId];
+      if (!currentSelection) {
+        handleMenuChange(firstChildId, dummyMenus[0]);
+      }
+    }
+  }, [editMode, selectedDate]);
 
   return (
     <Box

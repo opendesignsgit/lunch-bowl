@@ -44,6 +44,7 @@ const MenuCalendar = () => {
   const [menuSelections, setMenuSelections] = useState({});
   const [activeChild, setActiveChild] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
@@ -68,6 +69,10 @@ const MenuCalendar = () => {
         [childId]: dish,
       },
     }));
+    if (editMode) {
+      setEditMode(false);
+      if (isSmall) setOpenDialog(false);
+    }
   };
 
   const getDayName = (day) => {
@@ -133,9 +138,26 @@ const MenuCalendar = () => {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
+    setEditMode(false);
     if (isSmall) {
       setOpenDialog(true);
     }
+  };
+
+  const handleEditClick = (dateString) => {
+    const [year, month, day] = dateString.split('-');
+    setCurrentMonth(parseInt(month) - 1);
+    setCurrentYear(parseInt(year));
+    setSelectedDate(parseInt(day));
+    setEditMode(true);
+    if (isSmall) {
+      setOpenDialog(true);
+    }
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setEditMode(false);
   };
 
   return (
@@ -178,6 +200,7 @@ const MenuCalendar = () => {
           menuSelections={menuSelections}
           subscriptionStart={subscriptionStart}
           subscriptionEnd={subscriptionEnd}
+          onEditClick={handleEditClick}
         />
       )}
 
@@ -194,6 +217,7 @@ const MenuCalendar = () => {
             menuSelections={menuSelections}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
+            onEditClick={handleEditClick}
             sx={{ width: "30%" }}
           />
 
@@ -222,6 +246,8 @@ const MenuCalendar = () => {
             handleMenuChange={handleMenuChange}
             dummyMenus={dummyMenus}
             formatDate={formatDate}
+            editMode={editMode}
+            setEditMode={setEditMode}
             sx={{ width: "25%" }}
           />
         </>
@@ -230,7 +256,7 @@ const MenuCalendar = () => {
       {/* Mobile Dialog for Right Panel */}
       <Dialog
         open={openDialog}
-        onClose={() => setOpenDialog(false)}
+        onClose={handleDialogClose}
         fullWidth
         maxWidth="sm"
       >
@@ -244,7 +270,9 @@ const MenuCalendar = () => {
           handleMenuChange={handleMenuChange}
           dummyMenus={dummyMenus}
           formatDate={formatDate}
-          onClose={() => setOpenDialog(false)}
+          onClose={handleDialogClose}
+          editMode={editMode}
+          setEditMode={setEditMode}
         />
       </Dialog>
     </Box>

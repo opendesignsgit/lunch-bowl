@@ -18,6 +18,7 @@ const LeftPanel = ({
   menuSelections,
   subscriptionStart,
   subscriptionEnd,
+  onEditClick,
   sx,
 }) => {
   const formatDate = (day) =>
@@ -91,34 +92,45 @@ const LeftPanel = ({
           length: dayjs(`${currentYear}-${currentMonth + 1}`).daysInMonth(),
         },
         (_, i) => i + 1
-      ).map((day) => {
-        const dateKey = formatDate(day);
-        const dish = menuSelections[dateKey]?.[dummyChildren[activeChild].id];
-        const isOutOfRange =
-          dayjs(dateKey).isBefore(subscriptionStart) ||
-          dayjs(dateKey).isAfter(subscriptionEnd);
-        return (
-          <Box
-            key={day}
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            py={0.5}
-            borderBottom="1px solid #eee"
-            color={isOutOfRange ? "#bbb" : "inherit"}
-          >
-            <Typography variant="body2">{formatDate(day)}</Typography>
-            <Box display="flex" alignItems="center" maxWidth="140px">
-              <Typography variant="body2" noWrap>
-                {dish || "-"}
-              </Typography>
-              {!isOutOfRange && (
-                <Edit fontSize="small" sx={{ color: "#f97316", ml: 0.5 }} />
-              )}
+      )
+        .map((day) => {
+          const dateKey = formatDate(day);
+          const dish = menuSelections[dateKey]?.[dummyChildren[activeChild].id];
+          const isOutOfRange =
+            dayjs(dateKey).isBefore(subscriptionStart) ||
+            dayjs(dateKey).isAfter(subscriptionEnd);
+
+          // Only show rows where dish exists
+          if (!dish) return null;
+
+          return (
+            <Box
+              key={day}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              py={0.5}
+              borderBottom="1px solid #eee"
+              color={isOutOfRange ? "#bbb" : "inherit"}
+            >
+              <Typography variant="body2">{dateKey}</Typography>
+              <Box display="flex" alignItems="center" maxWidth="140px">
+                <Typography variant="body2" noWrap>
+                  {dish}
+                </Typography>
+                {!isOutOfRange && (
+                  <IconButton
+                    size="small"
+                    onClick={() => onEditClick(dateKey)}
+                    sx={{ color: "#f97316", ml: 0.5, p: 0 }}
+                  >
+                    <Edit fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
             </Box>
-          </Box>
-        );
-      })}
+          );
+        })}
     </Box>
   );
 };
