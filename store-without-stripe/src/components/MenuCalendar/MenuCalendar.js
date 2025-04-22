@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { Box, useMediaQuery, useTheme, Dialog } from "@mui/material";
 import LeftPanel from "./LeftPanel";
 import CenterPanel from "./CenterPanel";
 import RightPanel from "./RightPanel";
@@ -43,6 +43,7 @@ const MenuCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(today.date());
   const [menuSelections, setMenuSelections] = useState({});
   const [activeChild, setActiveChild] = useState(0);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
@@ -130,6 +131,13 @@ const MenuCalendar = () => {
     setCurrentYear(newYear);
   };
 
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
+    if (isSmall) {
+      setOpenDialog(true);
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -141,43 +149,101 @@ const MenuCalendar = () => {
       boxShadow={2}
       overflow="hidden"
     >
-      <LeftPanel
-        isSmall={isSmall}
-        currentYear={currentYear}
-        currentMonth={currentMonth}
-        activeChild={activeChild}
-        setActiveChild={setActiveChild}
-        dummyChildren={dummyChildren}
-        menuSelections={menuSelections}
-        subscriptionStart={subscriptionStart}
-        subscriptionEnd={subscriptionEnd}
-      />
+      {/* Mobile view: Center panel first */}
+      {isSmall && (
+        <CenterPanel
+          isSmall={isSmall}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+          handleMonthChange={handleMonthChange}
+          calendarDates={calendarDates}
+          selectedDate={selectedDate}
+          setSelectedDate={handleDateClick}
+          isHoliday={isHoliday}
+          dummyHolidays={dummyHolidays}
+          subscriptionStart={subscriptionStart}
+          subscriptionEnd={subscriptionEnd}
+        />
+      )}
 
-      <CenterPanel
-        isSmall={isSmall}
-        currentMonth={currentMonth}
-        currentYear={currentYear}
-        handleMonthChange={handleMonthChange}
-        calendarDates={calendarDates}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        isHoliday={isHoliday}
-        dummyHolidays={dummyHolidays}
-        subscriptionStart={subscriptionStart}
-        subscriptionEnd={subscriptionEnd}
-      />
+      {/* Mobile view: Left panel second */}
+      {isSmall && (
+        <LeftPanel
+          isSmall={isSmall}
+          currentYear={currentYear}
+          currentMonth={currentMonth}
+          activeChild={activeChild}
+          setActiveChild={setActiveChild}
+          dummyChildren={dummyChildren}
+          menuSelections={menuSelections}
+          subscriptionStart={subscriptionStart}
+          subscriptionEnd={subscriptionEnd}
+        />
+      )}
 
-      <RightPanel
-        isSmall={isSmall}
-        selectedDate={selectedDate}
-        getDayName={getDayName}
-        isHoliday={isHoliday}
-        dummyChildren={dummyChildren}
-        menuSelections={menuSelections}
-        handleMenuChange={handleMenuChange}
-        dummyMenus={dummyMenus}
-        formatDate={formatDate}
-      />
+      {/* Desktop view: Normal order */}
+      {!isSmall && (
+        <>
+          <LeftPanel
+            isSmall={isSmall}
+            currentYear={currentYear}
+            currentMonth={currentMonth}
+            activeChild={activeChild}
+            setActiveChild={setActiveChild}
+            dummyChildren={dummyChildren}
+            menuSelections={menuSelections}
+            subscriptionStart={subscriptionStart}
+            subscriptionEnd={subscriptionEnd}
+          />
+
+          <CenterPanel
+            isSmall={isSmall}
+            currentMonth={currentMonth}
+            currentYear={currentYear}
+            handleMonthChange={handleMonthChange}
+            calendarDates={calendarDates}
+            selectedDate={selectedDate}
+            setSelectedDate={handleDateClick}
+            isHoliday={isHoliday}
+            dummyHolidays={dummyHolidays}
+            subscriptionStart={subscriptionStart}
+            subscriptionEnd={subscriptionEnd}
+          />
+
+          <RightPanel
+            isSmall={isSmall}
+            selectedDate={selectedDate}
+            getDayName={getDayName}
+            isHoliday={isHoliday}
+            dummyChildren={dummyChildren}
+            menuSelections={menuSelections}
+            handleMenuChange={handleMenuChange}
+            dummyMenus={dummyMenus}
+            formatDate={formatDate}
+          />
+        </>
+      )}
+
+      {/* Mobile Dialog for Right Panel */}
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <RightPanel
+          isSmall={isSmall}
+          selectedDate={selectedDate}
+          getDayName={getDayName}
+          isHoliday={isHoliday}
+          dummyChildren={dummyChildren}
+          menuSelections={menuSelections}
+          handleMenuChange={handleMenuChange}
+          dummyMenus={dummyMenus}
+          formatDate={formatDate}
+          onClose={() => setOpenDialog(false)}
+        />
+      </Dialog>
     </Box>
   );
 };

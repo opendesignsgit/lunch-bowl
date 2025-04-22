@@ -7,8 +7,9 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  IconButton,
 } from "@mui/material";
-import { ArrowForward } from "@mui/icons-material";
+import { ArrowForward, Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 
 const RightPanel = ({
@@ -21,6 +22,7 @@ const RightPanel = ({
   handleMenuChange,
   dummyMenus,
   formatDate,
+  onClose,
 }) => {
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
@@ -30,7 +32,7 @@ const RightPanel = ({
 
   return (
     <Box
-      width={isSmall ? "100%" : "30%"}
+      width="100%"
       bgcolor="#f97316"
       color="#fff"
       p={3}
@@ -38,6 +40,14 @@ const RightPanel = ({
       flexDirection="column"
       justifyContent="center"
     >
+      {isSmall && (
+        <Box display="flex" justifyContent="flex-end">
+          <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+            <Close />
+          </IconButton>
+        </Box>
+      )}
+      
       <Typography fontSize="3rem" fontWeight="bold" textAlign="center">
         {String(selectedDate).padStart(2, "0")}
       </Typography>
@@ -149,6 +159,7 @@ const RightPanel = ({
                   fontWeight: "bold",
                   "&:hover": { bgcolor: "#f5f5f5" },
                 }}
+                onClick={onClose}
               >
                 Cancel
               </Button>
