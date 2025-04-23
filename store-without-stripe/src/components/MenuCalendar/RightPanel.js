@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { ArrowForward, Close } from "@mui/icons-material";
 import dayjs from "dayjs";
+import MealPlanDialog from "./MealPlanDialog"; // Make sure to create this component
 
 const RightPanel = ({
   isSmall,
@@ -33,6 +34,9 @@ const RightPanel = ({
 }) => {
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [currentPlan, setCurrentPlan] = useState(null);
+
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
   const isSelectedHoliday = !!holiday;
@@ -49,6 +53,16 @@ const RightPanel = ({
       ...prev,
       [childId]: planId
     }));
+  };
+
+  const handleViewPlan = (planId) => {
+    setCurrentPlan(planId);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setCurrentPlan(null);
   };
 
   useEffect(() => {
@@ -168,7 +182,17 @@ const RightPanel = ({
                               <Link 
                                 href="#" 
                                 fontSize="0.8rem"
-                                sx={{ color: '#f97316', textDecoration: 'none' }}
+                                sx={{ 
+                                  color: '#f97316', 
+                                  textDecoration: 'none',
+                                  '&:hover': {
+                                    textDecoration: 'underline'
+                                  }
+                                }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleViewPlan(plan.id);
+                                }}
                               >
                                 View Plan
                               </Link>
@@ -280,6 +304,12 @@ const RightPanel = ({
           </>
         );
       })()}
+
+      <MealPlanDialog 
+        open={dialogOpen} 
+        onClose={handleCloseDialog} 
+        planId={currentPlan}
+      />
     </Box>
   );
 };
