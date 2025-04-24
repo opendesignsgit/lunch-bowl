@@ -184,7 +184,7 @@ const ContactUs = () => {
               </div>
             </div>
           </section>
-          <section className='HfaqSec relative bg-4AB138 flex'>
+          <section className='HfaqSec senddesfaq relative bg-4AB138 flex '>
               <div className='Hfaqinrow w-full relative py-[12vh]' >
                   <div className='container mx-auto' >
                       <div className='faqcontain py-[6vw] px-[8vw] bg-white relative' >

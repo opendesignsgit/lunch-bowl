@@ -97,7 +97,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
         {/* Left Illustration */}
         <Box
           sx={{
-            width: { xs: "100%", md: "50%" },
+            width: { xs: "100%", md: "45%" },
             backgroundImage: `url("/profileStepImages/stepThree.png")`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",
@@ -107,11 +107,12 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
         />
 
         {/* Right Form Section */}
-        <Box sx={{ width: { xs: "100%", md: "50%" } }}>
+        <Box sx={{ width: { xs: "100%", md: "55%" } }}>
+        <div className="steptitles">
           <Typography variant="h6" fontWeight="bold">
             SUBSCRIPTION PLAN:
           </Typography>
-
+        </div>
           <Typography
             sx={{ color: "#FF6A00", fontWeight: 600, mt: 2, mb: 1 }}
             variant="subtitle2"
@@ -121,8 +122,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
               (Taxes not included)
             </Typography>
           </Typography>
-
-          <RadioGroup value={selectedPlan} onChange={handlePlanChange}>
+          <div className="subscrip">
+          <RadioGroup value={selectedPlan} onChange={handlePlanChange} className="radiogroub">
             {dummyPlans.map((plan) => (
               <Box
                 key={plan.id}
@@ -139,10 +140,10 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                     selectedPlan === plan.id.toString() ? "#FF6A00" : "#fff",
                 }}
               >
-                <FormControlLabel
+                <FormControlLabel  className="radiobtnlabel"
                   value={plan.id.toString()}
                   control={
-                    <Radio
+                    <Radio className="radiobtn"
                       sx={{
                         color:
                           selectedPlan === plan.id.toString()
@@ -173,7 +174,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                   sx={{ flex: 1 }}
                 />
                 {plan.id === 1 && (
-                  <IconButton onClick={() => setCalendarOpen(true)}>
+                  <IconButton onClick={() => setCalendarOpen(true)} className="clanbtn">
                     <EventIcon
                       sx={{
                         cursor: "pointer",
@@ -215,7 +216,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                   />
                 }
                 label={
-                  <Typography
+                  <Typography 
                     variant="body2"
                     sx={{
                       color: selectedPlan === "byDate" ? "#FF6A00" : "inherit",
@@ -229,8 +230,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                 }
               />
               {selectedPlan === "byDate" && (
-                <Grid container spacing={2} mt={1}>
-                  <Grid item xs={6}>
+                <Grid container mt={1} className="PreBookinput">
+                  <Grid item >
                     <DatePicker
                       label="Start Date"
                       value={startDate}
@@ -260,7 +261,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                       </FormHelperText>
                     )}
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item>
                     <DatePicker
                       label="End Date"
                       value={endDate}
@@ -311,12 +312,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
           </Typography>
 
           {/* Offers */}
-          <Box
+          <Box className="OffAvitbbox"
             mt={3}
-            p={2}
-            bgcolor="#FFF3EB"
-            borderRadius="8px"
-            border="1px solid #FFD6B8"
           >
             <Typography
               sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }}
@@ -324,59 +321,31 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
             >
               OFFERS AVAILABLE
             </Typography>
-            <ul style={{ margin: 0, paddingLeft: "1.2rem" }}>
+            <ul style={{ margin: 0, }}>
               <li>
                 <Typography fontSize={14}>
-                  Save 5% on the 150 Working Days Plan.
+                  Save <strong>5%</strong> on the 150 Working Days Plan.
                 </Typography>
               </li>
               <li>
                 <Typography fontSize={14}>
-                  Save 10% on the 260 Working Days Plan.
+                  Save <strong>10%</strong> on the 260 Working Days Plan.
                 </Typography>
               </li>
             </ul>
           </Box>
 
           <Typography mt={2} fontSize={12}>
-            Note: Per Day Meal = Rs. 200 (No. of Days X Rs. 200 = Subscription
-            Amount)
+          <strong>Note: Per Day Meal = Rs. 200 (No. of Days X Rs. 200 = Subscription
+            Amount)</strong>
           </Typography>
 
           {/* Action Buttons */}
-          <Box mt={4} display="flex" justifyContent="space-between">
-            <Button
-              variant="outlined"
-              onClick={prevStep}
-              sx={{
-                borderRadius: 0,
-                px: 5,
-                py: 1.5,
-                fontWeight: "bold",
-                borderColor: "#000",
-                color: "#000",
-                textTransform: "none",
-              }}
-            >
-              Back
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              sx={{
-                backgroundColor: "#FF6A00",
-                color: "#fff",
-                px: 5,
-                py: 1.5,
-                fontWeight: "bold",
-                borderRadius: 0,
-                textTransform: "none",
-                "&:hover": { backgroundColor: "#e65c00" },
-              }}
-            >
-              Next ↗
-            </Button>
+          <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
+            <Button variant="outlined" onClick={prevStep}  className="backbtn"> <span className="nextspan">Back</span> </Button>
+            <Button variant="contained" onClick={handleNext} className="nextbtn"> <span className="nextspan">Next</span> </Button>
           </Box>
+          </div>
         </Box>
       </Box>
 

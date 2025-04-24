@@ -118,6 +118,7 @@ header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 
 .HctaSec .combtntb p.parabtn a span{background: #ffffff;color: #FF6514;}
 .HctaSec .combtntb p.parabtn a span::after{filter: brightness(0) saturate(100%) invert(49%) sepia(90%) saturate(1395%) hue-rotate(359deg) brightness(105%) contrast(105%);}
 .HctaSec .combtntb p.parabtn a::before{border-color: #ffffff;}
+.steppage .HctaSec {display: none;}
 
 footer{background: #333333;}
 footer::before{content: '';position: absolute;width: 100%;height: 40px;top: 12px;left: 0;background: url(../../public/foottopWaveVector.png) repeat-x bottom center;background-size: auto 85%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);z-index: 9;animation: slide 50s linear infinite;
@@ -252,6 +253,10 @@ ul.footmenu li a{color: #FFFFFF;}
 .faqAccordionitems .incont{padding-block: 20px;}
 .faqAccordionitems.active .faqbodycont{}
 
+.HfaqSec.senddesfaq::before{background: url(../../public/contus/contfaqbg.png) no-repeat top center; background-size: 100%;height: 65px;}
+.HfaqSec.senddesfaq::after{opacity: 0;}
+.HfaqSec.senddesfaq .Hfaqinrow::before{opacity: 0;}
+
 .pagebansec {height: 55vh;padding-top: 10vh;}
 .pagebansec{background: url(../../public/about/aboutbanbg.jpg) no-repeat bottom center;background-size: 100%;}
 .pagebansec h1{font-family: 'Baloo';font-size: 3.2vw;line-height: 1;text-transform: uppercase;}
@@ -267,6 +272,7 @@ ul.footmenu li a{color: #FFFFFF;}
 .pagebansec::before{content: '';position: absolute;width: 100%;height: 35px;bottom: -1px;left: 0;background: url(../../public/introtopbefrimg.png) repeat-x top center;background-size: 90%;-webkit-transform: translateY(00%);-ms-transform: translateY(00%);transform: translateY(00%);z-index: 9;pointer-events: none;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .aboutbanersec .pageinconter::after{content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: 0;background: url(../../public/about/about-banimg.png) no-repeat center bottom;background-size: 100%;}
 .contusbanersec .pageinconter::after{content: '';position: absolute;width: 25%;height: 110%;right: 20%;bottom: 0;background: url(../../public/contus/contusbanbg.png) no-repeat center bottom;background-size: 100%;}
+.pagebansec.setpbanersec { height: 42vh;}
 
 .mteamitembox{border: 1px solid #ffffff;}
 .mteambox {border: 1px solid #ffffff;overflow: hidden;}
@@ -312,9 +318,6 @@ ul.footmenu li a{color: #FFFFFF;}
 .hOEnvirorow .image_wrapper.imgsmlbox{width: 19vw;border-radius: 200px;}
 .hOEnvirorow .image_wrapper img{width: 100%;}
 
-.contuspage .HfaqSec::before{background: url(../../public/contus/contfaqbg.png) no-repeat top center; background-size: 100%;height: 65px;}
-.contuspage .HfaqSec::after{opacity: 0;}
-.contuspage .HfaqSec .Hfaqinrow::before{opacity: 0;}
 .contuspage .HctaSec {display: none;}
 .contmapssec iframe{width: 100%;aspect-ratio: 2/0.6;}
 .contaddsboxs{margin-bottom: 10vh;}
@@ -338,3 +341,57 @@ ul.footmenu li a{color: #FFFFFF;}
 .formbox button span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
 .formbox button:hover span::after{top: -3px;right: -3px;}
 
+.SetpTabul .SetpTabli{}
+.SetpTabli p{font-family: 'Baloo';line-height: 0;font-size: 1vw;padding: 0px 15px 0px 35px;white-space: nowrap;position: relative;height: 40px;display: flex;align-items: center;}
+.SetpTabli p:before{content: ''; position: absolute;border-top:20px solid transparent;border-bottom:20px solid transparent;border-left:15px solid #ffffff;left: 0;top: 0;opacity: 0;}
+.SetpTabli p:after{content: ''; position: absolute;border-top:20px solid transparent;border-bottom:20px solid transparent;border-left:15px solid #FF6A00;left: 100%;top: 0;opacity: 0;}
+.SetpTabli.css-njfnnb p:before{opacity: 1;}
+.SetpTabli.css-njfnnb p:after{opacity: 1;}
+
+.steptitles .adchildnav {margin: 0;margin-top: 30px; -webkit-box-align: end;-ms-flex-align: end;align-items: end;}
+.adchildnav .adchildul {min-height: auto;}
+.adchildnav .adchildul>.MuiTabs-scroller>.MuiTabs-indicator{background: #ff6a00;}
+.adchildnav .adchildul .MuiTabs-scroller{height: auto;}
+.adchildnav .adchildul button{border: none;background: transparent;color: #000000;padding: 0;min-height: auto;}
+.adchildnav .adchildul button.MuiTab-root{margin-right: 10px;}
+.adchildnav .adchildul button.Mui-selected{color: #FF6514;}
+.adchildnav .adchildul button p{font-family: 'Baloo';}
+.adchildnav button.addanochildbtn {margin-left: auto;padding: 0;border: none;text-transform: capitalize;background: transparent;color: #000000;position: relative;}
+.adchildnav button.addanochildbtn:before{content:'+';position: relative;display: block;margin-right: 5px;}
+.adchildnav button.addanochildbtn:hover{color: #FF6514;}
+
+.steptitles{margin-bottom: 25px;padding-bottom: 0px;border-bottom: 1px solid #EAEAEC;}
+.steptitles h5{font-family: 'Baloo';line-height: 1;font-size: 1.2vw;}
+.DetlsSepBox h6{font-family: 'Baloo';font-size: 0.9vw;font-weight: 100;line-height: 1;}
+.DetlsSepBox input{color: #333333;padding: 0;padding-inline: 20px;line-height: 50px;height: 50px;border-color: #EAEAEC;font-family: "Open Sans", sans-serif;font-weight: 600;letter-spacing: -0.5px;}
+.DetlsSepBox textarea{color: #333333;padding: 0;padding-inline: 0px;line-height: 1;max-height: 80px;border-color: #EAEAEC;font-family: "Open Sans", sans-serif;font-weight: 600;letter-spacing: -0.5px;}
+.DetlsSepBox .formboxrow {gap: 0;margin-inline: -15px;}
+.DetlsSepBox .formboxrow .formboxcol {width: 50%;padding-inline: 15px;margin-bottom: 20px;}
+.DetlsSepBox .formboxrow .formboxcol:last-child{width: 100%;}
+.DetlsSepBox .formboxrow .formboxcol .MuiFormControl-root{width: 100%;}
+.DetlsSepBox .formboxrow .formboxcol .MuiSelect-select{color: #333333;padding: 0;padding-inline: 20px;height: 50px;border-color: #EAEAEC;}
+.DetlsSepBox .formboxrow .formboxcol .MuiTextField-root .MuiInputLabel-formControl {line-height: 1;}
+.DetlsSepBox .subbtnrow button{position: relative;padding: 0;border: none;width: 10vw;background: transparent;box-shadow: none;}
+.DetlsSepBox .subbtnrow button.nextbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.DetlsSepBox .subbtnrow button.nextbtn:hover::before{right: 0;bottom: 0;}
+.DetlsSepBox .subbtnrow button.nextbtn span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;border:1px solid #FF6514;font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;text-transform: capitalize;width: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.DetlsSepBox .subbtnrow button.nextbtn span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+.DetlsSepBox .subbtnrow button.nextbtn:hover span::after{top: -3px;right: -3px;}
+.DetlsSepBox .subbtnrow button.backbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.DetlsSepBox .subbtnrow button.backbtn:hover::before{right: 0;bottom: 0;}
+.DetlsSepBox .subbtnrow button.backbtn span{line-height: 50px;padding-inline: 30px;background: #ffffff;color: #000000;border:1px solid #000000; font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;text-transform: capitalize;width: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.DetlsSepBox .subbtnrow button span.MuiTouchRipple-root{display: none;}
+
+.subscrip p{font-family: "Open Sans", sans-serif;}
+.radiogroub>.MuiBox-root{padding: 15px 20px;border-color: #EAEAEC;margin-bottom: 15px;margin-top: 0;}
+.radiogroub>.MuiBox-root>label{margin-left: 0;margin-right: 0;}
+.radiogroub>.MuiBox-root>label p{font-size: 15px;font-weight: 500;margin-left: 12px;}
+.radiogroub>.MuiBox-root>label .MuiRadio-root{padding: 0;}
+.radiogroub>.MuiBox-root .clanbtn {padding: 0;}
+.radiogroub .radiobtnlabel .MuiRadio-root {padding: 0;}
+.subscrip .PreBookinput{margin-inline: -10px;margin-top: 10px;}
+.PreBookinput>.MuiGrid-root{padding-inline: 10px;width: 50%;}
+.OffAvitbbox{}
+.OffAvitbbox ul{background: #FFECE2;border: 1px solid #EAEAEC;border-radius: 10px;padding: 20px 20px 20px 45px;list-style: disc;}
+.OffAvitbbox ul li p{font-weight: 500;}
+.OffAvitbbox ul li p strong{color: #FF6514;}

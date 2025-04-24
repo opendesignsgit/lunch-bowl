@@ -1,5 +1,5 @@
 import React from 'react';
-import MenuCalendar from '../../components/MenuCalendar/MenuCalendar';
+import MenuCalendar from '../components/MenuCalendar/MenuCalendar';
 
 const MenuCalendarPage = () => {
   return (
