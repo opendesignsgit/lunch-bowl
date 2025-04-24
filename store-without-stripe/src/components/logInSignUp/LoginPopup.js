@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   Box,
@@ -7,6 +7,7 @@ import {
   Button,
   Divider,
   IconButton,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -17,13 +18,59 @@ import SignUpPopup from "./SignUpPopup";
 const LoginPopup = ({ open, onClose }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [userOtp, setUserOtp] = useState("");
+  const [timer, setTimer] = useState(120);
+  const [resendEnabled, setResendEnabled] = useState(false);
+  const [message, setMessage] = useState(null); // For displaying success/error message
   const otpRefs = useRef([]);
+
+  useEffect(() => {
+    let interval;
+    if (otpSent && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      clearInterval(interval);
+      setResendEnabled(true);
+    }
+    return () => clearInterval(interval);
+  }, [otpSent, timer]);
+
+  const generateOtp = () => {
+    const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+    setOtp(generatedOtp);
+    setTimer(120);
+    setResendEnabled(false);
+    setMessage(null); // Reset message on OTP generation
+  };
+
+  const handleSendOtp = () => {
+    generateOtp();
+    setOtpSent(true);
+  };
+
+  const handleResendOtp = () => {
+    generateOtp();
+  };
+
+  const handleVerifyOtp = () => {
+    if (userOtp === otp) {
+      setMessage({ type: "success", text: "OTP is correct!" });
+    } else {
+      setMessage({ type: "error", text: "OTP is incorrect! Please try again." });
+    }
+  };
 
   const handleCloseSignUp = () => {
     setShowSignUp(false);
   };
 
   const handleOtpChange = (index, value) => {
+    const otpArray = userOtp.split("");
+    otpArray[index] = value;
+    setUserOtp(otpArray.join(""));
     if (value.length === 1 && index < otpRefs.current.length - 1) {
       otpRefs.current[index + 1].focus(); // Move focus to the next field
     }
@@ -110,9 +157,19 @@ const LoginPopup = ({ open, onClose }) => {
                 </Typography>
               )}
               {otpSent && (
-                <Typography variant="body2" mt={1}>
-                  We've sent an OTP to your phone number.
-                </Typography>
+                <>
+                  <Typography variant="body2" mt={1}>
+                    We've sent an OTP to your phone number.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight="bold"
+                    mb={1}
+                    sx={{ color: "#FF6B00" }}
+                  >
+                    Your OTP: {otp}
+                  </Typography>
+                </>
               )}
             </Box>
 
@@ -144,10 +201,19 @@ const LoginPopup = ({ open, onClose }) => {
                     />
                   ))}
                 </Box>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  align="center"
+                  mb={2}
+                >
+                  Time remaining: {Math.floor(timer / 60)}:{timer % 60 < 10 ? "0" : ""}
+                  {timer % 60} minutes
+                </Typography>
                 <Button
                   fullWidth
                   sx={{
-                    backgroundColor: "#FF6B00",
+                    backgroundColor: resendEnabled ? "#FF6B00" : "#e85f00",
                     color: "#fff",
                     fontWeight: "bold",
                     padding: "12px",
@@ -155,9 +221,20 @@ const LoginPopup = ({ open, onClose }) => {
                     "&:hover": { backgroundColor: "#e85f00" },
                   }}
                   endIcon={<span>&#8594;</span>}
+                  onClick={resendEnabled ? handleResendOtp : handleVerifyOtp}
                 >
-                  Verify One Time Password
+                  {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
                 </Button>
+
+                {/* Success/Error Message */}
+                {message && (
+                  <Alert
+                    severity={message.type}
+                    sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}
+                  >
+                    {message.text}
+                  </Alert>
+                )}
               </>
             ) : (
               <>
@@ -187,7 +264,7 @@ const LoginPopup = ({ open, onClose }) => {
                     "&:hover": { backgroundColor: "#e85f00" },
                   }}
                   endIcon={<span>&#8594;</span>}
-                  onClick={() => setOtpSent(true)}
+                  onClick={handleSendOtp}
                 >
                   Send One Time Password
                 </Button>
