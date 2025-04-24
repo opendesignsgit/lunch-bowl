@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Dialog,
   Box,
@@ -17,9 +17,22 @@ import SignUpPopup from "./SignUpPopup";
 const LoginPopup = ({ open, onClose }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const otpRefs = useRef([]);
 
   const handleCloseSignUp = () => {
     setShowSignUp(false);
+  };
+
+  const handleOtpChange = (index, value) => {
+    if (value.length === 1 && index < otpRefs.current.length - 1) {
+      otpRefs.current[index + 1].focus(); // Move focus to the next field
+    }
+  };
+
+  const handleOtpKeyDown = (index, event) => {
+    if (event.key === "Backspace" && index > 0 && event.target.value === "") {
+      otpRefs.current[index - 1].focus(); // Move focus to the previous field
+    }
   };
 
   return (
@@ -63,7 +76,10 @@ const LoginPopup = ({ open, onClose }) => {
           >
             {/* Close Icon */}
             <IconButton
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                setOtpSent(false);
+              }}
               sx={{ position: "absolute", top: 16, right: 16 }}
             >
               <CloseIcon />
@@ -122,6 +138,9 @@ const LoginPopup = ({ open, onClose }) => {
                         style: { textAlign: "center", fontSize: "24px" },
                       }}
                       sx={{ width: "56px" }}
+                      onChange={(e) => handleOtpChange(index, e.target.value)}
+                      onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                      inputRef={(ref) => (otpRefs.current[index] = ref)}
                     />
                   ))}
                 </Box>

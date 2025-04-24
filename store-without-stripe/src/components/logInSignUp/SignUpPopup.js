@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Dialog,
   Box,
@@ -20,8 +20,8 @@ const SignUpPopup = ({ open, onClose }) => {
     mobile: "",
     email: "",
   });
-
   const [otpSent, setOtpSent] = useState(false);
+  const otpRefs = useRef([]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -45,6 +45,18 @@ const SignUpPopup = ({ open, onClose }) => {
       </Typography>
     </Typography>
   );
+
+  const handleOtpChange = (index, value) => {
+    if (value.length === 1 && index < otpRefs.current.length - 1) {
+      otpRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, event) => {
+    if (event.key === "Backspace" && index > 0 && event.target.value === "") {
+      otpRefs.current[index - 1].focus();
+    }
+  };
 
   return (
     <Dialog
@@ -84,12 +96,12 @@ const SignUpPopup = ({ open, onClose }) => {
             bgcolor: "#fff",
           }}
         >
-          <IconButton
+          {/* <IconButton
             onClick={onClose}
             sx={{ position: "absolute", top: 24, right: 24 }}
           >
             <CloseIcon />
-          </IconButton>
+          </IconButton> */}
 
           <Typography
             variant="h4"
@@ -124,6 +136,13 @@ const SignUpPopup = ({ open, onClose }) => {
                       style: { textAlign: "center", fontSize: "24px" },
                     }}
                     sx={{ width: "56px" }}
+                    onChange={(e) =>
+                      handleOtpChange(index, e.target.value)
+                    }
+                    onKeyDown={(e) =>
+                      handleOtpKeyDown(index, e)
+                    }
+                    inputRef={(ref) => (otpRefs.current[index] = ref)}
                   />
                 ))}
               </Box>
