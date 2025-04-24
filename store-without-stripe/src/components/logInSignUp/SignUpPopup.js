@@ -63,9 +63,7 @@ const SignUpPopup = ({ open, onClose }) => {
             bgcolor: "#fff",
           }}
         >
-          <IconButton onClick={onClose} sx={{ position: "absolute", top: 16, right: 16 }}>
-            <CloseIcon />
-          </IconButton>
+          
 
           <Typography variant="h4" fontWeight="bold" sx={{ textTransform: "uppercase" }}>
             Sign Up
@@ -77,6 +75,7 @@ const SignUpPopup = ({ open, onClose }) => {
               color="#FF6B00"
               fontWeight="500"
               sx={{ cursor: "pointer" }}
+              onClick={onClose}
             >
               Log In to your Account
             </Typography>
