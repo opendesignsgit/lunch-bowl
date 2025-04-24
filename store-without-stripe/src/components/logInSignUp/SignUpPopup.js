@@ -12,7 +12,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import SignUpImage from "../../../public/LogInSignUp/LogIn.png"; // Adjust path as needed
+import SignUpImage from "../../../public/LogInSignUp/LogIn.png";
 
 const SignUpPopup = ({ open, onClose }) => {
   const [form, setForm] = useState({
@@ -27,6 +27,13 @@ const SignUpPopup = ({ open, onClose }) => {
   const [timer, setTimer] = useState(120);
   const [resendEnabled, setResendEnabled] = useState(false);
   const [message, setMessage] = useState(null);
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    mobile: "",
+    email: "",
+    otp: "",
+  });
   const otpRefs = useRef([]);
 
   useEffect(() => {
@@ -42,39 +49,131 @@ const SignUpPopup = ({ open, onClose }) => {
     return () => clearInterval(interval);
   }, [otpSent, timer]);
 
+  // Validation functions
+  const validateName = (name) => {
+    return name.trim().length >= 2 && /^[a-zA-Z]+$/.test(name.trim());
+  };
+
+  const validateMobile = (mobile) => {
+    return /^[0-9]{10}$/.test(mobile);
+  };
+
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const validateOtp = (otp) => {
+    return otp.length === 4 && /^\d+$/.test(otp);
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      firstName: !form.firstName.trim()
+        ? "First name is required"
+        : !validateName(form.firstName)
+        ? "Minimum 2 letters, no numbers/special chars"
+        : "",
+      lastName: !form.lastName.trim()
+        ? "Last name is required"
+        : !validateName(form.lastName)
+        ? "Minimum 2 letters, no numbers/special chars"
+        : "",
+      mobile: !form.mobile
+        ? "Mobile number is required"
+        : !validateMobile(form.mobile)
+        ? "Please enter a valid 10-digit number"
+        : "",
+      email: !form.email
+        ? "Email is required"
+        : !validateEmail(form.email)
+        ? "Please enter a valid email"
+        : "",
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error);
+  };
+
   const generateOtp = () => {
     const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
     setOtp(generatedOtp);
     setTimer(120);
     setResendEnabled(false);
     setMessage(null);
+    setErrors({ ...errors, mobile: "" }); // Clear mobile error when OTP is sent
   };
 
   const handleSendOtp = () => {
-    generateOtp();
-    setOtpSent(true);
+    if (validateForm()) {
+      generateOtp();
+      setOtpSent(true);
+    }
   };
 
   const handleResendOtp = () => {
+    if (!validateMobile(form.mobile)) {
+      setErrors({
+        ...errors,
+        mobile: "Please enter a valid 10-digit mobile number",
+      });
+      return;
+    }
     generateOtp();
   };
 
   const handleVerifyOtp = () => {
+    if (!validateOtp(userOtp)) {
+      setErrors({ ...errors, otp: "Please enter a valid 4-digit OTP" });
+      return;
+    }
+
     if (userOtp === otp) {
-      setMessage({ type: "success", text: "OTP is correct!" });
+      setMessage({ type: "success", text: "OTP verified successfully!" });
+      setErrors({ ...errors, otp: "" });
+      // Here you would typically proceed with registration
     } else {
-      setMessage({ type: "error", text: "OTP is incorrect! Please try again." });
+      setMessage({
+        type: "error",
+        text: "OTP is incorrect! Please try again.",
+      });
+      setErrors({ ...errors, otp: "Incorrect OTP" });
     }
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Input restrictions
+    if (name === "mobile" && value && !/^[0-9]*$/.test(value)) return;
+    if (
+      (name === "firstName" || name === "lastName") &&
+      value &&
+      !/^[a-zA-Z ]*$/.test(value)
+    )
+      return;
+
+    setForm({ ...form, [name]: value });
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
   };
 
   const handleOtpChange = (index, value) => {
+    // Only allow numeric input
+    if (value && !/^[0-9]$/.test(value)) return;
+
     const otpArray = userOtp.split("");
     otpArray[index] = value;
-    setUserOtp(otpArray.join(""));
+    const newOtp = otpArray.join("");
+    setUserOtp(newOtp);
+
+    // Clear error when user starts typing
+    if (errors.otp && newOtp.length > 0) {
+      setErrors({ ...errors, otp: "" });
+    }
+
     if (value.length === 1 && index < otpRefs.current.length - 1) {
       otpRefs.current[index + 1].focus();
     }
@@ -108,7 +207,24 @@ const SignUpPopup = ({ open, onClose }) => {
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        setOtpSent(false);
+        setForm({
+          firstName: "",
+          lastName: "",
+          mobile: "",
+          email: "",
+        });
+        setUserOtp("");
+        setErrors({
+          firstName: "",
+          lastName: "",
+          mobile: "",
+          email: "",
+          otp: "",
+        });
+      }}
       maxWidth={false}
       PaperProps={{
         sx: {
@@ -143,6 +259,30 @@ const SignUpPopup = ({ open, onClose }) => {
             bgcolor: "#fff",
           }}
         >
+          <IconButton
+            onClick={() => {
+              onClose();
+              setOtpSent(false);
+              setForm({
+                firstName: "",
+                lastName: "",
+                mobile: "",
+                email: "",
+              });
+              setUserOtp("");
+              setErrors({
+                firstName: "",
+                lastName: "",
+                mobile: "",
+                email: "",
+                otp: "",
+              });
+            }}
+            sx={{ position: "absolute", top: 16, right: 16 }}
+          >
+            <CloseIcon />
+          </IconButton>
+
           <Typography
             variant="h4"
             fontWeight="bold"
@@ -164,7 +304,6 @@ const SignUpPopup = ({ open, onClose }) => {
               >
                 Your OTP: {otp}
               </Typography>
-
               <Typography
                 variant="body2"
                 fontWeight="bold"
@@ -173,7 +312,7 @@ const SignUpPopup = ({ open, onClose }) => {
               >
                 ONE TIME PASSWORD*
               </Typography>
-              <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+              <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
                 {Array.from({ length: 4 }).map((_, index) => (
                   <TextField
                     key={index}
@@ -187,9 +326,15 @@ const SignUpPopup = ({ open, onClose }) => {
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     inputRef={(ref) => (otpRefs.current[index] = ref)}
+                    error={!!errors.otp}
                   />
                 ))}
               </Box>
+              {errors.otp && (
+                <Typography color="error" variant="caption" sx={{ mb: 2 }}>
+                  {errors.otp}
+                </Typography>
+              )}
               <Typography
                 variant="body2"
                 color="textSecondary"
@@ -216,7 +361,23 @@ const SignUpPopup = ({ open, onClose }) => {
               >
                 {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
               </Button>
-
+              Resend{" "}
+              <Typography
+                variant="body2"
+                align="center"
+                sx={{
+                  mb: 3,
+                  color: "#FF6B00",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                  "&:hover": {
+                    opacity: 0.8,
+                  },
+                }}
+                onClick={() => setOtpSent(false)}
+              >
+                Edit phone number
+              </Typography>
               {/* Success/Error Message */}
               {message && (
                 <Alert
@@ -241,6 +402,9 @@ const SignUpPopup = ({ open, onClose }) => {
                     fullWidth
                     value={form.firstName}
                     onChange={handleChange}
+                    error={!!errors.firstName}
+                    helperText={errors.firstName}
+                    inputProps={{ maxLength: 30 }}
                   />
                 </Box>
                 <Box sx={{ flex: 1 }}>
@@ -253,6 +417,9 @@ const SignUpPopup = ({ open, onClose }) => {
                     fullWidth
                     value={form.lastName}
                     onChange={handleChange}
+                    error={!!errors.lastName}
+                    helperText={errors.lastName}
+                    inputProps={{ maxLength: 30 }}
                   />
                 </Box>
               </Box>
@@ -267,6 +434,9 @@ const SignUpPopup = ({ open, onClose }) => {
                   fullWidth
                   value={form.mobile}
                   onChange={handleChange}
+                  error={!!errors.mobile}
+                  helperText={errors.mobile}
+                  inputProps={{ maxLength: 10 }}
                 />
               </Box>
 
@@ -280,6 +450,8 @@ const SignUpPopup = ({ open, onClose }) => {
                   fullWidth
                   value={form.email}
                   onChange={handleChange}
+                  error={!!errors.email}
+                  helperText={errors.email}
                 />
               </Box>
 

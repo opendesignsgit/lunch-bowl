@@ -20,9 +20,14 @@ const LoginPopup = ({ open, onClose }) => {
   const [showSignUp, setShowSignUp] = useState(false);
   const [otp, setOtp] = useState("");
   const [userOtp, setUserOtp] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [timer, setTimer] = useState(120);
   const [resendEnabled, setResendEnabled] = useState(false);
-  const [message, setMessage] = useState(null); // For displaying success/error message
+  const [message, setMessage] = useState(null);
+  const [errors, setErrors] = useState({
+    mobileNumber: "",
+    otp: "",
+  });
   const otpRefs = useRef([]);
 
   useEffect(() => {
@@ -38,28 +43,70 @@ const LoginPopup = ({ open, onClose }) => {
     return () => clearInterval(interval);
   }, [otpSent, timer]);
 
+  const validateMobileNumber = (number) => {
+    // Basic validation - 10 digits, numbers only
+    const regex = /^[0-9]{10}$/;
+    return regex.test(number);
+  };
+
+  const validateOtp = (otp) => {
+    // OTP should be exactly 4 digits
+    return otp.length === 4 && /^\d+$/.test(otp);
+  };
+
   const generateOtp = () => {
     const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
     setOtp(generatedOtp);
     setTimer(120);
     setResendEnabled(false);
-    setMessage(null); // Reset message on OTP generation
+    setMessage(null);
+    setErrors({ ...errors, mobileNumber: "" });
   };
 
   const handleSendOtp = () => {
+    if (!mobileNumber) {
+      setErrors({ ...errors, mobileNumber: "Mobile number is required" });
+      return;
+    }
+
+    if (!validateMobileNumber(mobileNumber)) {
+      setErrors({
+        ...errors,
+        mobileNumber: "Please enter a valid 10-digit mobile number",
+      });
+      return;
+    }
+
     generateOtp();
     setOtpSent(true);
   };
 
   const handleResendOtp = () => {
+    if (!validateMobileNumber(mobileNumber)) {
+      setErrors({
+        ...errors,
+        mobileNumber: "Please enter a valid 10-digit mobile number",
+      });
+      return;
+    }
     generateOtp();
   };
 
   const handleVerifyOtp = () => {
+    if (!validateOtp(userOtp)) {
+      setErrors({ ...errors, otp: "Please enter a valid 4-digit OTP" });
+      return;
+    }
+
     if (userOtp === otp) {
       setMessage({ type: "success", text: "OTP is correct!" });
+      setErrors({ ...errors, otp: "" });
     } else {
-      setMessage({ type: "error", text: "OTP is incorrect! Please try again." });
+      setMessage({
+        type: "error",
+        text: "OTP is incorrect! Please try again.",
+      });
+      setErrors({ ...errors, otp: "Incorrect OTP" });
     }
   };
 
@@ -68,17 +115,40 @@ const LoginPopup = ({ open, onClose }) => {
   };
 
   const handleOtpChange = (index, value) => {
+    // Only allow numeric input
+    if (value && !/^[0-9]$/.test(value)) return;
+
     const otpArray = userOtp.split("");
     otpArray[index] = value;
-    setUserOtp(otpArray.join(""));
+    const newOtp = otpArray.join("");
+    setUserOtp(newOtp);
+
+    // Clear error when user starts typing
+    if (errors.otp && newOtp.length > 0) {
+      setErrors({ ...errors, otp: "" });
+    }
+
     if (value.length === 1 && index < otpRefs.current.length - 1) {
-      otpRefs.current[index + 1].focus(); // Move focus to the next field
+      otpRefs.current[index + 1].focus();
     }
   };
 
   const handleOtpKeyDown = (index, event) => {
     if (event.key === "Backspace" && index > 0 && event.target.value === "") {
-      otpRefs.current[index - 1].focus(); // Move focus to the previous field
+      otpRefs.current[index - 1].focus();
+    }
+  };
+
+  const handleMobileNumberChange = (e) => {
+    const value = e.target.value;
+    // Only allow numeric input
+    if (value && !/^[0-9]*$/.test(value)) return;
+
+    setMobileNumber(value);
+
+    // Clear error when user starts typing
+    if (errors.mobileNumber && value.length > 0) {
+      setErrors({ ...errors, mobileNumber: "" });
     }
   };
 
@@ -86,7 +156,13 @@ const LoginPopup = ({ open, onClose }) => {
     <>
       <Dialog
         open={open}
-        onClose={onClose}
+        onClose={() => {
+          onClose();
+          setOtpSent(false);
+          setMobileNumber("");
+          setUserOtp("");
+          setErrors({ mobileNumber: "", otp: "" });
+        }}
         maxWidth={false}
         PaperProps={{
           sx: {
@@ -126,6 +202,9 @@ const LoginPopup = ({ open, onClose }) => {
               onClick={() => {
                 onClose();
                 setOtpSent(false);
+                setMobileNumber("");
+                setUserOtp("");
+                setErrors({ mobileNumber: "", otp: "" });
               }}
               sx={{ position: "absolute", top: 16, right: 16 }}
             >
@@ -184,7 +263,7 @@ const LoginPopup = ({ open, onClose }) => {
                 >
                   ONE TIME PASSWORD*
                 </Typography>
-                <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+                <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
                   {Array.from({ length: 4 }).map((_, index) => (
                     <TextField
                       key={index}
@@ -198,16 +277,23 @@ const LoginPopup = ({ open, onClose }) => {
                       onChange={(e) => handleOtpChange(index, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(index, e)}
                       inputRef={(ref) => (otpRefs.current[index] = ref)}
+                      error={!!errors.otp}
                     />
                   ))}
                 </Box>
+                {errors.otp && (
+                  <Typography color="error" variant="caption" sx={{ mb: 2 }}>
+                    {errors.otp}
+                  </Typography>
+                )}
                 <Typography
                   variant="body2"
                   color="textSecondary"
                   align="center"
                   mb={2}
                 >
-                  Time remaining: {Math.floor(timer / 60)}:{timer % 60 < 10 ? "0" : ""}
+                  Time remaining: {Math.floor(timer / 60)}:
+                  {timer % 60 < 10 ? "0" : ""}
                   {timer % 60} minutes
                 </Typography>
                 <Button
@@ -225,6 +311,23 @@ const LoginPopup = ({ open, onClose }) => {
                 >
                   {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
                 </Button>
+
+                <Typography
+                  variant="body2"
+                  align="center"
+                  sx={{
+                    mb: 3,
+                    color: "#FF6B00",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                    "&:hover": {
+                      opacity: 0.8,
+                    },
+                  }}
+                  onClick={() => setOtpSent(false)}
+                >
+                  Edit phone number
+                </Typography>
 
                 {/* Success/Error Message */}
                 {message && (
@@ -251,6 +354,13 @@ const LoginPopup = ({ open, onClose }) => {
                   fullWidth
                   variant="outlined"
                   size="small"
+                  value={mobileNumber}
+                  onChange={handleMobileNumberChange}
+                  error={!!errors.mobileNumber}
+                  helperText={errors.mobileNumber}
+                  inputProps={{
+                    maxLength: 10,
+                  }}
                   sx={{ mb: 2 }}
                 />
                 <Button
