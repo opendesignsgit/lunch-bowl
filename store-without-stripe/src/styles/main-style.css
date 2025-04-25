@@ -397,3 +397,89 @@ ul.footmenu li a{color: #FFFFFF;}
 .OffAvitbbox ul{background: #FFECE2;border: 1px solid #EAEAEC;border-radius: 10px;padding: 20px 20px 20px 45px;list-style: disc;}
 .OffAvitbbox ul li p{font-weight: 500;}
 .OffAvitbbox ul li p strong{color: #FF6514;}
+
+.calandySecs{}
+.MCcalendy {border: 1px solid #EAEAEC;}
+.MCcalendy p{font-family: "Open Sans", sans-serif;}
+.MCcalendy .MCMainPanel {min-height: 75vh;}
+.MCcalendy .MCLeftPanel{padding: 2vw 1.5vw;height: 75vh;max-height: none;position: relative;}
+.MCcalendy .FLtable{}
+.MCcalendy .FLtable .FLbody{}
+.MCcalendy .FLtable .flitems {padding-block: 8px;}
+.MCcalendy .FLtable .flitems p{color: #777777;font-weight: 600;}
+.MCcalendy .FLtable .flitems .editbtn {margin-left: 10px;}
+.MCcalendy .MCMiddlePanel{padding: 2vw;}
+.MCcalendy .MCMiddlePanel .childslidebox {margin-bottom: 2vh;}
+.MCcalendy .MCMiddlePanel .childslidebox p{font-family: 'Baloo';font-size: 1vw;font-weight: 100;}
+.MCcalendy .MCMiddlePanel .clandhead p{margin-bottom: 0;padding-block: 10px;font-weight: 600;text-transform: uppercase;letter-spacing: -0.5px;}
+.MCcalendy .MCMiddlePanel .clandybox  {}
+.MCcalendy .MCMiddlePanel .clandbody  {}
+.MCcalendy .MCMiddlePanel .daybox {aspect-ratio: 2 / 1.3;width: 100%;}
+.MCcalendy .MCMiddlePanel .daybox span{width: 30px;aspect-ratio: 1;border-radius: 50%;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;text-align: center;font-weight: 600;}
+.MCcalendy .MCMiddlePanel .normalday{}
+.MCcalendy .MCMiddlePanel .selectday{}
+.MCcalendy .MCMiddlePanel .holiday {}
+.MCcalendy .MCMiddlePanel .normalday span{background: #ffffff; color:#777777;}
+.MCcalendy .MCMiddlePanel .selectday span{background: #f97316;color: #ffffff;}
+.MCcalendy .MCMiddlePanel .holiday span{background: #FFE6E6;color: #777777;}
+.MCcalendy .MCRightPanel {padding: 2vw 1.5vw;}
+.MCLeftPanel .titles {font-family: 'Baloo';text-align: center;line-height: 1;padding-block: 1.5vh;margin-bottom: 8px;  font-size: 1vw;position: relative;}
+.MCLeftPanel .titles:before{content:'';position: absolute;width: 100%;height: 2px;top: 0;left: 0;background: #000000;background: linear-gradient(90deg,rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);pointer-events: none;opacity: 0.2;}
+.MCLeftPanel .titles:after{content:'';position: absolute;width: 100%;height: 2px;bottom: 0;left: 0;background: #000000;background: linear-gradient(90deg,rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);pointer-events: none;opacity: 0.2;}
+.MCLeftPanel .childslidebox {color: #f97316;font-weight: 600;margin-bottom: 12px;}
+.MCLeftPanel .dataListbox {}
+.MCLeftPanel .dataListbox p{font-family: 'Baloo';font-weight: 100;font-size: 0.9vw;}
+.holylistbox{margin-top: 2vh;}
+h4.holylistitle{font-family: 'Baloo';text-align: center;line-height: 1;padding-block: 1.5vh;margin-block: 8px;font-size: 1vw;position: relative;}
+h4.holylistitle:before{content:'';position: absolute;width: 100%;height: 2px;top: 0;left: 0;background: #000000;background: linear-gradient(90deg,rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);pointer-events: none;opacity: 0.2;}
+h4.holylistitle:after{content:'';position: absolute;width: 100%;height: 2px;bottom: 0;left: 0;background: #000000;background: linear-gradient(90deg,rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);pointer-events: none;opacity: 0.2;}
+ul.holylisul{}
+ul.holylisul li{font-size: 14px;color: #333333;padding-block: 7px;padding-left: 18px;position: relative;line-height: 1;}
+ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;background: #FF6514;left: 0;top: 50%;display: block;-webkit-transform: rotate(45deg) translateY(-75%);-ms-transform: rotate(45deg) translateY(-75%);transform: rotate(45deg) translateY(-75%);}
+
+.fixcheckboxs{padding: 8px 10px;background: #FFECE2;border-radius: 5px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+.fixcheckboxs label{margin: 0;}
+.fixcheckboxs label span{padding: 0;margin-right: 10px;}
+.fixcheckboxs label span input[type='checkbox']{position: relative;width: 15px;height: 15px;border-color: #777777;border-radius: 5px;opacity: 1;}
+.fixcheckboxs label span input[type='checkbox']:checked{background-color: #f97316;}
+.fixcheckboxs label span input:focus{outline: none;box-shadow: none;}
+.fixcheckboxs label span svg{display: none;}
+.fixcheckboxs label>p{color: #000000;font-weight: 600;letter-spacing: -0.5px;font-size: 14px;}
+.fixdatesboxs{text-align: center;margin-block:0 1vw;}
+.fixdatesboxs h2{font-size: 8vw;line-height: 1;letter-spacing: -2px;font-weight: 500;}
+.fixdatesboxs h4{font-size: 1.2vw;line-height: 1;}
+.MCcalendy p.sycmenu{font-family: 'Baloo';font-weight: 200;margin-bottom: 1vh;}
+.childlistbox{height: 100%;padding: 15px;border: 1px solid rgb(255 255 255 / 24%);  border-radius: 10px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;}
+.childmlist {margin-bottom: 10px;}
+.childinputbox .childmlist:last-child{margin-bottom: 0px;}
+.childmlist p.menuddtitle {margin-bottom: 8px;font-family: 'Baloo';font-weight: 200;line-height: 1;}
+.childmlist .menuddlistbox {}
+.childlistbox .checkboxbtn{margin: 0 0 10px;}
+.childlistbox .checkboxbtn span{padding: 0;margin-right: 5px;}
+.childlistbox .checkboxbtn span input[type='checkbox']{position: relative;width: 15px;height: 15px;border-color: #777777;border-radius: 4px;opacity: 1;}
+.childlistbox .checkboxbtn span input:focus{outline: none;box-shadow: none;}
+.childlistbox .checkboxbtn span svg{display: none;}
+.childlistbox .checkboxbtn>p{color: #ffffff;font-weight: 500;letter-spacing: -0.5px;font-size: 14px;line-height: 1.2;}
+.btngroups{}
+.btngroups button{position: relative;padding: 0;border: none;width: auto;background: transparent;box-shadow: none;}
+.btngroups button::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #ffffff;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.btngroups button:hover::before{right: 0;bottom: 0;}
+.btngroups button span{line-height: 45px;padding-inline: 30px;background: #ffffff;color: #FF6514;border:1px solid #ffffff;font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;text-transform: capitalize;width: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.btngroups button span:last-child{display: none;}
+.btngroups button span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: brightness(0) saturate(100%) invert(49%) sepia(90%) saturate(1395%) hue-rotate(359deg) brightness(105%) contrast(105%);}
+.btngroups button:hover span::after{top: -3px;right: -3px;}
+
+.btngroups button.cancelbtn span{background: transparent;color: #ffffff;}
+.btngroups button.cancelbtn span::after{display: none;}
+
+.radiobtngroup {}
+.radiobtngroup .radiobtrow {}
+.radiobtngroup .radiobtrow .MuiBox-root{margin-bottom: 10px;padding: 5px 10px;border: 1px solid rgb(255 255 255 / 24%);border-radius: 6px;}
+.radiobtngroup .radiobtrow .radiobtnsinput {padding: 0;color: #ffffff;}
+.radiobtngroup .radiobtrow .radiobtnstext  {color: #ffffff;padding-left: 6px;font-size: 14px;font-weight: 500;}
+
+
+
+@media (min-width: 1536px) {
+  .container {max-width: 1320px;}
+}

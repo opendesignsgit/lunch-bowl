@@ -161,15 +161,14 @@ const MenuCalendar = () => {
   };
 
   return (
-    <Box
+    <Box className="MCMainPanel"
       display="flex"
       flexDirection={isSmall ? "column" : "row"}
       bgcolor="#fff"
-      maxWidth="1100px"
       mx="auto"
       borderRadius={2}
       boxShadow={2}
-      overflow="hidden"
+      overflow="hidden" 
     >
       {/* Mobile view: Center panel first */}
       {isSmall && (
@@ -218,7 +217,7 @@ const MenuCalendar = () => {
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
             onEditClick={handleEditClick}
-            sx={{ width: "30%" }}
+            sx={{ width: "29%" }}
           />
 
           <CenterPanel
@@ -233,7 +232,7 @@ const MenuCalendar = () => {
             dummyHolidays={dummyHolidays}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
-            sx={{ width: "45%" }}
+            sx={{ width: "44%" }}
           />
 
           <RightPanel
@@ -248,7 +247,7 @@ const MenuCalendar = () => {
             formatDate={formatDate}
             editMode={editMode}
             setEditMode={setEditMode}
-            sx={{ width: "25%" }}
+            sx={{ width: "29%" }}
           />
         </>
       )}

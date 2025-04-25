@@ -76,15 +76,13 @@ const RightPanel = ({
   }, [editMode, selectedDate, useMealPlan]);
 
   return (
-    <Box
+    <Box className="MCRightPanel"
       sx={{
         width: isSmall ? "100%" : "25%",
         bgcolor: "#f97316",
         color: "#fff",
-        p: 3,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         ...sx,
       }}
     >
@@ -95,30 +93,23 @@ const RightPanel = ({
           </IconButton>
         </Box>
       )}
-
-      <FormControlLabel
-        control={
-          <Checkbox 
-            checked={useMealPlan}
-            onChange={(e) => setUseMealPlan(e.target.checked)}
-            sx={{ color: "#fff" }}
-          />
-        }
-        label={
-          <Typography fontSize="0.8rem" color="#fff">
-            Meal Plan Approved by Dietitian
-          </Typography>
-        }
-        sx={{ mb: 1, alignSelf: 'flex-start' }}
-      />
-      
-      <Typography fontSize="2.5rem" fontWeight="bold" textAlign="center">
-        {String(selectedDate).padStart(2, "0")}
-      </Typography>
-      <Typography fontSize="0.9rem" fontWeight="500" textAlign="center" mb={2}>
-        {getDayName(selectedDate).toUpperCase()}
-      </Typography>
-
+      <div className="fixcheckboxs">
+        <FormControlLabel 
+          control={
+            <Checkbox checked={useMealPlan} onChange={(e) => setUseMealPlan(e.target.checked)} sx={{ color: "#fff" }} />
+          }
+          label={
+            <Typography fontSize="0.8rem" color="#fff">
+              Meal Plan Approved by Dietitian
+            </Typography>
+          }
+          sx={{ mb: 1, alignSelf: 'flex-start' }}
+        />
+      </div>
+      <div className="fixdatesboxs">
+          <h2> {String(selectedDate).padStart(2, "0")} </h2>
+          <h4> {getDayName(selectedDate).toUpperCase()} </h4>
+      </div>
       {(() => {
         if (lessThan48Hours) {
           return (
@@ -156,151 +147,114 @@ const RightPanel = ({
 
         return (
           <>
-            <Typography fontWeight="bold" textAlign="center" mb={2} fontSize="0.9rem">
-              SELECT YOUR CHILD'S MENU
-            </Typography>
-
-            {useMealPlan ? (
-              <>
-                {dummyChildren.map((child) => (
-                  <Box key={child.id} mb={2}>
-                    <Typography fontSize="0.9rem" fontWeight="500" mb={0.5}>
-                      {child.name.toUpperCase()}
+            <div className="childlistbox">              
+              <div className="childinputbox">              
+                <Typography fontWeight="bold" textAlign="center" className="sycmenu">SELECT YOUR CHILD'S MENU</Typography>
+                {useMealPlan ? (
+                  <>
+                    {dummyChildren.map((child) => (
+                      <Box key={child.id} className="childmlist">
+                        <Typography  className="menuddtitle">{child.name.toUpperCase()}</Typography>
+                        <Box className='radiobtngroup'>
+                          <FormControl  className="radiobtnss" component="fieldset" fullWidth>
+                            <RadioGroup  className="radiobtrow"
+                              value={selectedPlans[child.id] || ""}
+                              onChange={(e) => handlePlanChange(child.id, e.target.value)}
+                            >
+                              {mealPlans.map((plan) => (
+                                <Box key={plan.id} display="flex" alignItems="center" mb={0.5}>
+                                  <Radio value={plan.id} size="small" className="radiobtnsinput"/>
+                                  <Typography fontSize="0.8rem" color="#000" sx={{ flexGrow: 1 }} className="radiobtnstext">
+                                    {plan.name}
+                                  </Typography>
+                                  <Link 
+                                    href="#" 
+                                    fontSize="0.8rem"
+                                    sx={{ 
+                                      color: '#f97316', 
+                                      textDecoration: 'none',
+                                      '&:hover': {
+                                        textDecoration: 'underline'
+                                      }
+                                    }}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleViewPlan(plan.id);
+                                    }}
+                                  >
+                                    View Plan
+                                  </Link>
+                                </Box>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                        </Box>
+                      </Box>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {dummyChildren.map((child) => (
+                      <Box key={child.id} className="childmlist">
+                          <Typography className="menuddtitle"> {child.name.toUpperCase()} </Typography>
+                          <Box className="menuddlistbox" bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
+                            <Select className="menuddlist"
+                              value={
+                                menuSelections[formatDate(selectedDate)]?.[child.id] || ""
+                              }
+                              onChange={(e) => handleMenuChange(child.id, e.target.value)}
+                              fullWidth
+                              variant="standard"
+                              disableUnderline
+                              MenuProps={{
+                                PaperProps: {
+                                  style: {
+                                    maxHeight: 48 * 4.5,
+                                  },
+                                },
+                              }}
+                            >
+                            <MenuItem value="">Select Dish</MenuItem>
+                            {dummyMenus.map((menu, i) => (
+                              <MenuItem key={i} value={menu}>
+                                {menu}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </Box>
+                      </Box>
+                    ))}
+                  </>
+                )}
+              </div>
+                        
+              <div className="childbtnsbox"> 
+                {isSelectedHoliday ? (
+                  <Box mb={2}>
+                    <Typography variant="body2" fontStyle="italic" fontSize="0.8rem">
+                      Note: This day is a holiday – additional charges apply.
                     </Typography>
-                    <Box bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
-                      <FormControl component="fieldset" fullWidth>
-                        <RadioGroup
-                          value={selectedPlans[child.id] || ""}
-                          onChange={(e) => handlePlanChange(child.id, e.target.value)}
-                        >
-                          {mealPlans.map((plan) => (
-                            <Box key={plan.id} display="flex" alignItems="center" mb={0.5}>
-                              <Radio value={plan.id} size="small" />
-                              <Typography fontSize="0.8rem" color="#000" sx={{ flexGrow: 1 }}>
-                                {plan.name}
-                              </Typography>
-                              <Link 
-                                href="#" 
-                                fontSize="0.8rem"
-                                sx={{ 
-                                  color: '#f97316', 
-                                  textDecoration: 'none',
-                                  '&:hover': {
-                                    textDecoration: 'underline'
-                                  }
-                                }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleViewPlan(plan.id);
-                                }}
-                              >
-                                View Plan
-                              </Link>
-                            </Box>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                    </Box>
                   </Box>
-                ))}
-              </>
-            ) : (
-              <>
-                {dummyChildren.map((child) => (
-                  <Box key={child.id} mb={2}>
-                    <Typography fontSize="0.9rem" fontWeight="500" mb={0.5}>
-                      {child.name.toUpperCase()}
-                    </Typography>
-                    <Box bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
-                      <Select
-                        value={
-                          menuSelections[formatDate(selectedDate)]?.[child.id] || ""
-                        }
-                        onChange={(e) => handleMenuChange(child.id, e.target.value)}
-                        fullWidth
-                        variant="standard"
-                        disableUnderline
-                        sx={{ 
-                          fontSize: "0.8rem", 
-                          color: "#000",
-                          maxWidth: "100%",
-                        }}
-                        MenuProps={{
-                          PaperProps: {
-                            style: {
-                              maxHeight: 48 * 4.5,
-                            },
-                          },
-                        }}
-                      >
-                        <MenuItem value="">Select Dish</MenuItem>
-                        {dummyMenus.map((menu, i) => (
-                          <MenuItem key={i} value={menu}>
-                            {menu}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Box>
-                  </Box>
-                ))}
-              </>
-            )}
+                ) : (
+                  !useMealPlan && (
+                    <FormControlLabel className="checkboxbtn"
+                      control={<Checkbox sx={{ color: "white" }} size="small" />}
+                      label={
+                        <Typography variant="body2" fontSize="0.8rem">
+                          Save Selected Menus for Upcoming Months
+                        </Typography>
+                      }
+                      sx={{ mb: 2 }}
+                    />
+                  )
+                )}
 
-            {isSelectedHoliday ? (
-              <Box mb={2}>
-                <Typography variant="body2" fontStyle="italic" fontSize="0.8rem">
-                  Note: This day is a holiday – additional charges apply.
-                </Typography>
-              </Box>
-            ) : (
-              !useMealPlan && (
-                <FormControlLabel
-                  control={<Checkbox sx={{ color: "white" }} size="small" />}
-                  label={
-                    <Typography variant="body2" fontSize="0.8rem">
-                      Save Selected Menus for Upcoming Months
-                    </Typography>
-                  }
-                  sx={{ mb: 2 }}
-                />
-              )
-            )}
-
-            <Box display="flex" justifyContent="space-between" gap={1}>
-              <Button
-                variant="outlined"
-                onClick={onClose}
-                sx={{
-                  bgcolor: "#fff",
-                  color: "#f97316",
-                  borderColor: "#fff",
-                  textTransform: "none",
-                  px: 2,
-                  fontSize: "0.8rem",
-                  fontWeight: "bold",
-                  "&:hover": { bgcolor: "#f5f5f5" },
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="outlined"
-                endIcon={<ArrowForward />}
-                sx={{
-                  bgcolor: "#fff",
-                  color: "#f97316",
-                  borderColor: "#fff",
-                  textTransform: "none",
-                  px: 2,
-                  fontSize: "0.8rem",
-                  fontWeight: "bold",
-                  boxShadow: 1,
-                  "&:hover": { bgcolor: "#f5f5f5" },
-                }}
-              >
-                {isSelectedHoliday ? "Pay" : "Save"}
-              </Button>
-            </Box>
+                <Box display="flex" gap={2} className="btngroups">
+                  <Button variant="outlined" onClick={onClose} className="cancelbtn"> <span>Cancel</span> </Button>
+                  <Button variant="outlined" className="paysavebtn"> <span>{isSelectedHoliday ? "Pay" : "Save"}</span> </Button>
+                </Box>
+              </div>
+            </div>
           </>
         );
       })()}
