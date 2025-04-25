@@ -85,6 +85,14 @@ const Mainheader = ({ title, description, children }) => {
                 </Link>
               </li>
             </ul>
+            <div className='hmenubox' onClick={() => setShow(true)}>
+                    <h6>Menu</h6>
+                    <div className='hmenuline'>
+                      <div className='line lineone'> &nbsp; </div>
+                      <div className='line linetwo'> &nbsp; </div>
+                    </div>
+                </div>
+
           </div>
         </div>
     </header>
