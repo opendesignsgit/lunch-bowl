@@ -8,6 +8,7 @@ import {
   Typography,
   Box
 } from '@mui/material';
+import addSchoolPopUp from "../../../public/home/addSchoolPopUp.png";
 
 const SchoolServiceForm = ({ prefillSchool, onClose }) => {
   const [formData, setFormData] = useState({
@@ -18,13 +19,32 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
     message: ''
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newErrors = {};
+    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+    if (!formData.mobileNumber.trim()) {
+      newErrors.mobileNumber = 'Mobile number is required';
+    } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
+      newErrors.mobileNumber = 'Enter a valid 10-digit mobile number';
+    }
+    if (!formData.schoolName.trim()) newErrors.schoolName = 'School name is required';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     console.log('Form submitted:', formData);
     onClose();
   };
@@ -44,31 +64,26 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
       }}
     >
       <Box sx={{ display: 'flex', height: '100%' }}>
-        {/* Left Side - Blue Section */}
+        {/* Left Side - Image Section */}
         <Box
           sx={{
             width: '40%',
-            background: 'linear-gradient(135deg, #2563eb, #3b82f6)',
-            color: 'white',
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            p: 4,
-            textAlign: 'center'
+            backgroundColor: '#f8fafc',
+            overflow: 'hidden'
           }}
         >
-          <Typography variant="h4" sx={{ 
-            fontWeight: 'bold', 
-            mb: 2,
-            color: 'white',
-            fontSize: '1.8rem'
-          }}>
-            READY TO SERVE YOUR SCHOOL!
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'white', opacity: 0.9 }}>
-            We're excited to partner with your educational institution to provide the best services.
-          </Typography>
+          <img 
+            src={addSchoolPopUp} 
+            alt="School Service Illustration"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
         </Box>
 
         {/* Right Side - Form */}
@@ -85,13 +100,17 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
           
           <DialogContent sx={{ px: 0 }}>
             <form onSubmit={handleSubmit}>
+              {/* FIRST NAME & LAST NAME */}
               <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                 <Box sx={{ flex: 1 }}>
-                  <Typography variant="subtitle2" sx={{ 
-                    fontWeight: '600', 
-                    mb: 1,
-                    color: '#f97316' // Orange-500
-                  }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      fontWeight: '600',
+                      mb: 1,
+                      color: '#f97316'
+                    }}
+                  >
                     FIRST NAME*
                   </Typography>
                   <TextField
@@ -101,25 +120,19 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    required
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: '#cbd5e1',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: '#94a3b8',
-                        },
-                      }
-                    }}
+                    error={!!errors.firstName}
+                    helperText={errors.firstName}
                   />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                  <Typography variant="subtitle2" sx={{ 
-                    fontWeight: '600', 
-                    mb: 1,
-                    color: '#f97316' // Orange-500
-                  }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      fontWeight: '600',
+                      mb: 1,
+                      color: '#f97316'
+                    }}
+                  >
                     LAST NAME*
                   </Typography>
                   <TextField
@@ -129,27 +142,22 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    required
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: '#cbd5e1',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: '#94a3b8',
-                        },
-                      }
-                    }}
+                    error={!!errors.lastName}
+                    helperText={errors.lastName}
                   />
                 </Box>
               </Box>
 
+              {/* MOBILE NUMBER */}
               <Box sx={{ mb: 3 }}>
-                <Typography variant="subtitle2" sx={{ 
-                  fontWeight: '600', 
-                  mb: 1,
-                  color: '#f97316' // Orange-500
-                }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: '600',
+                    mb: 1,
+                    color: '#f97316'
+                  }}
+                >
                   MOBILE NUMBER*
                 </Typography>
                 <TextField
@@ -160,26 +168,21 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                   type="tel"
                   value={formData.mobileNumber}
                   onChange={handleChange}
-                  required
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#cbd5e1',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#94a3b8',
-                      },
-                    }
-                  }}
+                  error={!!errors.mobileNumber}
+                  helperText={errors.mobileNumber}
                 />
               </Box>
 
+              {/* SCHOOL NAME */}
               <Box sx={{ mb: 3 }}>
-                <Typography variant="subtitle2" sx={{ 
-                  fontWeight: '600', 
-                  mb: 1,
-                  color: '#f97316' // Orange-500
-                }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: '600',
+                    mb: 1,
+                    color: '#f97316'
+                  }}
+                >
                   SCHOOL NAME*
                 </Typography>
                 <TextField
@@ -189,25 +192,20 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                   name="schoolName"
                   value={formData.schoolName}
                   onChange={handleChange}
-                  required
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#cbd5e1',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#94a3b8',
-                      },
-                    }
-                  }}
+                  error={!!errors.schoolName}
+                  helperText={errors.schoolName}
                 />
               </Box>
 
+              {/* MESSAGE */}
               <Box sx={{ mb: 4 }}>
-                <Typography variant="subtitle2" sx={{ 
-                  mb: 1,
-                  color: '#64748b'
-                }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    mb: 1,
+                    color: '#64748b'
+                  }}
+                >
                   MESSAGE
                 </Typography>
                 <TextField
@@ -219,19 +217,10 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                   onChange={handleChange}
                   multiline
                   rows={4}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#cbd5e1',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#94a3b8',
-                      },
-                    }
-                  }}
                 />
               </Box>
 
+              {/* SUBMIT */}
               <Button
                 type="submit"
                 variant="contained"
@@ -240,10 +229,10 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                   py: 1.5,
                   fontWeight: 'bold',
                   fontSize: '1rem',
-                  backgroundColor: '#f97316', // Orange-500
+                  backgroundColor: '#f97316',
                   color: 'white',
                   '&:hover': {
-                    backgroundColor: '#ea580c', // Orange-600
+                    backgroundColor: '#ea580c'
                   },
                   borderRadius: '8px',
                   textTransform: 'none',
