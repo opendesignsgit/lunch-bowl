@@ -521,6 +521,16 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .propetilpopus .slider-container{position: relative;height: 100%;}
 .propetilpopus .Prodeilsliders {position: relative;width: 100%;}
 
+.ProdfilterBox {}
+.ProdfilterBox ul{border-bottom: 1px dashed #CCCCCC;}
+.ProdfilterBox ul li{padding-bottom: 10px;}
+.ProdfilterBox ul li button{font-family: 'Baloo';color: #777777;padding-inline: 30px;position: relative;height: 30px;font-size: 1vw;}
+.ProdfilterBox ul li button::before{content: '';position: absolute;top: 0;left: 0; border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-left: 15px solid #FFF4D7;}
+.ProdfilterBox ul li button::after{content: '';position: absolute;top: 0;right: 0; border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-right: 15px solid #FFF4D7;}
+.ProdfilterBox ul li button.active{background: #FF6514;color: #ffffff;}
+
+
+
 @media (min-width: 1536px) {
   .container {max-width: 1320px;}
 }
