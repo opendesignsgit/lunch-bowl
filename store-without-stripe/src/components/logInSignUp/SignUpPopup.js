@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import SignUpImage from "../../../public/LogInSignUp/LogIn.png";
+import useLoginSubmit from "../../hooks/useLoginSubmit";
 
 const SignUpPopup = ({ open, onClose }) => {
   const [form, setForm] = useState({
@@ -35,6 +36,7 @@ const SignUpPopup = ({ open, onClose }) => {
     otp: "",
   });
   const otpRefs = useRef([]);
+  const { submitHandler, loading } = useLoginSubmit();
 
   useEffect(() => {
     let interval;
@@ -103,12 +105,43 @@ const SignUpPopup = ({ open, onClose }) => {
     setErrors({ ...errors, mobile: "" }); // Clear mobile error when OTP is sent
   };
 
-  const handleSendOtp = () => {
+  const handleSendOtp = async () => {
     if (validateForm()) {
-      generateOtp();
-      setOtpSent(true);
+      try {
+        const res = await submitHandler({
+          // firstName: form.firstName,
+          // lastName: form.lastName,
+          mobile: form.mobile,
+          path: "signUp"
+          // email: form.email,
+          // otp: otp,
+        });
+  
+        console.log("res----->", res.message);
+  
+        // Check if OTP exists in the response
+        if (res.otp) {
+          console.log("OTP sent successfully:", res.otp);
+          // Optionally set the OTP state or show it to the user
+          setOtp(res.otp)
+          const expirySeconds = Math.floor(
+            (new Date(res.expiryTime) - new Date()) / 1000
+          ); // Calculate seconds remaining until expiry
+          setTimer(expirySeconds > 0 ? expirySeconds : 0);
+          // generateOtp();
+          setOtpSent(true);
+          setResendEnabled(false);
+          setMessage(null);
+          setErrors({ ...errors, mobile: "" });
+        } else {
+          console.warn("No OTP found in response.");
+        }
+      } catch (error) {
+        console.error("Error sending OTP:", error.message);
+      }
     }
   };
+  
 
   const handleResendOtp = () => {
     if (!validateMobile(form.mobile)) {
@@ -130,7 +163,7 @@ const SignUpPopup = ({ open, onClose }) => {
     if (userOtp === otp) {
       setMessage({ type: "success", text: "OTP verified successfully!" });
       setErrors({ ...errors, otp: "" });
-      // Here you would typically proceed with registration
+      // Register Logic
     } else {
       setMessage({
         type: "error",

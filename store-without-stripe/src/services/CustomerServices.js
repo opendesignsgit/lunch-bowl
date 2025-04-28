@@ -4,6 +4,9 @@ const CustomerServices = {
   loginCustomer: async (body) => {
     return requests.post("/customer/login", body);
   },
+  signUpOtp: async (body) => {
+    return requests.post("/customer/signUpOtp", body);
+  },
 
   verifyEmailAddress: async (body) => {
     return requests.post("/customer/verify-email", body);

@@ -11,6 +11,7 @@ const {
   forgetPasswordEmailBody,
 } = require("../lib/email-sender/templates/forget-password");
 const { sendVerificationCode } = require("../lib/phone-verification/sender");
+const PhoneVerification = require("../models/PhoneVerification");
 
 const verifyEmailAddress = async (req, res) => {
   const isAdded = await Customer.findOne({ email: req.body.email });
@@ -566,6 +567,63 @@ const deleteCustomer = (req, res) => {
   });
 };
 
+/////////////////////////////////////// website Api ////////////////////
+
+const sendOtp = async (req, res) => {
+  const phoneNumber = req.body.mobile;
+
+  if (!phoneNumber) {
+    return res.status(400).json({ message: "Phone number is required." });
+  }
+
+  const otp = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit OTP
+  const expiryTime = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes from now
+
+  try {
+    const record = await PhoneVerification.findOne({ 
+      phoneNumber: mobile,
+      otpSend:false,
+    });
+
+    if (record) {
+      // Update existing record
+      record.otp = otp;
+      record.expiryTime = expiryTime;
+      record.otpSend = true;
+      await record.save();
+    } else {
+      // Create new record if none exists
+      await PhoneVerification.create({
+        phoneNumber,
+        otp,
+        expiryTime,
+        otpSend: true,
+      });
+    }
+
+    setTimeout(async () => {
+      try {
+        await PhoneVerification.updateOne(
+          { phoneNumber },
+          { otpSend: false, otp: "" }
+        );
+      } catch (updateError) {
+        console.error("Error updating OTP fields:", updateError.message, updateError);
+      }
+    }, 2 * 60 * 1000); // 2 minutes timeout
+
+    // For testing/dev purposes — include OTP in response
+    return res.status(200).json({
+      message: "OTP sent successfully.",
+      otp, // Remove this in production
+      expiryTime,
+    });
+  } catch (error) {
+    console.error("Error sending OTP:", error.message, error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
 module.exports = {
   loginCustomer,
   verifyPhoneNumber,
@@ -585,4 +643,5 @@ module.exports = {
   getShippingAddress,
   updateShippingAddress,
   deleteShippingAddress,
+  sendOtp,
 };

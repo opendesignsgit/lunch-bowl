@@ -23,26 +23,42 @@ const useLoginSubmit = () => {
 
   // console.log("router", router.pathname === "/auth/signup");
 
-  const submitHandler = async ({ name, email, password, phone }) => {
+  const submitHandler = async ({
+    firstName,
+    lastName,
+    mobile,
+    email,
+    password,
+    phone,
+    path,
+  }) => {
     setLoading(true);
 
     // console.log("submitHandler", phone);
 
     try {
-      if (router.pathname === "/auth/signup") {
-        // Custom sign-up method
-        // console.log("Need to use custom sign-up method");
+      // if (router.pathname === "/auth/signup") {
+      //   // Custom sign-up method
+      //   // console.log("Need to use custom sign-up method");
 
-        // Call the sign-up API which also handles sending the email verification
-        const res = await CustomerServices.verifyEmailAddress({
-          name,
-          email,
-          password,
+      //   // Call the sign-up API which also handles sending the email verification
+      //   const res = await CustomerServices.verifyEmailAddress({
+      //     firstName,
+      //     lastName,
+      //     mobile,
+      //     email,
+      //     otp,
+      //   });
+
+      //   // console.log("res", res);
+      //   notifySuccess(res.message);
+      //   return setLoading(false);
+      // } else 
+      if (path === "signUp") {
+        const res = await CustomerServices.signUpOtp({
+          mobile,
         });
-
-        // console.log("res", res);
-        notifySuccess(res.message);
-        return setLoading(false);
+        return res;
       } else if (router.pathname === "/auth/forget-password") {
         // Call the forget password API for reset password
         const res = await CustomerServices.forgetPassword({
