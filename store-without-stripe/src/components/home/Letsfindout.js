@@ -37,7 +37,7 @@ const Letsfindout = () => {
             <option value="Vidya Mandir Senior Secondary School, Mylapore">Vidya Mandir Senior Secondary School, Mylapore</option>
             <option value="Bala Vidya Mandir">Bala Vidya Mandir</option>
             <option value="Sharanalaya Montessori School">Sharanalaya Montessori School</option>
-            <option value="Chetinad Harishree Vidyalayam">Chetinad Harishree Vidyalayam</option>
+            <option value="Chetinad Harishree Vidyalayam">Chetinad Harishree-Vidyalayam</option>
             <option value="Vidyodaya School">Vidyodaya School</option>
             <option value="Sprouts">Sprouts</option>
             <option value="St Michael Academy">St Michael Academy</option>
