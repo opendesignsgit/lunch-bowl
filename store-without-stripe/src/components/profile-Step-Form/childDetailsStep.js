@@ -5,22 +5,24 @@ import {
   Typography,
   Grid,
   Box,
-  Divider,
-  MenuItem,
   Tabs,
   Tab,
   IconButton,
+  MenuItem,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloseIcon from "@mui/icons-material/Close";
 import stepTwo from "../../../public/profileStepImages/stepTwo.png";
 
+// Validation schema
 const schema = yup.object().shape({
   childFirstName: yup.string().required("Child's first name is required"),
   childLastName: yup.string().required("Child's last name is required"),
-  dob: yup.string().required("Date of Birth is required"),
+  dob: yup.date().nullable().required("Date of Birth is required"),
   lunchTime: yup.string().required("Lunch time is required"),
   school: yup.string().required("School is required"),
   location: yup.string().required("Location is required"),
@@ -38,7 +40,7 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
           {
             childFirstName: "",
             childLastName: "",
-            dob: "",
+            dob: null,
             lunchTime: "",
             school: "",
             location: "",
@@ -56,7 +58,6 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
     reset,
     watch,
     control,
-    setValue,
   } = useForm({
     defaultValues: children[activeTab],
     resolver: yupResolver(schema),
@@ -86,7 +87,7 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
     const newChild = {
       childFirstName: "",
       childLastName: "",
-      dob: "",
+      dob: null,
       lunchTime: "",
       school: "",
       location: "",
@@ -131,10 +132,37 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const dropdownFields = [
-    ["CHILD'S LUNCH TIME*", "lunchTime", "Select Lunch Time", ["10:00 AM", "12:00 PM", "1:00 PM"]],
-    ["SCHOOL*", "school", "Select School", ["Greenwood", "Springfield"]],
-    ["LOCATION*", "location", "Select Location", ["Campus A", "Campus B"]],
-    ["CHILD CLASS*", "childClass", "Select Class", ["Nursery", "KG", "Grade 1"]],
+    ["CHILD'S LUNCH TIME*", "lunchTime", "Select Lunch Time", ["12:30 PM", "1:00 PM", ":30 PM"]],
+    [
+      "SCHOOL*", 
+      "school", 
+      "Select School", 
+      [
+        "Akshar Arbol International School",
+        "Asan Memorial Senior Secondary School",
+        "D.A.V. Public School",
+        "Don Bosco Matriculation Higher Secondary School",
+        "Holy Angels Anglo Indian Higher Secondary School",
+        "KC High School",
+        "MCTM International School",
+        "P.S. Higher Secondary School",
+        "Padma Seshadri Bala Bhavan School",
+        "Sishya School",
+        "St. Patrick's Anglo Indian Higher Secondary School",
+        "Vidya Mandir Senior Secondary School, Mylapore",
+        "Bala Vidya Mandir",
+        "Sharanalaya Montessori School",
+        "Chetinad Harishree Vidyalayam",
+        "Vidyodaya School",
+        "Sprouts",
+        "St Michael Academy",
+        "Accord International School",
+        "St Johns English School"
+      ]
+    ],
+    
+    ["LOCATION*", "location", "Select Location", ["Ambattur", "Pammal","Kotturpuram","Porur"]],
+    ["CHILD CLASS*", "childClass", "Select Class", ["LKG", "UKG", "Grade 1","Grade 2","Grade 3","Grade 4"]],
     ["CHILD SECTION*", "section", "Select Section", ["A", "B", "C"]],
   ];
 
@@ -158,14 +186,16 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
 
       {/* Form Side */}
       <Box sx={{ width: { xs: "100%", md: "55%" } }}>
-      <div className="steptitles">
-        <Typography variant="h5"> CHILD DETAILS : </Typography>
+        <div className="steptitles">
+          <Typography variant="h5">CHILD DETAILS :</Typography>
 
-        {/* Tabs */}
-          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }} className="adchildnav" >
-            <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" className="adchildul" >
+          {/* Tabs */}
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }} className="adchildnav">
+            <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" className="adchildul">
               {children.map((child, index) => (
-                <Tab key={index} label={
+                <Tab
+                  key={index}
+                  label={
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Typography>CHILD {index + 1}</Typography>
                       {children.length > 1 && (
@@ -188,7 +218,9 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
                 />
               ))}
             </Tabs>
-            <Button variant="outlined" onClick={addChild} className="addanochildbtn"> Add Another Child </Button>
+            <Button variant="outlined" onClick={addChild} className="addanochildbtn">
+              Add Another Child
+            </Button>
           </Box>
         </div>
 
@@ -197,10 +229,11 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
           {[
             ["CHILD'S FIRST NAME*", "childFirstName", "Enter Child's First Name"],
             ["CHILD'S LAST NAME*", "childLastName", "Enter Child's Last Name"],
-            ["DATE OF BIRTH*", "dob", "DD/MM/YYYY"],
           ].map(([label, name, placeholder]) => (
             <Grid item className="formboxcol" key={name}>
-              <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
+              <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
+                {label}
+              </Typography>
               <TextField
                 fullWidth
                 placeholder={placeholder}
@@ -212,36 +245,74 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
             </Grid>
           ))}
 
-          {/* Dropdowns */}
-          {dropdownFields.map(([label, name, placeholder, options]) => (
-            <Grid item  className="formboxcol" key={name}>
-              <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
+          {/* Date Picker */}
+          <Grid item className="formboxcol" key="dob">
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
+              DATE OF BIRTH*
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Controller
-                name={name}
+                name="dob"
                 control={control}
                 render={({ field }) => (
-                  <TextField
-                    select
-                    fullWidth
-                    label={placeholder}
+                  <DatePicker
                     {...field}
-                    error={!!errors[name]}
-                    helperText={errors[name]?.message}
-                    sx={{ width: "300px", minWidth: "300px" }}
-                  >
-                    <MenuItem value="" disabled>
-                      {placeholder}
-                    </MenuItem>
-                    {options.map((option) => (
-                      <MenuItem key={option} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    inputFormat="dd/MM/yyyy"
+                    renderInput={(params) => (
+                      <TextField
+                        fullWidth
+                        {...params}
+                        error={!!errors.dob}
+                        helperText={errors.dob?.message}
+                        sx={{ width: "300px", minWidth: "300px" }}
+                      />
+                    )}
+                  />
                 )}
               />
-            </Grid>
+            </LocalizationProvider>
+          </Grid>
+
+          {/* Dropdowns */}
+          {dropdownFields.map(([label, name, placeholder, options]) => (
+  <Grid item className="formboxcol" key={name}>
+    <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <TextField
+          select
+          fullWidth
+          label={placeholder}
+          {...field}
+          error={!!errors[name]}
+          helperText={errors[name]?.message}
+          sx={{ width: "300px", minWidth: "300px" }}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                style: {
+                  maxHeight: 200, // This will show about 4-5 items depending on their height
+                  overflow: 'auto',
+                },
+              },
+            },
+          }}
+        >
+          <MenuItem value="" disabled>
+            {placeholder}
+          </MenuItem>
+          {options.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
           ))}
+        </TextField>
+      )}
+    />
+  </Grid>
+))}
 
           {/* Allergies */}
           <Grid item className="formboxcol">

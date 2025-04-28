@@ -68,15 +68,20 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
 
       {/* Form Fields */}
       <Box sx={{ width: { xs: "100%", md: "55%" } }}>
-        
         <div className="steptitles">
           <Typography variant="h5">PARENT'S DETAILS:</Typography>
         </div>
-        
+
         <Grid className="formboxrow" container spacing={2}>
           {/* Parent Names */}
           <Grid className="formboxcol" item xs={12} sm={6}>
-            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}> PARENT FIRST NAME* </Typography>
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
+              {" "}
+              FATHER FIRST NAME*{" "}
+            </Typography>
             <TextField
               fullWidth
               variant="outlined"
@@ -88,7 +93,13 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
             />
           </Grid>
           <Grid className="formboxcol" item xs={12} sm={6}>
-            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }} > PARENT LAST NAME* </Typography>
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
+              {" "}
+              FATHER LAST NAME*{" "}
+            </Typography>
             <TextField
               fullWidth
               variant="outlined"
@@ -197,7 +208,10 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
         </Grid>
 
         <Box className="subbtnrow">
-          <Button className="subbtn nextbtn" type="submit" variant="contained"> <span className="nextspan">Next</span> </Button>
+          <Button className="subbtn nextbtn" type="submit" variant="contained">
+            {" "}
+            <span className="nextspan">Next</span>{" "}
+          </Button>
         </Box>
       </Box>
     </Box>

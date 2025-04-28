@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -17,35 +17,143 @@ import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 
-const dummyPlans = [
-  { id: 1, label: "24 Working Days - Rs. 4,800" },
-  { id: 2, label: "72 Working Days - Rs. 14,400" },
-  { id: 3, label: "144 Working Days - Rs. 28,800" },
-  { id: 4, label: "288 Working Days - Rs. 57,600" },
-];
+// Function to calculate working days between two dates (excluding weekends)
+const calculateWorkingDays = (startDate, endDate) => {
+  let count = 0;
+  let current = dayjs(startDate);
+  const end = dayjs(endDate);
+  
+  while (current.isBefore(end) || current.isSame(end, 'day')) {
+    // Check if it's not Saturday (6) or Sunday (0)
+    if (current.day() !== 0 && current.day() !== 6) {
+      count++;
+    }
+    current = current.add(1, 'day');
+  }
+  
+  return count;
+};
 
-const weekendsAndHolidays = [5, 6, 10, 12, 13, 14, 18, 19, 20, 26, 27];
-const today = 8;
+// Function to calculate end date based on working days from start date
+const calculateEndDateByWorkingDays = (startDate, workingDays) => {
+  let count = 0;
+  let current = dayjs(startDate);
+  
+  while (count < workingDays) {
+    if (current.day() !== 0 && current.day() !== 6) {
+      count++;
+    }
+    // Only move to next day if we haven't reached the required working days
+    if (count < workingDays) {
+      current = current.add(1, 'day');
+    }
+  }
+  
+  return current;
+};
 
 const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
   const [selectedPlan, setSelectedPlan] = useState("1");
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(null);
   const [errors, setErrors] = useState({
     startDate: false,
     endDate: false,
     dateOrder: false,
   });
-
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [plans, setPlans] = useState([]);
+
+  // Calculate plans based on current date
+  useEffect(() => {
+    const today = dayjs();
+    const calculatedPlans = [
+      {
+        id: 1,
+        label: "1 Month Plan",
+        workingDays: calculateWorkingDays(today, today.endOf('month')),
+        price: 0 // Will be calculated
+      },
+      {
+        id: 2,
+        label: "3 Months Plan",
+        workingDays: calculateWorkingDays(today, today.add(3, 'month').endOf('month')),
+        price: 0 // Will be calculated
+      },
+      {
+        id: 3,
+        label: "6 Months Plan",
+        workingDays: calculateWorkingDays(today, today.add(6, 'month').endOf('month')),
+        price: 0 // Will be calculated
+      },
+      {
+        id: 4,
+        label: "12 Months Plan",
+        workingDays: calculateWorkingDays(today, today.add(12, 'month').endOf('month')),
+        price: 0 // Will be calculated
+      }
+    ];
+
+    // Calculate prices
+    const plansWithPrices = calculatedPlans.map(plan => ({
+      ...plan,
+      price: plan.workingDays * 200,
+      label: `${plan.workingDays} Working Days - Rs. ${(plan.workingDays * 200).toLocaleString('en-IN')}`
+    }));
+
+    setPlans(plansWithPrices);
+    
+    // Set initial end date based on first plan
+    if (plansWithPrices.length > 0 && !endDate) {
+      const initialEndDate = calculateEndDateByWorkingDays(today, plansWithPrices[0].workingDays);
+      setEndDate(initialEndDate);
+    }
+  }, []);
+
+  // Update end date when plan changes
+  useEffect(() => {
+    if (selectedPlan !== "byDate" && plans.length > 0) {
+      const selected = plans.find(plan => plan.id.toString() === selectedPlan);
+      if (selected) {
+        const newEndDate = calculateEndDateByWorkingDays(startDate, selected.workingDays);
+        setEndDate(newEndDate);
+      }
+    }
+  }, [selectedPlan, startDate, plans]);
 
   const handlePlanChange = (e) => {
     setSelectedPlan(e.target.value);
     setErrors({ startDate: false, endDate: false, dateOrder: false });
     if (e.target.value !== "byDate") {
-      setStartDate(null);
-      setEndDate(null);
+      // Start date remains as is, end date will be updated in useEffect
     }
+  };
+
+  const handleStartDateChange = (newValue) => {
+    setStartDate(newValue);
+    setErrors({
+      ...errors,
+      startDate: false,
+      dateOrder: false,
+    });
+
+    // If not custom date plan, update end date based on selected plan
+    if (selectedPlan !== "byDate" && plans.length > 0) {
+      const selected = plans.find(plan => plan.id.toString() === selectedPlan);
+      if (selected) {
+        const newEndDate = calculateEndDateByWorkingDays(newValue, selected.workingDays);
+        setEndDate(newEndDate);
+      }
+    }
+  };
+
+  const handleEndDateChange = (newValue) => {
+    setEndDate(newValue);
+    setErrors({
+      ...errors,
+      endDate: false,
+      dateOrder: false,
+    });
   };
 
   const handleNext = () => {
@@ -64,8 +172,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
   };
 
   const renderDay = (dayNumber) => {
-    const isHoliday = weekendsAndHolidays.includes(dayNumber);
-    const isToday = dayNumber === today;
+    const isWeekend = [0, 6].includes(dayjs().date(dayNumber).day());
+    const isToday = dayNumber === dayjs().date();
     return (
       <Box
         key={dayNumber}
@@ -75,7 +183,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
           borderRadius: "50%",
           backgroundColor: isToday
             ? "#FF6A00"
-            : isHoliday
+            : isWeekend
             ? "#FFE9E1"
             : "transparent",
           color: isToday ? "#fff" : "#000",
@@ -108,11 +216,11 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
 
         {/* Right Form Section */}
         <Box sx={{ width: { xs: "100%", md: "55%" } }}>
-        <div className="steptitles">
-          <Typography variant="h6" fontWeight="bold">
-            SUBSCRIPTION PLAN:
-          </Typography>
-        </div>
+          <div className="steptitles">
+            <Typography variant="h6" fontWeight="bold">
+              SUBSCRIPTION PLAN:
+            </Typography>
+          </div>
           <Typography
             sx={{ color: "#FF6A00", fontWeight: 600, mt: 2, mb: 1 }}
             variant="subtitle2"
@@ -124,7 +232,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
           </Typography>
           <div className="subscrip">
           <RadioGroup value={selectedPlan} onChange={handlePlanChange} className="radiogroub">
-            {dummyPlans.map((plan) => (
+            {plans.map((plan) => (
               <Box
                 key={plan.id}
                 sx={{
@@ -235,14 +343,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                     <DatePicker
                       label="Start Date"
                       value={startDate}
-                      onChange={(newValue) => {
-                        setStartDate(newValue);
-                        setErrors({
-                          ...errors,
-                          startDate: false,
-                          dateOrder: false,
-                        });
-                      }}
+                      onChange={handleStartDateChange}
                       shouldDisableDate={(date) =>
                         dayjs(date).isBefore(dayjs(), "day")
                       }
@@ -265,22 +366,12 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                     <DatePicker
                       label="End Date"
                       value={endDate}
-                      onChange={(newValue) => {
-                        setEndDate(newValue);
-                        setErrors({
-                          ...errors,
-                          endDate: false,
-                          dateOrder: false,
-                        });
-                      }}
+                      onChange={handleEndDateChange}
                       shouldDisableDate={(date) => {
-                        const isLastDayOfMonth = dayjs(date)
-                          .endOf("month")
-                          .isSame(date, "day");
                         const isBeforeStartDate =
                           startDate &&
                           dayjs(date).isBefore(dayjs(startDate), "day");
-                        return !isLastDayOfMonth || isBeforeStartDate;
+                        return isBeforeStartDate;
                       }}
                       minDate={startDate || dayjs()}
                       slotProps={{
@@ -308,8 +399,20 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
           </RadioGroup>
 
           <Typography mt={1} fontSize={12} color="#888">
-            End Date must be the last day of the month and after Start Date.
+            End Date must be after Start Date.
           </Typography>
+
+          {/* Show calculated working days and price for custom date selection */}
+          {selectedPlan === "byDate" && startDate && endDate && (
+            <Box mt={2}>
+              <Typography variant="body2">
+                <strong>Working Days:</strong> {calculateWorkingDays(startDate, endDate)} days
+              </Typography>
+              <Typography variant="body2">
+                <strong>Total Price:</strong> Rs. {calculateWorkingDays(startDate, endDate) * 200}
+              </Typography>
+            </Box>
+          )}
 
           {/* Offers */}
           <Box className="OffAvitbbox"
@@ -370,12 +473,11 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
             sx={{
               p: 3,
               borderRadius: 3,
-              width: 700, // Increased from 360
+              width: 700,
               position: "relative",
-              minHeight: 550, // Added minimum height
+              minHeight: 550,
             }}
           >
-            {/* Header section remains the same */}
             <Box
               display="flex"
               justifyContent="center"
@@ -395,19 +497,16 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
             </Box>
 
             <Typography align="center" fontWeight="bold" sx={{ mt: 2, mb: 3 }}>
-              {" "}
-              {/* Increased bottom margin */}
-              APRIL, 2025
+              {dayjs().format('MMMM, YYYY')}
             </Typography>
 
-            {/* Weekday headers - increased font size */}
             <Box
               display="grid"
               gridTemplateColumns="repeat(7, 1fr)"
               textAlign="center"
               fontWeight="bold"
-              fontSize="0.875rem" // Increased from 0.75rem
-              mb={2} // Increased bottom margin
+              fontSize="0.875rem"
+              mb={2}
               gap={1}
             >
               {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map((day) => (
@@ -415,30 +514,28 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
               ))}
             </Box>
 
-            {/* Calendar days - increased cell size */}
             <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" gap={1.5}>
-              {" "}
-              {/* Increased gap */}
-              {/* Empty space for days before April 1st (Tuesday) */}
-              {[...Array(1)].map((_, i) => (
-                <Box key={`empty-${i}`} />
+              {/* Empty days for start of month */}
+              {[...Array(dayjs().startOf('month').day() - 1)].map((_, i) => (
+                <Box key={`empty-start-${i}`} />
               ))}
-              {/* Calendar days with larger dimensions */}
-              {[...Array(30)].map((_, i) => {
+              
+              {/* Calendar days */}
+              {[...Array(dayjs().daysInMonth())].map((_, i) => {
                 const dayNumber = i + 1;
-                const isHoliday = weekendsAndHolidays.includes(dayNumber);
-                const isToday = dayNumber === today;
-
+                const isWeekend = [6, 0].includes(dayjs().date(dayNumber).day());
+                const isToday = dayNumber === dayjs().date();
+                
                 return (
                   <Box
                     key={dayNumber}
                     sx={{
-                      width: 42, // Increased from 36
-                      height: 42, // Increased from 36
+                      width: 42,
+                      height: 42,
                       borderRadius: "50%",
                       backgroundColor: isToday
                         ? "#FF6A00"
-                        : isHoliday
+                        : isWeekend
                         ? "#FFE9E1"
                         : "transparent",
                       color: isToday ? "#fff" : "#000",
@@ -446,7 +543,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                       alignItems: "center",
                       justifyContent: "center",
                       fontWeight: 500,
-                      fontSize: "0.875rem", // Increased from 0.75rem
+                      fontSize: "0.875rem",
                       margin: "0 auto",
                     }}
                   >
@@ -456,28 +553,25 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
               })}
             </Box>
 
-            {/* Legend - increased font size */}
+            {/* Legend */}
             <Box
               display="flex"
               justifyContent="center"
               alignItems="center"
               mt={3}
             >
-              {" "}
-              {/* Increased top margin */}
               <Box
                 sx={{
-                  width: 12, // Increased from 10
-                  height: 12, // Increased from 10
+                  width: 12,
+                  height: 12,
                   borderRadius: "50%",
                   backgroundColor: "#FFE9E1",
-                  mr: 1.5, // Increased from 1
+                  mr: 1.5,
                 }}
               />
               <Typography fontSize="0.875rem">
                 Denotes Weekends & Holidays.
-              </Typography>{" "}
-              {/* Increased from 0.75rem */}
+              </Typography>
             </Box>
           </Paper>
         </Box>
