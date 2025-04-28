@@ -135,6 +135,7 @@ body .comffamily{font-family: 'Baloo';font-weight: 100;letter-spacing: -0.5px;}
 .comtilte h2.text-white {color: #ffffff;}
 .comtilte h2.text-EA1A27 {color: #EA1A27;}
 .comtilte h3.text4AB138 {color: #4AB138;}
+.comtilte h2.textFF6514 {color: #FF6514;}
 .comtilte h3.textFF6514 {color: #FF6514;}
 .comtilte h3.text-white {color: #ffffff;}
 .comtilte h4.text-white {color: #ffffff;}
@@ -187,6 +188,7 @@ ul.footmenu li a{color: #FFFFFF;}
 .HProlistSec:before{content: '';position: absolute;width: 100%;height: 40px;bottom: 0;left: 0;background: url(../../public/home/btmWaveVector.png) repeat-x top center;background-size: auto 85%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;
   -webkit-animation: slide 50s linear infinite;pointer-events: none;}
 .arrowIcon{box-shadow: 4px 4px 10px #3333333d}
+.progroupitem{border: 1px solid #777777;cursor: pointer;width: calc(33.333% - 20px);margin: 10px;}
 .nutritionboxs {}
 .nutritionitems{}
 .nutritionitems h5{}
@@ -301,8 +303,10 @@ ul.footmenu li a{color: #FFFFFF;}
 .pagebansec .breadcrumbs ol li a:hover{color: #4ab238;}
 .pagebansec .breadcrumbs ol li span{font-weight: 600;}
 .pagebansec::before{content: '';position: absolute;width: 100%;height: 35px;bottom: -1px;left: 0;background: url(../../public/introtopbefrimg.png) repeat-x top center;background-size: 90%;-webkit-transform: translateY(00%);-ms-transform: translateY(00%);transform: translateY(00%);z-index: 9;pointer-events: none;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
+.MenusLbanersec.pagebansec::before{background: url(../../public/introtopbefrimg-fff4d7.png) repeat-x top center;background-size: 90%;}
 .aboutbanersec .pageinconter::after{content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: 0;background: url(../../public/about/about-banimg.png) no-repeat center bottom;background-size: 100%;}
 .contusbanersec .pageinconter::after{content: '';position: absolute;width: 25%;height: 110%;right: 20%;bottom: 0;background: url(../../public/contus/contusbanbg.png) no-repeat center bottom;background-size: 100%;}
+.MenusLbanersec .pageinconter::after{content: '';position: absolute;width: 45%;height: 110%;right: 0%;bottom: 0;background: url(../../public/MenuListbanimg.png) no-repeat center bottom;background-size: 100%;filter: drop-shadow(2px 4px 6px rgb(51 51 51 / 12%));}
 .pagebansec.setpbanersec { height: 42vh;}
 
 .mteamitembox{border: 1px solid #ffffff;}
@@ -509,7 +513,13 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .radiobtngroup .radiobtrow .radiobtnsinput {padding: 0;color: #ffffff;}
 .radiobtngroup .radiobtrow .radiobtnstext  {color: #ffffff;padding-left: 6px;font-size: 14px;font-weight: 500;}
 
-
+.popbcont h3{font-size: 1.1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 10px;}
+.popbcont p{font-size: 16px;}
+.popbcont ul li{background: rgb(255 101 20 / 12%);padding: 5px 10px;font-size: 14px;color: #FF6514;letter-spacing: 0;border-radius: 5px;}
+.propetilpopus .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;}
+.propetilpopus .MuiPaper-root{border-radius: 8px;}
+.propetilpopus .slider-container{position: relative;height: 100%;}
+.propetilpopus .Prodeilsliders {position: relative;width: 100%;}
 
 @media (min-width: 1536px) {
   .container {max-width: 1320px;}

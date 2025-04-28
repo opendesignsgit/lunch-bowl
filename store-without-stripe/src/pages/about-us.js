@@ -26,7 +26,7 @@ import img6 from "../../public/about/environ-img6.jpg";
 const AboutUs = () => {
   return ( 
     <div className="aboutuspage">    
-      <Mainheader  title="Home" description="This is Home page"/>
+      <Mainheader  title="About Us" description="This is About Us page"/>
           <div className='pagebody'>
               <section className="pagebansec aboutbanersec relative">
                 <div className='container mx-auto relative h-full' >
