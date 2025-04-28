@@ -1,255 +1,190 @@
-import { SidebarContext } from "@context/SidebarContext";
-import { useContext, useEffect } from "react";
-import { useRouter } from "next/router";
+import React from 'react';
+import Link from "next/link";
+import Image from "next/image";
+import Head from "next/head";
+import Mainheader from '@layout/header/Mainheader';
+import Mainfooter from '@layout/footer/Mainfooter';
+import HomeProductCard from '@components/product/HomeProductCard';
+import Letsfindout from '@components/home/Letsfindout';
+import Htoworkslider from '@components/home/Htoworkslider';
+import Hoteamsslide from '@components/home/Hoteamsslide';
+import Accordion from '@components/faq/Accordion';
+import Homebanimg from "../../public/home/homebanimg.jpeg"
+import hintroImgOne from "../../public/home/hintroImg-one.jpg"
+import hintroImgTwo from "../../public/home/hintroImg-two.jpg"
+import HNutritionImg from "../../public/home/HNutritionImg.jpg"
 
-//internal import
-import Layout from "@layout/Layout";
-import Banner from "@components/banner/Banner";
-import useGetSetting from "@hooks/useGetSetting";
-import CardTwo from "@components/cta-card/CardTwo";
-import OfferCard from "@components/offer/OfferCard";
-import StickyCart from "@components/cart/StickyCart";
-import Loading from "@components/preloader/Loading";
-import ProductServices from "@services/ProductServices";
-import ProductCard from "@components/product/ProductCard";
-import MainCarousel from "@components/carousel/MainCarousel";
-import FeatureCategory from "@components/category/FeatureCategory";
-import AttributeServices from "@services/AttributeServices";
-import CMSkeleton from "@components/preloader/CMSkeleton";
+const Home = () => {
 
-const Home = ({ popularProducts, discountProducts, attributes }) => {
-  const router = useRouter();
-  const { isLoading, setIsLoading } = useContext(SidebarContext);
-  const { loading, error, storeCustomizationSetting } = useGetSetting();
-
-  // console.log("storeCustomizationSetting", storeCustomizationSetting);
-
-  useEffect(() => {
-    if (router.asPath === "/") {
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-    }
-  }, [router]);
+    const faqItems = [
+        {
+          title: "How do you ensure the food is nutritious and safe for my child?",
+          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+        },
+        {
+          title: "What if my child has specific dietary restrictions or allergies?",
+          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+        },
+        {
+          title: "How does the delivery process work, and can I trust it will arrive on time?",
+          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+        },
+        {
+          title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
+          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+        },
+        {
+          title: "Over time, what type of variation can I anticipate in the lunch bowl options? ",
+          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+        },
+        {
+          title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
+          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+        },
+        {
+          title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls? ",
+          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+        },
+      ];
 
   return (
-    <>
-      {isLoading ? (
-        <Loading loading={isLoading} />
-      ) : (
-        <Layout>
-          <div className="min-h-screen">
-            <StickyCart />
-            <div className="bg-white">
-              <div className="mx-auto py-5 max-w-screen-2xl px-3 sm:px-10">
-                <div className="flex w-full">
-                  <div className="flex-shrink-0 xl:pr-6 lg:block w-full lg:w-3/5">
-                    <MainCarousel />
-                  </div>
-                  <div className="w-full hidden lg:flex">
-                    <OfferCard />
-                  </div>
-                </div>
-                {storeCustomizationSetting?.home?.promotion_banner_status && (
-                  <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6">
-                    <Banner />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* feature category's */}
-            {storeCustomizationSetting?.home?.featured_status && (
-              <div className="bg-gray-100 lg:py-16 py-10">
-                <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
-                  <div className="mb-10 flex justify-center">
-                    <div className="text-center w-full lg:w-2/5">
-                      <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                        <CMSkeleton
-                          count={1}
-                          height={30}
-                          loading={loading}
-                          data={storeCustomizationSetting?.home?.feature_title}
-                        />
-                      </h2>
-                      <p className="text-base font-sans text-gray-600 leading-6">
-                        <CMSkeleton
-                          count={4}
-                          height={10}
-                          error={error}
-                          loading={loading}
-                          data={
-                            storeCustomizationSetting?.home?.feature_description
-                          }
-                        />
-                      </p>
+    <div class="homepage">
+        <Mainheader  title="Home" description="This is Home page"/>
+        <div className='pagebody'>
+            <section className='HbanSec relative bg-white flex'>
+                <div className='hbanLeft flex items-center justify-center' >
+                    <div className='hbanCont combtntb'>
+                        <h1 className='flex flex-col'>
+                            <span className='block'>Healthy Bites</span> 
+                            <span className='block'>t<strong className="iconone">o</strong> Fuel Y<strong className="icontwo">o</strong>ur</span> 
+                            <span className='block'>Child’s Mind</span>
+                        </h1>
+                        <h3>During School Lunch Time!</h3>
+                        <p>Healthy, delectable alternatives that are loaded with <br/>vital vitamins and minerals.</p>
+                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
-                  </div>
-
-                  <FeatureCategory />
                 </div>
-              </div>
-            )}
-
-            {/* popular products */}
-            {storeCustomizationSetting?.home?.popular_products_status && (
-              <div className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10">
-                <div className="mb-10 flex justify-center">
-                  <div className="text-center w-full lg:w-2/5">
-                    <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                      <CMSkeleton
-                        count={1}
-                        height={30}
-                        loading={loading}
-                        data={storeCustomizationSetting?.home?.popular_title}
-                      />
-                    </h2>
-                    <p className="text-base font-sans text-gray-600 leading-6">
-                      <CMSkeleton
-                        count={5}
-                        height={10}
-                        error={error}
-                        loading={loading}
-                        data={
-                          storeCustomizationSetting?.home?.popular_description
-                        }
-                      />
-                    </p>
-                  </div>
+                <div className='hbanRight relative'>
+                    <Image className="w-full h-auto" priority src= {Homebanimg} alt="logo" />
                 </div>
-                <div className="flex">
-                  <div className="w-full">
-                    {loading ? (
-                      <CMSkeleton
-                        count={20}
-                        height={20}
-                        error={error}
-                        loading={loading}
-                      />
-                    ) : (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                        {popularProducts
-                          ?.slice(
-                            0,
-                            storeCustomizationSetting?.home
-                              ?.popular_product_limit
-                          )
-                          .map((product) => (
-                            <ProductCard
-                              key={product._id}
-                              product={product}
-                              attributes={attributes}
-                            />
-                          ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+            </section>
 
-            {/* promotional banner card */}
-            {storeCustomizationSetting?.home?.delivery_status && (
-              <div className="block mx-auto max-w-screen-2xl">
-                <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
-                  <div className="lg:p-16 p-6 bg-emerald-500 shadow-sm border rounded-lg">
-                    <CardTwo />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* discounted products */}
-            {storeCustomizationSetting?.home?.discount_product_status &&
-              discountProducts?.length > 0 && (
-                <div
-                  id="discount"
-                  className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10"
-                >
-                  <div className="mb-10 flex justify-center">
-                    <div className="text-center w-full lg:w-2/5">
-                      <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                        <CMSkeleton
-                          count={1}
-                          height={30}
-                          loading={loading}
-                          data={
-                            storeCustomizationSetting?.home
-                              ?.latest_discount_title
-                          }
-                        />
-                      </h2>
-                      <p className="text-base font-sans text-gray-600 leading-6">
-                        <CMSkeleton
-                          count={5}
-                          height={20}
-                          loading={loading}
-                          data={
-                            storeCustomizationSetting?.home
-                              ?.latest_discount_description
-                          }
-                        />
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <div className="w-full">
-                      {loading ? (
-                        <CMSkeleton
-                          count={20}
-                          height={20}
-                          error={error}
-                          loading={loading}
-                        />
-                      ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                          {discountProducts
-                            ?.slice(
-                              0,
-                              storeCustomizationSetting?.home
-                                ?.latest_discount_product_limit
-                            )
-                            .map((product) => (
-                              <ProductCard
-                                key={product._id}
-                                product={product}
-                                attributes={attributes}
-                              />
-                            ))}
+            <section className='HintroSec bg-FFF4D7 relative bg-white flex py-[12vh]'>
+                <div className='container mx-auto' >
+                    <div className='flex items-center max-md:flex-col-reverse' >
+                        <div className='flex-1 hbanLeft flex justify-center flex-col' >
+                            <div className='hintroimgone rounded-[50%] overflow-hidden' >
+                                <Image className="w-full h-auto" priority src= {hintroImgOne} alt="logo" />
+                            </div>
+                            <div className='hintroimgtwo rounded-[50%] overflow-hidden self-end' >
+                                <Image className="w-full h-auto" priority src= {hintroImgTwo} alt="logo" />
+                            </div>
                         </div>
-                      )}
+                        <div className='flex-1 flex items-center hintroRight relative px-[4vw]'>
+                            <div className='hintroLeft combtntb comtilte'>
+                                <h4>The Mission Behind</h4>
+                                <h3 className='flex flex-col text4AB138'>
+                                    <span className='block'>Lunch Bowl</span> 
+                                </h3>
+                                <p>The goal of Lunch Bowl is to transform how kids get <br/>wholesome meals during the school day while directly <br/>addressing the difficulties experienced by working parents. <br/>In order to guarantee that every kid receives a nutritious, <br/>tasty meal that supports their learning and development, <br/>we are dedicated to delivering freshly made, healthful <br/>meals directly to schools.</p>
+                                <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Read More</span></Link></p>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              )}
-          </div>
-        </Layout>
-      )}
-    </>
+            </section>
+            <section className='HProlistSec bg-FF6514 relative bg-white flex py-[12vh]'>
+                <div className='container mx-auto' >
+                    <div className='hProListTitle combtntb comtilte textcenter mb-[8vh]'>
+                        <h3>The Mission Behind</h3>
+                        <h2 className='flex flex-col text-white'>
+                            <span className='block'>30+ Nutritious Picks</span> 
+                        </h2>
+                        <p className='text-white'>Nutrient-dense, well-portioned meals with a variety of flavors that are <br/>intended to entertain and feed kids every day.</p>
+                    </div>
+                    <div className='hProList'>
+                        <HomeProductCard/>
+                    </div>
+                    <div className='hProListTitle combtntb comtilte textcenter mt-[5vh]'>                    
+                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+                    </div>
+                </div>
+            </section>
+            <section className='HLFOlistSec bg-FFE6E6 relative  flex pt-[20vh] pb-[12vh]'>
+                <div className='container mx-auto flex flex-col items-start' >
+                    <div className='hLFOTitle combtntb comtilte mb-[5vh]'>
+                        <h3 className='text-[#000000]'>serving your school</h3>
+                        <h2 className='flex flex-col text-EA1A27'>
+                            <span className='block'>Lets Find Out!</span> 
+                        </h2>
+                        <p className=''>See whether your school is included in our list of schools that provide healthy, <br/>kid-friendly meals.</p>
+                    </div>
+                    <div className='hLFOintrow '>
+                        <Letsfindout/>
+                    </div>
+                </div>
+            </section>
+            <section className='HworktabSec relative bg-white flex py-[12vh]'>
+                <div className='container mx-auto' >
+                    <div className='hworkTitle combtntb comtilte textcenter  mb-[5vh]'>
+                        <h4 className='text-[#000000]'>How IT</h4>
+                        <h3 className='flex flex-col textFF6514'> <span className='block'>Works?</span> </h3>
+                        <p className=''>See how our site works as soon as you register <br/>and create an account with us.</p>
+                    </div>
+                    <div className='hworkintrow '>
+                        <Htoworkslider/>
+                    </div>
+                </div>
+            </section>
+            <section className='HteamSec relative bg-FF6514 flex py-[12vh]'>
+                <div className='container mx-auto' >
+                    <div className='hworkTitle combtntb comtilte textcenter mb-[5vh]'>
+                        <h4 className='text-[#000000]'>Meet the team</h4>
+                        <h3 className='flex flex-col text-white'> <span className='block'>Behind the Magic</span> </h3>
+                        <p className='text-white'>Experts in creating kid-friendly meals who combined inventiveness and fresh <br/>ingredients to create a nourishing and enchanted lunchtime experience.</p>
+                    </div>
+                    <div className='hworkintrow '>
+                        <Hoteamsslide/>
+                    </div>
+                    <div className='hworkTitle combtntb comtilte textcenter mt-[5vh]'>                    
+                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+                    </div>
+                </div>
+            </section>
+            <section className='HNutritionSec relative bg-FFF4D7 flex py-[12vh]'>
+                <div className='container mx-auto' >
+                    <div className='hNutritionTitle combtntb comtilte textcenter mb-[4vh]'>
+                        <h4 className='text-[#000000]'>Let's Talk Nutrition</h4>
+                        <h3 className='flex flex-col textFF6514'> <span className='block'>Your First Session Is Free!</span> </h3>
+                    </div>
+                    <div className='hNutritionintImg '>
+                        <Image className="w-full" priority src= {HNutritionImg} alt="logo" />
+                    </div>
+                    <div className='hNutritionTitle combtntb comtilte textcenter mt-[4vh]'>    
+                        <p className=''>Experts in creating kid-friendly meals who combined inventiveness and fresh <br/>ingredients to create a nourishing and enchanted lunchtime experience.</p>                
+                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Lets Talk</span></Link></p>
+                    </div>
+                </div>
+            </section>
+            <section className='HfaqSec relative bg-4AB138 flex'>
+                <div className='Hfaqinrow w-full relative py-[12vh]' >
+                    <div className='container mx-auto' >
+                        <div className='faqcontain py-[6vw] px-[8vw] bg-white relative' >
+                            <div className='hfaqTitle combtntb comtilte mb-[4vh]'>
+                                <h4 className='text-[#000000]'>Frequently Asked</h4>
+                                <h3 className='flex flex-col text4AB138'> <span className='block'>Questions</span> </h3>
+                            </div>
+                            <div className='hfaqAccordion '>
+                                <Accordion items={faqItems}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <Mainfooter/>
+    </div>
   );
-};
-
-export const getServerSideProps = async (context) => {
-  const { cookies } = context.req;
-  const { query, _id } = context.query;
-
-  const [data, attributes] = await Promise.all([
-    ProductServices.getShowingStoreProducts({
-      category: _id ? _id : "",
-      title: query ? query : "",
-    }),
-
-    AttributeServices.getShowingAttributes(),
-  ]);
-
-  return {
-    props: {
-      attributes,
-      cookies: cookies,
-      popularProducts: data.popularProducts,
-      discountProducts: data.discountedProducts,
-    },
-  };
-};
+}
 
 export default Home;

@@ -57,7 +57,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
       {/* Image */}
       <Box
         sx={{
-          width: { xs: "100%", md: "46%" },
+          width: { xs: "100%", md: "45%" },
           backgroundImage: `url(${stepOne.src})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "contain",
@@ -67,26 +67,16 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
       />
 
       {/* Form Fields */}
-      <Box sx={{ width: { xs: "100%", md: "54%" } }}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "bold", color: "#000", mb: 0, paddingBottom: "20px" }}
-        >
-          PARENT'S DETAILS:
-        </Typography>
-        <Divider
-          sx={{ borderBottom: "1px solid #C0C0C0", mb: 3, width: "95%" }}
-        />
+      <Box sx={{ width: { xs: "100%", md: "55%" } }}>
         
-        <Grid container spacing={2}>
+        <div className="steptitles">
+          <Typography variant="h5">PARENT'S DETAILS:</Typography>
+        </div>
+        
+        <Grid className="formboxrow" container spacing={2}>
           {/* Parent Names */}
-          <Grid item xs={12} sm={6}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-            >
-              PARENT FIRST NAME*
-            </Typography>
+          <Grid className="formboxcol" item xs={12} sm={6}>
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}> PARENT FIRST NAME* </Typography>
             <TextField
               fullWidth
               variant="outlined"
@@ -97,13 +87,8 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-            >
-              PARENT LAST NAME*
-            </Typography>
+          <Grid className="formboxcol" item xs={12} sm={6}>
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }} > PARENT LAST NAME* </Typography>
             <TextField
               fullWidth
               variant="outlined"
@@ -116,7 +101,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
           </Grid>
 
           {/* Mother Names */}
-          <Grid item xs={12} sm={6}>
+          <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -133,7 +118,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -152,7 +137,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
           </Grid>
 
           {/* Contact Info */}
-          <Grid item xs={12} sm={6}>
+          <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -169,7 +154,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -189,7 +174,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
           </Grid>
 
           {/* Address (full width) */}
-          <Grid item xs={12}>
+          <Grid className="formboxcol" item xs={12}>
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -211,23 +196,8 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
           </Grid>
         </Grid>
 
-        <Box sx={{ mt: 4, textAlign: "left" }}>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              backgroundColor: "#FF6A00",
-              color: "#fff",
-              px: 5,
-              py: 1.5,
-              textTransform: "none",
-              fontWeight: "bold",
-              borderRadius: 0,
-              "&:hover": { backgroundColor: "#e65c00" },
-            }}
-          >
-            Next ↗
-          </Button>
+        <Box className="subbtnrow">
+          <Button className="subbtn nextbtn" type="submit" variant="contained"> <span className="nextspan">Next</span> </Button>
         </Box>
       </Box>
     </Box>

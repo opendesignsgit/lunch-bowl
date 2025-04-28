@@ -147,7 +147,7 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Image Side */}
       <Box
         sx={{
-          width: { xs: "100%", md: "46%" },
+          width: { xs: "100%", md: "45%" },
           backgroundImage: `url(${stepTwo.src})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "contain",
@@ -157,89 +157,50 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
       />
 
       {/* Form Side */}
-      <Box sx={{ width: { xs: "100%", md: "54%" } }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0, paddingBottom: "20px" }}>
-          CHILD DETAILS :
-        </Typography>
+      <Box sx={{ width: { xs: "100%", md: "55%" } }}>
+      <div className="steptitles">
+        <Typography variant="h5"> CHILD DETAILS : </Typography>
 
         {/* Tabs */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{
-              minHeight: "auto",
-              "& .MuiTab-root": {
-                minHeight: "auto",
-                py: 1,
-                px: 2,
-                fontSize: "0.875rem",
-                textTransform: "none",
-              },
-            }}
-          >
-            {children.map((child, index) => (
-              <Tab
-                key={index}
-                label={
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography>CHILD {index + 1}</Typography>
-                    {children.length > 1 && (
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeChild(index);
-                        }}
-                        sx={{ ml: 1 }}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </IconButton>
-                    )}
-                  </Box>
-                }
-                sx={{
-                  bgcolor: activeTab === index ? "#FF6A00" : "transparent",
-                  color: activeTab === index ? "#fff" : "inherit",
-                  borderRadius: 1,
-                  mr: 1,
-                }}
-              />
-            ))}
-          </Tabs>
-          <Button
-            variant="outlined"
-            onClick={addChild}
-            sx={{
-              ml: 2,
-              px: 2,
-              py: 1,
-              borderRadius: 0,
-              borderColor: "#FF6A00",
-              color: "#FF6A00",
-              "&:hover": {
-                borderColor: "#FF6A00",
-                backgroundColor: "rgba(255, 106, 0, 0.08)",
-              },
-            }}
-          >
-            Add Child
-          </Button>
-        </Box>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }} className="adchildnav" >
+            <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" className="adchildul" >
+              {children.map((child, index) => (
+                <Tab key={index} label={
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Typography>CHILD {index + 1}</Typography>
+                      {children.length > 1 && (
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeChild(index);
+                          }}
+                        >
+                          <CloseIcon fontSize="small" />
+                        </IconButton>
+                      )}
+                    </Box>
+                  }
+                  sx={{
+                    bgcolor: activeTab === index ? "#FF6A00" : "transparent",
+                    color: activeTab === index ? "#fff" : "inherit",
+                  }}
+                />
+              ))}
+            </Tabs>
+            <Button variant="outlined" onClick={addChild} className="addanochildbtn"> Add Another Child </Button>
+          </Box>
+        </div>
 
-        <Divider sx={{ borderBottom: "1px solid #C0C0C0", mb: 3, width: "85%" }} />
-
-        <Grid container spacing={2}>
+        <Grid container className="formboxrow">
           {/* Text Inputs */}
           {[
             ["CHILD'S FIRST NAME*", "childFirstName", "Enter Child's First Name"],
             ["CHILD'S LAST NAME*", "childLastName", "Enter Child's Last Name"],
             ["DATE OF BIRTH*", "dob", "DD/MM/YYYY"],
           ].map(([label, name, placeholder]) => (
-            <Grid item xs={12} sm={6} key={name}>
-              <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
+            <Grid item className="formboxcol" key={name}>
+              <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
               <TextField
                 fullWidth
                 placeholder={placeholder}
@@ -253,8 +214,8 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
 
           {/* Dropdowns */}
           {dropdownFields.map(([label, name, placeholder, options]) => (
-            <Grid item xs={12} sm={6} key={name}>
-              <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
+            <Grid item  className="formboxcol" key={name}>
+              <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
               <Controller
                 name={name}
                 control={control}
@@ -283,14 +244,14 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
           ))}
 
           {/* Allergies */}
-          <Grid item xs={12}>
-            <Typography sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
+          <Grid item className="formboxcol">
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
               DOES THE CHILD HAVE ANY ALLERGIES?
             </Typography>
             <TextField
               fullWidth
               multiline
-              rows={4}
+              rows={3}
               placeholder="If yes, please specify."
               {...register("allergies")}
               error={!!errors.allergies}
@@ -298,30 +259,12 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
               sx={{ width: "625px", minWidth: "625px" }}
             />
           </Grid>
+
         </Grid>
 
-        <Box sx={{ mt: 4, display: "flex", gap: 2 }}>
-          <Button variant="outlined" onClick={prevStep}>
-            Back
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              backgroundColor: "#FF6A00",
-              color: "#fff",
-              textTransform: "none",
-              fontWeight: "bold",
-              px: 5,
-              py: 1.5,
-              borderRadius: 0,
-              "&:hover": {
-                backgroundColor: "#e65c00",
-              },
-            }}
-          >
-            Next ↗
-          </Button>
+        <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap:  3}}>
+          <Button variant="outlined" onClick={prevStep} className="backbtn"> <span className="nextspan">Back</span> </Button>
+          <Button type="submit" variant="contained" className="nextbtn"> <span className="nextspan">Next</span> </Button>
         </Box>
       </Box>
     </Box>
