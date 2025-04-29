@@ -61,7 +61,7 @@ const Home = () => {
                         </h1>
                         <h3>During School Lunch Time!</h3>
                         <p>Healthy, delectable alternatives that are loaded with <br/>vital vitamins and minerals.</p>
-                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+                        <p className="parabtn flex"><Link href="/Menulist" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
                 </div>
                 <div className='hbanRight relative'>
@@ -87,7 +87,7 @@ const Home = () => {
                                     <span className='block'>Lunch Bowl</span> 
                                 </h3>
                                 <p>The goal of Lunch Bowl is to transform how kids get <br/>wholesome meals during the school day while directly <br/>addressing the difficulties experienced by working parents. <br/>In order to guarantee that every kid receives a nutritious, <br/>tasty meal that supports their learning and development, <br/>we are dedicated to delivering freshly made, healthful <br/>meals directly to schools.</p>
-                                <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Read More</span></Link></p>
+                                <p className="parabtn flex"><Link href="/about-us" className="emenulink relative" ><span className='block flex items-center relative'>Read More</span></Link></p>
                             </div>
                         </div>
                     </div>
@@ -103,10 +103,10 @@ const Home = () => {
                         <p className='text-white'>Nutrient-dense, well-portioned meals with a variety of flavors that are <br/>intended to entertain and feed kids every day.</p>
                     </div>
                     <div className='hProList'>
-                        <HomeProductCard/>
+                        <HomeProductCard limit={6}/>
                     </div>
                     <div className='hProListTitle combtntb comtilte textcenter mt-[5vh]'>                    
-                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+                        <p className="parabtn flex"><Link href="/Menulist" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
                 </div>
             </section>
@@ -147,7 +147,7 @@ const Home = () => {
                         <Hoteamsslide/>
                     </div>
                     <div className='hworkTitle combtntb comtilte textcenter mt-[5vh]'>                    
-                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+                        <p className="parabtn flex"><Link href="/about-us" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
                 </div>
             </section>

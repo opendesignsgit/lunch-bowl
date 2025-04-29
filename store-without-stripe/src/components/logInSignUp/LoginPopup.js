@@ -151,76 +151,24 @@ const LoginPopup = ({ open, onClose }) => {
       setErrors({ ...errors, mobileNumber: "" });
     }
   };
-
   return (
     <>
-      <Dialog
-        open={open}
-        onClose={() => {
-          onClose();
-          setOtpSent(false);
-          setMobileNumber("");
-          setUserOtp("");
-          setErrors({ mobileNumber: "", otp: "" });
-        }}
-        maxWidth={false}
-        PaperProps={{
-          sx: {
-            width: "1000px",
-            height: "650px",
-            borderRadius: "16px",
-            overflow: "hidden",
-          },
-        }}
-      >
-        <Box sx={{ display: "flex", height: "100%" }}>
+      <Dialog className="compopups" open={open} onClose={() => { onClose(); setOtpSent(false); setMobileNumber(""); setUserOtp(""); setErrors({ mobileNumber: "", otp: "" }); }} maxWidth="lg" fullWidth  sx={{
+    '& .MuiDialog-paper': {
+      height: '75vh',
+    }
+  }}>
+        <Box className="flex relative h-full  relative overflow-hidden">
           {/* Left Side Image */}
-          <Box
-            sx={{
-              width: "50%",
-              backgroundImage: `url(${LogIn.src})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
+          <Box className="w-[50%]" sx={{ backgroundImage: `url(${LogIn.src})`, backgroundSize: "cover", backgroundPosition: "center", }} />
           {/* Right Side Form */}
-          <Box
-            sx={{
-              width: "50%",
-              padding: "55px",
-              paddingTop: "8%",
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              height: "100%",
-              bgcolor: "#fff",
-            }}
-          >
+          <Box className="w-[50%] p-[2.5vw] self-center logboxcol">
             {/* Close Icon */}
-            <IconButton
-              onClick={() => {
-                onClose();
-                setOtpSent(false);
-                setMobileNumber("");
-                setUserOtp("");
-                setErrors({ mobileNumber: "", otp: "" });
-              }}
-              sx={{ position: "absolute", top: 16, right: 16 }}
-            >
-              <CloseIcon />
-            </IconButton>
+               <IconButton className="popClose" onClick={() => { onClose(); setOtpSent(false); setMobileNumber(""); setUserOtp(""); setErrors({ mobileNumber: "", otp: "" }); }} sx={{ position: "absolute", top: 16, right: 16 }} > <CloseIcon />  </IconButton>
 
             {/* Title and Create Account */}
-            <Box sx={{ textAlign: "left", marginBottom: "24px" }}>
-              <Typography
-                variant="h4"
-                fontWeight="bold"
-                color="#000"
-                sx={{ textTransform: "uppercase", marginBottom: "4px" }}
-              >
-                {otpSent ? "Enter OTP" : "Log In"}
-              </Typography>
+            <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
+              <Typography variant="h4" color="#000"  sx={{ textTransform: "uppercase", marginBottom: "4px" }} > {otpSent ? "Enter OTP" : "Log In"}  </Typography>
               {!otpSent && (
                 <Typography variant="body2">
                   or{" "}
@@ -255,9 +203,9 @@ const LoginPopup = ({ open, onClose }) => {
             {/* Conditional Form */}
             {otpSent ? (
               <>
+              <div className="sendotpbox">
                 <Typography
-                  variant="body2"
-                  fontWeight="bold"
+                  variant="h6"
                   mb={1}
                   sx={{ color: "#FF6B00" }}
                 >
@@ -289,41 +237,27 @@ const LoginPopup = ({ open, onClose }) => {
                 <Typography
                   variant="body2"
                   color="textSecondary"
-                  align="center"
                   mb={2}
                 >
                   Time remaining: {Math.floor(timer / 60)}:
                   {timer % 60 < 10 ? "0" : ""}
                   {timer % 60} minutes
                 </Typography>
-                <Button
-                  fullWidth
-                  sx={{
-                    backgroundColor: resendEnabled ? "#FF6B00" : "#e85f00",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    padding: "12px",
-                    borderRadius: "4px",
-                    "&:hover": { backgroundColor: "#e85f00" },
-                  }}
-                  endIcon={<span>&#8594;</span>}
-                  onClick={resendEnabled ? handleResendOtp : handleVerifyOtp}
-                >
-                  {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
-                </Button>
-
-                <Typography
+                <div className="resendbtn">
+                  <Button
+                    fullWidth
+                    sx={{
+                      backgroundColor: resendEnabled ? "#FF6B00" : "#e85f00",
+                      color: "#fff",
+                      "&:hover": { backgroundColor: "#e85f00" },
+                    }}
+                    onClick={resendEnabled ? handleResendOtp : handleVerifyOtp}
+                  >
+                    {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
+                  </Button>
+                </div>
+                <Typography className="ephonenolink"
                   variant="body2"
-                  align="center"
-                  sx={{
-                    mb: 3,
-                    color: "#FF6B00",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                    "&:hover": {
-                      opacity: 0.8,
-                    },
-                  }}
                   onClick={() => setOtpSent(false)}
                 >
                   Edit phone number
@@ -338,12 +272,13 @@ const LoginPopup = ({ open, onClose }) => {
                     {message.text}
                   </Alert>
                 )}
+                </div>
               </>
             ) : (
               <>
+              <div className="loginfiledss">
                 <Typography
-                  variant="body2"
-                  fontWeight="bold"
+                  variant="h6"
                   mb={1}
                   sx={{ color: "#FF6B00" }}
                 >
@@ -363,7 +298,7 @@ const LoginPopup = ({ open, onClose }) => {
                   }}
                   sx={{ mb: 2 }}
                 />
-                <Button
+                <Button className="sotpbtn"
                   fullWidth
                   sx={{
                     backgroundColor: "#FF6B00",
@@ -373,18 +308,18 @@ const LoginPopup = ({ open, onClose }) => {
                     borderRadius: "4px",
                     "&:hover": { backgroundColor: "#e85f00" },
                   }}
-                  endIcon={<span>&#8594;</span>}
                   onClick={handleSendOtp}
                 >
-                  Send One Time Password
+                  <span>Send One Time Password</span>
                 </Button>
+                </div>
               </>
             )}
 
             {/* Divider */}
             {!otpSent && (
               <>
-                <Divider sx={{ my: 3, position: "relative", paddingY: "20px" }}>
+                <Divider className="ordivider" sx={{ my: 3, position: "relative", paddingY: "20px" }}>
                   <Typography
                     component="span"
                     sx={{
@@ -404,37 +339,30 @@ const LoginPopup = ({ open, onClose }) => {
                 </Divider>
 
                 {/* Social Login Buttons */}
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <Button
+                <Box className="wsmideabtn">
+                  <ul className="flex gap-2">
+                    <li className="flex-1">
+                      <Button className="gglebtn"
                     startIcon={<GoogleIcon />}
                     sx={{
                       backgroundColor: "#34A853",
                       color: "#fff",
-                      fontWeight: 500,
-                      padding: "8px 16px",
-                      minWidth: "180px",
-                      borderRadius: "4px",
-                      whiteSpace: "nowrap",
-                      "&:hover": { opacity: 0.9 },
                     }}
                   >
-                    Log In with Google
-                  </Button>
-                  <Button
+                    <span>Log In with Google</span>
+                  </Button></li>
+                    <li className="flex-1"><Button className="fbookbtn"
                     startIcon={<FacebookIcon />}
                     sx={{
                       backgroundColor: "#1877F2",
                       color: "#fff",
-                      fontWeight: 500,
-                      padding: "8px 16px",
-                      minWidth: "180px",
-                      borderRadius: "4px",
-                      whiteSpace: "nowrap",
-                      "&:hover": { opacity: 0.9 },
                     }}
                   >
-                    Log In with Facebook
-                  </Button>
+                    <span>Log In with Facebook</span>
+                  </Button></li>
+                  </ul>
+                  
+                  
                 </Box>
               </>
             )}
