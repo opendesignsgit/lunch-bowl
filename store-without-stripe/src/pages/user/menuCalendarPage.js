@@ -13,27 +13,27 @@ const MenuCalendarPage = () => {
     },
     {
       title: "What if my child has specific dietary restrictions or allergies?",
-      content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+      content: "We take effort to accommodate allergies and provide menus that may be customized. We prevent cross-contamination with strict protocols."
     },
     {
       title: "How does the delivery process work, and can I trust it will arrive on time?",
-      content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+      content: "For prompt delivery in temperature-controlled trucks, we work with schools. Confirmations will be sent to you, and any delays will be quickly communicated."
     },
     {
       title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
-      content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+      content: "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters.  To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery."
     },
     {
       title: "Over time, what type of variation can I anticipate in the lunch bowl options? ",
-      content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+      content: "We make an effort to provide a varied and ever-changing menu to keep your child engaged.  In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients."
     },
     {
       title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
-      content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+      content: "Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
     },
     {
       title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls? ",
-      content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+      content: " We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
     },
   ];
 
