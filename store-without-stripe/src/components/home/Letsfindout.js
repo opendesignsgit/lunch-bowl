@@ -22,7 +22,7 @@ const Letsfindout = () => {
       <div className="lfooutfild">
         <h6>Select a school to check its availability.</h6>
         <div className="inputbox bg-white p-[10px] rounded-[10px] flex ">
-        <select name="schoolname">
+        <select name="schoolname"> 
             <option>Select School Name</option>
             <option value="Asan Memorial Senior Secondary School">Asan Memorial Senior Secondary School</option>
             <option value="D.A.V. Public School">D.A.V. Public School</option>

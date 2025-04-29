@@ -23,8 +23,8 @@ header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 
 .logsinul li.trialbtn a::after{-webkit-filter: invert(1);filter: invert(1);}
 .logsinul li button{line-height: 50px;padding-inline: 40px;background: #ffffff;display: block;font-family: 'Baloo';font-size: 18px;position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .logsinul li button::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;}
-.logsinul li.trialbtn a{background: #FF6514;color: #ffffff;}
-.logsinul li.trialbtn a::after{-webkit-filter: invert(1);filter: invert(1);}
+.logsinul li.trialbtn button{background: #FF6514;color: #ffffff;}
+.logsinul li.trialbtn button::after{-webkit-filter: invert(1);filter: invert(1);}
 
 .logsinul li:hover::before{right: 0;bottom: 0;}
 .logsinul li:hover a::after{top: -3px;right: -3px;}
@@ -521,7 +521,45 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .propetilpopus .slider-container{position: relative;height: 100%;}
 .propetilpopus .Prodeilsliders {position: relative;width: 100%;}
 
+.compopups .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;}
+
+.poptitles h4{font-size: 2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 5px;}
+.poptitles p{font-size: 0.9vw;margin: 0 0 10px;}
+.loginfiledss h6{font-size: 0.9vw;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;}
+.loginfiledss label{font-size: 0.9vw;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;font-weight: 200;margin: 0;}
+.loginfiledss input{height: 50px;padding: 0 30px;font-family: "Open Sans", sans-serif;border-color: #EAEAEC;color: #333333;letter-spacing: -0.5px;font-weight: 500;}
+.loginfiledss input:focus, .loginfiledss input:focus-visible{border-color: #FF6514;outline: none;box-shadow: none;}
+.loginfiledss fieldset:focus, .loginfiledss fieldset:focus-visible{border-color: #FF6514;outline: none;box-shadow: none;}
+.loginfiledss button.sotpbtn{position: relative;padding: 0;border-radius: 0;background: transparent;font-weight: 100;}
+.loginfiledss button.sotpbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:1px solid #777777;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.loginfiledss button.sotpbtn span{line-height: 50px;padding-inline: 40px;background: #FF6514;color: #ffffff;width: 100%; font-family: 'Baloo';font-size: 18px;position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.loginfiledss button.sotpbtn:hover span{background: #db4b00;}
+.loginfiledss button.sotpbtn span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+.loginfiledss button.sotpbtn span.MuiTouchRipple-root{display: none;}
+.loginfiledss p.para-tcpp {font-size: 14px;}
+.loginfiledss p.para-tcpp a{color: #FF6514;font-weight: 500;}
+.loginfiledss p.para-tcpp a:hover{text-decoration: underline;}
+
+.ordivider{}
+.ordivider>span>span{padding: 0;position: relative;top: 0;left: 0;-webkit-transform: translate(0);-ms-transform: translate(0);transform: translate(0);width: 2.5vw;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;aspect-ratio: 1;font-family: 'Baloo';color: #000000;font-size: 1vw;border: 1px solid #000000;border-radius: 50%;}
+.wsmideabtn ul li{position: relative;padding: 0 4px 4px 0;}
+.wsmideabtn ul li::before{content: '';position: absolute;width: 80%;height: 100%;right: 0px;bottom: 0px;border:1px solid #777777;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.wsmideabtn button{width: 100%;border-radius: 0;font-family: 'Baloo';padding-block: 10px;}
+.wsmideabtn button.gglebtn:hover{background: #1d8137;}
+.wsmideabtn button.fbookbtn:hover{background: #1759c5;}
+.wsmideabtn button::after{content: '';position: relative;display: block;width: 13px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 10px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+.wsmideabtn button span.MuiTouchRipple-root{display: none;}
+.sendotpbox h6{font-size: 0.9vw;line-height: 1;text-transform: uppercase;font-family: 'Baloo'; letter-spacing: -0.5px;}
+.sendotpbox p.ephonenolink{margin-bottom: 0;margin-top: 20px;cursor: pointer;text-transform: uppercase;font-weight: 600;}
+.sendotpbox p.ephonenolink:hover{text-decoration: underline;color: #FF6514;}
+
+.resendbtn{width: 80%;position: relative;padding: 0 4px 4px 0;}
+.resendbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: 0px;bottom: 0px;border:1px solid #777777;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.resendbtn button{width: 100%;border-radius: 0;font-family: 'Baloo';padding-block: 10px;}
+.resendbtn button::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+
 .ProdfilterBox {}
+.homepage .ProdfilterBox {display: none;}
 .ProdfilterBox ul{border-bottom: 1px dashed #CCCCCC;}
 .ProdfilterBox ul li{padding-bottom: 10px;}
 .ProdfilterBox ul li button{font-family: 'Baloo';color: #777777;padding-inline: 30px;position: relative;height: 30px;font-size: 1vw;}

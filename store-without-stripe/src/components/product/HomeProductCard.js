@@ -6,7 +6,7 @@ import logtrialicon from "../../../public/logtrial-icon.svg"
 import productData from './homeProductCardData.json';
 import ProdetilProps from '@components/product/ProdetilProps';
 
-const HomeProductCard = () => {
+const HomeProductCard = ({ limit }) => {
     const [open, setOpen] = useState(false);
 
     const handleOpenDialog = () => {
@@ -28,6 +28,8 @@ const HomeProductCard = () => {
         ? productData.filter(item => item.cuisine === selectedCuisine)
         : productData;
 
+        const displayedProducts = limit ? filteredProducts.slice(0, limit) : filteredProducts;
+        
     return (
         <div>
             {/* Filter Component */}
@@ -57,7 +59,7 @@ const HomeProductCard = () => {
 
             <div className='flex flex-row max-md:flex-col-reverse flex-wrap'>
                 {/* Render filtered products */}
-                {filteredProducts.map((item, index) => (
+                {displayedProducts.map((item, index) => (
                     <div key={index} className='group progroupitem bg-FFF4D7 basis-sm flex-none relative rounded-[15px] overflow-hidden'  onClick={handleOpenDialog}>
                         <div className='proboxfront px-[2vw] py-[5vh] bg-FFF4D7 relative z-50 group-hover:z-0'>
                             <div className='fontanimi pointer-events-none'>
