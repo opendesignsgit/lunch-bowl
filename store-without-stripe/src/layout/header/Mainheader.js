@@ -6,7 +6,9 @@ import myLogo from "../../../public/logo/lunchbowl-logo.svg";
 import closeicon from "../../../public/menuclose-icon.svg";
 import LoginPopup from "../../components/logInSignUp/LoginPopup";
 import { useState } from "react";
-import HamburgerMenuImg from "../../../public/HamburgerMenuImg.jpg"
+import HamburgerMenuImg from "../../../public/HamburgerMenuImg.jpg";
+import FreeTrialPopup from "../../components/home/FreeTrialPopup";
+import SignUpPopup from "../../components/logInSignUp/SignUpPopup";
 
 const Mainheader = ({ title, description, children }) => {
   var pageWidth = window.innerWidth;
@@ -14,6 +16,8 @@ const Mainheader = ({ title, description, children }) => {
   var script = document.createElement("script");
   script.type = "text/javascript";
   const [openLogin, setOpenLogin] = useState(false);
+  const [freeTrialPopup, setFreeTrialPopup] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
 
   if (pageWidth > 801) {
     const body = document.body;
@@ -71,60 +75,89 @@ const Mainheader = ({ title, description, children }) => {
           <div className="navbox">
             <ul className="flex items-center logsinul">
               <li className="logbtn">
-                <button
-                  onClick={() => setOpenLogin(true)}
-                  // className="bg-[#ff6514] text-white w-40 px-4 py-2  font-semibold shadow-md"
-                >
+                <button onClick={() => setOpenLogin(true)}>
                   <span>Login</span>
                 </button>
               </li>
 
               <li className="trialbtn">
-                <Link href="/" className="">
+                <button onClick={() => setShowSignUp(true)}>
                   <span>Start Free Trial</span>
-                </Link>
+                </button>
               </li>
             </ul>
-            <div className='hmenubox' onClick={() => setShow(true)}>
-                    <h6>Menu</h6>
-                    <div className='hmenuline'>
-                      <div className='line lineone'> &nbsp; </div>
-                      <div className='line linetwo'> &nbsp; </div>
-                    </div>
-                </div>
-
+            <div className="hmenubox" onClick={() => setShow(true)}>
+              <h6>Menu</h6>
+              <div className="hmenuline">
+                <div className="line lineone"> &nbsp; </div>
+                <div className="line linetwo"> &nbsp; </div>
+              </div>
+            </div>
           </div>
         </div>
-    </header>
-    <div className={shadow ? "shadow" : ""} id="HamburgerMegamenu">	
-        <div className="mm-main-container">    
-            <div className="megamenu-container">
-                <div className="mmMenuColL">
-                  <Image className="w-full h-auto" priority src= {HamburgerMenuImg} alt="logo" />
-                </div>
-                <div className="mmMenuColR"> 
-                    
-                  <button className="Hamburgermm-close" id="Hamburgermm-close" onClick={() => setShow(false)}><Image src={closeicon} alt=""/></button>
-                  <div className="mmMenuCon">
-                      <ul className="HamBSMenu">
-                          <li className="nav__item hamnavlink"><Link href="/">Home</Link></li>
-                          <li className="nav__item hamnavlink"><Link href="/">My Account</Link></li>
-                          <li className="nav__item hamnavlink"><Link href="/about-us">About Us</Link></li>
-                          <li className="nav__item hamnavlink"><Link href="/">Food Menu</Link></li>
-                          <li className="nav__item hamnavlink"><Link href="/contact-us">Contact Us</Link></li>
-                          <li className="nav__item hamnavlink"><Link href="/">Career</Link></li>
-                      </ul>
-                      <ul className="HamSMediaul">
-                          <li className="nav__item hamnavlink"><Link href="/">Instagram</Link></li>
-                          <li className="nav__item hamnavlink"><Link href="/">Facebook</Link></li>
-                          <li className="nav__item hamnavlink"><Link href="/">Linkedin</Link></li>
-                      </ul>
-                  </div>
-                </div>
+      </header>
+      <div className={shadow ? "shadow" : ""} id="HamburgerMegamenu">
+        <div className="mm-main-container">
+          <div className="megamenu-container">
+            <div className="mmMenuColL">
+              <Image
+                className="w-full h-auto"
+                priority
+                src={HamburgerMenuImg}
+                alt="logo"
+              />
             </div>
+            <div className="mmMenuColR">
+              <button
+                className="Hamburgermm-close"
+                id="Hamburgermm-close"
+                onClick={() => setShow(false)}
+              >
+                <Image src={closeicon} alt="" />
+              </button>
+              <div className="mmMenuCon">
+                <ul className="HamBSMenu">
+                  <li className="nav__item hamnavlink">
+                    <Link href="/">Home</Link>
+                  </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/">My Account</Link>
+                  </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/about-us">About Us</Link>
+                  </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/">Food Menu</Link>
+                  </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/contact-us">Contact Us</Link>
+                  </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/">Career</Link>
+                  </li>
+                </ul>
+                <ul className="HamSMediaul">
+                  <li className="nav__item hamnavlink">
+                    <Link href="/">Instagram</Link>
+                  </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/">Facebook</Link>
+                  </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/">Linkedin</Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <LoginPopup open={openLogin} onClose={() => setOpenLogin(false)} />
+      <FreeTrialPopup
+        open={freeTrialPopup}
+        onClose={() => setFreeTrialPopup(false)}
+      />
+      <SignUpPopup open={showSignUp} onClose={() => setShowSignUp(false)} />
     </>
   );
 };

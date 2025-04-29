@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import SignUpImage from "../../../public/LogInSignUp/LogIn.png";
+import FreeTrialPopup from "../../components/home/FreeTrialPopup";
 
 const SignUpPopup = ({ open, onClose }) => {
   const [form, setForm] = useState({
@@ -36,6 +37,7 @@ const SignUpPopup = ({ open, onClose }) => {
     otp: "",
   });
   const otpRefs = useRef([]);
+  const [freeTrialPopup, setFreeTrialPopup] = useState(false);
 
   useEffect(() => {
     let interval;
@@ -131,6 +133,8 @@ const SignUpPopup = ({ open, onClose }) => {
     if (userOtp === otp) {
       setMessage({ type: "success", text: "OTP verified successfully!" });
       setErrors({ ...errors, otp: "" });
+      setFreeTrialPopup(true)
+      onClose()
       // Here you would typically proceed with registration
     } else {
       setMessage({
@@ -206,6 +210,7 @@ const SignUpPopup = ({ open, onClose }) => {
   );
 
   return (
+    <>
     <Dialog open={open} onClose={() => { onClose(); setOtpSent(false); setForm({ firstName: "", lastName: "", mobile: "", email: "", }); setUserOtp("");  setErrors({ firstName: "", lastName: "", mobile: "", email: "", otp: "", }); }} className="compopups" maxWidth="lg" fullWidth  sx={{'& .MuiDialog-paper': { height: '75vh', }}}>
       <Box className="flex relative h-full relative overflow-hidden">
         {/* Left Side Image */}
@@ -294,7 +299,6 @@ const SignUpPopup = ({ open, onClose }) => {
                 {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
               </Button>
               </div>
-              Resend{" "}
               <Typography className="ephonenolink"
                 variant="body2"
                 sx={{
@@ -460,6 +464,11 @@ const SignUpPopup = ({ open, onClose }) => {
         </Box>
       </Box>
     </Dialog>
+    <FreeTrialPopup
+    open={freeTrialPopup}
+    onClose={() => setFreeTrialPopup(false)}
+  />
+</>
   );
 };
 
