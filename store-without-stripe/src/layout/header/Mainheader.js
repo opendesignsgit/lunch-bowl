@@ -7,6 +7,7 @@ import closeicon from "../../../public/menuclose-icon.svg";
 import LoginPopup from "../../components/logInSignUp/LoginPopup";
 import { useState } from "react";
 import HamburgerMenuImg from "../../../public/HamburgerMenuImg.jpg"
+import FreeTrialPopup from "../../components/home/FreeTrialPopup"
 
 const Mainheader = ({ title, description, children }) => {
   var pageWidth = window.innerWidth;
@@ -14,6 +15,8 @@ const Mainheader = ({ title, description, children }) => {
   var script = document.createElement("script");
   script.type = "text/javascript";
   const [openLogin, setOpenLogin] = useState(false);
+  const [freeTrialPopup, setFreeTrialPopup] = useState(false);
+
 
   if (pageWidth > 801) {
     const body = document.body;
@@ -73,16 +76,17 @@ const Mainheader = ({ title, description, children }) => {
               <li className="logbtn">
                 <button
                   onClick={() => setOpenLogin(true)}
-                  // className="bg-[#ff6514] text-white w-40 px-4 py-2  font-semibold shadow-md"
                 >
                   <span>Login</span>
                 </button>
               </li>
 
               <li className="trialbtn">
-                <Link href="/" className="">
+              <button
+                  onClick={() => setFreeTrialPopup(true)}
+                >
                   <span>Start Free Trial</span>
-                </Link>
+                  </button>
               </li>
             </ul>
             <div className='hmenubox' onClick={() => setShow(true)}>
@@ -125,6 +129,8 @@ const Mainheader = ({ title, description, children }) => {
         </div>
       </div>
       <LoginPopup open={openLogin} onClose={() => setOpenLogin(false)} />
+      <FreeTrialPopup open={freeTrialPopup} onClose={() => setFreeTrialPopup(false)} />
+
     </>
   );
 };

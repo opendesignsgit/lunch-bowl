@@ -23,8 +23,8 @@ header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 
 .logsinul li.trialbtn a::after{-webkit-filter: invert(1);filter: invert(1);}
 .logsinul li button{line-height: 50px;padding-inline: 40px;background: #ffffff;display: block;font-family: 'Baloo';font-size: 18px;position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .logsinul li button::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(../../public/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;}
-.logsinul li.trialbtn a{background: #FF6514;color: #ffffff;}
-.logsinul li.trialbtn a::after{-webkit-filter: invert(1);filter: invert(1);}
+.logsinul li.trialbtn button{background: #FF6514;color: #ffffff;}
+.logsinul li.trialbtn button::after{-webkit-filter: invert(1);filter: invert(1);}
 
 .logsinul li:hover::before{right: 0;bottom: 0;}
 .logsinul li:hover a::after{top: -3px;right: -3px;}
