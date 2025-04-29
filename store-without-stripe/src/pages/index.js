@@ -23,27 +23,27 @@ const Home = () => {
         },
         {
           title: "What if my child has specific dietary restrictions or allergies?",
-          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+          content: "We take effort to accommodate allergies and provide menus that may be customized. We prevent cross-contamination with strict protocols."
         },
         {
           title: "How does the delivery process work, and can I trust it will arrive on time?",
-          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+          content: "For prompt delivery in temperature-controlled trucks, we work with schools. Confirmations will be sent to you, and any delays will be quickly communicated."
         },
         {
           title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
-          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+          content: "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters.  To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery."
         },
         {
           title: "Over time, what type of variation can I anticipate in the lunch bowl options? ",
-          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+          content: "We make an effort to provide a varied and ever-changing menu to keep your child engaged.  In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients."
         },
         {
           title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
-          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+          content: "Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
         },
         {
           title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls? ",
-          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
+          content: " We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
         },
       ];
 
@@ -96,11 +96,11 @@ const Home = () => {
             <section className='HProlistSec bg-FF6514 relative bg-white flex py-[12vh]'>
                 <div className='container mx-auto' >
                     <div className='hProListTitle combtntb comtilte textcenter mb-[8vh]'>
-                        <h3>The Mission Behind</h3>
+                        <h3>Small Bites, Huge Impact</h3>
                         <h2 className='flex flex-col text-white'>
-                            <span className='block'>30+ Nutritious Picks</span> 
+                            <span className='block'>30+ Healthy Packs</span> 
                         </h2>
-                        <p className='text-white'>Nutrient-dense, well-portioned meals with a variety of flavors that are <br/>intended to entertain and feed kids every day.</p>
+                        <p className='text-white'>Nutrient-dense, well-portioned meals with a variety of flavors that are intended to entertain and feed kids every day.</p>
                     </div>
                     <div className='hProList'>
                         <HomeProductCard limit={6}/>
@@ -154,14 +154,14 @@ const Home = () => {
             <section className='HNutritionSec relative bg-FFF4D7 flex py-[12vh]'>
                 <div className='container mx-auto' >
                     <div className='hNutritionTitle combtntb comtilte textcenter mb-[4vh]'>
-                        <h4 className='text-[#000000]'>Let's Talk Nutrition</h4>
-                        <h3 className='flex flex-col textFF6514'> <span className='block'>Your First Session Is Free!</span> </h3>
+                        <h4 className='text-[#000000]'>Explore Nutritious food</h4>
+                        <h3 className='flex flex-col textFF6514'> <span className='block'>First free session awaits you</span> </h3>
                     </div>
                     <div className='hNutritionintImg '>
                         <Image className="w-full" priority src= {HNutritionImg} alt="logo" />
                     </div>
-                    <div className='hNutritionTitle combtntb comtilte textcenter mt-[4vh]'>    
-                        <p className=''>Experts in creating kid-friendly meals who combined inventiveness and fresh <br/>ingredients to create a nourishing and enchanted lunchtime experience.</p>                
+                    <div className='hNutritionTitle combtntb comtilte textcenter mt-[4vh]'>      
+                        <p className=''>Kickstart your child's wellness with a complimentary session to explore our <br/>yummy and healthy meal options. See how our nutritious food can make a positive difference!</p>      
                         <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Lets Talk</span></Link></p>
                     </div>
                 </div>
@@ -173,6 +173,7 @@ const Home = () => {
                             <div className='hfaqTitle combtntb comtilte mb-[4vh]'>
                                 <h4 className='text-[#000000]'>Frequently Asked</h4>
                                 <h3 className='flex flex-col text4AB138'> <span className='block'>Questions</span> </h3>
+                                <p>Quickly get answers to guarantee a seamless and <br/>knowledgeable lunch bowl experience.</p>
                             </div>
                             <div className='hfaqAccordion '>
                                 <Accordion items={faqItems}/>
