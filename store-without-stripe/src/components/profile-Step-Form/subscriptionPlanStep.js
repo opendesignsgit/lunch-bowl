@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 // Function to calculate working days between two dates (excluding weekends)
 const calculateWorkingDays = (startDate, endDate) => {
   let count = 0;
-  let current = dayjs(startDate);
+  let current = dayjs(startDate).add(2, 'day');
   const end = dayjs(endDate);
   
   while (current.isBefore(end) || current.isSame(end, 'day')) {
@@ -37,7 +37,7 @@ const calculateWorkingDays = (startDate, endDate) => {
 // Function to calculate end date based on working days from start date
 const calculateEndDateByWorkingDays = (startDate, workingDays) => {
   let count = 0;
-  let current = dayjs(startDate);
+  let current = dayjs(startDate).add(2, 'day');
   
   while (count < workingDays) {
     if (current.day() !== 0 && current.day() !== 6) {
