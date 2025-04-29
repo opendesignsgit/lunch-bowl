@@ -13,7 +13,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import SignUpImage from "../../../public/LogInSignUp/LogIn.png";
+import SignUpImage from "../../../public/LogInSignUp/signuppopimg.jpg";
 import FreeTrialPopup from "../../components/home/FreeTrialPopup";
 
 const SignUpPopup = ({ open, onClose }) => {

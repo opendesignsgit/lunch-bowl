@@ -12,7 +12,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import LogIn from "../../../public/LogInSignUp/LogIn.png";
+import LogIn from "../../../public/LogInSignUp/LogIn.jpg";
 import SignUpPopup from "./SignUpPopup";
 
 const LoginPopup = ({ open, onClose }) => {
