@@ -18,7 +18,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Image from "next/image";
-import freeTrialPopupImg from "../../../public/home/freeTrialPopup.png";
+import freeTrialPopup from "../../../public/home/freeTrialPopup.png";
+import { useRouter } from "next/router";
 
 const timeOptions = ["1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM"];
 
@@ -40,6 +41,7 @@ const FormBox = styled(Box)(({ theme }) => ({
 }));
 
 export default function FreeTrialPopup({ open, onClose }) {
+    const router = useRouter(); 
   const [formData, setFormData] = useState({
     date: null,
     time: "",
@@ -154,7 +156,7 @@ export default function FreeTrialPopup({ open, onClose }) {
           <Grid item xs={12} md={6} sx={{ height: "100%" }}>
             <ImageBox>
               <Image
-                src={freeTrialPopupImg}
+                src={freeTrialPopup}
                 alt="Free Trial"
                 layout="fill"
                 objectFit="cover"
@@ -189,7 +191,15 @@ export default function FreeTrialPopup({ open, onClose }) {
                   <Typography variant="body1">
                     Address: {formData.address}
                   </Typography>
+                  <Button
+              variant="contained"
+              color="primary"
+              onClick={() => router.push("/user/profile-Step-Form")} 
+            >
+                    Complete your registration 
+                </Button>
                 </Box>
+                
               ) : (
                 <>
                   <Typography variant="subtitle2" color="orange" mt={3}>
