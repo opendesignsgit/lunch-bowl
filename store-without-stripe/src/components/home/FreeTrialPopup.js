@@ -9,6 +9,7 @@ import {
   Box,
   Grid,
   IconButton,
+  FormHelperText,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
@@ -194,24 +195,28 @@ export default function FreeTrialPopup({ open, onClose }) {
                   <Typography variant="subtitle2" color="orange" mt={3}>
                     SELECT YOUR PREFERRED SLOT FOR DELIVERY*
                   </Typography>
+
                   <Box display="flex" gap={2} mt={1}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        value={formData.date}
-                        onChange={handleDateChange}
-                        minDate={dayjs()}
-                        shouldDisableDate={shouldDisableDate}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            size="small"
-                            error={!!errors.date}
-                            helperText={errors.date}
-                          />
-                        )}
-                      />
-                    </LocalizationProvider>
+                    <Box flex={1}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          value={formData.date}
+                          onChange={handleDateChange}
+                          minDate={dayjs()}
+                          shouldDisableDate={shouldDisableDate}
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              size: "small",
+                              error: !!errors.date,
+                            },
+                          }}
+                        />
+                      </LocalizationProvider>
+                      {errors.date && (
+                        <FormHelperText error>{errors.date}</FormHelperText>
+                      )}
+                    </Box>
                     <TextField
                       select
                       fullWidth
