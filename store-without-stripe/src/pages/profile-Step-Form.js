@@ -3,9 +3,9 @@ import { Box, Typography, Divider } from "@mui/material";
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
 import Accordion from '@components/faq/Accordion';
-import ParentDetailsStep from "../../components/profile-Step-Form/ParentDetailsStep";
-import ChildDetailsStep from "../../components/profile-Step-Form/childDetailsStep";
-import SubscriptionPlanStep from "../../components/profile-Step-Form/subscriptionPlanStep";
+import ParentDetailsStep from "../components/profile-Step-Form/ParentDetailsStep";
+import ChildDetailsStep from "../components/profile-Step-Form/childDetailsStep";
+import SubscriptionPlanStep from "../components/profile-Step-Form/subscriptionPlanStep";
 
 
 const StepHeader = ({ step }) => {
@@ -75,7 +75,7 @@ const StepHeader = ({ step }) => {
 };
 
 const MultiStepForm = () => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
