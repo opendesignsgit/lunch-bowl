@@ -318,8 +318,8 @@ const CustomDateSelection = ({
   startDate,
   endDate,
   errors,
-  onStartDateChange,
-  onEndDateChange
+  onStartDateChange,  // This is handleStartDateChange from parent
+  onEndDateChange     // This is handleEndDateChange from parent
 }) => (
   <Box
     sx={{
@@ -354,31 +354,43 @@ const CustomDateSelection = ({
       }
     />
     {selectedPlan === "byDate" && (
-  <Grid container spacing={2}>
-    <Grid item xs={12} sm={6}>
-      <Typography variant="subtitle2" gutterBottom>
-        Start Date
-      </Typography>
-      <SubscriptionDatePicker
-  type="start"
-  value={startDate}
-  onChange={(newDate) => setStartDate(newDate)}
-  minDate={dayjs().add(2, 'day')} // Minimum 48 hours from now
-/>
-    </Grid>
-    <Grid item xs={12} sm={6}>
-      <Typography variant="subtitle2" gutterBottom>
-        End Date
-      </Typography>
-      <SubscriptionDatePicker
-  type="end"
-  value={endDate}
-  onChange={(newDate) => setEndDate(newDate)}
-  minDate={startDate || dayjs().add(2, 'day')}
-/>
-    </Grid>
-  </Grid>
-)}
+      <Grid container spacing={2}>
+        {/* Start Date Picker - Fixed */}
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle2" gutterBottom>
+            Start Date
+          </Typography>
+          <SubscriptionDatePicker
+            type="start"
+            value={startDate}
+            onChange={onStartDateChange}  
+            minDate={dayjs().add(2, 'day')}
+          />
+          {errors.startDate && (
+            <FormHelperText error>Start date is required</FormHelperText>
+          )}
+        </Grid>
+
+        {/* End Date Picker - Fixed */}
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle2" gutterBottom>
+            End Date
+          </Typography>
+          <SubscriptionDatePicker
+            type="end"
+            value={endDate}
+            onChange={onEndDateChange}  
+            minDate={startDate || dayjs().add(2, 'day')}
+          />
+          {errors.endDate && (
+            <FormHelperText error>End date is required</FormHelperText>
+          )}
+          {errors.dateOrder && (
+            <FormHelperText error>End date must be after start date</FormHelperText>
+          )}
+        </Grid>
+      </Grid>
+    )}
   </Box>
 );
 
