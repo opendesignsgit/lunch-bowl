@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import ctaimg from "../../../public/ctaimg.png"
 import myLogo from "../../../public/logo/lunchbowl-logo.svg";
 import {FacebookIcon,LinkedinIcon,TwitterIcon,WhatsappIcon,} from "react-share";
+import GetinTouch from './GetinTouch';
 
 const Mainfooter = () => {
+
+  const [open, setOpen] = useState(false);
+  
+      const handleOpenDialog = () => {
+        setOpen(true);
+      };
+    
+      const handleCloseDialog = () => {
+        setOpen(false);
+      };
+
+
   return (
     <>
         <section className='HctaSec relative flex py-[12vh]'>
@@ -17,7 +30,7 @@ const Mainfooter = () => {
                     <h4 className=''>We’d Love to Hear</h4>
                     <h3 className='flex flex-col textFF6514'> <span className='block'>From You</span> </h3>
                     <p className=''>We are super excited in cooking and <br/>providing the best meals to your kids. <br/>Give us a try.</p>                
-                    <p className="parabtn flex mt-[3vh]"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Get in Touch</span></Link></p>
+                    <p className="parabtn flex mt-[3vh]"><Link href="/" className="emenulink relative" onClick={handleOpenDialog}><span className='block flex items-center relative'>Get in Touch</span></Link></p>
                 </div>
             </div>
         </section>
@@ -98,7 +111,7 @@ const Mainfooter = () => {
             </div>
         </footer>
         
-        
+        <GetinTouch open={open} onClose={handleCloseDialog}/>
     </>
   )
 }
