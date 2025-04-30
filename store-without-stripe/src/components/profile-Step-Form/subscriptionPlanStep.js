@@ -16,6 +16,7 @@ import EventIcon from "@mui/icons-material/Event";
 import dayjs from "dayjs";
 import WorkingDaysCalendar from "./WorkingDaysCalendar";
 import SubscriptionDatePicker from "./SubscriptionDatePicker";
+import { useRouter } from "next/router";
 
 // Helper functions
 const calculateWorkingDays = (startDate, endDate) => {
@@ -51,42 +52,63 @@ const calculateEndDateByWorkingDays = (startDate, workingDays) => {
 
 // Plan calculation functions
 const calculateOneMonthPlan = () => {
-  const startDate = dayjs().add(2, 'day'); // Start after 48 hours
-  const endDate = startDate.add(1, 'month');
+  const startDate = dayjs().add(2, "day"); // Start after 48 hours
+  const endOfMonth = dayjs(startDate).endOf("month");
+
+  let endDate = endOfMonth;
+  while (endDate.day() === 0 || endDate.day() === 6) {
+    // Skip weekends
+    endDate = endDate.subtract(1, "day");
+  }
+
   const workingDays = calculateWorkingDays(startDate, endDate);
-  
+
   return {
     id: 1,
-    label: `1 Month Plan - ${workingDays} Working Days - Rs. ${(workingDays * 200).toLocaleString('en-IN')}`,
+    label: `1 Month Plan - ${workingDays} Working Days - Rs. ${(
+      workingDays * 200
+    ).toLocaleString("en-IN")}`,
     workingDays,
     price: workingDays * 200,
     isOneMonth: true,
     startDate,
-    endDate
+    endDate,
   };
 };
 
 const calculateMultiMonthPlans = () => {
-  const startDate = dayjs().add(2, 'day'); // Start after 48 hours for all plans
-  return [3, 6, 12].map(months => {
-    const endDate = startDate.add(months, 'month');
+  const startDate = dayjs().add(2, "day"); // Start after 48 hours for all plans
+  return [3, 6, 12].map((months) => {
+    const endOfMonth = dayjs(startDate)
+      .add(months - 1, "month")
+      .endOf("month");
+
+    let endDate = endOfMonth;
+    while (endDate.day() === 0 || endDate.day() === 6) {
+      // Skip weekends
+      endDate = endDate.subtract(1, "day");
+    }
+
     const workingDays = calculateWorkingDays(startDate, endDate);
-    
+
     return {
       id: months,
-      label: `${months} Months Plan - ${workingDays} Working Days - Rs. ${(workingDays * 200).toLocaleString('en-IN')}`,
+      label: `${months} Months Plan - ${workingDays} Working Days - Rs. ${(
+        workingDays * 200
+      ).toLocaleString("en-IN")}`,
       workingDays,
       price: workingDays * 200,
       isOneMonth: false,
       startDate,
-      endDate
+      endDate,
     };
   });
 };
 
 const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
+  const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState("1");
-  const [startDate, setStartDate] = useState(dayjs().add(2, 'day'));
+  const [startDate, setStartDate] = useState(dayjs().add(2, "day"));
   const [endDate, setEndDate] = useState(null);
   const [errors, setErrors] = useState({
     startDate: false,
@@ -100,7 +122,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
   useEffect(() => {
     const oneMonthPlan = calculateOneMonthPlan();
     const multiMonthPlans = calculateMultiMonthPlans();
-    
+
     setPlans([oneMonthPlan, ...multiMonthPlans]);
     setStartDate(oneMonthPlan.startDate);
     setEndDate(oneMonthPlan.endDate);
@@ -113,7 +135,9 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
     setErrors({ startDate: false, endDate: false, dateOrder: false });
 
     if (newPlanId !== "byDate") {
-      const selectedPlan = plans.find(plan => plan.id.toString() === newPlanId);
+      const selectedPlan = plans.find(
+        (plan) => plan.id.toString() === newPlanId
+      );
       if (selectedPlan) {
         setStartDate(selectedPlan.startDate);
         setEndDate(selectedPlan.endDate);
@@ -127,9 +151,14 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
     setErrors({ ...errors, startDate: false, dateOrder: false });
 
     if (selectedPlan !== "byDate") {
-      const selected = plans.find(plan => plan.id.toString() === selectedPlan);
+      const selected = plans.find(
+        (plan) => plan.id.toString() === selectedPlan
+      );
       if (selected) {
-        const newEndDate = calculateEndDateByWorkingDays(newValue, selected.workingDays);
+        const newEndDate = calculateEndDateByWorkingDays(
+          newValue,
+          selected.workingDays
+        );
         setEndDate(newEndDate);
       }
     }
@@ -145,18 +174,22 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
       const newErrors = {
         startDate: !startDate,
         endDate: !endDate,
-        dateOrder: endDate && startDate && dayjs(endDate).isBefore(dayjs(startDate)),
+        dateOrder:
+          endDate && startDate && dayjs(endDate).isBefore(dayjs(startDate)),
       };
       setErrors(newErrors);
-      if (newErrors.startDate || newErrors.endDate || newErrors.dateOrder) return;
+      if (newErrors.startDate || newErrors.endDate || newErrors.dateOrder)
+        return;
     }
     nextStep();
+    router.push("/user/menuCalendarPage");
   };
 
   // Get the currently selected plan details
-  const currentPlan = selectedPlan !== "byDate" 
-    ? plans.find(plan => plan.id.toString() === selectedPlan)
-    : null;
+  const currentPlan =
+    selectedPlan !== "byDate"
+      ? plans.find((plan) => plan.id.toString() === selectedPlan)
+      : null;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -189,9 +222,13 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
               (Taxes not included)
             </Typography>
           </Typography>
-          
+
           <div className="subscrip">
-            <RadioGroup value={selectedPlan} onChange={handlePlanChange} className="radiogroub">
+            <RadioGroup
+              value={selectedPlan}
+              onChange={handlePlanChange}
+              className="radiogroub"
+            >
               {/* Render all plans */}
               {plans.map((plan) => (
                 <Box
@@ -205,7 +242,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    bgcolor: selectedPlan === plan.id.toString() ? "#FF6A00" : "#fff",
+                    bgcolor:
+                      selectedPlan === plan.id.toString() ? "#FF6A00" : "#fff",
                   }}
                 >
                   <FormControlLabel
@@ -213,18 +251,29 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                     control={
                       <Radio
                         sx={{
-                          color: selectedPlan === plan.id.toString() ? "#fff" : "rgba(0, 0, 0, 0.6)",
+                          color:
+                            selectedPlan === plan.id.toString()
+                              ? "#fff"
+                              : "rgba(0, 0, 0, 0.6)",
                           "&.Mui-checked": {
-                            color: selectedPlan === plan.id.toString() ? "#fff" : "#FF6A00",
+                            color:
+                              selectedPlan === plan.id.toString()
+                                ? "#fff"
+                                : "#FF6A00",
                           },
                         }}
                       />
                     }
                     label={
-                      <Typography sx={{
-                        color: selectedPlan === plan.id.toString() ? "#fff" : "inherit",
-                        ml: 1,
-                      }}>
+                      <Typography
+                        sx={{
+                          color:
+                            selectedPlan === plan.id.toString()
+                              ? "#fff"
+                              : "inherit",
+                          ml: 1,
+                        }}
+                      >
                         {plan.label}
                       </Typography>
                     }
@@ -233,17 +282,22 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
                   {/* Show calendar icon only for 1-month plan */}
                   {plan.isOneMonth && (
                     <IconButton onClick={() => setCalendarOpen(true)}>
-                      <EventIcon sx={{
-                        cursor: "pointer",
-                        color: selectedPlan === plan.id.toString() ? "#fff" : "#FF6A00",
-                      }} />
+                      <EventIcon
+                        sx={{
+                          cursor: "pointer",
+                          color:
+                            selectedPlan === plan.id.toString()
+                              ? "#fff"
+                              : "#FF6A00",
+                        }}
+                      />
                     </IconButton>
                   )}
                 </Box>
               ))}
 
               {/* Custom date selection option */}
-              <CustomDateSelection 
+              <CustomDateSelection
                 selectedPlan={selectedPlan}
                 startDate={startDate}
                 endDate={endDate}
@@ -266,10 +320,12 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
             {currentPlan && (
               <Box mt={2}>
                 <Typography variant="body2">
-                  <strong>Start Date:</strong> {currentPlan.startDate.format("DD MMM YYYY")}
+                  <strong>Start Date:</strong>{" "}
+                  {currentPlan.startDate.format("DD MMM YYYY")}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>End Date:</strong> {currentPlan.endDate.format("DD MMM YYYY")}
+                  <strong>End Date:</strong>{" "}
+                  {currentPlan.endDate.format("DD MMM YYYY")}
                 </Typography>
               </Box>
             )}
@@ -285,12 +341,19 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
             </Typography>
 
             {/* Action Buttons */}
-            <Box sx={{ mt: 4, display: "flex", gap: 3 }}>
-              <Button variant="outlined" onClick={prevStep}>
-                <span className="nextspan">Back</span>
+
+            <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
+              <Button variant="outlined" onClick={prevStep} className="backbtn">
+                {" "}
+                <span className="nextspan">Back</span>{" "}
               </Button>
-              <Button variant="contained" onClick={handleNext}>
-                <span className="nextspan">Next</span>
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                className="nextbtn"
+              >
+                {" "}
+                <span className="nextspan">Next</span>{" "}
               </Button>
             </Box>
           </div>
@@ -303,8 +366,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
         onClose={() => setCalendarOpen(false)}
         startDate={startDate}
         workingDays={
-          selectedPlan !== "byDate" && currentPlan 
-            ? currentPlan.workingDays 
+          selectedPlan !== "byDate" && currentPlan
+            ? currentPlan.workingDays
             : calculateWorkingDays(startDate, endDate)
         }
       />
@@ -318,8 +381,8 @@ const CustomDateSelection = ({
   startDate,
   endDate,
   errors,
-  onStartDateChange,  // This is handleStartDateChange from parent
-  onEndDateChange     // This is handleEndDateChange from parent
+  onStartDateChange, // This is handleStartDateChange from parent
+  onEndDateChange, // This is handleEndDateChange from parent
 }) => (
   <Box
     sx={{
@@ -363,8 +426,8 @@ const CustomDateSelection = ({
           <SubscriptionDatePicker
             type="start"
             value={startDate}
-            onChange={onStartDateChange}  
-            minDate={dayjs().add(2, 'day')}
+            onChange={onStartDateChange}
+            minDate={dayjs().add(2, "day")}
           />
           {errors.startDate && (
             <FormHelperText error>Start date is required</FormHelperText>
@@ -379,14 +442,16 @@ const CustomDateSelection = ({
           <SubscriptionDatePicker
             type="end"
             value={endDate}
-            onChange={onEndDateChange}  
-            minDate={startDate || dayjs().add(2, 'day')}
+            onChange={onEndDateChange}
+            minDate={startDate || dayjs().add(2, "day")}
           />
           {errors.endDate && (
             <FormHelperText error>End date is required</FormHelperText>
           )}
           {errors.dateOrder && (
-            <FormHelperText error>End date must be after start date</FormHelperText>
+            <FormHelperText error>
+              End date must be after start date
+            </FormHelperText>
           )}
         </Grid>
       </Grid>
@@ -397,17 +462,22 @@ const CustomDateSelection = ({
 const CustomDateDetails = ({ startDate, endDate }) => (
   <Box mt={2}>
     <Typography variant="body2">
-      <strong>Working Days:</strong> {calculateWorkingDays(startDate, endDate)} days
+      <strong>Working Days:</strong> {calculateWorkingDays(startDate, endDate)}{" "}
+      days
     </Typography>
     <Typography variant="body2">
-      <strong>Total Price:</strong> Rs. {calculateWorkingDays(startDate, endDate) * 200}
+      <strong>Total Price:</strong> Rs.{" "}
+      {calculateWorkingDays(startDate, endDate) * 200}
     </Typography>
   </Box>
 );
 
 const OffersSection = () => (
   <Box mt={3}>
-    <Typography sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }} variant="subtitle2">
+    <Typography
+      sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }}
+      variant="subtitle2"
+    >
       OFFERS AVAILABLE
     </Typography>
     <ul style={{ margin: 0 }}>

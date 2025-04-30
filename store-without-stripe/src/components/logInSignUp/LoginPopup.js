@@ -14,8 +14,10 @@ import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LogIn from "../../../public/LogInSignUp/LogIn.png";
 import SignUpPopup from "./SignUpPopup";
+import { useRouter } from "next/router";
 
 const LoginPopup = ({ open, onClose }) => {
+  const router = useRouter();
   const [otpSent, setOtpSent] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [otp, setOtp] = useState("");
@@ -101,6 +103,7 @@ const LoginPopup = ({ open, onClose }) => {
     if (userOtp === otp) {
       setMessage({ type: "success", text: "OTP is correct!" });
       setErrors({ ...errors, otp: "" });
+      router.push("/user/menuCalendarPage")
     } else {
       setMessage({
         type: "error",

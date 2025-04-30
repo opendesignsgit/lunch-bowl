@@ -9,12 +9,16 @@ import {
   DialogContent,
   Chip,
 } from "@mui/material";
-import { ChevronLeft, ChevronRight, Event as EventIcon } from "@mui/icons-material";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Event as EventIcon,
+} from "@mui/icons-material";
 import dayjs from "dayjs";
 
 // Extended dummy holidays data
 const HOLIDAYS = [
-  { date: "2023-01-26", name: "Republic Day" },
+  { date: "2023-06-26", name: "Republic Day" },
   { date: "2023-06-08", name: "Holi" },
   { date: "2023-08-15", name: "Independence Day" },
   { date: "2023-10-02", name: "Gandhi Jayanti" },
@@ -23,7 +27,12 @@ const HOLIDAYS = [
 ];
 
 const isWeekend = (date) => [0, 6].includes(dayjs(date).day()); // Sunday (0) or Saturday (6)
-const isHoliday = (date) => HOLIDAYS.some((h) => dayjs(h.date).isSame(date, "day"));
+const isHoliday = (date) =>
+    HOLIDAYS.some(
+      (h) =>
+        dayjs(h.date).month() === dayjs(date).month() &&
+        dayjs(h.date).date() === dayjs(date).date()
+    );
 const isWorkingDay = (date) => !isWeekend(date) && !isHoliday(date);
 
 const getLastWorkingDayOfMonth = (date) => {
@@ -46,7 +55,10 @@ const SubscriptionDatePicker = ({
   const [currentYear, setCurrentYear] = useState(dayjs(value).year());
 
   const handleMonthChange = (delta) => {
-    const newDate = dayjs(`${currentYear}-${currentMonth + 1}-01`).add(delta, "month");
+    const newDate = dayjs(`${currentYear}-${currentMonth + 1}-01`).add(
+      delta,
+      "month"
+    );
     setCurrentMonth(newDate.month());
     setCurrentYear(newDate.year());
   };
@@ -62,7 +74,10 @@ const SubscriptionDatePicker = ({
     });
   };
 
-  const calendarDates = useMemo(generateCalendarDates, [currentMonth, currentYear]);
+  const calendarDates = useMemo(generateCalendarDates, [
+    currentMonth,
+    currentYear,
+  ]);
 
   const handleDateSelect = (day) => {
     if (!day) return;
@@ -117,12 +132,19 @@ const SubscriptionDatePicker = ({
         {value ? dayjs(value).format("DD MMM YYYY") : `Select ${type} date`}
       </Button>
 
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
         <DialogTitle>
           Select {type === "start" ? "Start" : "End"} Date
           <Box sx={{ mt: 1 }}>
             <Chip
-              label={dayjs(`${currentYear}-${currentMonth + 1}-01`).format("MMMM YYYY")}
+              label={dayjs(`${currentYear}-${currentMonth + 1}-01`).format(
+                "MMMM YYYY"
+              )}
               color="primary"
               size="small"
             />
@@ -130,7 +152,12 @@ const SubscriptionDatePicker = ({
         </DialogTitle>
         <DialogContent>
           <Box sx={{ p: 2 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={2}
+            >
               <IconButton onClick={() => handleMonthChange(-1)}>
                 <ChevronLeft />
               </IconButton>
@@ -139,7 +166,12 @@ const SubscriptionDatePicker = ({
               </IconButton>
             </Box>
 
-            <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" textAlign="center" mb={1}>
+            <Box
+              display="grid"
+              gridTemplateColumns="repeat(7, 1fr)"
+              textAlign="center"
+              mb={1}
+            >
               {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
                 <Typography key={day} variant="caption" color="textSecondary">
                   {day}
@@ -151,7 +183,9 @@ const SubscriptionDatePicker = ({
               {calendarDates.map((date, idx) => {
                 if (date === null) return <Box key={idx} />;
 
-                const dateObj = dayjs(`${currentYear}-${currentMonth + 1}-${date}`);
+                const dateObj = dayjs(
+                  `${currentYear}-${currentMonth + 1}-${date}`
+                );
                 const disabled = isDateDisabled(date);
                 const isSelected = value && value.isSame(dateObj, "day");
                 const isHolidayDate = isHoliday(dateObj);
@@ -208,22 +242,34 @@ const SubscriptionDatePicker = ({
                 <Button onClick={() => setOpen(false)} sx={{ mr: 1 }}>
                   Cancel
                 </Button>
-                <Button variant="contained" onClick={() => setOpen(false)} disabled={!value}>
+                <Button
+                  variant="contained"
+                  onClick={() => setOpen(false)}
+                  disabled={!value}
+                >
                   Confirm
                 </Button>
               </Box>
             </Box>
 
             {HOLIDAYS.some((h) =>
-              dayjs(h.date).isSame(dayjs(`${currentYear}-${currentMonth + 1}-01`), "month")
+              dayjs(h.date).isSame(
+                dayjs(`${currentYear}-${currentMonth + 1}-01`),
+                "month"
+              )
             ) && (
               <Box mt={2}>
                 <Typography variant="caption" color="text.secondary">
                   Holidays this month:
                 </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 0.5 }}>
+                <Box
+                  sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 0.5 }}
+                >
                   {HOLIDAYS.filter((h) =>
-                    dayjs(h.date).isSame(dayjs(`${currentYear}-${currentMonth + 1}-01`), "month")
+                    dayjs(h.date).isSame(
+                      dayjs(`${currentYear}-${currentMonth + 1}-01`),
+                      "month"
+                    )
                   ).map((h) => (
                     <Chip
                       key={h.date}
