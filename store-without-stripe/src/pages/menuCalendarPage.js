@@ -2,7 +2,7 @@ import React from 'react';
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
 import Accordion from '@components/faq/Accordion';
-import MenuCalendar from '../../components/MenuCalendar/MenuCalendar';
+import MenuCalendar from '../components/MenuCalendar/MenuCalendar';
 
 const MenuCalendarPage = () => {
 

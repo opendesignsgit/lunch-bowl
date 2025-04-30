@@ -103,7 +103,7 @@ const LoginPopup = ({ open, onClose }) => {
     if (userOtp === otp) {
       setMessage({ type: "success", text: "OTP is correct!" });
       setErrors({ ...errors, otp: "" });
-      router.push("/user/menuCalendarPage")
+      router.push("/menuCalendarPage")
     } else {
       setMessage({
         type: "error",

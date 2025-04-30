@@ -196,7 +196,7 @@ export default function FreeTrialPopup({ open, onClose }) {
                       <Button className="sotpbtn"
                         variant="contained"
                         color="primary"
-                        onClick={() => router.push("/user/profile-Step-Form")} 
+                        onClick={() => router.push("/profile-Step-Form")} 
                       >
                         <span>Complete your registration </span>
                       </Button>

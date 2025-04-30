@@ -182,7 +182,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
         return;
     }
     nextStep();
-    router.push("/user/menuCalendarPage");
+    router.push("/menuCalendarPage");
   };
 
   // Get the currently selected plan details
