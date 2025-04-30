@@ -1,28 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Typography,
   IconButton,
-  Divider,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
+  Chip,
 } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight, Event as EventIcon } from "@mui/icons-material";
 import dayjs from "dayjs";
 
-// Dummy holidays data
-const dummyHolidays = [
+// Extended dummy holidays data
+const HOLIDAYS = [
   { date: "2023-01-26", name: "Republic Day" },
+  { date: "2023-06-08", name: "Holi" },
   { date: "2023-08-15", name: "Independence Day" },
   { date: "2023-10-02", name: "Gandhi Jayanti" },
   { date: "2023-12-25", name: "Christmas" },
   // Add more holidays as needed
 ];
 
+const isWeekend = (date) => [0, 6].includes(dayjs(date).day()); // Sunday (0) or Saturday (6)
+const isHoliday = (date) => HOLIDAYS.some((h) => dayjs(h.date).isSame(date, "day"));
+const isWorkingDay = (date) => !isWeekend(date) && !isHoliday(date);
+
+const getLastWorkingDayOfMonth = (date) => {
+  let lastDay = dayjs(date).endOf("month");
+  while (!isWorkingDay(lastDay)) {
+    lastDay = lastDay.subtract(1, "day");
+  }
+  return lastDay;
+};
+
 const SubscriptionDatePicker = ({
-  type = "start", // "start" or "end"
+  type = "start",
   value,
   onChange,
   minDate,
@@ -31,36 +44,9 @@ const SubscriptionDatePicker = ({
   const [open, setOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(dayjs(value).month());
   const [currentYear, setCurrentYear] = useState(dayjs(value).year());
-  const [selectedDate, setSelectedDate] = useState(value);
-
-  const isHoliday = (date) => {
-    return dummyHolidays.some(
-      (holiday) => dayjs(holiday.date).isSame(date, "day")
-    );
-  };
-
-  const isWeekend = (date) => {
-    const day = dayjs(date).day();
-    return day === 0 || day === 6; // Sunday or Saturday
-  };
-
-  const isDisabled = (date) => {
-    if (type === "start") {
-      // For start date, disable past dates and holidays/weekends
-      return (
-        dayjs(date).isBefore(minDate, "day") ||
-        isHoliday(date) ||
-        isWeekend(date)
-      );
-    } else {
-      // For end date, only disable if before start date
-      return dayjs(date).isBefore(minDate, "day");
-    }
-  };
 
   const handleMonthChange = (delta) => {
-    const newDate = dayjs(`${currentYear}-${currentMonth + 1}-01`)
-      .add(delta, "month");
+    const newDate = dayjs(`${currentYear}-${currentMonth + 1}-01`).add(delta, "month");
     setCurrentMonth(newDate.month());
     setCurrentYear(newDate.year());
   };
@@ -70,49 +56,55 @@ const SubscriptionDatePicker = ({
     const daysInMonth = startOfMonth.daysInMonth();
     const startDay = startOfMonth.day();
 
-    const dates = [];
-    // Add empty slots for days before the 1st of the month
-    for (let i = 0; i < startDay; i++) {
-      dates.push(null);
-    }
-
-    // Add all days of the month
-    for (let i = 1; i <= daysInMonth; i++) {
-      const date = dayjs(`${currentYear}-${currentMonth + 1}-${i}`);
-      dates.push(i);
-    }
-
-    return dates;
+    return Array.from({ length: 42 }, (_, i) => {
+      if (i < startDay || i >= startDay + daysInMonth) return null;
+      return i - startDay + 1;
+    });
   };
+
+  const calendarDates = useMemo(generateCalendarDates, [currentMonth, currentYear]);
 
   const handleDateSelect = (day) => {
     if (!day) return;
-    
+
     const date = dayjs(`${currentYear}-${currentMonth + 1}-${day}`);
-    
+
     if (type === "end") {
-      // For end date, find the last working day of the month if selected date is month end
-      const endOfMonth = dayjs(date).endOf("month");
-      if (date.isSame(endOfMonth, "day")) {
-        let lastWorkingDay = endOfMonth;
-        while (isHoliday(lastWorkingDay)) {
-          lastWorkingDay = lastWorkingDay.subtract(1, "day");
-        }
-        setSelectedDate(lastWorkingDay);
-      } else {
-        setSelectedDate(date);
-      }
+      // For end date, always select the last working day of the month
+      const selectedDate = getLastWorkingDayOfMonth(date);
+      onChange(selectedDate);
     } else {
-      setSelectedDate(date);
+      // For start date, allow selection of any working day except weekends
+      if (!isWeekend(date)) {
+        onChange(date);
+      }
     }
   };
 
-  const handleApply = () => {
-    onChange(selectedDate);
-    setOpen(false);
+  const isDateDisabled = (date) => {
+    const dayjsDate = dayjs(`${currentYear}-${currentMonth + 1}-${date}`);
+
+    // Common disabled conditions
+    if (dayjsDate.isBefore(minDate, "day")) return true;
+    if (maxDate && dayjsDate.isAfter(maxDate, "day")) return true;
+
+    // Additional conditions based on type
+    if (type === "start") return isWeekend(dayjsDate);
+
+    // Only allow the last working day for the end date
+    if (type === "end") {
+      const lastWorkingDay = getLastWorkingDayOfMonth(
+        dayjs(`${currentYear}-${currentMonth + 1}-01`)
+      );
+      return !dayjsDate.isSame(lastWorkingDay, "day");
+    }
+
+    return false;
   };
 
-  const calendarDates = generateCalendarDates();
+  const lastWorkingDay = getLastWorkingDayOfMonth(
+    dayjs(`${currentYear}-${currentMonth + 1}-01`)
+  );
 
   return (
     <>
@@ -128,39 +120,26 @@ const SubscriptionDatePicker = ({
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
         <DialogTitle>
           Select {type === "start" ? "Start" : "End"} Date
+          <Box sx={{ mt: 1 }}>
+            <Chip
+              label={dayjs(`${currentYear}-${currentMonth + 1}-01`).format("MMMM YYYY")}
+              color="primary"
+              size="small"
+            />
+          </Box>
         </DialogTitle>
         <DialogContent>
-          <Box
-            sx={{
-              width: "100%",
-              p: 2,
-            }}
-          >
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={2}
-            >
+          <Box sx={{ p: 2 }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
               <IconButton onClick={() => handleMonthChange(-1)}>
                 <ChevronLeft />
               </IconButton>
-              <Typography fontWeight="bold">
-                {dayjs(`${currentYear}-${currentMonth + 1}`)
-                  .format("MMMM, YYYY")
-                  .toUpperCase()}
-              </Typography>
               <IconButton onClick={() => handleMonthChange(1)}>
                 <ChevronRight />
               </IconButton>
             </Box>
 
-            <Box
-              display="grid"
-              gridTemplateColumns="repeat(7, 1fr)"
-              textAlign="center"
-              mb={1}
-            >
+            <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" textAlign="center" mb={1}>
               {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
                 <Typography key={day} variant="caption" color="textSecondary">
                   {day}
@@ -173,9 +152,10 @@ const SubscriptionDatePicker = ({
                 if (date === null) return <Box key={idx} />;
 
                 const dateObj = dayjs(`${currentYear}-${currentMonth + 1}-${date}`);
-                const disabled = isDisabled(dateObj);
+                const disabled = isDateDisabled(date);
+                const isSelected = value && value.isSame(dateObj, "day");
                 const isHolidayDate = isHoliday(dateObj);
-                const isSelected = selectedDate && selectedDate.isSame(dateObj, "day");
+                const isWeekendDate = isWeekend(dateObj);
 
                 return (
                   <Box
@@ -196,10 +176,13 @@ const SubscriptionDatePicker = ({
                         ? "text.disabled"
                         : isHolidayDate
                         ? "error.main"
+                        : isWeekendDate
+                        ? "text.secondary"
                         : "text.primary",
-                      "&:hover": {
-                        bgcolor: !disabled && !isSelected && "action.hover",
+                      "&:hover": !disabled && {
+                        bgcolor: isSelected ? "primary.dark" : "action.hover",
                       },
+                      opacity: disabled ? 0.3 : 1, // Fade out disabled dates
                     }}
                   >
                     <Typography variant="body2">{date}</Typography>
@@ -208,30 +191,51 @@ const SubscriptionDatePicker = ({
               })}
             </Box>
 
-            {type === "start" && (
-              <Box mt={2}>
-                <Typography variant="caption" color="textSecondary">
-                  Note: Start date must be a working day (Mon-Fri, non-holiday)
-                </Typography>
+            <Box mt={3} display="flex" justifyContent="space-between">
+              <Box>
+                {type === "start" && (
+                  <Typography variant="caption" color="text.secondary">
+                    Weekends (Sat-Sun) are not selectable
+                  </Typography>
+                )}
+                {type === "end" && (
+                  <Typography variant="caption" color="text.secondary">
+                    Only the last working day is selectable
+                  </Typography>
+                )}
               </Box>
-            )}
-
-            {type === "end" && (
-              <Box mt={2}>
-                <Typography variant="caption" color="textSecondary">
-                  Note: If month end falls on holiday, last working day will be selected
-                </Typography>
+              <Box>
+                <Button onClick={() => setOpen(false)} sx={{ mr: 1 }}>
+                  Cancel
+                </Button>
+                <Button variant="contained" onClick={() => setOpen(false)} disabled={!value}>
+                  Confirm
+                </Button>
               </Box>
-            )}
-
-            <Box mt={3} display="flex" justifyContent="flex-end">
-              <Button onClick={() => setOpen(false)} sx={{ mr: 2 }}>
-                Cancel
-              </Button>
-              <Button variant="contained" onClick={handleApply}>
-                Apply
-              </Button>
             </Box>
+
+            {HOLIDAYS.some((h) =>
+              dayjs(h.date).isSame(dayjs(`${currentYear}-${currentMonth + 1}-01`), "month")
+            ) && (
+              <Box mt={2}>
+                <Typography variant="caption" color="text.secondary">
+                  Holidays this month:
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 0.5 }}>
+                  {HOLIDAYS.filter((h) =>
+                    dayjs(h.date).isSame(dayjs(`${currentYear}-${currentMonth + 1}-01`), "month")
+                  ).map((h) => (
+                    <Chip
+                      key={h.date}
+                      label={`${dayjs(h.date).format("D")}: ${h.name}`}
+                      size="small"
+                      color="error"
+                      variant="outlined"
+                    />
+                  ))}
+                </Box>
+              </Box>
+            )}
           </Box>
         </DialogContent>
       </Dialog>

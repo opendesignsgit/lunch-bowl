@@ -15,6 +15,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import EventIcon from "@mui/icons-material/Event";
 import dayjs from "dayjs";
 import WorkingDaysCalendar from "./WorkingDaysCalendar";
+import SubscriptionDatePicker from "./SubscriptionDatePicker";
 
 // Helper functions
 const calculateWorkingDays = (startDate, endDate) => {
@@ -85,7 +86,7 @@ const calculateMultiMonthPlans = () => {
 
 const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
   const [selectedPlan, setSelectedPlan] = useState("1");
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(dayjs().add(2, 'day'));
   const [endDate, setEndDate] = useState(null);
   const [errors, setErrors] = useState({
     startDate: false,
@@ -353,52 +354,31 @@ const CustomDateSelection = ({
       }
     />
     {selectedPlan === "byDate" && (
-      <Grid container mt={1} spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <DatePicker
-            label="Start Date"
-            value={startDate}
-            onChange={onStartDateChange}
-            shouldDisableDate={(date) => dayjs(date).isBefore(dayjs(), "day")}
-            minDate={dayjs()}
-            slotProps={{
-              textField: {
-                fullWidth: true,
-                variant: "outlined",
-                error: errors.startDate,
-              },
-            }}
-          />
-          {errors.startDate && (
-            <FormHelperText error>Please select a start date</FormHelperText>
-          )}
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <DatePicker
-            label="End Date"
-            value={endDate}
-            onChange={onEndDateChange}
-            shouldDisableDate={(date) => 
-              startDate && dayjs(date).isBefore(dayjs(startDate), "day")
-            }
-            minDate={startDate || dayjs()}
-            slotProps={{
-              textField: {
-                fullWidth: true,
-                variant: "outlined",
-                error: errors.endDate || errors.dateOrder,
-              },
-            }}
-          />
-          {errors.endDate && (
-            <FormHelperText error>Please select an end date</FormHelperText>
-          )}
-          {errors.dateOrder && !errors.endDate && (
-            <FormHelperText error>End date must be after start date</FormHelperText>
-          )}
-        </Grid>
-      </Grid>
-    )}
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={6}>
+      <Typography variant="subtitle2" gutterBottom>
+        Start Date
+      </Typography>
+      <SubscriptionDatePicker
+  type="start"
+  value={startDate}
+  onChange={(newDate) => setStartDate(newDate)}
+  minDate={dayjs().add(2, 'day')} // Minimum 48 hours from now
+/>
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      <Typography variant="subtitle2" gutterBottom>
+        End Date
+      </Typography>
+      <SubscriptionDatePicker
+  type="end"
+  value={endDate}
+  onChange={(newDate) => setEndDate(newDate)}
+  minDate={startDate || dayjs().add(2, 'day')}
+/>
+    </Grid>
+  </Grid>
+)}
   </Box>
 );
 
