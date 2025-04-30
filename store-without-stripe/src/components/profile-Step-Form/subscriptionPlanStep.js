@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,43 +9,164 @@ import {
   Button,
   FormHelperText,
   IconButton,
-  Paper,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import EventIcon from "@mui/icons-material/Event";
-import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
+import WorkingDaysCalendar from "./WorkingDaysCalendar";
+import SubscriptionDatePicker from "./SubscriptionDatePicker";
+import { useRouter } from "next/router";
 
-const dummyPlans = [
-  { id: 1, label: "24 Working Days - Rs. 4,800" },
-  { id: 2, label: "72 Working Days - Rs. 14,400" },
-  { id: 3, label: "144 Working Days - Rs. 28,800" },
-  { id: 4, label: "288 Working Days - Rs. 57,600" },
-];
+// Helper functions
+const calculateWorkingDays = (startDate, endDate) => {
+  let count = 0;
+  let current = dayjs(startDate);
+  const end = dayjs(endDate);
 
-const weekendsAndHolidays = [5, 6, 10, 12, 13, 14, 18, 19, 20, 26, 27];
-const today = 8;
+  while (current.isBefore(end) || current.isSame(end, "day")) {
+    if (current.day() !== 0 && current.day() !== 6) {
+      count++;
+    }
+    current = current.add(1, "day");
+  }
+
+  return count;
+};
+
+const calculateEndDateByWorkingDays = (startDate, workingDays) => {
+  let count = 0;
+  let current = dayjs(startDate);
+
+  while (count < workingDays) {
+    if (current.day() !== 0 && current.day() !== 6) {
+      count++;
+    }
+    if (count < workingDays) {
+      current = current.add(1, "day");
+    }
+  }
+
+  return current;
+};
+
+// Plan calculation functions
+const calculateOneMonthPlan = () => {
+  const startDate = dayjs().add(2, "day"); // Start after 48 hours
+  const endOfMonth = dayjs(startDate).endOf("month");
+
+  let endDate = endOfMonth;
+  while (endDate.day() === 0 || endDate.day() === 6) {
+    // Skip weekends
+    endDate = endDate.subtract(1, "day");
+  }
+
+  const workingDays = calculateWorkingDays(startDate, endDate);
+
+  return {
+    id: 1,
+    label: `1 Month Plan - ${workingDays} Working Days - Rs. ${(
+      workingDays * 200
+    ).toLocaleString("en-IN")}`,
+    workingDays,
+    price: workingDays * 200,
+    isOneMonth: true,
+    startDate,
+    endDate,
+  };
+};
+
+const calculateMultiMonthPlans = () => {
+  const startDate = dayjs().add(2, "day"); // Start after 48 hours for all plans
+  return [3, 6, 12].map((months) => {
+    const endOfMonth = dayjs(startDate)
+      .add(months - 1, "month")
+      .endOf("month");
+
+    let endDate = endOfMonth;
+    while (endDate.day() === 0 || endDate.day() === 6) {
+      // Skip weekends
+      endDate = endDate.subtract(1, "day");
+    }
+
+    const workingDays = calculateWorkingDays(startDate, endDate);
+
+    return {
+      id: months,
+      label: `${months} Months Plan - ${workingDays} Working Days - Rs. ${(
+        workingDays * 200
+      ).toLocaleString("en-IN")}`,
+      workingDays,
+      price: workingDays * 200,
+      isOneMonth: false,
+      startDate,
+      endDate,
+    };
+  });
+};
 
 const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
+  const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState("1");
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(dayjs().add(2, "day"));
   const [endDate, setEndDate] = useState(null);
   const [errors, setErrors] = useState({
     startDate: false,
     endDate: false,
     dateOrder: false,
   });
-
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [plans, setPlans] = useState([]);
 
+  // Initialize plans and dates
+  useEffect(() => {
+    const oneMonthPlan = calculateOneMonthPlan();
+    const multiMonthPlans = calculateMultiMonthPlans();
+
+    setPlans([oneMonthPlan, ...multiMonthPlans]);
+    setStartDate(oneMonthPlan.startDate);
+    setEndDate(oneMonthPlan.endDate);
+  }, []);
+
+  // Handle plan selection change
   const handlePlanChange = (e) => {
-    setSelectedPlan(e.target.value);
+    const newPlanId = e.target.value;
+    setSelectedPlan(newPlanId);
     setErrors({ startDate: false, endDate: false, dateOrder: false });
-    if (e.target.value !== "byDate") {
-      setStartDate(null);
-      setEndDate(null);
+
+    if (newPlanId !== "byDate") {
+      const selectedPlan = plans.find(
+        (plan) => plan.id.toString() === newPlanId
+      );
+      if (selectedPlan) {
+        setStartDate(selectedPlan.startDate);
+        setEndDate(selectedPlan.endDate);
+      }
     }
+  };
+
+  // Handle custom date selection changes
+  const handleStartDateChange = (newValue) => {
+    setStartDate(newValue);
+    setErrors({ ...errors, startDate: false, dateOrder: false });
+
+    if (selectedPlan !== "byDate") {
+      const selected = plans.find(
+        (plan) => plan.id.toString() === selectedPlan
+      );
+      if (selected) {
+        const newEndDate = calculateEndDateByWorkingDays(
+          newValue,
+          selected.workingDays
+        );
+        setEndDate(newEndDate);
+      }
+    }
+  };
+
+  const handleEndDateChange = (newValue) => {
+    setEndDate(newValue);
+    setErrors({ ...errors, endDate: false, dateOrder: false });
   };
 
   const handleNext = () => {
@@ -61,35 +182,14 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
         return;
     }
     nextStep();
+    router.push("/user/menuCalendarPage");
   };
 
-  const renderDay = (dayNumber) => {
-    const isHoliday = weekendsAndHolidays.includes(dayNumber);
-    const isToday = dayNumber === today;
-    return (
-      <Box
-        key={dayNumber}
-        sx={{
-          width: 36,
-          height: 36,
-          borderRadius: "50%",
-          backgroundColor: isToday
-            ? "#FF6A00"
-            : isHoliday
-            ? "#FFE9E1"
-            : "transparent",
-          color: isToday ? "#fff" : "#000",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 500,
-          fontSize: "14px",
-        }}
-      >
-        {String(dayNumber).padStart(2, "0")}
-      </Box>
-    );
-  };
+  // Get the currently selected plan details
+  const currentPlan =
+    selectedPlan !== "byDate"
+      ? plans.find((plan) => plan.id.toString() === selectedPlan)
+      : null;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -108,11 +208,11 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
 
         {/* Right Form Section */}
         <Box sx={{ width: { xs: "100%", md: "55%" } }}>
-        <div className="steptitles">
-          <Typography variant="h6" fontWeight="bold">
-            SUBSCRIPTION PLAN:
-          </Typography>
-        </div>
+          <div className="steptitles">
+            <Typography variant="h6" fontWeight="bold">
+              SUBSCRIPTION PLAN:
+            </Typography>
+          </div>
           <Typography
             sx={{ color: "#FF6A00", fontWeight: 600, mt: 2, mb: 1 }}
             variant="subtitle2"
@@ -122,368 +222,277 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
               (Taxes not included)
             </Typography>
           </Typography>
+
           <div className="subscrip">
-          <RadioGroup value={selectedPlan} onChange={handlePlanChange} className="radiogroub">
-            {dummyPlans.map((plan) => (
-              <Box
-                key={plan.id}
-                sx={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  mb: 1,
-                  px: 2,
-                  py: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  bgcolor:
-                    selectedPlan === plan.id.toString() ? "#FF6A00" : "#fff",
-                }}
-              >
-                <FormControlLabel  className="radiobtnlabel"
-                  value={plan.id.toString()}
-                  control={
-                    <Radio className="radiobtn"
-                      sx={{
-                        color:
-                          selectedPlan === plan.id.toString()
-                            ? "#fff"
-                            : "rgba(0, 0, 0, 0.6)",
-                        "&.Mui-checked": {
+            <RadioGroup
+              value={selectedPlan}
+              onChange={handlePlanChange}
+              className="radiogroub"
+            >
+              {/* Render all plans */}
+              {plans.map((plan) => (
+                <Box
+                  key={plan.id}
+                  sx={{
+                    border: "1px solid #ddd",
+                    borderRadius: "8px",
+                    mb: 1,
+                    px: 2,
+                    py: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    bgcolor:
+                      selectedPlan === plan.id.toString() ? "#FF6A00" : "#fff",
+                  }}
+                >
+                  <FormControlLabel
+                    value={plan.id.toString()}
+                    control={
+                      <Radio
+                        sx={{
+                          color:
+                            selectedPlan === plan.id.toString()
+                              ? "#fff"
+                              : "rgba(0, 0, 0, 0.6)",
+                          "&.Mui-checked": {
+                            color:
+                              selectedPlan === plan.id.toString()
+                                ? "#fff"
+                                : "#FF6A00",
+                          },
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography
+                        sx={{
+                          color:
+                            selectedPlan === plan.id.toString()
+                              ? "#fff"
+                              : "inherit",
+                          ml: 1,
+                        }}
+                      >
+                        {plan.label}
+                      </Typography>
+                    }
+                    sx={{ flex: 1 }}
+                  />
+                  {/* Show calendar icon only for 1-month plan */}
+                  {plan.isOneMonth && (
+                    <IconButton onClick={() => setCalendarOpen(true)}>
+                      <EventIcon
+                        sx={{
+                          cursor: "pointer",
                           color:
                             selectedPlan === plan.id.toString()
                               ? "#fff"
                               : "#FF6A00",
-                        },
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      sx={{
-                        color:
-                          selectedPlan === plan.id.toString()
-                            ? "#fff"
-                            : "inherit",
-                        ml: 1,
-                      }}
-                    >
-                      {plan.label}
-                    </Typography>
-                  }
-                  sx={{ flex: 1 }}
-                />
-                {plan.id === 1 && (
-                  <IconButton onClick={() => setCalendarOpen(true)} className="clanbtn">
-                    <EventIcon
-                      sx={{
-                        cursor: "pointer",
-                        color:
-                          selectedPlan === plan.id.toString()
-                            ? "#fff"
-                            : "#FF6A00",
-                      }}
-                    />
-                  </IconButton>
-                )}
-              </Box>
-            ))}
+                        }}
+                      />
+                    </IconButton>
+                  )}
+                </Box>
+              ))}
 
-            {/* Subscription by Date Option */}
-            <Box
-              sx={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                px: 2,
-                py: 2,
-                mt: 1,
-                bgcolor: selectedPlan === "byDate" ? "#FFF3EB" : "#fff",
-              }}
-            >
-              <FormControlLabel
-                value="byDate"
-                control={
-                  <Radio
-                    sx={{
-                      color:
-                        selectedPlan === "byDate"
-                          ? "#FF6A00"
-                          : "rgba(0, 0, 0, 0.6)",
-                      "&.Mui-checked": {
-                        color: "#FF6A00",
-                      },
-                    }}
-                  />
-                }
-                label={
-                  <Typography 
-                    variant="body2"
-                    sx={{
-                      color: selectedPlan === "byDate" ? "#FF6A00" : "inherit",
-                    }}
-                  >
-                    Subscription By Date{" "}
-                    <Typography component="span" fontSize={12} color="#777">
-                      (Pre Book)
-                    </Typography>
-                  </Typography>
-                }
+              {/* Custom date selection option */}
+              <CustomDateSelection
+                selectedPlan={selectedPlan}
+                startDate={startDate}
+                endDate={endDate}
+                errors={errors}
+                onStartDateChange={handleStartDateChange}
+                onEndDateChange={handleEndDateChange}
               />
-              {selectedPlan === "byDate" && (
-                <Grid container mt={1} className="PreBookinput">
-                  <Grid item >
-                    <DatePicker
-                      label="Start Date"
-                      value={startDate}
-                      onChange={(newValue) => {
-                        setStartDate(newValue);
-                        setErrors({
-                          ...errors,
-                          startDate: false,
-                          dateOrder: false,
-                        });
-                      }}
-                      shouldDisableDate={(date) =>
-                        dayjs(date).isBefore(dayjs(), "day")
-                      }
-                      minDate={dayjs()}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          variant: "outlined",
-                          error: errors.startDate,
-                        },
-                      }}
-                    />
-                    {errors.startDate && (
-                      <FormHelperText error>
-                        Please select a start date
-                      </FormHelperText>
-                    )}
-                  </Grid>
-                  <Grid item>
-                    <DatePicker
-                      label="End Date"
-                      value={endDate}
-                      onChange={(newValue) => {
-                        setEndDate(newValue);
-                        setErrors({
-                          ...errors,
-                          endDate: false,
-                          dateOrder: false,
-                        });
-                      }}
-                      shouldDisableDate={(date) => {
-                        const isLastDayOfMonth = dayjs(date)
-                          .endOf("month")
-                          .isSame(date, "day");
-                        const isBeforeStartDate =
-                          startDate &&
-                          dayjs(date).isBefore(dayjs(startDate), "day");
-                        return !isLastDayOfMonth || isBeforeStartDate;
-                      }}
-                      minDate={startDate || dayjs()}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          variant: "outlined",
-                          error: errors.endDate || errors.dateOrder,
-                        },
-                      }}
-                    />
-                    {errors.endDate && (
-                      <FormHelperText error>
-                        Please select an end date
-                      </FormHelperText>
-                    )}
-                    {errors.dateOrder && !errors.endDate && (
-                      <FormHelperText error>
-                        End date must be after start date
-                      </FormHelperText>
-                    )}
-                  </Grid>
-                </Grid>
-              )}
-            </Box>
-          </RadioGroup>
+            </RadioGroup>
 
-          <Typography mt={1} fontSize={12} color="#888">
-            End Date must be the last day of the month and after Start Date.
-          </Typography>
-
-          {/* Offers */}
-          <Box className="OffAvitbbox"
-            mt={3}
-          >
-            <Typography
-              sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }}
-              variant="subtitle2"
-            >
-              OFFERS AVAILABLE
+            <Typography mt={1} fontSize={12} color="#888">
+              End Date must be after Start Date.
             </Typography>
-            <ul style={{ margin: 0, }}>
-              <li>
-                <Typography fontSize={14}>
-                  Save <strong>5%</strong> on the 150 Working Days Plan.
-                </Typography>
-              </li>
-              <li>
-                <Typography fontSize={14}>
-                  Save <strong>10%</strong> on the 260 Working Days Plan.
-                </Typography>
-              </li>
-            </ul>
-          </Box>
 
-          <Typography mt={2} fontSize={12}>
-          <strong>Note: Per Day Meal = Rs. 200 (No. of Days X Rs. 200 = Subscription
-            Amount)</strong>
-          </Typography>
+            {/* Show details for custom date selection */}
+            {selectedPlan === "byDate" && startDate && endDate && (
+              <CustomDateDetails startDate={startDate} endDate={endDate} />
+            )}
 
-          {/* Action Buttons */}
-          <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
-            <Button variant="outlined" onClick={prevStep}  className="backbtn"> <span className="nextspan">Back</span> </Button>
-            <Button variant="contained" onClick={handleNext} className="nextbtn"> <span className="nextspan">Next</span> </Button>
-          </Box>
+            {/* Show details for selected plan */}
+            {currentPlan && (
+              <Box mt={2}>
+                <Typography variant="body2">
+                  <strong>Start Date:</strong>{" "}
+                  {currentPlan.startDate.format("DD MMM YYYY")}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>End Date:</strong>{" "}
+                  {currentPlan.endDate.format("DD MMM YYYY")}
+                </Typography>
+              </Box>
+            )}
+
+            {/* Offers section */}
+            <OffersSection />
+
+            <Typography mt={2} fontSize={12}>
+              <strong>
+                Note: Per Day Meal = Rs. 200 (No. of Days X Rs. 200 =
+                Subscription Amount)
+              </strong>
+            </Typography>
+
+            {/* Action Buttons */}
+
+            <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
+              <Button variant="outlined" onClick={prevStep} className="backbtn">
+                {" "}
+                <span className="nextspan">Back</span>{" "}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                className="nextbtn"
+              >
+                {" "}
+                <span className="nextspan">Next</span>{" "}
+              </Button>
+            </Box>
           </div>
         </Box>
       </Box>
 
-      {/* Centered Calendar Popup */}
-      {calendarOpen && (
-        <Box
-          sx={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.4)",
-            zIndex: 1300,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              width: 700, // Increased from 360
-              position: "relative",
-              minHeight: 550, // Added minimum height
-            }}
-          >
-            {/* Header section remains the same */}
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              position="relative"
-              mb={1}
-            >
-              <Typography variant="h6" fontWeight="bold" align="center">
-                LIST OF WORKING DAYS:
-              </Typography>
-              <IconButton
-                onClick={() => setCalendarOpen(false)}
-                sx={{ position: "absolute", right: 0 }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Box>
-
-            <Typography align="center" fontWeight="bold" sx={{ mt: 2, mb: 3 }}>
-              {" "}
-              {/* Increased bottom margin */}
-              APRIL, 2025
-            </Typography>
-
-            {/* Weekday headers - increased font size */}
-            <Box
-              display="grid"
-              gridTemplateColumns="repeat(7, 1fr)"
-              textAlign="center"
-              fontWeight="bold"
-              fontSize="0.875rem" // Increased from 0.75rem
-              mb={2} // Increased bottom margin
-              gap={1}
-            >
-              {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map((day) => (
-                <Typography key={day}>{day}</Typography>
-              ))}
-            </Box>
-
-            {/* Calendar days - increased cell size */}
-            <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" gap={1.5}>
-              {" "}
-              {/* Increased gap */}
-              {/* Empty space for days before April 1st (Tuesday) */}
-              {[...Array(1)].map((_, i) => (
-                <Box key={`empty-${i}`} />
-              ))}
-              {/* Calendar days with larger dimensions */}
-              {[...Array(30)].map((_, i) => {
-                const dayNumber = i + 1;
-                const isHoliday = weekendsAndHolidays.includes(dayNumber);
-                const isToday = dayNumber === today;
-
-                return (
-                  <Box
-                    key={dayNumber}
-                    sx={{
-                      width: 42, // Increased from 36
-                      height: 42, // Increased from 36
-                      borderRadius: "50%",
-                      backgroundColor: isToday
-                        ? "#FF6A00"
-                        : isHoliday
-                        ? "#FFE9E1"
-                        : "transparent",
-                      color: isToday ? "#fff" : "#000",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 500,
-                      fontSize: "0.875rem", // Increased from 0.75rem
-                      margin: "0 auto",
-                    }}
-                  >
-                    {String(dayNumber).padStart(2, "0")}
-                  </Box>
-                );
-              })}
-            </Box>
-
-            {/* Legend - increased font size */}
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              mt={3}
-            >
-              {" "}
-              {/* Increased top margin */}
-              <Box
-                sx={{
-                  width: 12, // Increased from 10
-                  height: 12, // Increased from 10
-                  borderRadius: "50%",
-                  backgroundColor: "#FFE9E1",
-                  mr: 1.5, // Increased from 1
-                }}
-              />
-              <Typography fontSize="0.875rem">
-                Denotes Weekends & Holidays.
-              </Typography>{" "}
-              {/* Increased from 0.75rem */}
-            </Box>
-          </Paper>
-        </Box>
-      )}
+      {/* Calendar Popup */}
+      <WorkingDaysCalendar
+        open={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
+        startDate={startDate}
+        workingDays={
+          selectedPlan !== "byDate" && currentPlan
+            ? currentPlan.workingDays
+            : calculateWorkingDays(startDate, endDate)
+        }
+      />
     </LocalizationProvider>
   );
 };
+
+// Extracted components for better organization
+const CustomDateSelection = ({
+  selectedPlan,
+  startDate,
+  endDate,
+  errors,
+  onStartDateChange, // This is handleStartDateChange from parent
+  onEndDateChange, // This is handleEndDateChange from parent
+}) => (
+  <Box
+    sx={{
+      border: "1px solid #ddd",
+      borderRadius: "8px",
+      px: 2,
+      py: 2,
+      mt: 1,
+      bgcolor: selectedPlan === "byDate" ? "#FFF3EB" : "#fff",
+    }}
+  >
+    <FormControlLabel
+      value="byDate"
+      control={
+        <Radio
+          sx={{
+            color: selectedPlan === "byDate" ? "#FF6A00" : "rgba(0, 0, 0, 0.6)",
+            "&.Mui-checked": { color: "#FF6A00" },
+          }}
+        />
+      }
+      label={
+        <Typography
+          variant="body2"
+          sx={{ color: selectedPlan === "byDate" ? "#FF6A00" : "inherit" }}
+        >
+          Subscription By Date{" "}
+          <Typography component="span" fontSize={12} color="#777">
+            (Pre Book)
+          </Typography>
+        </Typography>
+      }
+    />
+    {selectedPlan === "byDate" && (
+      <Grid container spacing={2}>
+        {/* Start Date Picker - Fixed */}
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle2" gutterBottom>
+            Start Date
+          </Typography>
+          <SubscriptionDatePicker
+            type="start"
+            value={startDate}
+            onChange={onStartDateChange}
+            minDate={dayjs().add(2, "day")}
+          />
+          {errors.startDate && (
+            <FormHelperText error>Start date is required</FormHelperText>
+          )}
+        </Grid>
+
+        {/* End Date Picker - Fixed */}
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle2" gutterBottom>
+            End Date
+          </Typography>
+          <SubscriptionDatePicker
+            type="end"
+            value={endDate}
+            onChange={onEndDateChange}
+            minDate={startDate || dayjs().add(2, "day")}
+          />
+          {errors.endDate && (
+            <FormHelperText error>End date is required</FormHelperText>
+          )}
+          {errors.dateOrder && (
+            <FormHelperText error>
+              End date must be after start date
+            </FormHelperText>
+          )}
+        </Grid>
+      </Grid>
+    )}
+  </Box>
+);
+
+const CustomDateDetails = ({ startDate, endDate }) => (
+  <Box mt={2}>
+    <Typography variant="body2">
+      <strong>Working Days:</strong> {calculateWorkingDays(startDate, endDate)}{" "}
+      days
+    </Typography>
+    <Typography variant="body2">
+      <strong>Total Price:</strong> Rs.{" "}
+      {calculateWorkingDays(startDate, endDate) * 200}
+    </Typography>
+  </Box>
+);
+
+const OffersSection = () => (
+  <Box mt={3}>
+    <Typography
+      sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }}
+      variant="subtitle2"
+    >
+      OFFERS AVAILABLE
+    </Typography>
+    <ul style={{ margin: 0 }}>
+      <li>
+        <Typography fontSize={14}>
+          Save <strong>5%</strong> on the 150 Working Days Plan.
+        </Typography>
+      </li>
+      <li>
+        <Typography fontSize={14}>
+          Save <strong>10%</strong> on the 260 Working Days Plan.
+        </Typography>
+      </li>
+    </ul>
+  </Box>
+);
 
 export default SubscriptionPlanStep;
