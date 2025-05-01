@@ -95,6 +95,9 @@ body .comffamily{font-family: 'Baloo';font-weight: 100;letter-spacing: -0.5px;}
 .hbanLeft{width: 43%;}
 .hbanRight{width: 57%;}
 .hbanRight::before{content:'';position: absolute;width: 15%;height:100%;left: -2px;top: 0;background: url(../../public/home/banleftpattern.png) no-repeat left center;background-size: auto 100%;pointer-events: none;}
+.banimgss::before{content:'';position: absolute;width: 5vw;aspect-ratio: 1; left: 50%;top: 50%;background: url(../../public/home/banplayicon.png) no-repeat center center;background-size: auto 100%;pointer-events: none;-webkit-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}
+.banimgss img{cursor: pointer;}
+.banimgss::after{content:'';position: absolute;width: 6vw;aspect-ratio: 2/0.7; left: 5vw;bottom: 5vw;background: url(../../public/home/vegicon.png) no-repeat center center;background-size: auto 100%;pointer-events: none;}
 .hbanCont{}
 .hbanCont h1{font-size: 4.3vw;color: #4AB138;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -2px;}
 .hbanCont h1 span{display: block;}
@@ -522,6 +525,9 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .propetilpopus .Prodeilsliders {position: relative;width: 100%;}
 
 .compopups .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;}
+.popvideodialog .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;background: #ffffff;opacity: 0.6;}
+.popvideodialog .popClose:hover{background: #ffffff;opacity: 1;}
+.popvideodialog iframe{position: relative;width: 100%;height: 100%;}
 
 .poptitles h4{font-size: 2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 5px;}
 .poptitles p{font-size: 0.9vw;margin: 0 0 10px;}
