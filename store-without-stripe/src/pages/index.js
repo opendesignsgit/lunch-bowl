@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import Head from "next/head";
 import Mainheader from '@layout/header/Mainheader';
 import Mainfooter from '@layout/footer/Mainfooter';
@@ -9,12 +10,22 @@ import Letsfindout from '@components/home/Letsfindout';
 import Htoworkslider from '@components/home/Htoworkslider';
 import Hoteamsslide from '@components/home/Hoteamsslide';
 import Accordion from '@components/faq/Accordion';
+import HomepopVideo from '@components/home/HomepopVideo';
 import Homebanimg from "../../public/home/homebanimg.jpeg"
 import hintroImgOne from "../../public/home/hintroImg-one.jpg"
 import hintroImgTwo from "../../public/home/hintroImg-two.jpg"
 import HNutritionImg from "../../public/home/HNutritionImg.jpg"
 
 const Home = () => {
+ const [open, setOpen] = useState(false);
+  
+      const handleOpenDialog = () => {
+        setOpen(true);
+      };
+    
+      const handleCloseDialog = () => {
+        setOpen(false);
+      };
 
     const faqItems = [
         {
@@ -65,7 +76,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className='hbanRight relative'>
-                    <Image className="w-full h-auto" priority src= {Homebanimg} alt="logo" />
+                    <div className='banimgss'><Image className="w-full h-auto" priority src= {Homebanimg} alt="Banimg"  onClick={handleOpenDialog}/></div>
                 </div>
             </section>
 
@@ -184,6 +195,7 @@ const Home = () => {
             </section>
         </div>
         <Mainfooter/>
+        <HomepopVideo open={open} onClose={handleCloseDialog}/>
     </div>
   );
 }
