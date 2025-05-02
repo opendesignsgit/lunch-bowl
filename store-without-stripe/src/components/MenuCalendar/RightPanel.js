@@ -15,7 +15,40 @@ import {
 } from "@mui/material";
 import { ArrowForward, Close } from "@mui/icons-material";
 import dayjs from "dayjs";
-import MealPlanDialog from "./MealPlanDialog"; // Make sure to create this component
+import MealPlanDialog from "./MealPlanDialog";
+
+const meals = [
+  "Veg Biryani and Raita",
+  "Burnt garlic veg fried rice and Veg in black bean sauce",
+  "Pav Bhaji",
+  "Aglio E Olio Veg Pasta and cheesy garlic bread",
+  "Veg Noodles and gravy",
+  "Alfredo Pasta Garlic bread",
+  "Mac and Cheese, Garlic Bread",
+  "Aloo Paratha",
+  "Hummus and Pita, Jalapeno Cheese Poppers",
+  "Creamy curd rice and potato roast",
+  "Ghee rice and Paneer curry",
+  "Phulka+ Paneer butter masala",
+  "Avocado sandwich and Hash brown potatoes",
+  "Arabiata Pasta and Garlic bread",
+  "Edamame Momos and Crispy lotus stem",
+  "Veg spring roll and Pan fried noodles with Veggies",
+  "Phulka and Chanamasala",
+  "Veg Hakka Noodles",
+  "5 spice fried rice and Baby Corn",
+  "Hummus and Pita, Jalapeno Cheese Poppers",
+  "Veg Noodles and gravy",
+  "Creamy curd rice and potato roast",
+  "Aloo Paratha",
+  "Alfredo Pasta Garlic bread",
+  "Phulka+ Paneer butter masala",
+  "Mac and Cheese, Garlic Bread",
+  "Edamame Momos and Crispy lotus stem",
+  "Mac and Cheese, Garlic Bread",
+  "Ghee rice and Paneer curry",
+  "Pav Bhaji",
+];
 
 const RightPanel = ({
   isSmall,
@@ -31,6 +64,7 @@ const RightPanel = ({
   editMode,
   setEditMode,
   sx,
+  setMealPlanDialog,
 }) => {
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
@@ -43,10 +77,17 @@ const RightPanel = ({
   const isSelectedHoliday = !!holiday;
   const lessThan48Hours = isSelectedHoliday && selectedDateObj.diff(dayjs(), "hour") < 48;
 
-  // Sample meal plans data
   const mealPlans = [
-    { id: 1, name: "Meal Plan 1" },
-    { id: 2, name: "Meal Plan 2" },
+    { 
+      id: 1, 
+      name: "Meal Plan 1",
+      meals: meals
+    },
+    { 
+      id: 2, 
+      name: "Meal Plan 2",
+      meals: [...meals].reverse()
+    },
   ];
 
   const handlePlanChange = (childId, planId) => {
@@ -54,6 +95,13 @@ const RightPanel = ({
       ...prev,
       [childId]: planId
     }));
+    
+    // Open the meal plan dialog
+    setMealPlanDialog({
+      open: true,
+      startDate: formatDate(selectedDate),
+      plan: planId
+    });
   };
 
   const handleViewPlan = (planId) => {
@@ -121,7 +169,11 @@ const RightPanel = ({
       <div className="fixcheckboxs">
         <FormControlLabel 
           control={
-            <Checkbox checked={useMealPlan} onChange={(e) => setUseMealPlan(e.target.checked)} sx={{ color: "#fff" }} />
+            <Checkbox 
+              checked={useMealPlan} 
+              onChange={(e) => setUseMealPlan(e.target.checked)} 
+              sx={{ color: "#fff" }} 
+            />
           }
           label={
             <Typography fontSize="0.8rem" color="#fff">
@@ -174,22 +226,35 @@ const RightPanel = ({
           <>
             <div className="childlistbox">              
               <div className="childinputbox">              
-                <Typography fontWeight="bold" textAlign="center" className="sycmenu">SELECT YOUR CHILD'S MENU</Typography>
+                <Typography fontWeight="bold" textAlign="center" className="sycmenu">
+                  SELECT YOUR CHILD'S MENU
+                </Typography>
                 {useMealPlan ? (
                   <>
                     {dummyChildren.map((child) => (
                       <Box key={child.id} className="childmlist">
-                        <Typography  className="menuddtitle">{child.name.toUpperCase()}</Typography>
+                        <Typography className="menuddtitle">
+                          {child.name.toUpperCase()}
+                        </Typography>
                         <Box className='radiobtngroup'>
-                          <FormControl  className="radiobtnss" component="fieldset" fullWidth>
-                            <RadioGroup  className="radiobtrow"
+                          <FormControl className="radiobtnss" component="fieldset" fullWidth>
+                            <RadioGroup
                               value={selectedPlans[child.id] || ""}
-                              onChange={(e) => handlePlanChange(child.id, e.target.value)}
+                              onChange={(e) => handlePlanChange(child.id, parseInt(e.target.value))}
                             >
                               {mealPlans.map((plan) => (
                                 <Box key={plan.id} display="flex" alignItems="center" mb={0.5}>
-                                  <Radio value={plan.id} size="small" className="radiobtnsinput"/>
-                                  <Typography fontSize="0.8rem" color="#000" sx={{ flexGrow: 1 }} className="radiobtnstext">
+                                  <Radio 
+                                    value={plan.id} 
+                                    size="small" 
+                                    className="radiobtnsinput"
+                                  />
+                                  <Typography 
+                                    fontSize="0.8rem" 
+                                    color="#000" 
+                                    sx={{ flexGrow: 1 }} 
+                                    className="radiobtnstext"
+                                  >
                                     {plan.name}
                                   </Typography>
                                   <Link 
@@ -221,9 +286,12 @@ const RightPanel = ({
                   <>
                     {dummyChildren.map((child, index) => (
                       <Box key={child.id} className="childmlist">
-                        <Typography className="menuddtitle"> {child.name.toUpperCase()} </Typography>
+                        <Typography className="menuddtitle">
+                          {child.name.toUpperCase()}
+                        </Typography>
                         <Box className="menuddlistbox" bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
-                          <Select className="menuddlist"
+                          <Select 
+                            className="menuddlist"
                             value={
                               menuSelections[formatDate(selectedDate)]?.[child.id] || ""
                             }
@@ -242,13 +310,13 @@ const RightPanel = ({
                               },
                             }}
                           >
-                          <MenuItem value="">Select Dish</MenuItem>
-                          {dummyMenus.map((menu, i) => (
-                            <MenuItem key={i} value={menu}>
-                              {menu}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                            <MenuItem value="">Select Dish</MenuItem>
+                            {dummyMenus.map((menu, i) => (
+                              <MenuItem key={i} value={menu}>
+                                {menu}
+                              </MenuItem>
+                            ))}
+                          </Select>
                         </Box>
                         {index === 0 && (
                           <Box sx={{ mt: 1 }}>
@@ -284,8 +352,19 @@ const RightPanel = ({
                 ) : null}
 
                 <Box display="flex" gap={2} className="btngroups">
-                  <Button variant="outlined" onClick={onClose} className="cancelbtn"> <span>Cancel</span> </Button>
-                  <Button variant="outlined" className="paysavebtn"> <span>{isSelectedHoliday ? "Pay" : "Save"}</span> </Button>
+                  <Button 
+                    variant="outlined" 
+                    onClick={onClose} 
+                    className="cancelbtn"
+                  >
+                    <span>Cancel</span>
+                  </Button>
+                  <Button 
+                    variant="outlined" 
+                    className="paysavebtn"
+                  >
+                    <span>{isSelectedHoliday ? "Pay" : "Save"}</span>
+                  </Button>
                 </Box>
               </div>
             </div>
