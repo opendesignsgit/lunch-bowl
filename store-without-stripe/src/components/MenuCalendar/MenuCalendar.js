@@ -4,6 +4,7 @@ import { Box, useMediaQuery, useTheme, Dialog } from "@mui/material";
 import LeftPanel from "./LeftPanel";
 import CenterPanel from "./CenterPanel";
 import RightPanel from "./RightPanel";
+import MealPlanDialog from "./MealPlanDialog";
 
 const dummyChildren = [
   { id: 1, name: "Child Name 1" },
@@ -25,13 +26,13 @@ const dummyMenus = [
 ];
 
 const dummyHolidays = [
-  { date: "2025-04-10", name: "Mahavir Jayanti" },
+  { date: "2025-05-09", name: "Mahavir Jayanti" },
   { date: "2025-04-16", name: "Tamil New Year" },
   { date: "2025-04-18", name: "Good Friday" },
 ];
 
-const subscriptionStart = dayjs("2025-02-05");
-const subscriptionEnd = dayjs("2025-06-25");
+const subscriptionStart = dayjs("2025-04-01");
+const subscriptionEnd = dayjs("2025-05-31");
 
 const MenuCalendar = () => {
   const today = dayjs();
@@ -45,6 +46,10 @@ const MenuCalendar = () => {
   const [activeChild, setActiveChild] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [mealPlanDialog, setMealPlanDialog] = useState({
+    open: false,
+    startDate: null,
+  });
 
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
@@ -53,7 +58,7 @@ const MenuCalendar = () => {
 
   const isHoliday = (day) => {
     const date = dayjs(formatDate(day));
-    const isWeekend = date.day() === 0 || date.day() === 6;
+    const isWeekend = date.day() === 0 || date.day() === 6; // Saturdays and Sundays
     const isCustomHoliday = dummyHolidays.find(
       (h) => h.date === formatDate(day)
     );
@@ -96,16 +101,39 @@ const MenuCalendar = () => {
       const currentDate = dayjs(
         `${currentYear}-${currentMonth + 1}-${String(i).padStart(2, "0")}`
       );
-      if (
-        currentDate.isBefore(subscriptionStart) ||
-        currentDate.isAfter(subscriptionEnd)
-      ) {
-        daysArray.push("disabled");
-      } else {
-        daysArray.push(i);
-      }
+      daysArray.push(i);
     }
     return daysArray;
+  };
+
+  const applyMealPlan = (planId) => {
+    const selectedPlan = planId === 1 ? dummyMenus : [...dummyMenus].reverse();
+    const updates = {};
+  
+    // Get the first and last day of the current month
+    const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
+    const daysInMonth = firstDayOfMonth.daysInMonth();
+  
+    // Iterate over all days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const currentDate = dayjs(`${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`);
+  
+      // Skip weekends and holidays
+      if (!isHoliday(day)) {
+        const mealDate = currentDate.format("YYYY-MM-DD");
+        const meal = selectedPlan[(day - 1) % selectedPlan.length]; // Cycle through meals
+        updates[mealDate] = {
+          ...(menuSelections[mealDate] || {}),
+          [dummyChildren[activeChild].id]: meal,
+        };
+      }
+    }
+  
+    // Update the menu selections state
+    setMenuSelections((prev) => ({
+      ...prev,
+      ...updates,
+    }));
   };
 
   const calendarDates = getCalendarGridDates();
@@ -145,7 +173,7 @@ const MenuCalendar = () => {
   };
 
   const handleEditClick = (dateString) => {
-    const [year, month, day] = dateString.split('-');
+    const [year, month, day] = dateString.split("-");
     setCurrentMonth(parseInt(month) - 1);
     setCurrentYear(parseInt(year));
     setSelectedDate(parseInt(day));
@@ -161,16 +189,16 @@ const MenuCalendar = () => {
   };
 
   return (
-    <Box className="MCMainPanel"
+    <Box
+      className="MCMainPanel"
       display="flex"
       flexDirection={isSmall ? "column" : "row"}
       bgcolor="#fff"
       mx="auto"
       borderRadius={2}
       boxShadow={2}
-      overflow="hidden" 
+      overflow="hidden"
     >
-      {/* Mobile view: Center panel first */}
       {isSmall && (
         <CenterPanel
           isSmall={isSmall}
@@ -187,7 +215,6 @@ const MenuCalendar = () => {
         />
       )}
 
-      {/* Mobile view: Left panel second */}
       {isSmall && (
         <LeftPanel
           isSmall={isSmall}
@@ -203,7 +230,6 @@ const MenuCalendar = () => {
         />
       )}
 
-      {/* Desktop view: Normal order with adjusted widths */}
       {!isSmall && (
         <>
           <LeftPanel
@@ -248,11 +274,11 @@ const MenuCalendar = () => {
             editMode={editMode}
             setEditMode={setEditMode}
             sx={{ width: "29%" }}
+            setMealPlanDialog={setMealPlanDialog}
           />
         </>
       )}
 
-      {/* Mobile Dialog for Right Panel */}
       <Dialog
         open={openDialog}
         onClose={handleDialogClose}
@@ -272,8 +298,16 @@ const MenuCalendar = () => {
           onClose={handleDialogClose}
           editMode={editMode}
           setEditMode={setEditMode}
+          setMealPlanDialog={setMealPlanDialog}
         />
       </Dialog>
+
+      <MealPlanDialog
+        open={mealPlanDialog.open}
+        onClose={() => setMealPlanDialog({ ...mealPlanDialog, open: false })}
+        startDate={mealPlanDialog.startDate}
+        onApplyPlan={applyMealPlan}
+      />
     </Box>
   );
 };
