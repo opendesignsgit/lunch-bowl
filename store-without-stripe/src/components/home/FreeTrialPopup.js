@@ -155,7 +155,7 @@ export default function FreeTrialPopup({ open, onClose }) {
           <Box item xs={12} md={6} sx={{ height: "100%" }} className="w-[50%]">
             <ImageBox>
               <Image
-                src={freeTrialPopup}
+                src={"/home/freeTrialPopup.png"}
                 alt="Free Trial"
                 layout="fill"
                 objectFit="cover"
