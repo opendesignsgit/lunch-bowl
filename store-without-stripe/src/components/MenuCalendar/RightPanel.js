@@ -34,6 +34,7 @@ const RightPanel = ({
 }) => {
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
+  const [applyToAll, setApplyToAll] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
 
@@ -63,6 +64,30 @@ const RightPanel = ({
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setCurrentPlan(null);
+  };
+
+  const handleApplyToAllChange = (e) => {
+    const { checked } = e.target;
+    setApplyToAll(checked);
+
+    if (checked && dummyChildren.length > 1) {
+      const firstChildId = dummyChildren[0].id;
+      const firstChildSelection = menuSelections[formatDate(selectedDate)]?.[firstChildId];
+
+      dummyChildren.slice(1).forEach(child => {
+        handleMenuChange(child.id, firstChildSelection || "");
+      });
+    }
+  };
+
+  const handleFirstChildMenuChange = (childId, value) => {
+    handleMenuChange(childId, value);
+
+    if (applyToAll && dummyChildren.length > 1) {
+      dummyChildren.slice(1).forEach(child => {
+        handleMenuChange(child.id, value);
+      });
+    }
   };
 
   useEffect(() => {
@@ -194,34 +219,55 @@ const RightPanel = ({
                   </>
                 ) : (
                   <>
-                    {dummyChildren.map((child) => (
+                    {dummyChildren.map((child, index) => (
                       <Box key={child.id} className="childmlist">
-                          <Typography className="menuddtitle"> {child.name.toUpperCase()} </Typography>
-                          <Box className="menuddlistbox" bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
-                            <Select className="menuddlist"
-                              value={
-                                menuSelections[formatDate(selectedDate)]?.[child.id] || ""
-                              }
-                              onChange={(e) => handleMenuChange(child.id, e.target.value)}
-                              fullWidth
-                              variant="standard"
-                              disableUnderline
-                              MenuProps={{
-                                PaperProps: {
-                                  style: {
-                                    maxHeight: 48 * 4.5,
-                                  },
+                        <Typography className="menuddtitle"> {child.name.toUpperCase()} </Typography>
+                        <Box className="menuddlistbox" bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
+                          <Select className="menuddlist"
+                            value={
+                              menuSelections[formatDate(selectedDate)]?.[child.id] || ""
+                            }
+                            onChange={(e) => index === 0 
+                              ? handleFirstChildMenuChange(child.id, e.target.value)
+                              : handleMenuChange(child.id, e.target.value)
+                            }
+                            fullWidth
+                            variant="standard"
+                            disableUnderline
+                            MenuProps={{
+                              PaperProps: {
+                                style: {
+                                  maxHeight: 48 * 4.5,
                                 },
-                              }}
-                            >
-                            <MenuItem value="">Select Dish</MenuItem>
-                            {dummyMenus.map((menu, i) => (
-                              <MenuItem key={i} value={menu}>
-                                {menu}
-                              </MenuItem>
-                            ))}
-                          </Select>
+                              },
+                            }}
+                          >
+                          <MenuItem value="">Select Dish</MenuItem>
+                          {dummyMenus.map((menu, i) => (
+                            <MenuItem key={i} value={menu}>
+                              {menu}
+                            </MenuItem>
+                          ))}
+                        </Select>
                         </Box>
+                        {index === 0 && (
+                          <Box sx={{ mt: 1 }}>
+                            <FormControlLabel 
+                              control={
+                                <Checkbox 
+                                  checked={applyToAll} 
+                                  onChange={handleApplyToAllChange} 
+                                  sx={{ color: "#fff" }} 
+                                />
+                              }
+                              label={
+                                <Typography fontSize="0.8rem" color="#fff">
+                                  Apply the same menu for all children
+                                </Typography>
+                              }
+                            />
+                          </Box>
+                        )}
                       </Box>
                     ))}
                   </>
@@ -235,19 +281,7 @@ const RightPanel = ({
                       Note: This day is a holiday – additional charges apply.
                     </Typography>
                   </Box>
-                ) : (
-                  !useMealPlan && (
-                    <FormControlLabel className="checkboxbtn"
-                      control={<Checkbox sx={{ color: "white" }} size="small" />}
-                      label={
-                        <Typography variant="body2" fontSize="0.8rem">
-                          Save Selected Menus for Upcoming Months
-                        </Typography>
-                      }
-                      sx={{ mb: 2 }}
-                    />
-                  )
-                )}
+                ) : null}
 
                 <Box display="flex" gap={2} className="btngroups">
                   <Button variant="outlined" onClick={onClose} className="cancelbtn"> <span>Cancel</span> </Button>
