@@ -8,13 +8,15 @@ import ProdetilProps from '@components/product/ProdetilProps';
 
 const HomeProductCard = ({ limit }) => {
     const [open, setOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const handleOpenDialog = () => {
-      setOpen(true);
+    const handleOpenDialog = (product) => {
+        setSelectedProduct(product); // Set the selected product
+        setOpen(true); // Open the popup
     };
-  
+
     const handleCloseDialog = () => {
-      setOpen(false);
+        setOpen(false); // Close the popup
     };
     // State for the selected cuisine filter
     const [selectedCuisine, setSelectedCuisine] = useState('');
@@ -60,7 +62,7 @@ const HomeProductCard = ({ limit }) => {
             <div className='flex flex-row max-md:flex-col-reverse flex-wrap'>
                 {/* Render filtered products */}
                 {displayedProducts.map((item, index) => (
-                    <div key={index} className='group progroupitem bg-FFF4D7 basis-sm flex-none relative rounded-[15px] overflow-hidden'  onClick={handleOpenDialog}>
+                    <div key={index} className='group progroupitem bg-FFF4D7 basis-sm flex-none relative rounded-[15px] overflow-hidden'  onClick={() => handleOpenDialog(item)}>
                         <div className='proboxfront px-[2vw] py-[5vh] bg-FFF4D7 relative z-50 group-hover:z-0'>
                             <div className='fontanimi pointer-events-none'>
                                 <div className='animitext animiOne'>
@@ -118,7 +120,13 @@ const HomeProductCard = ({ limit }) => {
                 ))}
             </div>
             
-            <ProdetilProps  open={open} onClose={handleCloseDialog}  />
+            {selectedProduct && (
+                <ProdetilProps 
+                    open={open} 
+                    onClose={handleCloseDialog} 
+                    product={selectedProduct} 
+                />
+            )}
         </div>
     );
 };

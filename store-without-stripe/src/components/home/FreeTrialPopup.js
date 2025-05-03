@@ -18,7 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Image from "next/image";
-import freeTrialPopup from "../../../public/home/freeTrialPopup.png";
+
 import { useRouter } from "next/router";
 
 const timeOptions = ["1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM"];

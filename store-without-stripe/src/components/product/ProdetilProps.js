@@ -1,82 +1,128 @@
-import React from 'react'
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 import Slider from "react-slick";
-import { Dialog, IconButton, Box } from "@mui/material";
-import Proimgbiriyani from "../../../public/home/biriyani-img.png"
-import Proimgtwobiriyani from "../../../public/home/biriyani-img-two.png"
+import { Dialog, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ProdetilProps = ({ open, onClose }) => {
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,        
-        autoplay: true,
-        autoplaySpeed: 2000
-      };
-  const [maxWidth, setMaxWidth] = React.useState('lg');
+const ProdetilProps = ({ open, onClose, product }) => {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    fade: true,
+  };
+
   return (
-    <>
-        <Dialog open={open} onClose={onClose} maxWidth={maxWidth} className="propetilpopus">
-                <IconButton className="popClose" onClick={onClose} sx={{ position: "absolute", top: 16, right: 16 }} > <CloseIcon />  </IconButton>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="lg"
+      className="propetilpopus"
+    >
+      <IconButton
+        className="popClose"
+        onClick={onClose}
+        sx={{ position: "absolute", top: 16, right: 16 }}
+      >
+        <CloseIcon />
+      </IconButton>
 
-                <div className='propetPopBox flex'>
-                    <div className='popbimg  w-[45%] bg-FFF4D7 overflow-hidden relative p-[2vw]'>                        
-                        <div className='fontanimi pointer-events-none'>
-                            <div className='animitext animiOne'><span>Veg Biriyani</span><span>Veg Biriyani</span></div>
-                            <div className='animitext animiTwo'><span>Biriyani Veg</span><span>Biriyani Veg</span></div>
-                        </div>
-                        <div className="slider-container flex items-center">
-                            <Slider {...settings} className='Prodeilsliders'>
-                                <div>                                    
-                                    <div className='flex-1 teamboximg rounded-full overflow-hidden'>
-                                        <Image className="w-full h-auto m-auto" priority src= {Proimgbiriyani} alt="logo" />
-                                    </div>  
-                                </div>
-                                <div>                              
-                                    <div className='flex-1 teamboximg rounded-full overflow-hidden'>
-                                        <Image className="w-full h-auto m-auto" priority src= {Proimgtwobiriyani} alt="logo" />
-                                    </div> 
-                                </div>
-                            </Slider>
-                        </div>
-                    </div>
-                    <div className='popbcont w-[55%] p-[3.5vw]'>
-                        <div className='mb-[4vh]'>
-                            <h3>Ghee Rice</h3>
-                            <p className='mb-[0]'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
-                        </div>
-                        <div className='mb-[4vh]'>
-                            <h3>Ingredients</h3>
-                            <p className='mb-[0]'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
-                        </div>
-                        <div className='mb-[0vh]'>
-                            <h3>Nutrition Value</h3>
-                            <ul className='flex flex-wrap gap-2'>
-                                <li>Calories <strong>100 Kcal</strong></li>
-                                <li>Carbs <strong>8 g</strong></li>
-                                <li>Proteins <strong>10 g</strong></li>
-                                <li>Fats <strong>2 g</strong></li>
-                                <li>Vitamins <strong>10 g</strong></li>
-                                <li>Minerals <strong>10 g</strong></li>
-                                <li>Cholesterol <strong>1.2 g</strong></li>
-                                <li>Calcium <strong>10 g</strong></li>
-                                <li>Iron <strong>10 g</strong></li>
-                                <li>Potassium <strong>5 g</strong></li>
-                                <li>Fiber <strong>5 g</strong></li>
-                            </ul>
-                        </div>
-                    </div>
+      <div className="propetPopBox flex">
+        {/* Left Side: Slider and Title */}
+        <div className="popbimg w-[45%] bg-FFF4D7 overflow-hidden relative p-[2vw]">
+          <div className="fontanimi pointer-events-none">
+            <div className="animitext animiOne">
+              <span>{product?.primaryDishTitle || "Dish Title"}</span>
+              <span>{product?.primaryDishTitle || "Dish Title"}</span>
+            </div>
+            <div className="animitext animiTwo">
+              <span>{product?.subDishTitle || "Sub Title"}</span>
+              <span>{product?.subDishTitle || "Sub Title"}</span>
+            </div>
+          </div>
+          <div className="slider-container flex items-center">
+            <Slider {...settings} className="Prodeilsliders">
+              <div>
+                <div className="flex-1 teamboximg rounded-full overflow-hidden">
+                  <Image
+                    className="w-full h-auto m-auto"
+                    priority
+                    src="/home/biriyani-img.png"
+                    alt={product?.primaryDishTitle || "Dish Image"}
+                    width={500}
+                    height={500}
+                  />
                 </div>
+              </div>
+              <div>
+                <div className="flex-1 teamboximg rounded-full overflow-hidden">
+                  <Image
+                    className="w-full h-auto m-auto"
+                    priority
+                    src="/home/biriyani-img-two.png"
+                    alt={product?.primaryDishTitle || "Dish Image"}
+                    width={500}
+                    height={500}
+                  />
+                </div>
+              </div>
+            </Slider>
+          </div>
+        </div>
 
-                
+        {/* Right Side: Product Details */}
+        <div className="popbcont w-[55%] p-[3.5vw]">
+          {/* Cuisine Type */}
+          <div className="mb-[2vh]">
+            <span className="text-sm font-medium text-gray-500">Cuisine:</span>
+            <span className="ml-2 text-sm font-semibold">
+              {product?.cuisine || "Not specified"}
+            </span>
+          </div>
 
-        </Dialog>
-    
-    </>
-  )
-}
+          {/* Main Title and Subtitle */}
+          <div className="mb-[2vh]">
+            <h1 className="text-3xl font-bold">
+              {product?.primaryDishTitle || "Dish Title"}
+            </h1>
+            <h2 className="text-2xl text-gray-600">
+              with {product?.subDishTitle || "Sub Dish"}
+            </h2>
+          </div>
 
-export default ProdetilProps
+          {/* Short Description */}
+          <div className="mb-[4vh]">
+            <p className="text-lg italic text-gray-700">
+              {product?.shortDescription || "Short description not available"}
+            </p>
+          </div>
+
+          {/* Full Description */}
+          <div className="mb-[4vh]">
+            <h3 className="text-xl font-semibold mb-2">About This Dish</h3>
+            <p className="text-gray-700">
+              {product?.description || "Detailed description not available"}
+            </p>
+          </div>
+
+          {/* Ingredients (You can make this dynamic if your data includes it) */}
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Key Ingredients</h3>
+            <ul className="list-disc pl-5 text-gray-700">
+              <li>Fresh {product?.primaryDishTitle || "main ingredient"}</li>
+              <li>Organic {product?.subDishTitle || "side ingredient"}</li>
+              <li>Special blend of spices</li>
+              <li>Fresh herbs</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </Dialog>
+  );
+};
+
+export default ProdetilProps;
