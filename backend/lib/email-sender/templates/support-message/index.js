@@ -7,7 +7,7 @@ const sendSupportMessage = (option) => {
 >
 
   <head>
-    <title>Kachabazar</title>
+    <title>lunchBowl</title>
     <!--[if !mso]><!-->
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
     <!--<![endif]-->
@@ -105,7 +105,9 @@ const sendSupportMessage = (option) => {
                                           <img
                                             alt
                                             height='auto'
-                                            src='https://res.cloudinary.com/ahossain/image/upload/v1676296566/Kachabazar%20files/cc_v8jite.png'
+                                            src='https://res.cloudinary.com/ahossain/image/upload/v1676296566/lunchBowl%20files/cc_v8jite.png'
+                                            alt="Your image"
+                                            onerror="this.src='https://via.placeholder.com/150';"
                                             style='border:0;display:block;outline:none;text-decoration:none;height:auto;width:80px;font-size:13px;padding-bottom:30px;'
                                             width='80'
                                             height='80'
@@ -204,7 +206,7 @@ const sendSupportMessage = (option) => {
                           >
                             <!--start email_template -->
                             <h2>Hello ${option.name}</h2>
-                            <p>Thank you for contacting Kachabazar. We got the
+                            <p>Thank you for contacting lunchBowl. We got the
                               following message from you.
                             </p>
 
@@ -226,7 +228,7 @@ const sendSupportMessage = (option) => {
                             >Thank you
                               <h4
                                 style='margin:1px; margin-bottom:0px; text-align:center;'
-                              >Kachabazar Team</h4></p>
+                              >lunchBowl Team</h4></p>
 
                             <!--end email_template -->
                           </div>
@@ -351,7 +353,7 @@ const sendSupportMessage = (option) => {
                                                         You are receiving this
                                                         email because you
                                                         registered with
-                                                        Kachabazar and agreed
+                                                        lunchBowl and agreed
                                                         to receive emails from
                                                         us regarding new
                                                         features, events and
@@ -359,7 +361,7 @@ const sendSupportMessage = (option) => {
                                                         <p
                                                           style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:11px;font-weight:400;line-height:16px;text-align:center;color:#303030;"
                                                         >
-                                                          &copy; Kachabazar,
+                                                          &copy; lunchBowl,
                                                           All Rights Reserved.</p></div>
                                                     </td>
                                                   </tr>

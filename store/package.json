@@ -1,7 +1,7 @@
 {
-  "name": "kachabazar-store",
+  "name": "lunchBowl-store",
   "version": "0.1.0",
-  "description": "this is kachabazar-store built with next.js and tailwindcss",
+  "description": "this is lunchBowl-store built with next.js and tailwindcss",
   "homepage": "http://localhost:3000/",
   "private": true,
   "scripts": {

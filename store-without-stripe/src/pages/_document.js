@@ -21,7 +21,7 @@ class MyDocument extends Document {
             property="og:title"
             content={
               setting?.meta_title ||
-              "KachaBazar - React Grocery & Organic Food Store e-commerce Template"
+              "lunchBowl - Healthy Bites to Fuel Your Child’s Mind"
             }
           />
           <meta property="og:type" content="eCommerce Website" />
@@ -29,7 +29,7 @@ class MyDocument extends Document {
             property="og:description"
             content={
               setting?.meta_description ||
-              "React Grocery & Organic Food Store e-commerce Template"
+              "Healthy Bites to Fuel Your Child’s Mind"
             }
           />
           <meta
@@ -39,7 +39,7 @@ class MyDocument extends Document {
           <meta
             property="og:url"
             content={
-              setting?.meta_url || "https://kachabazar-store.vercel.app/"
+              setting?.meta_url || "https://lunchBowl-store.vercel.app/"
             }
           />
           <meta
