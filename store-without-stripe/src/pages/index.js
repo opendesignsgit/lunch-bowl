@@ -45,7 +45,7 @@ const Home = () => {
           content: "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters.  To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery."
         },
         {
-          title: "Over time, what type of variation can I anticipate in the lunch bowl options? ",
+          title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
           content: "We make an effort to provide a varied and ever-changing menu to keep your child engaged.  In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients."
         },
         {
@@ -53,7 +53,7 @@ const Home = () => {
           content: "Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
         },
         {
-          title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls? ",
+          title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls?",
           content: " We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
         },
       ];
@@ -68,11 +68,10 @@ const Home = () => {
                         <h1 className='flex flex-col'>
                             <span className='block'>Healthy Bites</span> 
                             <span className='block'>t<strong className="iconone">o</strong> Fuel Y<strong className="icontwo">o</strong>ur</span> 
-                            <span className='block'>Child’s Mind</span>
+                            <span className='block'>Child's Mind</span>
                         </h1>
                         <h3>During School Lunch Time!</h3>
-                        <p>Healthy, delectable alternatives that are loaded with <br/>vital vitamins and minerals.</p>
-                        <p className="parabtn flex"><Link href="/Menulist" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+                          <p>Healthy, delectable alternatives that are loaded with <br />vital vitamins and minerals.</p><p className="parabtn flex"><Link href="/Menulist" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
                 </div>
                 <div className='hbanRight relative'>

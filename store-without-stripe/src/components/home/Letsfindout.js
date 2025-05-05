@@ -1,10 +1,13 @@
 import React from "react";
 import { useState } from "react";
 import SchoolServiceForm from "@components/home/SchoolServiceForm";
+import SignUpPopup from "@components/logInSignUp/SignUpPopup";
 
 const Letsfindout = () => {
   const [schoolName, setSchoolName] = useState("");
   const [showSchoolForm, setShowSchoolForm] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
+  
 
   const handleInputChange = (e) => {
     setSchoolName(e.target.value);
@@ -44,7 +47,7 @@ const Letsfindout = () => {
             <option value="Accord International School">Accord International School</option>
             <option value="St Johns English School">St Johns English School</option>
           </select>
-          <button className="btn">
+          <button className="btn" onClick={() => setShowSignUp(true)}>
             <span>Submit</span>
           </button>
         </div>
@@ -66,7 +69,7 @@ const Letsfindout = () => {
             placeholder="Enter School Name"
             className="form-radio outline-none focus:ring-0 text-emerald-500"
           />
-          <button className="btn" onClick={handleSubmit}>
+          <button className="btn" onClick={handleSubmit} >
             <span>Submit</span>
           </button>
         </div>
@@ -77,6 +80,8 @@ const Letsfindout = () => {
           onClose={() => setShowSchoolForm(false)}
         />
       )}
+            <SignUpPopup open={showSignUp} onClose={() => setShowSignUp(false)} />
+      
     </>
   );
 };
