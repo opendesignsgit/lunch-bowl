@@ -352,13 +352,7 @@ const RightPanel = ({
                 ) : null}
 
                 <Box display="flex" gap={2} className="btngroups">
-                  <Button 
-                    variant="outlined" 
-                    onClick={onClose} 
-                    className="cancelbtn"
-                  >
-                    <span>Cancel</span>
-                  </Button>
+                 
                   <Button 
                     variant="outlined" 
                     className="paysavebtn"

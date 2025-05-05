@@ -127,14 +127,12 @@ const Mainheader = ({ title, description, children }) => {
                     <Link href="/about-us">About Us</Link>
                   </li>
                   <li className="nav__item hamnavlink">
-                    <Link href="/">Food Menu</Link>
+                    <Link href="/Menulist">Food Menu</Link>
                   </li>
                   <li className="nav__item hamnavlink">
                     <Link href="/contact-us">Contact Us</Link>
                   </li>
-                  <li className="nav__item hamnavlink">
-                    <Link href="/">Career</Link>
-                  </li>
+                
                 </ul>
                 <ul className="HamSMediaul">
                   <li className="nav__item hamnavlink">
