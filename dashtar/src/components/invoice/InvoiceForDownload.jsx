@@ -345,7 +345,7 @@ const InvoiceForDownload = ({
               >
                 <Image
                   src={logoDark}
-                  alt="kachabazar"
+                  alt="lunchBowl"
                   style={{
                     width: 90,
                     alignItems: "right",
