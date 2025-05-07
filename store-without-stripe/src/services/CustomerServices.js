@@ -50,6 +50,14 @@ const CustomerServices = {
       shippingAddressData
     );
   },
+
+  sendOtp: async (body) => {
+    return requests.post("/customer/sendOtp", body);
+  },
+
+  verifyOtp: async (body) => {
+    return requests.post("/customer/verifyOtp", body);
+  },
 };
 
 export default CustomerServices;
