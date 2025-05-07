@@ -19,6 +19,8 @@ const {
   getShippingAddress,
   updateShippingAddress,
   deleteShippingAddress,
+  sendOtp,
+  verifyOtp
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -79,5 +81,11 @@ router.put("/:id", updateCustomer);
 
 //delete a user
 router.delete("/:id", deleteCustomer);
+
+//send OTP
+router.post("/sendOtp", sendOtp)
+
+//verify Otp
+router.post("/verifyOtp", verifyOtp)
 
 module.exports = router;

@@ -887,12 +887,12 @@ const setting = [
         favicon:
           "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
         meta_description:
-          "lunchBowlHealthy Bites to Fuel Your Child’s Mind",
+          "Healthy Bites to Fuel Your Child’s Mind",
         meta_img:
           "https://cdn.pixabay.com/photo/2017/06/02/18/24/fruit-2367029_1280.jpg",
         meta_keywords: "lunchBowl, online store",
         meta_title:
-          "lunchBowl - lunchBowlHealthy Bites to Fuel Your Child’s Mind",
+          "lunchBowl - Healthy Bites to Fuel Your Child’s Mind",
         meta_url: "https://lunchBowl-store-nine.vercel.app/",
       },
     },

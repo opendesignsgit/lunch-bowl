@@ -23,27 +23,38 @@ const useLoginSubmit = () => {
 
   // console.log("router", router.pathname === "/auth/signup");
 
-  const submitHandler = async ({ name, email, password, phone }) => {
+  const submitHandler = async ({ firstName,lastName, email, password, phone,path, otp }) => {
     setLoading(true);
 
     // console.log("submitHandler", phone);
 
     try {
-      if (router.pathname === "/auth/signup") {
-        // Custom sign-up method
-        // console.log("Need to use custom sign-up method");
+      // if (router.pathname === "/auth/signup") {
+      //   // Custom sign-up method
+      //   // console.log("Need to use custom sign-up method");
 
+      //   // Call the sign-up API which also handles sending the email verification
+      //   const res = await CustomerServices.verifyEmailAddress({
+      //     name,
+      //     email,
+      //     password,
+      //   });
+
+      //   // console.log("res", res);
+      //   notifySuccess(res.message);
+      //   return setLoading(false);
+      // }
+      if(path == "signUp" || path == "logIn"){
         // Call the sign-up API which also handles sending the email verification
-        const res = await CustomerServices.verifyEmailAddress({
-          name,
-          email,
-          password,
-        });
 
-        // console.log("res", res);
-        notifySuccess(res.message);
-        return setLoading(false);
-      } else if (router.pathname === "/auth/forget-password") {
+        const res = await CustomerServices.sendOtp({mobile: phone,path})
+        console.log("Full response------>:", res);
+        return res
+
+      }else if(path == "signUp-otp" || path == "logIn-otp"){
+        const res = await CustomerServices.verifyOtp({firstName,lastName,email,mobile: phone,otp,path})
+        return res
+      }else if (router.pathname === "/auth/forget-password") {
         // Call the forget password API for reset password
         const res = await CustomerServices.forgetPassword({
           email,

@@ -11,7 +11,7 @@ const DefaultSeo = () => {
     <NextSeo
       title={
         globalSetting?.meta_title ||
-        "lunchBowl - React Grocery & Organic Food Store e-commerce Template"
+        "lunchBowl - Healthy Bites to Fuel Your Child’s Mind"
       }
       openGraph={{
         type: "website",
@@ -19,7 +19,7 @@ const DefaultSeo = () => {
         url: globalSetting?.meta_url || "https://lunchBowl-store.vercel.app/",
         site_name:
           globalSetting?.meta_title ||
-          "lunchBowl - React Grocery & Organic Food Store e-commerce Template",
+          "lunchBowl - Healthy Bites to Fuel Your Child’s Mind",
       }}
       twitter={{
         handle: "@handle",

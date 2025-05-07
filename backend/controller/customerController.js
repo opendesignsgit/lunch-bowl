@@ -11,6 +11,7 @@ const {
   forgetPasswordEmailBody,
 } = require("../lib/email-sender/templates/forget-password");
 const { sendVerificationCode } = require("../lib/phone-verification/sender");
+const Otp = require("../models/Otp");
 
 const verifyEmailAddress = async (req, res) => {
   const isAdded = await Customer.findOne({ email: req.body.email });
@@ -173,40 +174,40 @@ const addAllCustomers = async (req, res) => {
   }
 };
 
-const loginCustomer = async (req, res) => {
-  try {
-    const customer = await Customer.findOne({ email: req.body.email });
+// const loginCustomer = async (req, res) => {
+//   try {
+//     const customer = await Customer.findOne({ email: req.body.email });
 
-    // console.log("loginCustomer", req.body.password, "customer", customer);
+//     // console.log("loginCustomer", req.body.password, "customer", customer);
 
-    if (
-      customer &&
-      customer.password &&
-      bcrypt.compareSync(req.body.password, customer.password)
-    ) {
-      const token = signInToken(customer);
-      res.send({
-        token,
-        _id: customer._id,
-        name: customer.name,
-        email: customer.email,
-        address: customer.address,
-        phone: customer.phone,
-        image: customer.image,
-      });
-    } else {
-      res.status(401).send({
-        message: "Invalid user or password!",
-        error: "Invalid user or password!",
-      });
-    }
-  } catch (err) {
-    res.status(500).send({
-      message: err.message,
-      error: "Invalid user or password!",
-    });
-  }
-};
+//     if (
+//       customer &&
+//       customer.password &&
+//       bcrypt.compareSync(req.body.password, customer.password)
+//     ) {
+//       const token = signInToken(customer);
+//       res.send({
+//         token,
+//         _id: customer._id,
+//         name: customer.name,
+//         email: customer.email,
+//         address: customer.address,
+//         phone: customer.phone,
+//         image: customer.image,
+//       });
+//     } else {
+//       res.status(401).send({
+//         message: "Invalid user or password!",
+//         error: "Invalid user or password!",
+//       });
+//     }
+//   } catch (err) {
+//     res.status(500).send({
+//       message: err.message,
+//       error: "Invalid user or password!",
+//     });
+//   }
+// };
 
 const forgetPassword = async (req, res) => {
   const isAdded = await Customer.findOne({ email: req.body.email });
@@ -566,6 +567,153 @@ const deleteCustomer = (req, res) => {
   });
 };
 
+// Send OTP
+const sendOtp = async (req, res) => {
+  try {
+    const { mobile, path } = req.body;
+
+    if (!mobile)
+      return res.status(400).json({ message: "Mobile number is required" });
+
+    // Generate a -digit OTP
+    const generateOtp = () =>
+      Math.floor(1000 + Math.random() * 9000).toString();
+    const otp = generateOtp();
+    const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes expiry
+
+    // Remove any existing OTPs for this mobile number
+    await Otp.deleteMany({ mobile });
+
+    // Save the new OTP
+    await Otp.create({ mobile, otp, expiresAt });
+
+    // In production: send OTP via SMS service (e.g., Twilio)
+
+    res.status(200).json({ message: "OTP sent successfully", otp, expiresAt }); // remove `otp` in production
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//verify Otp
+const verifyOtp = async (req, res) => {
+  try {
+    const { firstName, lastName, email, mobile, otp, path } = req.body;
+    console.log("====================================");
+    console.log("path---->", path);
+    console.log("====================================");
+    if (!mobile || !otp) {
+      return res
+        .status(400)
+        .json({ message: "Mobile number and OTP are required" });
+    }
+
+    // Find the OTP record for the mobile number
+    const existingOtp = await Otp.findOne({ mobile });
+
+    if (!existingOtp) {
+      return res.status(400).json({ message: "OTP not found or expired" });
+    }
+
+    // Check if the OTP is correct
+    if (existingOtp.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    // Check if the OTP has expired (optional — TTL should auto-delete it)
+    if (existingOtp.expiresAt < new Date()) {
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    // OTP is valid — delete it from DB (optional cleanup)
+    await Otp.deleteOne({ mobile });
+
+    // Proceed with login/signup or session creation logic here
+
+    
+
+    if (path == "signUp-otp") {
+      // Check if user already exists
+    const existingUser = await Customer.findOne({
+      $or: [{ email }, { mobile }],
+    });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+    
+      // Now call createCustomer and return the response
+      const result = await createCustomer({
+        firstName,
+        lastName,
+        mobile,
+        email,
+      });
+      return res.status(200).json(result);
+    } else {
+      const result = await loginCustomer(mobile);
+      return res.status(200).json(result);
+    }
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//create Customer
+const createCustomer = async ({ firstName, lastName, mobile, email }) => {
+  const newUser = new Customer({
+    name: `${firstName} ${lastName}`,
+    phone: mobile,
+    email,
+  });
+
+  await newUser.save();
+
+  const token = signInToken(newUser);
+
+  return {
+    success: true,
+    token,
+    _id: newUser._id,
+    name: newUser.name,
+    email: newUser.email,
+    mobile: newUser.mobile,
+    message: "Registration successful!",
+  };
+};
+
+//logIn Customer
+const loginCustomer = async (mobile) => {
+  try {
+    const customer = await Customer.findOne({ phone: mobile });
+
+    if (customer) {
+      const token = signInToken(customer);
+      res.send({
+        success: true,
+        token,
+        _id: customer._id,
+        name: customer.name,
+        email: customer.email,
+        phone: customer.mobile,
+        message: "Log in successful!",
+      });
+    } else {
+      res.status(401).send({
+        message: "Invalid user or password!",
+        error: "Invalid user or password!",
+      });
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+    return {
+      success: false,
+      message: "Login failed",
+    };
+  }
+};
+
 module.exports = {
   loginCustomer,
   verifyPhoneNumber,
@@ -585,4 +733,6 @@ module.exports = {
   getShippingAddress,
   updateShippingAddress,
   deleteShippingAddress,
+  sendOtp,
+  verifyOtp,
 };

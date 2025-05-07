@@ -15,6 +15,8 @@ import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import SignUpImage from "../../../public/LogInSignUp/signuppopimg.jpg";
 import FreeTrialPopup from "../../components/home/FreeTrialPopup";
+import useLoginSubmit from "@hooks/useLoginSubmit";
+
 
 const SignUpPopup = ({ open, onClose }) => {
   const [form, setForm] = useState({
@@ -38,6 +40,9 @@ const SignUpPopup = ({ open, onClose }) => {
   });
   const otpRefs = useRef([]);
   const [freeTrialPopup, setFreeTrialPopup] = useState(false);
+  const { submitHandler, loading } =
+      useLoginSubmit();
+  
 
   useEffect(() => {
     let interval;
@@ -106,12 +111,25 @@ const SignUpPopup = ({ open, onClose }) => {
     setErrors({ ...errors, mobile: "" }); // Clear mobile error when OTP is sent
   };
 
-  const handleSendOtp = () => {
+  const handleSendOtp = async () => {
     if (validateForm()) {
-      generateOtp();
-      setOtpSent(true);
+        try {
+            const res = await submitHandler({ phone: form.mobile, path: "signUp" });
+
+            console.log('====================================');
+            console.log("Full Response:", res); // Ensure the response is an object
+           
+            console.log('====================================');
+            setOtp(res.otp)
+
+            // generateOtp();
+             setOtpSent(true);
+        } catch (error) {
+            console.error("Error sending OTP:", error);
+        }
     }
-  };
+};
+
 
   const handleResendOtp = () => {
     if (!validateMobile(form.mobile)) {
@@ -124,25 +142,30 @@ const SignUpPopup = ({ open, onClose }) => {
     generateOtp();
   };
 
-  const handleVerifyOtp = () => {
+  const handleVerifyOtp = async() => {
     if (!validateOtp(userOtp)) {
       setErrors({ ...errors, otp: "Please enter a valid 4-digit OTP" });
       return;
+    }else{
+      const res = await submitHandler({otp:userOtp, phone: form.mobile, path : "signUp-otp", email: form.email, firstName: form.firstName, lastName:form.lastName})
+      console.log('====================================');
+      console.log("verifyOtp---->", res);
+      console.log('====================================');
     }
 
-    if (userOtp === otp) {
-      setMessage({ type: "success", text: "OTP verified successfully!" });
-      setErrors({ ...errors, otp: "" });
-      setFreeTrialPopup(true)
-      onClose()
-      // Here you would typically proceed with registration
-    } else {
-      setMessage({
-        type: "error",
-        text: "OTP is incorrect! Please try again.",
-      });
-      setErrors({ ...errors, otp: "Incorrect OTP" });
-    }
+    // if (userOtp === otp) {
+    //   setMessage({ type: "success", text: "OTP verified successfully!" });
+    //   setErrors({ ...errors, otp: "" });
+    //   setFreeTrialPopup(true)
+    //   onClose()
+    //   // Here you would typically proceed with registration
+    // } else {
+    //   setMessage({
+    //     type: "error",
+    //     text: "OTP is incorrect! Please try again.",
+    //   });
+    //   setErrors({ ...errors, otp: "Incorrect OTP" });
+    // }
   };
 
   const handleChange = (e) => {
@@ -294,7 +317,7 @@ const SignUpPopup = ({ open, onClose }) => {
                   color: "#fff",
                   "&:hover": { backgroundColor: "#e85f00" },
                 }}
-                onClick={resendEnabled ? handleResendOtp : handleVerifyOtp}
+                onClick={handleVerifyOtp}
               >
                 {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
               </Button>
