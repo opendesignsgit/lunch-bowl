@@ -11,10 +11,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import stepOne from "../../../public/profileStepImages/stepOne.png";
+import  useRegistration  from "@hooks/useRegistration";
+
 
 const schema = yup.object().shape({
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
+  fatherFirstName: yup.string().required("First name is required"),
+  fatherLastName: yup.string().required("Last name is required"),
   motherFirstName: yup.string().required("Mother first name is required"),
   motherLastName: yup.string().required("Mother last name is required"),
   mobile: yup
@@ -28,7 +30,7 @@ const schema = yup.object().shape({
   address: yup.string().required("Residential address is required"),
 });
 
-const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
+const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
   const {
     register,
     handleSubmit,
@@ -38,10 +40,17 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
     resolver: yupResolver(schema),
     mode: "onTouched",
   });
+  const { submitHandler, loading } =
+  useRegistration();
 
-  const onSubmit = (data) => {
-    setFormData(data);
-    nextStep();
+  const onSubmit = async(data) => {
+    console.log("Form data submitted:", data);
+    const res = await submitHandler({ formData: data, path: "step-Form-ParentDetails" ,_id});
+    if(res){
+      setFormData(data);
+      nextStep();
+    }
+    
   };
 
   return (
@@ -86,9 +95,9 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               fullWidth
               variant="outlined"
               placeholder="Enter Parent First Name"
-              {...register("firstName")}
-              error={!!errors.firstName}
-              helperText={errors.firstName?.message}
+              {...register("fatherFirstName")}
+              error={!!errors.fatherFirstName}
+              helperText={errors.fatherFirstName?.message}
               sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
@@ -104,9 +113,9 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep }) => {
               fullWidth
               variant="outlined"
               placeholder="Enter Parent Last Name"
-              {...register("lastName")}
-              error={!!errors.lastName}
-              helperText={errors.lastName?.message}
+              {...register("fatherLastName")}
+              error={!!errors.fatherLastName}
+              helperText={errors.fatherLastName?.message}
               sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>

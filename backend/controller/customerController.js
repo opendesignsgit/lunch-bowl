@@ -12,6 +12,7 @@ const {
 } = require("../lib/email-sender/templates/forget-password");
 const { sendVerificationCode } = require("../lib/phone-verification/sender");
 const Otp = require("../models/Otp");
+const Form = require("../models/Form");
 
 const verifyEmailAddress = async (req, res) => {
   const isAdded = await Customer.findOne({ email: req.body.email });
@@ -631,17 +632,15 @@ const verifyOtp = async (req, res) => {
 
     // Proceed with login/signup or session creation logic here
 
-    
-
     if (path == "signUp-otp") {
       // Check if user already exists
-    const existingUser = await Customer.findOne({
-      $or: [{ email }, { mobile }],
-    });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-    
+      const existingUser = await Customer.findOne({
+        $or: [{ email }, { mobile }],
+      });
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      }
+
       // Now call createCustomer and return the response
       const result = await createCustomer({
         firstName,
@@ -714,6 +713,71 @@ const loginCustomer = async (mobile) => {
   }
 };
 
+const stepFormRegister = async (req, res) => {
+  try {
+    const { formData, path, payload, _id } = req.body;
+
+    // Validate required fields
+    if (!_id || !path || (!formData && !payload)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Missing required fields: _id, path, and either formData or payload",
+      });
+    }
+
+    let update = {};
+    if (path === "step-Form-ParentDetails") {
+      update = { parentDetails: formData };
+    } else if (path === "step-Form-ChildDetails") {
+      update = { children: formData };
+    } else if (path === "step-Form-SubscriptionPlan") {
+      if (
+        !payload ||
+        !payload.selectedPlan ||
+        !payload.startDate ||
+        !payload.endDate ||
+        !payload.workingDays ||
+        !payload.totalPrice
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Missing required subscription plan fields",
+        });
+      }
+      update = {
+        subscriptionPlan: {
+          planId: payload.selectedPlan,
+          startDate: payload.startDate,
+          endDate: payload.endDate,
+          workingDays: payload.workingDays,
+          price: payload.totalPrice,
+        },
+      };
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid path parameter",
+      });
+    }
+
+    const form = await Form.findOneAndUpdate(
+      { user: _id },
+      { $set: update },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({ success: true, data: form });
+  } catch (error) {
+    console.error("Error during stepFormRegister:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   loginCustomer,
   verifyPhoneNumber,
@@ -735,4 +799,5 @@ module.exports = {
   deleteShippingAddress,
   sendOtp,
   verifyOtp,
+  stepFormRegister,
 };

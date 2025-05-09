@@ -20,7 +20,8 @@ const {
   updateShippingAddress,
   deleteShippingAddress,
   sendOtp,
-  verifyOtp
+  verifyOtp,
+  stepFormRegister,
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -83,9 +84,13 @@ router.put("/:id", updateCustomer);
 router.delete("/:id", deleteCustomer);
 
 //send OTP
-router.post("/sendOtp", sendOtp)
+router.post("/sendOtp", sendOtp);
 
 //verify Otp
-router.post("/verifyOtp", verifyOtp)
+router.post("/verifyOtp", verifyOtp);
+
+//step-Form ParentDetails
+router.post("/stepForm-Register", stepFormRegister);
+
 
 module.exports = router;

@@ -3,9 +3,9 @@ import { Box, Typography, Divider } from "@mui/material";
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
 import Accordion from '@components/faq/Accordion';
-import ParentDetailsStep from "../../components/profile-Step-Form/ParentDetailsStep";
-import ChildDetailsStep from "../../components/profile-Step-Form/childDetailsStep";
-import SubscriptionPlanStep from "../../components/profile-Step-Form/subscriptionPlanStep";
+import ParentDetailsStep from "@components/profile-Step-Form/ParentDetailsStep";
+import ChildDetailsStep from "@components/profile-Step-Form/childDetailsStep";
+import SubscriptionPlanStep from "@components/profile-Step-Form/subscriptionPlanStep";
 
 
 const StepHeader = ({ step }) => {
@@ -77,8 +77,8 @@ const StepHeader = ({ step }) => {
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fatherFirstName: "",
+    fatherLastName: "",
     motherFirstName: "",
     motherLastName: "",
     mobile: "",
@@ -86,6 +86,8 @@ const MultiStepForm = () => {
     address: "",
     children: [], // assuming an array of child objects
   });
+  const _id = "67ff446d67091f18f00d3c2d";
+
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
@@ -154,6 +156,7 @@ const MultiStepForm = () => {
                 formData={formData}
                 setFormData={setFormData}
                 nextStep={nextStep}
+                _id={_id}
               />
             )}
 
@@ -163,6 +166,8 @@ const MultiStepForm = () => {
                 setFormData={setFormData}
                 nextStep={nextStep}
                 prevStep={prevStep}
+                _id={_id}
+
               />
             )}
 

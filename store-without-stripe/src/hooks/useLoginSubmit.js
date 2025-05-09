@@ -29,21 +29,21 @@ const useLoginSubmit = () => {
     // console.log("submitHandler", phone);
 
     try {
-      // if (router.pathname === "/auth/signup") {
-      //   // Custom sign-up method
-      //   // console.log("Need to use custom sign-up method");
+      if (router.pathname === "/auth/signup") {
+        // Custom sign-up method
+        // console.log("Need to use custom sign-up method");
 
-      //   // Call the sign-up API which also handles sending the email verification
-      //   const res = await CustomerServices.verifyEmailAddress({
-      //     name,
-      //     email,
-      //     password,
-      //   });
+        // Call the sign-up API which also handles sending the email verification
+        const res = await CustomerServices.verifyEmailAddress({
+          name,
+          email,
+          password,
+        });
 
-      //   // console.log("res", res);
-      //   notifySuccess(res.message);
-      //   return setLoading(false);
-      // }
+        // console.log("res", res);
+        notifySuccess(res.message);
+        return setLoading(false);
+      }
       if(path == "signUp" || path == "logIn"){
         // Call the sign-up API which also handles sending the email verification
 

@@ -17,6 +17,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloseIcon from "@mui/icons-material/Close";
 import stepTwo from "../../../public/profileStepImages/stepTwo.png";
+import useRegistration from "@hooks/useRegistration";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -31,7 +32,13 @@ const schema = yup.object().shape({
   allergies: yup.string(),
 });
 
-const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
+const ChildDetailsStep = ({
+  formData,
+  setFormData,
+  nextStep,
+  prevStep,
+  _id,
+}) => {
   const [activeTab, setActiveTab] = useState(0);
   const [children, setChildren] = useState(
     formData.children.length > 0
@@ -50,6 +57,7 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
           },
         ]
   );
+  const { submitHandler, loading } = useRegistration();
 
   const {
     register,
@@ -65,8 +73,10 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
   });
 
   useEffect(() => {
-    reset(children[activeTab]);
-  }, [activeTab]);
+    if (children[activeTab]) {
+      reset(children[activeTab]);
+    }
+  }, [activeTab, children, reset]);
 
   useEffect(() => {
     const subscription = watch((values) => {
@@ -110,33 +120,50 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  const onSubmit = () => {
-    const validateAll = async () => {
-      const results = await Promise.all(
-        children.map((child) =>
-          schema.validate(child, { abortEarly: false }).catch((err) => err)
-        )
-      );
-      const hasErrors = results.some((res) => res.name === "ValidationError");
-      if (hasErrors) {
-        const firstInvalidIndex = results.findIndex(
-          (res) => res.name === "ValidationError"
-        );
-        setActiveTab(firstInvalidIndex);
-        return;
+  const onSubmit = async () => {
+    try {
+      // Validate all children first
+      await Promise.all(children.map(child => schema.validate(child, { abortEarly: false })));
+
+      const res = await submitHandler({
+        formData:  children ,
+        path: "step-Form-ChildDetails",
+        _id,
+      });
+
+      if (res) {
+        setFormData({ ...formData, children });
+        nextStep();
       }
-      setFormData({ ...formData, children });
-      nextStep();
-    };
-    validateAll();
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        // Find the index of the first invalid child
+        const invalidIndex = children.findIndex(child => {
+          try {
+            schema.validateSync(child, { abortEarly: false });
+            return false;
+          } catch {
+            return true;
+          }
+        });
+        if (invalidIndex >= 0) {
+          setActiveTab(invalidIndex);
+        }
+      }
+    }
   };
 
   const dropdownFields = [
-    ["CHILD'S LUNCH TIME*", "lunchTime", "Select Lunch Time", ["12:30 PM", "1:00 PM", ":30 PM"]],
     [
-      "SCHOOL*", 
-      "school", 
-      "Select School", 
+      "CHILD'S LUNCH TIME*",
+      "lunchTime",
+      "Select Lunch Time",
+      ["12:30 PM", "1:00 PM", "1:30 PM"],
+    ],
+    [
+      "SCHOOL*",
+      "school",
+      "Select School",
       [
         "Akshar Arbol International School",
         "Asan Memorial Senior Secondary School",
@@ -157,12 +184,21 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
         "Sprouts",
         "St Michael Academy",
         "Accord International School",
-        "St Johns English School"
-      ]
+        "St Johns English School",
+      ],
     ],
-    
-    ["LOCATION*", "location", "Select Location", ["Ambattur", "Pammal","Kotturpuram","Porur"]],
-    ["CHILD CLASS*", "childClass", "Select Class", ["LKG", "UKG", "Grade 1","Grade 2","Grade 3","Grade 4"]],
+    [
+      "LOCATION*",
+      "location",
+      "Select Location",
+      ["Ambattur", "Pammal", "Kotturpuram", "Porur"],
+    ],
+    [
+      "CHILD CLASS*",
+      "childClass",
+      "Select Class",
+      ["LKG", "UKG", "Grade 1", "Grade 2", "Grade 3", "Grade 4"],
+    ],
     ["CHILD SECTION*", "section", "Select Section", ["A", "B", "C"]],
   ];
 
@@ -170,7 +206,11 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        gap: 2,
+      }}
     >
       {/* Image Side */}
       <Box
@@ -190,8 +230,17 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
           <Typography variant="h5">CHILD DETAILS :</Typography>
 
           {/* Tabs */}
-          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }} className="adchildnav">
-            <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" className="adchildul">
+          <Box
+            sx={{ display: "flex", alignItems: "center", mb: 2 }}
+            className="adchildnav"
+          >
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              className="adchildul"
+            >
               {children.map((child, index) => (
                 <Tab
                   key={index}
@@ -218,7 +267,11 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
                 />
               ))}
             </Tabs>
-            <Button variant="outlined" onClick={addChild} className="addanochildbtn">
+            <Button
+              variant="outlined"
+              onClick={addChild}
+              className="addanochildbtn"
+            >
               Add Another Child
             </Button>
           </Box>
@@ -227,11 +280,18 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
         <Grid container className="formboxrow">
           {/* Text Inputs */}
           {[
-            ["CHILD'S FIRST NAME*", "childFirstName", "Enter Child's First Name"],
+            [
+              "CHILD'S FIRST NAME*",
+              "childFirstName",
+              "Enter Child's First Name",
+            ],
             ["CHILD'S LAST NAME*", "childLastName", "Enter Child's Last Name"],
           ].map(([label, name, placeholder]) => (
             <Grid item className="formboxcol" key={name}>
-              <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
+              <Typography
+                variant="subtitle2"
+                sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+              >
                 {label}
               </Typography>
               <TextField
@@ -247,7 +307,10 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
 
           {/* Date Picker */}
           <Grid item className="formboxcol" key="dob">
-            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
               DATE OF BIRTH*
             </Typography>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -275,48 +338,56 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
 
           {/* Dropdowns */}
           {dropdownFields.map(([label, name, placeholder, options]) => (
-  <Grid item className="formboxcol" key={name}>
-    <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>{label}</Typography>
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => (
-        <TextField
-          select
-          fullWidth
-          label={placeholder}
-          {...field}
-          error={!!errors[name]}
-          helperText={errors[name]?.message}
-          sx={{ width: "300px", minWidth: "300px" }}
-          SelectProps={{
-            MenuProps: {
-              PaperProps: {
-                style: {
-                  maxHeight: 200, // This will show about 4-5 items depending on their height
-                  overflow: 'auto',
-                },
-              },
-            },
-          }}
-        >
-          <MenuItem value="" disabled>
-            {placeholder}
-          </MenuItem>
-          {options.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
+            <Grid item className="formboxcol" key={name}>
+              <Typography
+                variant="subtitle2"
+                sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+              >
+                {label}
+              </Typography>
+              <Controller
+                name={name}
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    select
+                    fullWidth
+                    label={placeholder}
+                    {...field}
+                    error={!!errors[name]}
+                    helperText={errors[name]?.message}
+                    sx={{ width: "300px", minWidth: "300px" }}
+                    SelectProps={{
+                      MenuProps: {
+                        PaperProps: {
+                          style: {
+                            maxHeight: 200,
+                            overflow: "auto",
+                          },
+                        },
+                      },
+                    }}
+                  >
+                    <MenuItem value="" disabled>
+                      {placeholder}
+                    </MenuItem>
+                    {options.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid>
           ))}
-        </TextField>
-      )}
-    />
-  </Grid>
-))}
 
           {/* Allergies */}
           <Grid item className="formboxcol">
-            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
               DOES THE CHILD HAVE ANY ALLERGIES?
             </Typography>
             <TextField
@@ -330,12 +401,20 @@ const ChildDetailsStep = ({ formData, setFormData, nextStep, prevStep }) => {
               sx={{ width: "625px", minWidth: "625px" }}
             />
           </Grid>
-
         </Grid>
 
-        <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap:  3}}>
-          <Button variant="outlined" onClick={prevStep} className="backbtn"> <span className="nextspan">Back</span> </Button>
-          <Button type="submit" variant="contained" className="nextbtn"> <span className="nextspan">Next</span> </Button>
+        <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
+          <Button variant="outlined" onClick={prevStep} className="backbtn">
+            <span className="nextspan">Back</span>
+          </Button>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            className="nextbtn"
+            disabled={loading}
+          >
+            {loading ? "Processing..." : <span className="nextspan">Next</span>}
+          </Button>
         </Box>
       </Box>
     </Box>
