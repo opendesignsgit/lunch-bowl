@@ -58,6 +58,10 @@ const CustomerServices = {
   verifyOtp: async (body) => {
     return requests.post("/customer/verifyOtp", body);
   },
+
+  stepFormRegister: async (body) => {
+    return requests.post("/customer/stepForm-Register", body);
+  },
 };
 
 export default CustomerServices;
