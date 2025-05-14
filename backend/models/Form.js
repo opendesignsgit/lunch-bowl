@@ -1,0 +1,48 @@
+const mongoose = require("mongoose");
+
+const FormSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customer", // Referencing the Customer schema
+    required: true,
+  },
+  parentDetails: {
+    fatherFirstName: { type: String, required: true },
+    fatherLastName: { type: String, required: true },
+    motherFirstName: { type: String, required: true },
+    motherLastName: { type: String, required: true },
+    mobile: {
+      type: String,
+      required: true,
+      match: /^[0-9]{10}$/,
+    },
+    email: {
+      type: String,
+      required: true,
+      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    },
+    address: { type: String, required: true },
+  },
+  children: [
+    {
+      childFirstName: { type: String, required: true },
+      childLastName: { type: String, required: true },
+      dob: { type: Date, required: true },
+      lunchTime: { type: String, required: true },
+      school: { type: String, required: true },
+      location: { type: String, required: true },
+      childClass: { type: String, required: true },
+      section: { type: String, required: true },
+      allergies: { type: String, default: "" },
+    },
+  ],
+  subscriptionPlan: {
+    planId: { type: String, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    workingDays: { type: Number, required: true },
+    price: { type: Number, required: true },
+  },
+});
+
+module.exports = mongoose.model("Form", FormSchema);

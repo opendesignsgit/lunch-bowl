@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import WorkingDaysCalendar from "./WorkingDaysCalendar";
 import SubscriptionDatePicker from "./SubscriptionDatePicker";
 import { useRouter } from "next/router";
+import useRegistration from "@hooks/useRegistration";
 
 // Helper functions
 const calculateWorkingDays = (startDate, endDate) => {
@@ -117,6 +118,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
   });
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [plans, setPlans] = useState([]);
+  const { submitHandler, loading } = useRegistration();
 
   // Initialize plans and dates
   useEffect(() => {
@@ -169,7 +171,10 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
     setErrors({ ...errors, endDate: false, dateOrder: false });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    console.log("Selected Plan:", selectedPlan);
+
+    // Validation for custom date selection
     if (selectedPlan === "byDate") {
       const newErrors = {
         startDate: !startDate,
@@ -181,8 +186,29 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
       if (newErrors.startDate || newErrors.endDate || newErrors.dateOrder)
         return;
     }
-    nextStep();
-    router.push("/menuCalendarPage");
+
+    // Construct the payload
+    const payload = {
+      selectedPlan,
+      workingDays:
+        selectedPlan !== "byDate"
+          ? currentPlan?.workingDays
+          : calculateWorkingDays(startDate, endDate),
+      totalPrice:
+        selectedPlan !== "byDate"
+          ? currentPlan?.price
+          : calculateWorkingDays(startDate, endDate) * 200,
+      startDate: startDate.format("YYYY-MM-DD"),
+      endDate: endDate.format("YYYY-MM-DD"),
+    };
+
+    try {
+      // Proceed to the next step
+      nextStep();
+      router.push("/menuCalendarPage"); // Redirect to the menu calendar page
+    } catch (error) {
+      console.error("Error during subscription plan selection:", error);
+    }
   };
 
   // Get the currently selected plan details
