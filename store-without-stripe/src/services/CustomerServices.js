@@ -62,6 +62,10 @@ const CustomerServices = {
   stepFormRegister: async (body) => {
     return requests.post("/customer/stepForm-Register", body);
   },
+
+  getCalendarDetails: async ({ body }) => {
+    return requests.post("/customer/get-menu-calendar", body);
+  },
 };
 
 export default CustomerServices;

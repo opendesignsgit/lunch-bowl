@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { Box, useMediaQuery, useTheme, Dialog } from "@mui/material";
 import LeftPanel from "./LeftPanel";
 import CenterPanel from "./CenterPanel";
 import RightPanel from "./RightPanel";
 import MealPlanDialog from "./MealPlanDialog";
+import useDetails from "@hooks/useDetails";
 
 const dummyChildren = [
   { id: 1, name: "Child Name 1" },
@@ -38,6 +39,7 @@ const MenuCalendar = () => {
   const today = dayjs();
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const _id = "67ff446d67091f18f00d3c2d";
 
   const [currentMonth, setCurrentMonth] = useState(today.month());
   const [currentYear, setCurrentYear] = useState(today.year());
@@ -50,6 +52,44 @@ const MenuCalendar = () => {
     open: false,
     startDate: null,
   });
+  const { fetchDetailsHandler } = useDetails();
+  // State for fetched data
+  const [children, setChildren] = useState([]);
+  const [subscriptionStart, setSubscriptionStart] = useState(null);
+  const [subscriptionEnd, setSubscriptionEnd] = useState(null);
+  // const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const _id = "67ff446d67091f18f00d3c2d";
+
+    const fetchDetails = async () => {
+      try {
+        // Replace with your API endpoint
+        console.log("Fetching details for ID:", _id);
+
+        const response = await axios.post("/customer/get-menu-calendar", {
+          _id,
+          path: "menu-Calendar-Page",
+        });
+        console.log("Fetched details:", response);
+        const {
+          startDate,
+          endDate,
+          children: fetchedChildren,
+        } = response.data.data;
+
+        setSubscriptionStart(dayjs(startDate));
+        setSubscriptionEnd(dayjs(endDate));
+        setChildren(fetchedChildren);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching details:", error);
+        // setLoading(false);
+      }
+    };
+
+    fetchDetails();
+  }, [_id]);
 
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
@@ -109,15 +149,17 @@ const MenuCalendar = () => {
   const applyMealPlan = (planId) => {
     const selectedPlan = planId === 1 ? dummyMenus : [...dummyMenus].reverse();
     const updates = {};
-  
+
     // Get the first and last day of the current month
     const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
     const daysInMonth = firstDayOfMonth.daysInMonth();
-  
+
     // Iterate over all days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-      const currentDate = dayjs(`${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`);
-  
+      const currentDate = dayjs(
+        `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
+      );
+
       // Skip weekends and holidays
       if (!isHoliday(day)) {
         const mealDate = currentDate.format("YYYY-MM-DD");
@@ -128,7 +170,7 @@ const MenuCalendar = () => {
         };
       }
     }
-  
+
     // Update the menu selections state
     setMenuSelections((prev) => ({
       ...prev,

@@ -22,6 +22,7 @@ const {
   sendOtp,
   verifyOtp,
   stepFormRegister,
+  getMenuCalendarDate,
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -92,5 +93,7 @@ router.post("/verifyOtp", verifyOtp);
 //step-Form ParentDetails
 router.post("/stepForm-Register", stepFormRegister);
 
+//get menu calendar date
+router.post("/get-menu-calendar", getMenuCalendarDate);
 
 module.exports = router;

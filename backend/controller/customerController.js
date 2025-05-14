@@ -778,6 +778,96 @@ const stepFormRegister = async (req, res) => {
   }
 };
 
+const getMenuCalendarDate = async (req, res) => {
+  try {
+    const { _id, path } = req.body;
+    console.log("====================================", req.body);
+
+    if (!_id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    console.log("====================================");
+    console.log("_id", _id);
+    console.log("====================================");
+
+    const form = await Form.findOne({ user: _id });
+    if (!form) {
+      return res.status(404).json({
+        success: false,
+        message: "Form not found",
+      });
+    }
+
+    // Check if subscriptionPlan exists
+    if (!form.subscriptionPlan) {
+      return res.status(404).json({
+        success: false,
+        message: "Subscription plan not found",
+      });
+    }
+
+    const { startDate, endDate } = form.subscriptionPlan;
+
+    // Safely map children names
+    const childrenNames =
+      form.children?.map((child) => ({
+        firstName: child.childFirstName,
+        lastName: child.childLastName,
+      })) || [];
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        startDate,
+        endDate,
+        children: childrenNames,
+      },
+    });
+  } catch (error) {
+    console.error("Error in getMenuCalendarDate:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+// const menuCalendar = async (req, res) => {
+//   try {
+//     const _id = req.params.id;
+
+//     const customer = await Customer.findById(_id);
+//     if (!customer) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Customer not found",
+//       });
+//     }
+
+//     const { startDate, endDate } = form.subscriptionPlan;
+
+//     return res.status(200).json({
+//       success: true,
+//       data: {
+//         startDate,
+//         endDate,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error during stepFormRegister:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Internal server error",
+//       error: error.message,
+//     });
+//   }
+// };
+
 module.exports = {
   loginCustomer,
   verifyPhoneNumber,
@@ -800,4 +890,5 @@ module.exports = {
   sendOtp,
   verifyOtp,
   stepFormRegister,
+  getMenuCalendarDate,
 };
