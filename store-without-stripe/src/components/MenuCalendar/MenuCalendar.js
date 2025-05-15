@@ -132,147 +132,101 @@ const MenuCalendar = () => {
     return daysArray;
   };
 
-  const applyMealPlan = (planId) => {
-    const selectedPlan = planId === 1 ? menus : [...menus].reverse();
-    const updates = {};
+    const applyMealPlan = (planId) => {
+      const selectedPlan = planId === 1 ? menus : [...menus].reverse();
+      const updates = {};
 
-    const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
-    const daysInMonth = firstDayOfMonth.daysInMonth();
+      const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
+      const daysInMonth = firstDayOfMonth.daysInMonth();
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const currentDate = dayjs(
-        `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
-      );
-      if (!isHoliday(day)) {
-        const mealDate = currentDate.format("YYYY-MM-DD");
-        const meal = selectedPlan[(day - 1) % selectedPlan.length];
-        updates[mealDate] = {
-          ...(menuSelections[mealDate] || {}),
-          [children[activeChild]?.id]: meal,
-        };
+      for (let day = 1; day <= daysInMonth; day++) {
+        const currentDate = dayjs(
+          `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
+        );
+        if (!isHoliday(day)) {
+          const mealDate = currentDate.format("YYYY-MM-DD");
+          const meal = selectedPlan[(day - 1) % selectedPlan.length];
+          updates[mealDate] = {
+            ...(menuSelections[mealDate] || {}),
+            [children[activeChild]?.id]: meal,
+          };
+        }
       }
+
+      setMenuSelections((prev) => ({
+        ...prev,
+        ...updates,
+      }));
+    };
+
+    const calendarDates = getCalendarGridDates();
+
+    const handleMonthChange = (direction) => {
+      let newMonth = currentMonth + direction;
+      let newYear = currentYear;
+
+      if (newMonth < 0) {
+        newMonth = 11;
+        newYear--;
+      } else if (newMonth > 11) {
+        newMonth = 0;
+        newYear++;
+      }
+
+      const newMonthStart = dayjs(`${newYear}-${newMonth + 1}-01`);
+      const newMonthEnd = newMonthStart.endOf("month");
+
+      if (
+        newMonthEnd.isBefore(subscriptionStart) ||
+        newMonthStart.isAfter(subscriptionEnd)
+      ) {
+        return;
+      }
+
+      setCurrentMonth(newMonth);
+      setCurrentYear(newYear);
+    };
+
+    const handleDateClick = (date) => {
+      setSelectedDate(date);
+      setEditMode(false);
+      if (isSmall) {
+        setOpenDialog(true);
+      }
+    };
+
+    const handleEditClick = (dateString) => {
+      const [year, month, day] = dateString.split("-");
+      setCurrentMonth(parseInt(month) - 1);
+      setCurrentYear(parseInt(year));
+      setSelectedDate(parseInt(day));
+      setEditMode(true);
+      if (isSmall) {
+        setOpenDialog(true);
+      }
+    };
+
+    const handleDialogClose = () => {
+      setOpenDialog(false);
+      setEditMode(false);
+    };
+
+    if (loading || !children.length) {
+      return <CircularProgress />;
     }
 
-    setMenuSelections((prev) => ({
-      ...prev,
-      ...updates,
-    }));
-  };
-
-  const calendarDates = getCalendarGridDates();
-
-  const handleMonthChange = (direction) => {
-    let newMonth = currentMonth + direction;
-    let newYear = currentYear;
-
-    if (newMonth < 0) {
-      newMonth = 11;
-      newYear--;
-    } else if (newMonth > 11) {
-      newMonth = 0;
-      newYear++;
-    }
-
-    const newMonthStart = dayjs(`${newYear}-${newMonth + 1}-01`);
-    const newMonthEnd = newMonthStart.endOf("month");
-
-    if (
-      newMonthEnd.isBefore(subscriptionStart) ||
-      newMonthStart.isAfter(subscriptionEnd)
-    ) {
-      return;
-    }
-
-    setCurrentMonth(newMonth);
-    setCurrentYear(newYear);
-  };
-
-  const handleDateClick = (date) => {
-    setSelectedDate(date);
-    setEditMode(false);
-    if (isSmall) {
-      setOpenDialog(true);
-    }
-  };
-
-  const handleEditClick = (dateString) => {
-    const [year, month, day] = dateString.split("-");
-    setCurrentMonth(parseInt(month) - 1);
-    setCurrentYear(parseInt(year));
-    setSelectedDate(parseInt(day));
-    setEditMode(true);
-    if (isSmall) {
-      setOpenDialog(true);
-    }
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setEditMode(false);
-  };
-
-  if (loading || !children.length) {
-    return <CircularProgress />;
-  }
-
-  return (
-    <Box
-      className="MCMainPanel"
-      display="flex"
-      flexDirection={isSmall ? "column" : "row"}
-      bgcolor="#fff"
-      mx="auto"
-      borderRadius={2}
-      boxShadow={2}
-      overflow="hidden"
-    >
-      {isSmall && (
-        <CenterPanel
-          isSmall={isSmall}
-          currentMonth={currentMonth}
-          currentYear={currentYear}
-          handleMonthChange={handleMonthChange}
-          calendarDates={calendarDates}
-          selectedDate={selectedDate}
-          setSelectedDate={handleDateClick}
-          isHoliday={isHoliday}
-          dummyHolidays={holidays}
-          subscriptionStart={subscriptionStart}
-          subscriptionEnd={subscriptionEnd}
-        />
-      )}
-
-      {isSmall && (
-        <LeftPanel
-          isSmall={isSmall}
-          currentYear={currentYear}
-          currentMonth={currentMonth}
-          activeChild={activeChild}
-          setActiveChild={setActiveChild}
-          dummyChildren={children}
-          menuSelections={menuSelections}
-          subscriptionStart={subscriptionStart}
-          subscriptionEnd={subscriptionEnd}
-          onEditClick={handleEditClick}
-        />
-      )}
-
-      {!isSmall && (
-        <>
-          <LeftPanel
-            isSmall={isSmall}
-            currentYear={currentYear}
-            currentMonth={currentMonth}
-            activeChild={activeChild}
-            setActiveChild={setActiveChild}
-            dummyChildren={children}
-            menuSelections={menuSelections}
-            subscriptionStart={subscriptionStart}
-            subscriptionEnd={subscriptionEnd}
-            onEditClick={handleEditClick}
-            sx={{ width: "29%" }}
-          />
-
+    return (
+      <Box
+        className="MCMainPanel"
+        display="flex"
+        flexDirection={isSmall ? "column" : "row"}
+        bgcolor="#fff"
+        mx="auto"
+        borderRadius={2}
+        boxShadow={2}
+        overflow="hidden"
+      >
+        {isSmall && (
           <CenterPanel
             isSmall={isSmall}
             currentMonth={currentMonth}
@@ -285,9 +239,80 @@ const MenuCalendar = () => {
             dummyHolidays={holidays}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
-            sx={{ width: "44%" }}
           />
+        )}
 
+        {isSmall && (
+          <LeftPanel
+            isSmall={isSmall}
+            currentYear={currentYear}
+            currentMonth={currentMonth}
+            activeChild={activeChild}
+            setActiveChild={setActiveChild}
+            dummyChildren={children}
+            menuSelections={menuSelections}
+            subscriptionStart={subscriptionStart}
+            subscriptionEnd={subscriptionEnd}
+            onEditClick={handleEditClick}
+          />
+        )}
+
+        {!isSmall && (
+          <>
+            <LeftPanel
+              isSmall={isSmall}
+              currentYear={currentYear}
+              currentMonth={currentMonth}
+              activeChild={activeChild}
+              setActiveChild={setActiveChild}
+              dummyChildren={children}
+              menuSelections={menuSelections}
+              subscriptionStart={subscriptionStart}
+              subscriptionEnd={subscriptionEnd}
+              onEditClick={handleEditClick}
+              sx={{ width: "29%" }}
+            />
+
+            <CenterPanel
+              isSmall={isSmall}
+              currentMonth={currentMonth}
+              currentYear={currentYear}
+              handleMonthChange={handleMonthChange}
+              calendarDates={calendarDates}
+              selectedDate={selectedDate}
+              setSelectedDate={handleDateClick}
+              isHoliday={isHoliday}
+              dummyHolidays={holidays}
+              subscriptionStart={subscriptionStart}
+              subscriptionEnd={subscriptionEnd}
+              sx={{ width: "44%" }}
+            />
+
+            <RightPanel
+              isSmall={isSmall}
+              selectedDate={selectedDate}
+              getDayName={getDayName}
+              isHoliday={isHoliday}
+              dummyChildren={children}
+              menuSelections={menuSelections}
+              handleMenuChange={handleMenuChange}
+              dummyMenus={menus}
+              formatDate={formatDate}
+              editMode={editMode}
+              setEditMode={setEditMode}
+              sx={{ width: "29%" }}
+              applyMealPlan={applyMealPlan} // Pass the function
+              setMealPlanDialog={setMealPlanDialog}
+            />
+          </>
+        )}
+
+        <Dialog
+          open={openDialog}
+          onClose={handleDialogClose}
+          fullWidth
+          maxWidth="sm"
+        >
           <RightPanel
             isSmall={isSmall}
             selectedDate={selectedDate}
@@ -298,45 +323,22 @@ const MenuCalendar = () => {
             handleMenuChange={handleMenuChange}
             dummyMenus={menus}
             formatDate={formatDate}
+            onClose={handleDialogClose}
             editMode={editMode}
             setEditMode={setEditMode}
-            sx={{ width: "29%" }}
+            applyMealPlan={applyMealPlan} // Pass the function
             setMealPlanDialog={setMealPlanDialog}
           />
-        </>
-      )}
+        </Dialog>
 
-      <Dialog
-        open={openDialog}
-        onClose={handleDialogClose}
-        fullWidth
-        maxWidth="sm"
-      >
-        <RightPanel
-          isSmall={isSmall}
-          selectedDate={selectedDate}
-          getDayName={getDayName}
-          isHoliday={isHoliday}
-          dummyChildren={children}
-          menuSelections={menuSelections}
-          handleMenuChange={handleMenuChange}
-          dummyMenus={menus}
-          formatDate={formatDate}
-          onClose={handleDialogClose}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          setMealPlanDialog={setMealPlanDialog}
+        <MealPlanDialog
+          open={mealPlanDialog.open}
+          onClose={() => setMealPlanDialog({ ...mealPlanDialog, open: false })}
+          startDate={mealPlanDialog.startDate}
+          planId={mealPlanDialog.plan} // Pass the selected plan ID
         />
-      </Dialog>
-
-      <MealPlanDialog
-        open={mealPlanDialog.open}
-        onClose={() => setMealPlanDialog({ ...mealPlanDialog, open: false })}
-        startDate={mealPlanDialog.startDate}
-        onApplyPlan={applyMealPlan}
-      />
-    </Box>
-  );
+      </Box>
+    );
 };
 
 export default MenuCalendar;

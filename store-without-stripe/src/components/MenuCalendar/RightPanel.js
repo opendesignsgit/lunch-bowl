@@ -65,12 +65,16 @@ const RightPanel = ({
   setEditMode,
   sx,
   setMealPlanDialog,
+  applyMealPlan,
+  // setMealPlanDialog,
 }) => {
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
   const [applyToAll, setApplyToAll] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
+  const [dialogOpen1, setDialogOpen1] = useState(false);
+  const [dialogOpen2, setDialogOpen2] = useState(false);
 
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
@@ -88,8 +92,30 @@ const RightPanel = ({
     setMealPlanDialog({
       open: true,
       startDate: formatDate(selectedDate),
-      plan: planId,
+      plan: planId, // Pass the selected plan ID
     });
+    // Call applyMealPlan directly when a radio button is selected
+    // Note: You'll need to pass applyMealPlan as a prop or use context
+    // For this example, I'm assuming it's passed as a prop
+    if (applyMealPlan) {
+      applyMealPlan(planId);
+    }
+  };
+
+  const handleViewPlan1 = () => {
+    setDialogOpen1(true);
+  };
+
+  const handleViewPlan2 = () => {
+    setDialogOpen2(true);
+  };
+
+  const handleCloseDialog1 = () => {
+    setDialogOpen1(false);
+  };
+
+  const handleCloseDialog2 = () => {
+    setDialogOpen2(false);
   };
 
   const handleViewPlan = (planId) => {
@@ -276,7 +302,9 @@ const RightPanel = ({
                                     }}
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      handleViewPlan(plan.id);
+                                      plan.id === 1
+                                        ? handleViewPlan1()
+                                        : handleViewPlan2();
                                     }}
                                   >
                                     View Plan
@@ -382,11 +410,20 @@ const RightPanel = ({
         );
       })()}
 
-      <MealPlanDialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-        planId={currentPlan}
-      />
+      <>
+        <MealPlanDialog
+          open={dialogOpen1}
+          onClose={handleCloseDialog1}
+          planId={1}
+          startDate={formatDate(selectedDate)}
+        />
+        <MealPlanDialog
+          open={dialogOpen2}
+          onClose={handleCloseDialog2}
+          planId={2}
+          startDate={formatDate(selectedDate)}
+        />
+      </>
     </Box>
   );
 };
