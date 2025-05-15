@@ -75,32 +75,20 @@ const RightPanel = ({
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
   const isSelectedHoliday = !!holiday;
-  const lessThan48Hours = isSelectedHoliday && selectedDateObj.diff(dayjs(), "hour") < 48;
+  const lessThan48Hours =
+    isSelectedHoliday && selectedDateObj.diff(dayjs(), "hour") < 48;
 
   const mealPlans = [
-    { 
-      id: 1, 
-      name: "Meal Plan 1",
-      meals: meals
-    },
-    { 
-      id: 2, 
-      name: "Meal Plan 2",
-      meals: [...meals].reverse()
-    },
+    { id: 1, name: "Meal Plan 1", meals: meals },
+    { id: 2, name: "Meal Plan 2", meals: [...meals].reverse() },
   ];
 
   const handlePlanChange = (childId, planId) => {
-    setSelectedPlans(prev => ({
-      ...prev,
-      [childId]: planId
-    }));
-    
-    // Open the meal plan dialog
+    setSelectedPlans((prev) => ({ ...prev, [childId]: planId }));
     setMealPlanDialog({
       open: true,
       startDate: formatDate(selectedDate),
-      plan: planId
+      plan: planId,
     });
   };
 
@@ -117,12 +105,11 @@ const RightPanel = ({
   const handleApplyToAllChange = (e) => {
     const { checked } = e.target;
     setApplyToAll(checked);
-
     if (checked && dummyChildren.length > 1) {
       const firstChildId = dummyChildren[0].id;
-      const firstChildSelection = menuSelections[formatDate(selectedDate)]?.[firstChildId];
-
-      dummyChildren.slice(1).forEach(child => {
+      const firstChildSelection =
+        menuSelections[formatDate(selectedDate)]?.[firstChildId];
+      dummyChildren.slice(1).forEach((child) => {
         handleMenuChange(child.id, firstChildSelection || "");
       });
     }
@@ -130,9 +117,8 @@ const RightPanel = ({
 
   const handleFirstChildMenuChange = (childId, value) => {
     handleMenuChange(childId, value);
-
     if (applyToAll && dummyChildren.length > 1) {
-      dummyChildren.slice(1).forEach(child => {
+      dummyChildren.slice(1).forEach((child) => {
         handleMenuChange(child.id, value);
       });
     }
@@ -141,7 +127,8 @@ const RightPanel = ({
   useEffect(() => {
     if (editMode && dummyChildren.length > 0 && !useMealPlan) {
       const firstChildId = dummyChildren[0].id;
-      const currentSelection = menuSelections[formatDate(selectedDate)]?.[firstChildId];
+      const currentSelection =
+        menuSelections[formatDate(selectedDate)]?.[firstChildId];
       if (!currentSelection) {
         handleMenuChange(firstChildId, dummyMenus[0]);
       }
@@ -149,7 +136,8 @@ const RightPanel = ({
   }, [editMode, selectedDate, useMealPlan]);
 
   return (
-    <Box className="MCRightPanel"
+    <Box
+      className="MCRightPanel"
       sx={{
         width: isSmall ? "100%" : "25%",
         bgcolor: "#f97316",
@@ -167,12 +155,12 @@ const RightPanel = ({
         </Box>
       )}
       <div className="fixcheckboxs">
-        <FormControlLabel 
+        <FormControlLabel
           control={
-            <Checkbox 
-              checked={useMealPlan} 
-              onChange={(e) => setUseMealPlan(e.target.checked)} 
-              sx={{ color: "#fff" }} 
+            <Checkbox
+              checked={useMealPlan}
+              onChange={(e) => setUseMealPlan(e.target.checked)}
+              sx={{ color: "#fff" }}
             />
           }
           label={
@@ -180,13 +168,14 @@ const RightPanel = ({
               Meal Plan Approved by Dietitian
             </Typography>
           }
-          sx={{ mb: 1, alignSelf: 'flex-start' }}
+          sx={{ mb: 1, alignSelf: "flex-start" }}
         />
       </div>
       <div className="fixdatesboxs">
-          <h2> {String(selectedDate).padStart(2, "0")} </h2>
-          <h4> {getDayName(selectedDate).toUpperCase()} </h4>
+        <h2>{String(selectedDate).padStart(2, "0")}</h2>
+        <h4>{getDayName(selectedDate).toUpperCase()}</h4>
       </div>
+
       {(() => {
         if (lessThan48Hours) {
           return (
@@ -224,9 +213,13 @@ const RightPanel = ({
 
         return (
           <>
-            <div className="childlistbox">              
-              <div className="childinputbox">              
-                <Typography fontWeight="bold" textAlign="center" className="sycmenu">
+            <div className="childlistbox">
+              <div className="childinputbox">
+                <Typography
+                  fontWeight="bold"
+                  textAlign="center"
+                  className="sycmenu"
+                >
                   SELECT YOUR CHILD'S MENU
                 </Typography>
                 {useMealPlan ? (
@@ -234,38 +227,52 @@ const RightPanel = ({
                     {dummyChildren.map((child) => (
                       <Box key={child.id} className="childmlist">
                         <Typography className="menuddtitle">
-                          {child.name.toUpperCase()}
+                          {(child.name || "").toUpperCase()}
                         </Typography>
-                        <Box className='radiobtngroup'>
-                          <FormControl className="radiobtnss" component="fieldset" fullWidth>
+                        <Box className="radiobtngroup">
+                          <FormControl
+                            className="radiobtnss"
+                            component="fieldset"
+                            fullWidth
+                          >
                             <RadioGroup
                               value={selectedPlans[child.id] || ""}
-                              onChange={(e) => handlePlanChange(child.id, parseInt(e.target.value))}
+                              onChange={(e) =>
+                                handlePlanChange(
+                                  child.id,
+                                  parseInt(e.target.value)
+                                )
+                              }
                             >
                               {mealPlans.map((plan) => (
-                                <Box key={plan.id} display="flex" alignItems="center" mb={0.5}>
-                                  <Radio 
-                                    value={plan.id} 
-                                    size="small" 
+                                <Box
+                                  key={plan.id}
+                                  display="flex"
+                                  alignItems="center"
+                                  mb={0.5}
+                                >
+                                  <Radio
+                                    value={plan.id}
+                                    size="small"
                                     className="radiobtnsinput"
                                   />
-                                  <Typography 
-                                    fontSize="0.8rem" 
-                                    color="#000" 
-                                    sx={{ flexGrow: 1 }} 
+                                  <Typography
+                                    fontSize="0.8rem"
+                                    color="#000"
+                                    sx={{ flexGrow: 1 }}
                                     className="radiobtnstext"
                                   >
                                     {plan.name}
                                   </Typography>
-                                  <Link 
-                                    href="#" 
+                                  <Link
+                                    href="#"
                                     fontSize="0.8rem"
-                                    sx={{ 
-                                      color: '#f97316', 
-                                      textDecoration: 'none',
-                                      '&:hover': {
-                                        textDecoration: 'underline'
-                                      }
+                                    sx={{
+                                      color: "#f97316",
+                                      textDecoration: "none",
+                                      "&:hover": {
+                                        textDecoration: "underline",
+                                      },
                                     }}
                                     onClick={(e) => {
                                       e.preventDefault();
@@ -287,26 +294,36 @@ const RightPanel = ({
                     {dummyChildren.map((child, index) => (
                       <Box key={child.id} className="childmlist">
                         <Typography className="menuddtitle">
-                          {child.name.toUpperCase()}
+                          {(child.name || "").toUpperCase()}
                         </Typography>
-                        <Box className="menuddlistbox" bgcolor="#fff" borderRadius={2} px={1} py={0.5}>
-                          <Select 
+                        <Box
+                          className="menuddlistbox"
+                          bgcolor="#fff"
+                          borderRadius={2}
+                          px={1}
+                          py={0.5}
+                        >
+                          <Select
                             className="menuddlist"
                             value={
-                              menuSelections[formatDate(selectedDate)]?.[child.id] || ""
+                              menuSelections[formatDate(selectedDate)]?.[
+                                child.id
+                              ] || ""
                             }
-                            onChange={(e) => index === 0 
-                              ? handleFirstChildMenuChange(child.id, e.target.value)
-                              : handleMenuChange(child.id, e.target.value)
+                            onChange={(e) =>
+                              index === 0
+                                ? handleFirstChildMenuChange(
+                                    child.id,
+                                    e.target.value
+                                  )
+                                : handleMenuChange(child.id, e.target.value)
                             }
                             fullWidth
                             variant="standard"
                             disableUnderline
                             MenuProps={{
                               PaperProps: {
-                                style: {
-                                  maxHeight: 48 * 4.5,
-                                },
+                                style: { maxHeight: 48 * 4.5 },
                               },
                             }}
                           >
@@ -320,12 +337,12 @@ const RightPanel = ({
                         </Box>
                         {index === 0 && (
                           <Box sx={{ mt: 1 }}>
-                            <FormControlLabel 
+                            <FormControlLabel
                               control={
-                                <Checkbox 
-                                  checked={applyToAll} 
-                                  onChange={handleApplyToAllChange} 
-                                  sx={{ color: "#fff" }} 
+                                <Checkbox
+                                  checked={applyToAll}
+                                  onChange={handleApplyToAllChange}
+                                  sx={{ color: "#fff" }}
                                 />
                               }
                               label={
@@ -341,22 +358,21 @@ const RightPanel = ({
                   </>
                 )}
               </div>
-                        
-              <div className="childbtnsbox"> 
-                {isSelectedHoliday ? (
+
+              <div className="childbtnsbox">
+                {isSelectedHoliday && (
                   <Box mb={2}>
-                    <Typography variant="body2" fontStyle="italic" fontSize="0.8rem">
+                    <Typography
+                      variant="body2"
+                      fontStyle="italic"
+                      fontSize="0.8rem"
+                    >
                       Note: This day is a holiday – additional charges apply.
                     </Typography>
                   </Box>
-                ) : null}
-
+                )}
                 <Box display="flex" gap={2} className="btngroups">
-                 
-                  <Button 
-                    variant="outlined" 
-                    className="paysavebtn"
-                  >
+                  <Button variant="outlined" className="paysavebtn">
                     <span>{isSelectedHoliday ? "Pay" : "Save"}</span>
                   </Button>
                 </Box>
@@ -366,9 +382,9 @@ const RightPanel = ({
         );
       })()}
 
-      <MealPlanDialog 
-        open={dialogOpen} 
-        onClose={handleCloseDialog} 
+      <MealPlanDialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
         planId={currentPlan}
       />
     </Box>

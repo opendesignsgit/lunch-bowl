@@ -1,38 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { Box, useMediaQuery, useTheme, Dialog } from "@mui/material";
+import {
+  Box,
+  useMediaQuery,
+  useTheme,
+  Dialog,
+  CircularProgress,
+} from "@mui/material";
 import LeftPanel from "./LeftPanel";
 import CenterPanel from "./CenterPanel";
 import RightPanel from "./RightPanel";
 import MealPlanDialog from "./MealPlanDialog";
-
-const dummyChildren = [
-  { id: 1, name: "Child Name 1" },
-  { id: 2, name: "Child Name 2" },
-];
-
-const dummyMenus = [
-  "Veg Biriyani",
-  "Phulka + Chole",
-  "Pav Bhaji",
-  "5 Spice Fried Rice",
-  "Veg Noodles",
-  "Alfredo Pasta",
-  "Mac and Cheese",
-  "Aloo Paratha",
-  "Hummus and Pita",
-  "Creamy Curry Rice",
-  "Ghee Rice and Dal",
-];
-
-const dummyHolidays = [
-  { date: "2025-05-09", name: "Mahavir Jayanti" },
-  { date: "2025-04-16", name: "Tamil New Year" },
-  { date: "2025-04-18", name: "Good Friday" },
-];
-
-const subscriptionStart = dayjs("2025-04-01");
-const subscriptionEnd = dayjs("2025-05-31");
+import useRegistration from "@hooks/useRegistration";
 
 const MenuCalendar = () => {
   const today = dayjs();
@@ -51,6 +30,63 @@ const MenuCalendar = () => {
     startDate: null,
   });
 
+  const [children, setChildren] = useState([]);
+  const [menus, setMenus] = useState([]);
+  const [holidays, setHolidays] = useState([]);
+  const [subscriptionStart, setSubscriptionStart] = useState(dayjs());
+  const [subscriptionEnd, setSubscriptionEnd] = useState(dayjs());
+
+  const { submitHandler, loading } = useRegistration();
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const res = await submitHandler({
+          _id: "663fa6b9ae09bfe5c4812c2e",
+          path: "get-Menu-Calendar",
+        });
+
+        if (res.success) {
+          const childrenWithNames =
+            res.data.children?.map((child, index) => ({
+              id: `child-${index}`, // Create an ID if not provided
+              name: `${child.firstName} ${child.lastName}`.trim(), // Combine first and last name
+              ...child,
+            })) || [];
+
+          setChildren(childrenWithNames);
+          setMenus([
+            "Veg Biriyani",
+            "Phulka + Chole",
+            "Pav Bhaji",
+            "5 Spice Fried Rice",
+            "Veg Noodles",
+            "Alfredo Pasta",
+            "Mac and Cheese",
+            "Aloo Paratha",
+            "Hummus and Pita",
+            "Creamy Curry Rice",
+            "Ghee Rice and Dal",
+          ]);
+          setHolidays([
+            { date: "2025-05-09", name: "Mahavir Jayanti" },
+            { date: "2025-04-16", name: "Tamil New Year" },
+            { date: "2025-04-18", name: "Good Friday" },
+          ]);
+          setSubscriptionStart(dayjs(res.data.startDate));
+          setSubscriptionEnd(dayjs(res.data.endDate));
+          setCurrentMonth(dayjs(res.data.startDate).month());
+          setCurrentYear(dayjs(res.data.startDate).year());
+          setSelectedDate(dayjs(res.data.startDate).date());
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
       day
@@ -58,10 +94,8 @@ const MenuCalendar = () => {
 
   const isHoliday = (day) => {
     const date = dayjs(formatDate(day));
-    const isWeekend = date.day() === 0 || date.day() === 6; // Saturdays and Sundays
-    const isCustomHoliday = dummyHolidays.find(
-      (h) => h.date === formatDate(day)
-    );
+    const isWeekend = date.day() === 0 || date.day() === 6;
+    const isCustomHoliday = holidays.find((h) => h.date === formatDate(day));
     return isWeekend || isCustomHoliday;
   };
 
@@ -93,43 +127,32 @@ const MenuCalendar = () => {
       (dayjs(`${currentYear}-${currentMonth + 1}-01`).day() + 6) % 7;
 
     const daysArray = [];
-    for (let i = 0; i < startDay; i++) {
-      daysArray.push(null);
-    }
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      const currentDate = dayjs(
-        `${currentYear}-${currentMonth + 1}-${String(i).padStart(2, "0")}`
-      );
-      daysArray.push(i);
-    }
+    for (let i = 0; i < startDay; i++) daysArray.push(null);
+    for (let i = 1; i <= daysInMonth; i++) daysArray.push(i);
     return daysArray;
   };
 
   const applyMealPlan = (planId) => {
-    const selectedPlan = planId === 1 ? dummyMenus : [...dummyMenus].reverse();
+    const selectedPlan = planId === 1 ? menus : [...menus].reverse();
     const updates = {};
-  
-    // Get the first and last day of the current month
+
     const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
     const daysInMonth = firstDayOfMonth.daysInMonth();
-  
-    // Iterate over all days of the month
+
     for (let day = 1; day <= daysInMonth; day++) {
-      const currentDate = dayjs(`${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`);
-  
-      // Skip weekends and holidays
+      const currentDate = dayjs(
+        `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
+      );
       if (!isHoliday(day)) {
         const mealDate = currentDate.format("YYYY-MM-DD");
-        const meal = selectedPlan[(day - 1) % selectedPlan.length]; // Cycle through meals
+        const meal = selectedPlan[(day - 1) % selectedPlan.length];
         updates[mealDate] = {
           ...(menuSelections[mealDate] || {}),
-          [dummyChildren[activeChild].id]: meal,
+          [children[activeChild]?.id]: meal,
         };
       }
     }
-  
-    // Update the menu selections state
+
     setMenuSelections((prev) => ({
       ...prev,
       ...updates,
@@ -188,6 +211,10 @@ const MenuCalendar = () => {
     setEditMode(false);
   };
 
+  if (loading || !children.length) {
+    return <CircularProgress />;
+  }
+
   return (
     <Box
       className="MCMainPanel"
@@ -209,7 +236,7 @@ const MenuCalendar = () => {
           selectedDate={selectedDate}
           setSelectedDate={handleDateClick}
           isHoliday={isHoliday}
-          dummyHolidays={dummyHolidays}
+          dummyHolidays={holidays}
           subscriptionStart={subscriptionStart}
           subscriptionEnd={subscriptionEnd}
         />
@@ -222,7 +249,7 @@ const MenuCalendar = () => {
           currentMonth={currentMonth}
           activeChild={activeChild}
           setActiveChild={setActiveChild}
-          dummyChildren={dummyChildren}
+          dummyChildren={children}
           menuSelections={menuSelections}
           subscriptionStart={subscriptionStart}
           subscriptionEnd={subscriptionEnd}
@@ -238,7 +265,7 @@ const MenuCalendar = () => {
             currentMonth={currentMonth}
             activeChild={activeChild}
             setActiveChild={setActiveChild}
-            dummyChildren={dummyChildren}
+            dummyChildren={children}
             menuSelections={menuSelections}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
@@ -255,7 +282,7 @@ const MenuCalendar = () => {
             selectedDate={selectedDate}
             setSelectedDate={handleDateClick}
             isHoliday={isHoliday}
-            dummyHolidays={dummyHolidays}
+            dummyHolidays={holidays}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}
             sx={{ width: "44%" }}
@@ -266,10 +293,10 @@ const MenuCalendar = () => {
             selectedDate={selectedDate}
             getDayName={getDayName}
             isHoliday={isHoliday}
-            dummyChildren={dummyChildren}
+            dummyChildren={children}
             menuSelections={menuSelections}
             handleMenuChange={handleMenuChange}
-            dummyMenus={dummyMenus}
+            dummyMenus={menus}
             formatDate={formatDate}
             editMode={editMode}
             setEditMode={setEditMode}
@@ -290,10 +317,10 @@ const MenuCalendar = () => {
           selectedDate={selectedDate}
           getDayName={getDayName}
           isHoliday={isHoliday}
-          dummyChildren={dummyChildren}
+          dummyChildren={children}
           menuSelections={menuSelections}
           handleMenuChange={handleMenuChange}
-          dummyMenus={dummyMenus}
+          dummyMenus={menus}
           formatDate={formatDate}
           onClose={handleDialogClose}
           editMode={editMode}

@@ -106,7 +106,7 @@ const calculateMultiMonthPlans = () => {
   });
 };
 
-const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
+const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
   const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState("1");
   const [startDate, setStartDate] = useState(dayjs().add(2, "day"));
@@ -203,9 +203,16 @@ const SubscriptionPlanStep = ({ nextStep, prevStep }) => {
     };
 
     try {
+      const res = await submitHandler({
+        payload,
+        path: "step-Form-SubscriptionPlan",
+        _id,
+      });
       // Proceed to the next step
-      nextStep();
-      router.push("/menuCalendarPage"); // Redirect to the menu calendar page
+      if (res.status !== 200) {
+        nextStep();
+        router.push("/menuCalendarPage"); // Redirect to the menu calendar page
+      }
     } catch (error) {
       console.error("Error during subscription plan selection:", error);
     }
