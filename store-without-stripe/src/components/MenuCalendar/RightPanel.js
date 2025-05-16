@@ -310,6 +310,7 @@ const RightPanel = ({
                                       }}
                                       onClick={(e) => {
                                         e.preventDefault();
+                                        e.stopPropagation(); // Add this line to stop event bubbling
                                         plan.id === 1
                                           ? handleViewPlan1()
                                           : handleViewPlan2();

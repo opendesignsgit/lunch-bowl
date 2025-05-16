@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Divider,
-} from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import dayjs from "dayjs";
 
@@ -26,11 +21,34 @@ const LeftPanel = ({
       day
     ).padStart(2, "0")}`;
 
-  // Safety check to avoid runtime error
   const currentChild = dummyChildren?.[activeChild];
 
   if (!dummyChildren || dummyChildren.length === 0 || !currentChild) {
     return <Box p={2}>No child data available.</Box>;
+  }
+
+  // Get the first day of the current month
+  const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
+
+  // Calculate the effective start date (either subscription start or first day of month, whichever is later)
+  const effectiveStartDate =
+    subscriptionStart && subscriptionStart.isAfter(firstDayOfMonth)
+      ? subscriptionStart
+      : firstDayOfMonth;
+
+  // Generate days array only from effective start date
+  const daysInMonth = firstDayOfMonth.daysInMonth();
+  const daysArray = [];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const currentDate = dayjs(formatDate(day));
+    // Using isAfter or isSame instead of isSameOrAfter
+    if (
+      currentDate.isAfter(effectiveStartDate) ||
+      currentDate.isSame(effectiveStartDate)
+    ) {
+      daysArray.push(day);
+    }
   }
 
   return (
@@ -68,7 +86,6 @@ const LeftPanel = ({
           <ChevronLeft />
         </IconButton>
 
-        {/* Safe access to child name */}
         {currentChild.name?.toUpperCase() || "UNKNOWN"}
 
         <IconButton
@@ -95,12 +112,7 @@ const LeftPanel = ({
         </Box>
 
         <div className="FLbody">
-          {Array.from(
-            {
-              length: dayjs(`${currentYear}-${currentMonth + 1}`).daysInMonth(),
-            },
-            (_, i) => i + 1
-          ).map((day) => {
+          {daysArray.map((day) => {
             const dateKey = formatDate(day);
             const dish = menuSelections[dateKey]?.[currentChild.id];
             const isOutOfRange =
