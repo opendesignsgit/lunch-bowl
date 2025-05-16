@@ -132,7 +132,7 @@ const MenuCalendar = () => {
     return daysArray;
   };
 
-    const applyMealPlan = (planId) => {
+    const applyMealPlan = (planId, childId) => {
       const selectedPlan = planId === 1 ? menus : [...menus].reverse();
       const updates = {};
 
@@ -148,7 +148,7 @@ const MenuCalendar = () => {
           const meal = selectedPlan[(day - 1) % selectedPlan.length];
           updates[mealDate] = {
             ...(menuSelections[mealDate] || {}),
-            [children[activeChild]?.id]: meal,
+            [childId]: meal, // Use the specific childId
           };
         }
       }
@@ -303,6 +303,8 @@ const MenuCalendar = () => {
               sx={{ width: "29%" }}
               applyMealPlan={applyMealPlan} // Pass the function
               setMealPlanDialog={setMealPlanDialog}
+              activeChild={activeChild} // Add this
+              setActiveChild={setActiveChild}
             />
           </>
         )}
@@ -328,6 +330,8 @@ const MenuCalendar = () => {
             setEditMode={setEditMode}
             applyMealPlan={applyMealPlan} // Pass the function
             setMealPlanDialog={setMealPlanDialog}
+            activeChild={activeChild} // Add this
+            setActiveChild={setActiveChild}
           />
         </Dialog>
 

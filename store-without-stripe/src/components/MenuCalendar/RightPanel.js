@@ -67,6 +67,8 @@ const RightPanel = ({
   setMealPlanDialog,
   applyMealPlan,
   // setMealPlanDialog,
+  activeChild, // Add this prop
+  setActiveChild,
 }) => {
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
@@ -89,16 +91,16 @@ const RightPanel = ({
 
   const handlePlanChange = (childId, planId) => {
     setSelectedPlans((prev) => ({ ...prev, [childId]: planId }));
-    setMealPlanDialog({
-      open: true,
-      startDate: formatDate(selectedDate),
-      plan: planId, // Pass the selected plan ID
-    });
-    // Call applyMealPlan directly when a radio button is selected
-    // Note: You'll need to pass applyMealPlan as a prop or use context
-    // For this example, I'm assuming it's passed as a prop
+
+    // Find the child index to set as active
+    const childIndex = dummyChildren.findIndex((child) => child.id === childId);
+    if (childIndex !== -1) {
+      setActiveChild(childIndex);
+    }
+
+    // Apply the meal plan for this specific child
     if (applyMealPlan) {
-      applyMealPlan(planId);
+      applyMealPlan(planId, childId);
     }
   };
 
@@ -250,76 +252,83 @@ const RightPanel = ({
                 </Typography>
                 {useMealPlan ? (
                   <>
-                    {dummyChildren.map((child) => (
-                      <Box key={child.id} className="childmlist">
-                        <Typography className="menuddtitle">
-                          {(child.name || "").toUpperCase()}
-                        </Typography>
-                        <Box className="radiobtngroup">
-                          <FormControl
-                            className="radiobtnss"
-                            component="fieldset"
-                            fullWidth
-                          >
-                            <RadioGroup
-                              value={selectedPlans[child.id] || ""}
-                              onChange={(e) =>
-                                handlePlanChange(
-                                  child.id,
-                                  parseInt(e.target.value)
-                                )
-                              }
+                    {dummyChildren.map(
+                      (
+                        child,
+                        childIndex // Add childIndex here
+                      ) => (
+                        <Box key={child.id} className="childmlist">
+                          <Typography className="menuddtitle">
+                            {(child.name || "").toUpperCase()}
+                          </Typography>
+                          <Box className="radiobtngroup">
+                            <FormControl
+                              className="radiobtnss"
+                              component="fieldset"
+                              fullWidth
                             >
-                              {mealPlans.map((plan) => (
-                                <Box
-                                  key={plan.id}
-                                  display="flex"
-                                  alignItems="center"
-                                  mb={0.5}
-                                >
-                                  <Radio
-                                    value={plan.id}
-                                    size="small"
-                                    className="radiobtnsinput"
-                                  />
-                                  <Typography
-                                    fontSize="0.8rem"
-                                    color="#000"
-                                    sx={{ flexGrow: 1 }}
-                                    className="radiobtnstext"
+                              <RadioGroup
+                                value={selectedPlans[child.id] || ""}
+                                onChange={(e) => {
+                                  handlePlanChange(
+                                    child.id,
+                                    parseInt(e.target.value)
+                                  );
+                                  // Set this child as active using childIndex
+                                  setActiveChild(childIndex);
+                                }}
+                              >
+                                {mealPlans.map((plan) => (
+                                  <Box
+                                    key={plan.id}
+                                    display="flex"
+                                    alignItems="center"
+                                    mb={0.5}
                                   >
-                                    {plan.name}
-                                  </Typography>
-                                  <Link
-                                    href="#"
-                                    fontSize="0.8rem"
-                                    sx={{
-                                      color: "#f97316",
-                                      textDecoration: "none",
-                                      "&:hover": {
-                                        textDecoration: "underline",
-                                      },
-                                    }}
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      plan.id === 1
-                                        ? handleViewPlan1()
-                                        : handleViewPlan2();
-                                    }}
-                                  >
-                                    View Plan
-                                  </Link>
-                                </Box>
-                              ))}
-                            </RadioGroup>
-                          </FormControl>
+                                    <Radio
+                                      value={plan.id}
+                                      size="small"
+                                      className="radiobtnsinput"
+                                    />
+                                    <Typography
+                                      fontSize="0.8rem"
+                                      color="#000"
+                                      sx={{ flexGrow: 1 }}
+                                      className="radiobtnstext"
+                                    >
+                                      {plan.name}
+                                    </Typography>
+                                    <Link
+                                      href="#"
+                                      fontSize="0.8rem"
+                                      sx={{
+                                        color: "#f97316",
+                                        textDecoration: "none",
+                                        "&:hover": {
+                                          textDecoration: "underline",
+                                        },
+                                      }}
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        plan.id === 1
+                                          ? handleViewPlan1()
+                                          : handleViewPlan2();
+                                      }}
+                                    >
+                                      View Plan
+                                    </Link>
+                                  </Box>
+                                ))}
+                              </RadioGroup>
+                            </FormControl>
+                          </Box>
                         </Box>
-                      </Box>
-                    ))}
+                      )
+                    )}
                   </>
                 ) : (
                   <>
-                    {dummyChildren.map((child, index) => (
+                    {dummyChildren.map((child, childIndex) => (
                       <Box key={child.id} className="childmlist">
                         <Typography className="menuddtitle">
                           {(child.name || "").toUpperCase()}
@@ -338,14 +347,16 @@ const RightPanel = ({
                                 child.id
                               ] || ""
                             }
-                            onChange={(e) =>
-                              index === 0
+                            onChange={(e) => {
+                              childIndex === 0
                                 ? handleFirstChildMenuChange(
                                     child.id,
                                     e.target.value
                                   )
-                                : handleMenuChange(child.id, e.target.value)
-                            }
+                                : handleMenuChange(child.id, e.target.value);
+                              // Set this child as active
+                              setActiveChild(childIndex);
+                            }}
                             fullWidth
                             variant="standard"
                             disableUnderline
@@ -363,7 +374,7 @@ const RightPanel = ({
                             ))}
                           </Select>
                         </Box>
-                        {index === 0 && (
+                        {childIndex === 0 && (
                           <Box sx={{ mt: 1 }}>
                             <FormControlLabel
                               control={
