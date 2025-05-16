@@ -8,7 +8,6 @@ import {
   Box,
   useMediaQuery,
   useTheme,
-  Typography,
   Tabs,
   Tab,
 } from "@mui/material";
@@ -47,38 +46,38 @@ const meals = [
   "Pav Bhaji",
 ];
 
-const MealPlanDialog = ({ 
-  open, 
-  onClose, 
+const MealPlanDialog = ({
+  open,
+  onClose,
   startDate,
-  onApplyPlan 
+  planId = 1, // Add this prop
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [tabValue, setTabValue] = React.useState(0);
+  // const [tabValue, setTabValue] = React.useState(planId ? planId - 1 : 0);
 
   const mealPlans = {
     1: {
       name: "Meal Plan 1",
-      meals: meals
+      meals: meals,
     },
     2: {
       name: "Meal Plan 2",
-      meals: [...meals].reverse()
-    }
+      meals: [...meals].reverse(),
+    },
   };
 
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
+  // const handleTabChange = (event, newValue) => {
+  //   setTabValue(newValue);
+  // };
 
-  const handleApply = () => {
-    onApplyPlan(tabValue + 1);
-    onClose();
-  };
-
+  // const handleApply = () => {
+  //   onApplyPlan(tabValue + 1);
+  //   onClose();
+  // };
+  const plan = mealPlans[planId] || mealPlans[1];
   const renderPlan = (planId) => {
-    const plan = mealPlans[planId];
+    //const plan = mealPlans[planId];
     const firstCol = plan.meals.slice(0, Math.ceil(plan.meals.length / 2));
     const secondCol = plan.meals.slice(Math.ceil(plan.meals.length / 2));
 
@@ -97,10 +96,17 @@ const MealPlanDialog = ({
         </Box>
         {data.map((item, idx) => {
           const dayNumber = startIndex + idx + 1;
-          const mealDate = dayjs(startDate).add(dayNumber - 1, 'day').format("MMM D, YYYY");
-          
+          const mealDate = dayjs(startDate)
+            .add(dayNumber - 1, "day")
+            .format("MMM D, YYYY");
+
           return (
-            <Box key={idx} display="flex" py={0.5} borderBottom="1px solid #f0f0f0">
+            <Box
+              key={idx}
+              display="flex"
+              py={0.5}
+              borderBottom="1px solid #f0f0f0"
+            >
               <Box width="30%" color="#666">
                 Day {String(dayNumber).padStart(2, "0")}
               </Box>
@@ -155,7 +161,7 @@ const MealPlanDialog = ({
           position: "relative",
         }}
       >
-        Meal Plans
+        {mealPlans[planId]?.name}
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -170,49 +176,7 @@ const MealPlanDialog = ({
         </IconButton>
       </DialogTitle>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={tabValue} onChange={handleTabChange} centered>
-          <Tab label="Meal Plan 1" />
-          <Tab label="Meal Plan 2" />
-        </Tabs>
-      </Box>
-
-      <DialogContent
-        dividers
-        sx={{
-          px: isMobile ? 2 : 4,
-          pt: 2,
-          overflowY: "auto",
-          maxHeight: isMobile ? "calc(100vh - 180px)" : "auto",
-        }}
-      >
-        {renderPlan(tabValue + 1)}
-      </DialogContent>
-
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          p: 2,
-          borderTop: '1px solid #e0e0e0'
-        }}
-      >
-        <button
-          onClick={handleApply}
-          style={{
-            backgroundColor: '#f97316',
-            color: 'white',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '4px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            fontSize: '1rem'
-          }}
-        >
-          APPLY THIS MEAL PLAN
-        </button>
-      </Box>
+      <DialogContent dividers>{renderPlan()}</DialogContent>
     </Dialog>
   );
 };

@@ -13,6 +13,7 @@ const {
 const { sendVerificationCode } = require("../lib/phone-verification/sender");
 const Otp = require("../models/Otp");
 const Form = require("../models/Form");
+const mongoose = require("mongoose");
 
 const verifyEmailAddress = async (req, res) => {
   const isAdded = await Customer.findOne({ email: req.body.email });
@@ -726,6 +727,14 @@ const stepFormRegister = async (req, res) => {
       });
     }
 
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID format",
+      });
+    }
+
     let update = {};
     if (path === "step-Form-ParentDetails") {
       update = { parentDetails: formData };
@@ -778,6 +787,88 @@ const stepFormRegister = async (req, res) => {
   }
 };
 
+// const getMenuDetails = async (req, res) => {
+//   try {
+//     const { _id, path } = req.body;
+//     if (!_id || !path) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Missing required fields: _id and path",
+//       });
+//     }
+//     console.log("====================================");
+//     console.log("getMenuDetails", _id, path);
+//     console.log("====================================");
+//   } catch (error) {
+//     console.error("Error during getMenuDetails:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Internal server error",
+//       error: error.message,
+//     });
+//   }
+// };
+
+const getMenuCalendarDate = async (req, res) => {
+  try {
+    const { _id, path } = req.body;
+    console.log("====================================", req.body);
+
+    if (!_id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    console.log("====================================");
+    console.log("_id", _id);
+    console.log("====================================");
+
+    const form = await Form.findOne({ user: mongoose.Types.ObjectId(_id) });
+
+    if (!form) {
+      return res.status(404).json({
+        success: false,
+        message: "Form not found",
+      });
+    }
+
+    // Check if subscriptionPlan exists
+    if (!form.subscriptionPlan) {
+      return res.status(404).json({
+        success: false,
+        message: "Subscription plan not found",
+      });
+    }
+
+    const { startDate, endDate } = form.subscriptionPlan;
+
+    // Safely map children names
+    const childrenNames =
+      form.children?.map((child) => ({
+        firstName: child.childFirstName,
+        lastName: child.childLastName,
+      })) || [];
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        startDate,
+        endDate,
+        children: childrenNames,
+      },
+    });
+  } catch (error) {
+    console.error("Error in getMenuCalendarDate:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   loginCustomer,
   verifyPhoneNumber,
@@ -800,4 +891,5 @@ module.exports = {
   sendOtp,
   verifyOtp,
   stepFormRegister,
+  getMenuCalendarDate,
 };

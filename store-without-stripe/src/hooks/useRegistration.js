@@ -24,6 +24,10 @@ const useRegistration = () => {
         });
         console.log("Full response------>:", res);
         return res;
+      } else if (path == "get-Menu-Calendar") {
+        const res = await CustomerServices.getMenuCalendar({ _id, path });
+        console.log("Full response------>:", res);
+        return res;
       }
     } catch (error) {
       setError(error.message);
