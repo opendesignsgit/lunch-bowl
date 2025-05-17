@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import dayjs from "dayjs";
@@ -15,6 +15,7 @@ const LeftPanel = ({
   subscriptionEnd,
   onEditClick,
   sx,
+  onMenuDataChange,
 }) => {
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
@@ -22,6 +23,56 @@ const LeftPanel = ({
     ).padStart(2, "0")}`;
 
   const currentChild = dummyChildren?.[activeChild];
+
+  // Log child name and menu list whenever active child or menu selections change
+  useEffect(() => {
+    if (!currentChild || !menuSelections) return;
+
+    const menuData = {};
+    const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
+    const effectiveStartDate =
+      subscriptionStart && subscriptionStart.isAfter(firstDayOfMonth)
+        ? subscriptionStart
+        : firstDayOfMonth;
+
+    const daysInMonth = firstDayOfMonth.daysInMonth();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const currentDate = dayjs(formatDate(day));
+      if (
+        currentDate.isAfter(effectiveStartDate) ||
+        currentDate.isSame(effectiveStartDate)
+      ) {
+        const dateKey = formatDate(day);
+        const dish = menuSelections[dateKey]?.[currentChild.id];
+        if (dish) {
+          if (!menuData[currentChild.id]) {
+            menuData[currentChild.id] = {
+              childId: currentChild.id,
+              childName: currentChild.name,
+              meals: [],
+            };
+          }
+          menuData[currentChild.id].meals.push({
+            mealDate: currentDate.toDate(),
+            mealName: dish,
+          });
+        }
+      }
+    }
+
+    // Call a prop function to pass this data up
+    if (onMenuDataChange) {
+      onMenuDataChange(Object.values(menuData));
+    }
+  }, [
+    activeChild,
+    menuSelections,
+    currentChild,
+    currentYear,
+    currentMonth,
+    subscriptionStart,
+  ]);
 
   if (!dummyChildren || dummyChildren.length === 0 || !currentChild) {
     return <Box p={2}>No child data available.</Box>;

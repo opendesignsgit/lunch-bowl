@@ -23,6 +23,7 @@ const {
   verifyOtp,
   stepFormRegister,
   getMenuCalendarDate,
+  saveMealPlans,
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -94,5 +95,7 @@ router.post("/verifyOtp", verifyOtp);
 router.post("/stepForm-Register", stepFormRegister);
 
 router.post("/get-Menu-Calendar", getMenuCalendarDate);
+
+router.post("/save-Menu-Calendar", saveMealPlans);
 
 module.exports = router;

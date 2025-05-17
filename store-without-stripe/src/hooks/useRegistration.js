@@ -7,7 +7,7 @@ const useRegistration = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const submitHandler = async ({ formData, path, payload, _id }) => {
+  const submitHandler = async ({ formData, path, payload, _id, data }) => {
     setLoading(true);
 
     try {
@@ -26,6 +26,14 @@ const useRegistration = () => {
         return res;
       } else if (path == "get-Menu-Calendar") {
         const res = await CustomerServices.getMenuCalendar({ _id, path });
+        console.log("Full response------>:", res);
+        return res;
+      } else if (path == "save-meals") {
+        const res = await CustomerServices.saveMenuCalendar({
+          _id,
+          path,
+          data,
+        });
         console.log("Full response------>:", res);
         return res;
       }
