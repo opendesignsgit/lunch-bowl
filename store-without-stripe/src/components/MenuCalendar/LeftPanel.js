@@ -36,7 +36,6 @@ const LeftPanel = ({
         : firstDayOfMonth;
 
     const daysInMonth = firstDayOfMonth.daysInMonth();
-
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = dayjs(formatDate(day));
       if (

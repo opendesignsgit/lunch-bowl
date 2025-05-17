@@ -70,6 +70,10 @@ const CustomerServices = {
   saveMenuCalendar: async (body) => {
     return requests.post("/customer/save-Menu-Calendar", body);
   },
+
+  getSavedMeals: async (body) => {
+    return requests.post("/customer/get-saved-meals", body);
+  },
 };
 
 export default CustomerServices;

@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Customer = require("../models/Customer");
 const UserMeal = require("../models/UserMeal");
+const dayjs = require("dayjs");
 
 const { signInToken, tokenForVerify } = require("../config/auth");
 const { sendEmail } = require("../lib/email-sender/sender");
@@ -604,9 +605,6 @@ const sendOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const { firstName, lastName, email, mobile, otp, path } = req.body;
-    console.log("====================================");
-    console.log("path---->", path);
-    console.log("====================================");
     if (!mobile || !otp) {
       return res
         .status(400)
@@ -789,32 +787,9 @@ const stepFormRegister = async (req, res) => {
   }
 };
 
-// const getMenuDetails = async (req, res) => {
-//   try {
-//     const { _id, path } = req.body;
-//     if (!_id || !path) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Missing required fields: _id and path",
-//       });
-//     }
-//     console.log("====================================");
-//     console.log("getMenuDetails", _id, path);
-//     console.log("====================================");
-//   } catch (error) {
-//     console.error("Error during getMenuDetails:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Internal server error",
-//       error: error.message,
-//     });
-//   }
-// };
-
 const getMenuCalendarDate = async (req, res) => {
   try {
     const { _id, path } = req.body;
-    console.log("====================================", req.body);
 
     if (!_id) {
       return res.status(400).json({
@@ -822,10 +797,6 @@ const getMenuCalendarDate = async (req, res) => {
         message: "User ID is required",
       });
     }
-
-    console.log("====================================");
-    console.log("_id", _id);
-    console.log("====================================");
 
     const form = await Form.findOne({ user: mongoose.Types.ObjectId(_id) });
 
@@ -967,6 +938,60 @@ const saveMealPlans = async (req, res) => {
   }
 };
 
+const getSavedMeals = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
+    // Find user's saved meals
+    const userMeals = await UserMeal.findOne({
+      userId: mongoose.Types.ObjectId(_id),
+    });
+
+    if (!userMeals) {
+      return res.status(404).json({
+        success: false,
+        message: "No saved meals found",
+      });
+    }
+
+    // Transform data for frontend
+    const transformedData = {
+      menuSelections: {},
+    };
+
+    userMeals.children.forEach((child) => {
+      child.meals.forEach((meal) => {
+        const dateKey = dayjs(meal.mealDate).format("YYYY-MM-DD");
+        if (!transformedData.menuSelections[dateKey]) {
+          transformedData.menuSelections[dateKey] = {};
+        }
+        // Changed from child.childId._id to child.childId since we're not populating
+        transformedData.menuSelections[dateKey][child.childId.toString()] =
+          meal.mealName;
+      });
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: transformedData,
+    });
+  } catch (error) {
+    console.error("Error fetching saved meals:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 // Helper function to check if date is in current month
 function isDateInCurrentMonth(date, currentMonth) {
   const mealDate = new Date(date);
@@ -997,4 +1022,5 @@ module.exports = {
   stepFormRegister,
   getMenuCalendarDate,
   saveMealPlans,
+  getSavedMeals,
 };

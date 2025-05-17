@@ -39,53 +39,91 @@ const MenuCalendar = () => {
 
   const { submitHandler, loading } = useRegistration();
 
+  const fetchSavedMealPlans = async () => {
+    try {
+      const res = await submitHandler({
+        _id: "663fa6b9ae09bfe5c4812c2e",
+        path: "get-saved-meals",
+      });
+
+      if (res.success && res.data) {
+        const { menuSelections, holidays } = res.data;
+
+        // Update menu selections state
+        setMenuSelections((prev) => ({
+          ...prev,
+          ...menuSelections,
+        }));
+
+        // Update holidays if needed
+        setHolidays((prev) => [...prev, ...(holidays || [])]);
+
+        console.log("Saved meals loaded successfully");
+      }
+    } catch (error) {
+      console.error("Error loading saved meals:", error);
+    } finally {
+      setInitialLoadComplete(true);
+    }
+  };
+
+  const fetchInitialData = async () => {
+    try {
+      const res = await submitHandler({
+        _id: "663fa6b9ae09bfe5c4812c2e",
+        path: "get-Menu-Calendar",
+      });
+
+      if (res.success) {
+        const childrenWithNames =
+          res.data.children?.map((child, index) => ({
+            id: `child-${index}`, // Create an ID if not provided
+            name: `${child.firstName} ${child.lastName}`.trim(), // Combine first and last name
+            ...child,
+          })) || [];
+
+        setChildren(childrenWithNames);
+        setMenus([
+          "Veg Biriyani",
+          "Phulka + Chole",
+          "Pav Bhaji",
+          "5 Spice Fried Rice",
+          "Veg Noodles",
+          "Alfredo Pasta",
+          "Mac and Cheese",
+          "Aloo Paratha",
+          "Hummus and Pita",
+          "Creamy Curry Rice",
+          "Ghee Rice and Dal",
+        ]);
+        setHolidays([
+          { date: "2025-05-09", name: "Mahavir Jayanti" },
+          { date: "2025-04-16", name: "Tamil New Year" },
+          { date: "2025-04-18", name: "Good Friday" },
+        ]);
+        setSubscriptionStart(dayjs(res.data.startDate));
+        setSubscriptionEnd(dayjs(res.data.endDate));
+        setCurrentMonth(dayjs(res.data.startDate).month());
+        setCurrentYear(dayjs(res.data.startDate).year());
+        setSelectedDate(dayjs(res.data.startDate).date());
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchInitialData = async () => {
+    const fetchAllData = async () => {
       try {
-        const res = await submitHandler({
-          _id: "663fa6b9ae09bfe5c4812c2e",
-          path: "get-Menu-Calendar",
-        });
+        await fetchInitialData();
 
-        if (res.success) {
-          const childrenWithNames =
-            res.data.children?.map((child, index) => ({
-              id: `child-${index}`, // Create an ID if not provided
-              name: `${child.firstName} ${child.lastName}`.trim(), // Combine first and last name
-              ...child,
-            })) || [];
-
-          setChildren(childrenWithNames);
-          setMenus([
-            "Veg Biriyani",
-            "Phulka + Chole",
-            "Pav Bhaji",
-            "5 Spice Fried Rice",
-            "Veg Noodles",
-            "Alfredo Pasta",
-            "Mac and Cheese",
-            "Aloo Paratha",
-            "Hummus and Pita",
-            "Creamy Curry Rice",
-            "Ghee Rice and Dal",
-          ]);
-          setHolidays([
-            { date: "2025-05-09", name: "Mahavir Jayanti" },
-            { date: "2025-04-16", name: "Tamil New Year" },
-            { date: "2025-04-18", name: "Good Friday" },
-          ]);
-          setSubscriptionStart(dayjs(res.data.startDate));
-          setSubscriptionEnd(dayjs(res.data.endDate));
-          setCurrentMonth(dayjs(res.data.startDate).month());
-          setCurrentYear(dayjs(res.data.startDate).year());
-          setSelectedDate(dayjs(res.data.startDate).date());
-        }
+        await fetchSavedMealPlans();
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error in initial data loading:", error);
       }
     };
 
-    fetchInitialData();
+    fetchAllData();
   }, []);
 
   const handleMenuDataChange = (data) => {
@@ -95,25 +133,35 @@ const MenuCalendar = () => {
   // In MenuCalendar.js
   const getAllMenuData = () => {
     const allMenuData = [];
-    const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
-    const daysInMonth = firstDayOfMonth.daysInMonth();
 
-    children.forEach((child) => {
-      const childData = {
-        childId: child.id,
-        childName: child.name,
-        meals: [],
-      };
+    // Create a dayjs object for the subscription start date
+    let currentDate = dayjs(subscriptionStart);
+    const endDate = dayjs(subscriptionEnd);
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const currentDate = dayjs(formatDate(day));
-        // Check if date is within subscription and not a holiday
-        if (
-          (currentDate.isAfter(subscriptionStart) ||
-            currentDate.isSame(subscriptionStart)) &&
-          !isHoliday(day)
-        ) {
-          const dateKey = formatDate(day);
+    // Loop through each day from subscription start to end
+    while (
+      currentDate.isBefore(endDate) ||
+      currentDate.isSame(endDate, "day")
+    ) {
+      const dateKey = currentDate.format("YYYY-MM-DD");
+      const day = currentDate.date();
+      const month = currentDate.month();
+      const year = currentDate.year();
+
+      children.forEach((child) => {
+        // Find or create the child's data object
+        let childData = allMenuData.find((c) => c.childId === child.id);
+        if (!childData) {
+          childData = {
+            childId: child.id,
+            childName: child.name,
+            meals: [],
+          };
+          allMenuData.push(childData);
+        }
+
+        // Check if the date is not a holiday
+        if (!isHoliday(day, month, year)) {
           const dish = menuSelections[dateKey]?.[child.id];
           if (dish) {
             childData.meals.push({
@@ -122,29 +170,26 @@ const MenuCalendar = () => {
             });
           }
         }
-      }
+      });
 
-      allMenuData.push(childData);
-    });
+      // Move to the next day
+      currentDate = currentDate.add(1, "day");
+    }
 
     return allMenuData;
   };
 
   // Add this function to handle the save button click
   const handleSave = async () => {
-    // const allMenuData = getAllMenuData();
+    const allMenuData = getAllMenuData();
 
-    // const payload = {
-    //   userId: "663fa6b9ae09bfe5c4812c2e", // Replace with actual user ID
-    //   children: allMenuData.map((child) => ({
-    //     childId: child.childId,
-    //     meals: child.meals,
-    //   })),
-    // };
-
-    // console.log("====================================");
-    // console.log("Payload:", payload);
-    // console.log("====================================");
+    const payload = {
+      userId: "663fa6b9ae09bfe5c4812c2e", // Replace with actual user ID
+      children: allMenuData.map((child) => ({
+        childId: child.childId,
+        meals: child.meals,
+      })),
+    };
     try {
       const allMenuData = getAllMenuData();
 
@@ -163,7 +208,6 @@ const MenuCalendar = () => {
       });
 
       if (res.success) {
-        console.log("All children's meals saved successfully!");
         // Show success notification
       } else {
         console.error("Failed to save meals:", res.message);
@@ -180,10 +224,22 @@ const MenuCalendar = () => {
       day
     ).padStart(2, "0")}`;
 
-  const isHoliday = (day) => {
-    const date = dayjs(formatDate(day));
+  const isHoliday = (day, month = currentMonth, year = currentYear) => {
+    // Handle case where only day is provided (for backward compatibility)
+    if (arguments.length === 1) {
+      const date = dayjs(formatDate(day));
+      return (
+        date.day() === 0 ||
+        date.day() === 6 ||
+        holidays.some((h) => h.date === date.format("YYYY-MM-DD"))
+      );
+    }
+
+    // Normal case with all parameters
+    const date = dayjs(`${year}-${month + 1}-${day}`);
     const isWeekend = date.day() === 0 || date.day() === 6;
-    const isCustomHoliday = holidays.find((h) => h.date === formatDate(day));
+    const dateString = date.format("YYYY-MM-DD");
+    const isCustomHoliday = holidays.some((h) => h.date === dateString);
     return isWeekend || isCustomHoliday;
   };
 
@@ -231,12 +287,13 @@ const MenuCalendar = () => {
       const currentDate = dayjs(
         `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
       );
-      if (!isHoliday(day)) {
+      if (!isHoliday(day, currentMonth, currentYear)) {
+        // Pass all three params
         const mealDate = currentDate.format("YYYY-MM-DD");
         const meal = selectedPlan[(day - 1) % selectedPlan.length];
         updates[mealDate] = {
           ...(menuSelections[mealDate] || {}),
-          [childId]: meal, // Use the specific childId
+          [childId]: meal,
         };
       }
     }
@@ -323,7 +380,7 @@ const MenuCalendar = () => {
           calendarDates={calendarDates}
           selectedDate={selectedDate}
           setSelectedDate={handleDateClick}
-          isHoliday={isHoliday}
+          isHoliday={(day) => isHoliday(day, currentMonth, currentYear)}
           dummyHolidays={holidays}
           subscriptionStart={subscriptionStart}
           subscriptionEnd={subscriptionEnd}
@@ -371,7 +428,7 @@ const MenuCalendar = () => {
             calendarDates={calendarDates}
             selectedDate={selectedDate}
             setSelectedDate={handleDateClick}
-            isHoliday={isHoliday}
+            isHoliday={(day) => isHoliday(day, currentMonth, currentYear)}
             dummyHolidays={holidays}
             subscriptionStart={subscriptionStart}
             subscriptionEnd={subscriptionEnd}

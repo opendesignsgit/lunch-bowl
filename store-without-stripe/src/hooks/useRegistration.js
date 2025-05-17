@@ -22,11 +22,9 @@ const useRegistration = () => {
           payload,
           _id,
         });
-        console.log("Full response------>:", res);
         return res;
       } else if (path == "get-Menu-Calendar") {
         const res = await CustomerServices.getMenuCalendar({ _id, path });
-        console.log("Full response------>:", res);
         return res;
       } else if (path == "save-meals") {
         const res = await CustomerServices.saveMenuCalendar({
@@ -34,7 +32,12 @@ const useRegistration = () => {
           path,
           data,
         });
-        console.log("Full response------>:", res);
+        return res;
+      }else if (path == "get-saved-meals") {
+        const res = await CustomerServices.getSavedMeals({
+          _id,
+          path,
+        });
         return res;
       }
     } catch (error) {
