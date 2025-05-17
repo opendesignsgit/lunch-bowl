@@ -69,6 +69,7 @@ const RightPanel = ({
   // setMealPlanDialog,
   activeChild, // Add this prop
   setActiveChild,
+  onSave,
 }) => {
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
@@ -412,7 +413,15 @@ const RightPanel = ({
                   </Box>
                 )}
                 <Box display="flex" gap={2} className="btngroups">
-                  <Button variant="outlined" className="paysavebtn">
+                  <Button
+                    variant="outlined"
+                    className="paysavebtn"
+                    onClick={() => {
+                      if (typeof onSave === "function") {
+                        onSave();
+                      }
+                    }}
+                  >
                     <span>{isSelectedHoliday ? "Pay" : "Save"}</span>
                   </Button>
                 </Box>

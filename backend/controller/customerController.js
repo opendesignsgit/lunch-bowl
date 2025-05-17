@@ -2,6 +2,9 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Customer = require("../models/Customer");
+const UserMeal = require("../models/UserMeal");
+const dayjs = require("dayjs");
+
 const { signInToken, tokenForVerify } = require("../config/auth");
 const { sendEmail } = require("../lib/email-sender/sender");
 const {
@@ -602,9 +605,6 @@ const sendOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const { firstName, lastName, email, mobile, otp, path } = req.body;
-    console.log("====================================");
-    console.log("path---->", path);
-    console.log("====================================");
     if (!mobile || !otp) {
       return res
         .status(400)
@@ -787,32 +787,9 @@ const stepFormRegister = async (req, res) => {
   }
 };
 
-// const getMenuDetails = async (req, res) => {
-//   try {
-//     const { _id, path } = req.body;
-//     if (!_id || !path) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Missing required fields: _id and path",
-//       });
-//     }
-//     console.log("====================================");
-//     console.log("getMenuDetails", _id, path);
-//     console.log("====================================");
-//   } catch (error) {
-//     console.error("Error during getMenuDetails:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Internal server error",
-//       error: error.message,
-//     });
-//   }
-// };
-
 const getMenuCalendarDate = async (req, res) => {
   try {
     const { _id, path } = req.body;
-    console.log("====================================", req.body);
 
     if (!_id) {
       return res.status(400).json({
@@ -820,10 +797,6 @@ const getMenuCalendarDate = async (req, res) => {
         message: "User ID is required",
       });
     }
-
-    console.log("====================================");
-    console.log("_id", _id);
-    console.log("====================================");
 
     const form = await Form.findOne({ user: mongoose.Types.ObjectId(_id) });
 
@@ -847,6 +820,7 @@ const getMenuCalendarDate = async (req, res) => {
     // Safely map children names
     const childrenNames =
       form.children?.map((child) => ({
+        id: child._id?.$oid || child._id,
         firstName: child.childFirstName,
         lastName: child.childLastName,
       })) || [];
@@ -868,6 +842,161 @@ const getMenuCalendarDate = async (req, res) => {
     });
   }
 };
+
+const saveMealPlans = async (req, res) => {
+  try {
+    // Extract data from your specific payload structure
+    const { _id, path, data } = req.body;
+
+    if (!data || !data.userId || !data.children) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid request data: Missing required fields",
+      });
+    }
+
+    const { userId, children } = data;
+
+    // Validate children array
+    if (!Array.isArray(children) || children.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid children data: Must be a non-empty array",
+      });
+    }
+
+    // Process each child's meals
+    const processedChildren = children.map((child) => {
+      if (!child.childId || !Array.isArray(child.meals)) {
+        throw new Error("Invalid child data structure");
+      }
+
+      return {
+        childId: mongoose.Types.ObjectId(child.childId),
+        meals: child.meals.map((meal) => {
+          if (!meal.mealDate || !meal.mealName) {
+            throw new Error("Invalid meal data structure");
+          }
+
+          // Convert string date to Date object
+          let mealDate;
+          try {
+            mealDate = new Date(meal.mealDate);
+            if (isNaN(mealDate.getTime())) {
+              throw new Error("Invalid date format");
+            }
+          } catch (error) {
+            throw new Error(`Invalid meal date: ${meal.mealDate}`);
+          }
+
+          return {
+            mealDate,
+            mealName: meal.mealName,
+          };
+        }),
+      };
+    });
+
+    // Find existing user meal plan
+    const existingPlan = await UserMeal.findOne({
+      userId: mongoose.Types.ObjectId(userId),
+    });
+
+    if (existingPlan) {
+      // Update existing plan - implement your merge logic here
+      // For now, we'll just replace all children's meals
+      existingPlan.children = processedChildren;
+      await existingPlan.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Meal plans updated successfully",
+        data: existingPlan,
+      });
+    } else {
+      // Create new plan
+      const newUserMeal = new UserMeal({
+        userId: mongoose.Types.ObjectId(userId),
+        children: processedChildren,
+      });
+
+      await newUserMeal.save();
+
+      return res.status(201).json({
+        success: true,
+        message: "Meal plans created successfully",
+        data: newUserMeal,
+      });
+    }
+  } catch (error) {
+    console.error("Error saving meal plans:", error);
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Failed to process meal plans",
+      error: process.env.NODE_ENV === "development" ? error.stack : undefined,
+    });
+  }
+};
+
+const getSavedMeals = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
+    // Find user's saved meals
+    const userMeals = await UserMeal.findOne({
+      userId: mongoose.Types.ObjectId(_id),
+    });
+
+    if (!userMeals) {
+      return res.status(404).json({
+        success: false,
+        message: "No saved meals found",
+      });
+    }
+
+    // Transform data for frontend
+    const transformedData = {
+      menuSelections: {},
+    };
+
+    userMeals.children.forEach((child) => {
+      child.meals.forEach((meal) => {
+        const dateKey = dayjs(meal.mealDate).format("YYYY-MM-DD");
+        if (!transformedData.menuSelections[dateKey]) {
+          transformedData.menuSelections[dateKey] = {};
+        }
+        // Changed from child.childId._id to child.childId since we're not populating
+        transformedData.menuSelections[dateKey][child.childId.toString()] =
+          meal.mealName;
+      });
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: transformedData,
+    });
+  } catch (error) {
+    console.error("Error fetching saved meals:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+// Helper function to check if date is in current month
+function isDateInCurrentMonth(date, currentMonth) {
+  const mealDate = new Date(date);
+  return mealDate.getMonth() === currentMonth;
+}
 
 module.exports = {
   loginCustomer,
@@ -892,4 +1021,6 @@ module.exports = {
   verifyOtp,
   stepFormRegister,
   getMenuCalendarDate,
+  saveMealPlans,
+  getSavedMeals,
 };
