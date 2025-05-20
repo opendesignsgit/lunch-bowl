@@ -385,7 +385,9 @@ const getAllCustomers = async (req, res) => {
 
 const getCustomerById = async (req, res) => {
   try {
-    const customer = await Customer.findById(req.params.id);
+    const user = await Customer.findById(req.params.id);
+    const form = await Form.findOne({ user: req.params.id });
+    const customer = { user, form };
     res.send(customer);
   } catch (err) {
     res.status(500).send({

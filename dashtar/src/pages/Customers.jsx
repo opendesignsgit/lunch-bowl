@@ -128,7 +128,7 @@ const Customers = () => {
           <Table>
             <TableHeader>
               <tr>
-                <TableCell>{t("CustomersId")}</TableCell>
+                {/* <TableCell>{t("CustomersId")}</TableCell> */}
                 <TableCell>{t("CustomersJoiningDate")}</TableCell>
                 <TableCell>{t("CustomersName")}</TableCell>
                 <TableCell>{t("CustomersEmail")}</TableCell>
