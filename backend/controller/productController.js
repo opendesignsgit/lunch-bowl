@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const Category = require("../models/Category");
 const { languageCodes } = require("../utils/data");
 const multer = require("multer");
+const path = require("path"); // Make sure this is at the top of your controller file
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -185,9 +187,61 @@ const addDish = async (req, res) => {
     });
 
     await newDish.save();
-    res.status(201).json(newDish);
+
+    // Return response with full image URL
+    const responseDish = newDish.toObject();
+    responseDish.image = `${req.protocol}://${req.get("host")}${
+      responseDish.image
+    }`;
+
+    res.status(201).json(responseDish);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const updateDish = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let updateData = { ...req.body };
+
+    // If new image was uploaded
+    if (req.file) {
+      const imagePath = `/uploads/${req.file.filename}`;
+      updateData.image = imagePath;
+
+      // Delete old image if it exists
+      const oldDish = await Dish.findById(id);
+      if (oldDish && oldDish.image) {
+        const oldImagePath = path.join(__dirname, "../..", oldDish.image);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
+    }
+
+    const updatedDish = await Dish.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedDish) {
+      return res.status(404).json({ error: "Dish not found" });
+    }
+
+    // Return response with full image URL
+    const responseDish = updatedDish.toObject();
+    responseDish.image = `${req.protocol}://${req.get("host")}${
+      updatedDish.image
+    }`;
+
+    res.status(200).json(responseDish);
+  } catch (error) {
+    console.error("Update error:", error); // Log the full error
+    res.status(500).json({
+      error: error.message,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+    });
   }
 };
 
@@ -463,4 +517,5 @@ module.exports = {
   getShowingStoreProducts,
   getAllDishes,
   addDish,
+  updateDish,
 };

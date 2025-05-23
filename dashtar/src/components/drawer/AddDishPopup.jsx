@@ -36,6 +36,7 @@ const AddDishPopup = ({
   const imagePreviewClasses =
     "mt-2 w-full h-48 object-cover rounded-md border border-gray-300 dark:border-gray-600";
 
+  // In your useEffect when productData is present
   useEffect(() => {
     if (productData) {
       setForm({
@@ -44,11 +45,17 @@ const AddDishPopup = ({
         shortDescription: productData.shortDescription || "",
         description: productData.description || "",
         cuisine: productData.cuisine || "",
-        image: productData.image || "",
+        image: productData.image || null,
         status: productData.status || "active",
       });
+
+      // Set image preview
       if (productData.image) {
-        setImagePreview(productData.image);
+        setImagePreview(
+          productData.image.startsWith("http")
+            ? productData.image
+            : `http://localhost:5055${productData.image}`
+        );
       }
     } else {
       setForm(initialState);
@@ -76,26 +83,37 @@ const AddDishPopup = ({
 
     try {
       const formData = new FormData();
-      Object.keys(form).forEach((key) => {
-        formData.append(key, form[key]);
-      });
 
-      const config = {
-        headers: { "Content-Type": "multipart/form-data" },
-      };
-      console.log("====================================");
-      console.log("formData", formData);
-      console.log("====================================");
-      await ProductServices.addDish(formData, config);
+      // Append all form fields
+      formData.append("primaryDishTitle", form.primaryDishTitle);
+      formData.append("subDishTitle", form.subDishTitle);
+      formData.append("shortDescription", form.shortDescription);
+      formData.append("description", form.description);
+      formData.append("cuisine", form.cuisine);
+      formData.append("status", form.status);
 
-      setLoading(false);
-      setForm(initialState);
-      setImagePreview("");
-      onSuccess?.();
+      // Only append image if it's a new file
+      if (form.image instanceof File) {
+        formData.append("image", form.image);
+      } else if (isEditing && typeof form.image === "string") {
+        // For editing without changing image
+        formData.append("existingImage", form.image);
+      }
+
+      let response;
+      if (isEditing) {
+        response = await ProductServices.updateDish(productData._id, formData);
+      } else {
+        response = await ProductServices.addDish(formData);
+      }
+
+      // Handle success
+      onSuccess?.(response.data);
       onClose();
     } catch (err) {
+      setError(err.response?.data?.error || "Error processing dish");
+    } finally {
       setLoading(false);
-      setError(err.response?.data?.message || "Error processing dish");
     }
   };
 

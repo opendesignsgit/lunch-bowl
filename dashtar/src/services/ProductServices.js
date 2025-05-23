@@ -34,6 +34,14 @@ const ProductServices = {
     });
   },
 
+  updateDish: async (id, formData) => {
+    return requests.put(`/products/update-dish/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
   getProductById: async (id) => {
     return requests.post(`/products/${id}`);
   },
