@@ -2,6 +2,21 @@ import { TableBody, TableCell, TableRow } from "@windmill/react-ui";
 import { FiEdit } from "react-icons/fi";
 
 const ProductTable = ({ products = [], setIsCheck, onEdit }) => {
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "";
+    return imagePath.startsWith("http")
+      ? imagePath
+      : `http://localhost:5055${imagePath}`;
+  };
+
+  console.log("====================================");
+  console.log("ProductTable products:", products);
+  // Correct way to log first product's image (for debugging)
+  if (products.length > 0) {
+    console.log("First product image path:", products[0].image);
+  }
+  console.log("====================================");
+
   return (
     <TableBody>
       {products.map((product) => (
@@ -12,7 +27,7 @@ const ProductTable = ({ products = [], setIsCheck, onEdit }) => {
                 <div className="hidden sm:block mr-3">
                   <img
                     className="w-10 h-10 rounded-full object-cover"
-                    src={product.image}
+                    src={getImageUrl(product.image)}
                     alt={product.primaryDishTitle}
                   />
                 </div>

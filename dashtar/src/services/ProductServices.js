@@ -26,11 +26,12 @@ const ProductServices = {
     );
   },
 
-  addDish: async (body) => {
-    console.log("====================================");
-    console.log("body", body);
-    console.log("====================================");
-    return requests.post("/products/add-dish", body);
+  addDish: async (formData) => {
+    return requests.post("/products/add-dish", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 
   getProductById: async (id) => {

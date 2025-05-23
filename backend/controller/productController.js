@@ -3,6 +3,18 @@ const Dish = require("../models/DishSchema");
 const mongoose = require("mongoose");
 const Category = require("../models/Category");
 const { languageCodes } = require("../utils/data");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 const addProduct = async (req, res) => {
   try {
@@ -163,23 +175,19 @@ const getAllDishes = async (req, res) => {
 
 const addDish = async (req, res) => {
   try {
-    const newDish = new Dish(req.body);
-    console.log("====================================");
-    console.log("newDish", newDish);
-    console.log("====================================");
-    await newDish.save();
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
 
-    res.status(201).json({
-      success: true,
-      message: "Dish added successfully",
-      dish: newDish,
+    const newDish = new Dish({
+      ...req.body,
+      image: `/uploads/${req.file.filename}`,
     });
+
+    await newDish.save();
+    res.status(201).json(newDish);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to add dish",
-      error: error.message,
-    });
+    res.status(500).json({ error: error.message });
   }
 };
 

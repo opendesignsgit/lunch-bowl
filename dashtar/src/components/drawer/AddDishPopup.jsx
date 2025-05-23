@@ -8,7 +8,7 @@ const initialState = {
   shortDescription: "",
   description: "",
   cuisine: "",
-  image: "",
+  image: null, // Change from empty string to null
   status: "active",
 };
 
@@ -64,12 +64,8 @@ const AddDishPopup = ({
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setForm((prev) => ({ ...prev, image: reader.result }));
-      };
-      reader.readAsDataURL(file);
+      setImagePreview(URL.createObjectURL(file)); // Show preview
+      setForm((prev) => ({ ...prev, image: file })); // Store file object
     }
   };
 
@@ -77,12 +73,21 @@ const AddDishPopup = ({
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
-      if (isEditing && productData?._id) {
-        await addProduct(productData._id, form);
-      } else {
-        await addProduct(form);
-      }
+      const formData = new FormData();
+      Object.keys(form).forEach((key) => {
+        formData.append(key, form[key]);
+      });
+
+      const config = {
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+      console.log("====================================");
+      console.log("formData", formData);
+      console.log("====================================");
+      await ProductServices.addDish(formData, config);
+
       setLoading(false);
       setForm(initialState);
       setImagePreview("");
@@ -215,12 +220,13 @@ const AddDishPopup = ({
             accept="image/*"
             onChange={handleImageChange}
             className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-md file:border-0
-              file:text-sm file:font-semibold
-              file:bg-emerald-50 file:text-emerald-700
-              hover:file:bg-emerald-100"
+    file:mr-4 file:py-2 file:px-4
+    file:rounded-md file:border-0
+    file:text-sm file:font-semibold
+    file:bg-emerald-50 file:text-emerald-700
+    hover:file:bg-emerald-100"
           />
+
           {imagePreview && (
             <div className="mt-2">
               <img
