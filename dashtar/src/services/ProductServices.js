@@ -11,6 +11,28 @@ const ProductServices = {
     );
   },
 
+  getAllDishes: async ({
+    page = 1,
+    limit = 10,
+    cuisine = "",
+    title = "",
+    status = "",
+  }) => {
+    // Clean title to avoid sending "null" as a string
+    const cleanTitle = title && title !== "null" ? title : "";
+
+    return requests.get(
+      `/products/get-all-menu?page=${page}&limit=${limit}&title=${cleanTitle}`
+    );
+  },
+
+  addDish: async (body) => {
+    console.log("====================================");
+    console.log("body", body);
+    console.log("====================================");
+    return requests.post("/products/add-dish", body);
+  },
+
   getProductById: async (id) => {
     return requests.post(`/products/${id}`);
   },

@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const Dish = require("../models/DishSchema");
 const mongoose = require("mongoose");
 const Category = require("../models/Category");
 const { languageCodes } = require("../utils/data");
@@ -121,6 +122,63 @@ const getAllProducts = async (req, res) => {
     // console.log("error", err);
     res.status(500).send({
       message: err.message,
+    });
+  }
+};
+
+const getAllDishes = async (req, res) => {
+  const { title, page, limit } = req.query;
+
+  const queryObject = {};
+
+  if (title && title !== "null") {
+    queryObject.$or = [
+      { primaryDishTitle: { $regex: title, $options: "i" } },
+      { subDishTitle: { $regex: title, $options: "i" } },
+    ];
+  }
+
+  const pages = Number(page) || 1;
+  const limits = Number(limit) || 10;
+  const skip = (pages - 1) * limits;
+
+  try {
+    const totalDoc = await Dish.countDocuments(queryObject);
+
+    const dishes = await Dish.find(queryObject)
+      .sort({ _id: -1 }) // Default: newest first
+      .skip(skip)
+      .limit(limits);
+
+    res.send({
+      dishes,
+      totalDoc,
+      limits,
+      pages,
+    });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const addDish = async (req, res) => {
+  try {
+    const newDish = new Dish(req.body);
+    console.log("====================================");
+    console.log("newDish", newDish);
+    console.log("====================================");
+    await newDish.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Dish added successfully",
+      dish: newDish,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to add dish",
+      error: error.message,
     });
   }
 };
@@ -395,4 +453,6 @@ module.exports = {
   deleteProduct,
   deleteManyProducts,
   getShowingStoreProducts,
+  getAllDishes,
+  addDish,
 };

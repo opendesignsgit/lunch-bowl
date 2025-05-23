@@ -13,6 +13,8 @@ const {
   deleteProduct,
   deleteManyProducts,
   getShowingStoreProducts,
+  getAllDishes,
+  addDish,
 } = require("../controller/productController");
 
 //add a product
@@ -22,7 +24,7 @@ router.post("/add", addProduct);
 router.post("/all", addAllProducts);
 
 //get a product
-router.post("/:id", getProductById);
+//router.post("/:id", getProductById);
 
 //get showing products only
 router.get("/show", getShowingProducts);
@@ -32,6 +34,10 @@ router.get("/store", getShowingStoreProducts);
 
 //get all products
 router.get("/", getAllProducts);
+
+router.get("/get-all-menu", getAllDishes);
+
+router.post("/add-dish", addDish);
 
 //get a product by slug
 router.get("/product/:slug", getProductBySlug);
