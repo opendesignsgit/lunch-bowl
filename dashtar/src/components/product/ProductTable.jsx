@@ -1,75 +1,68 @@
 import { TableBody, TableCell, TableRow } from "@windmill/react-ui";
+import { FiEdit } from "react-icons/fi";
 
-//internal import
-import MainDrawer from "@/components/drawer/MainDrawer";
-import ProductDrawer from "@/components/drawer/ProductDrawer";
-import DeleteModal from "@/components/modal/DeleteModal";
-import EditDeleteButton from "@/components/table/EditDeleteButton";
-import ShowHideButton from "@/components/table/ShowHideButton";
-import useToggleDrawer from "@/hooks/useToggleDrawer";
-import useUtilsFunction from "@/hooks/useUtilsFunction";
-
-//internal import
-
-const ProductTable = ({ products, isCheck }) => {
-  const { title, serviceId, handleModalOpen, handleUpdate } = useToggleDrawer();
-  const { currency, showingTranslateValue } = useUtilsFunction();
-  console.log("====================================");
-  console.log("products", products);
-  console.log("====================================");
+const ProductTable = ({ products = [], setIsCheck, onEdit }) => {
   return (
-    <>
-      {isCheck?.length < 1 && <DeleteModal id={serviceId} title={title} />}
-
-      {isCheck?.length < 2 && (
-        <MainDrawer>
-          <ProductDrawer currency={currency} id={serviceId} />
-        </MainDrawer>
-      )}
-
-      <TableBody>
-        {products?.map((product, i) => (
-          <TableRow key={i + 1}>
-            <TableCell>
-              <div className="flex items-center">
-                <div>
-                  <h2
-                    className={`text-sm font-medium ${
-                      product?.primaryDishTitle?.length > 30
-                        ? "wrap-long-title"
-                        : ""
-                    }`}
-                  >
-                    {showingTranslateValue(
-                      product?.primaryDishTitle
-                    )?.substring(0, 28)}
-                  </h2>
+    <TableBody>
+      {products.map((product) => (
+        <TableRow key={product._id}>
+          <TableCell className="px-4 py-3">
+            <div className="flex items-center">
+              {product.image && (
+                <div className="hidden sm:block mr-3">
+                  <img
+                    className="w-10 h-10 rounded-full object-cover"
+                    src={product.image}
+                    alt={product.primaryDishTitle}
+                  />
                 </div>
+              )}
+              <div>
+                <h2 className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                  {product?.primaryDishTitle || "Untitled"}
+                </h2>
+                {product.subDishTitle && (
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    {product.subDishTitle}
+                  </p>
+                )}
               </div>
-            </TableCell>
+            </div>
+          </TableCell>
 
-            <TableCell>
-              <span className="text-sm">
-                {showingTranslateValue(product?.category?.name)}
-              </span>
-            </TableCell>
-            <TableCell className="text-center">
-              <ShowHideButton id={product._id} status={product.status} />
-            </TableCell>
-            <TableCell>
-              <EditDeleteButton
-                id={product._id}
-                product={product}
-                isCheck={isCheck}
-                handleUpdate={handleUpdate}
-                handleModalOpen={handleModalOpen}
-                title={showingTranslateValue(product?.title)}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </>
+          <TableCell className="px-4 py-3">
+            <span className="text-sm text-gray-700 dark:text-gray-300">
+              {product?.cuisine || "Not specified"}
+            </span>
+          </TableCell>
+
+          <TableCell className="px-4 py-3 text-center">
+            <span
+              className={`inline-flex px-2 py-1 text-xs font-medium rounded-full 
+              ${
+                product?.status === "active"
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+              }`}
+            >
+              {product?.status === "active" ? "Active" : "Inactive"}
+            </span>
+          </TableCell>
+
+          <TableCell className="px-4 py-3 text-right">
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => onEdit(product)}
+                className="text-gray-600 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
+                aria-label="Edit"
+              >
+                <FiEdit className="w-5 h-5" />
+              </button>
+            </div>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
   );
 };
 

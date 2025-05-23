@@ -23,8 +23,6 @@ import ProductServices from "@/services/ProductServices";
 import PageTitle from "@/components/Typography/PageTitle";
 import { SidebarContext } from "@/context/SidebarContext";
 import ProductTable from "@/components/product/ProductTable";
-import MainDrawer from "@/components/drawer/MainDrawer";
-import ProductDrawer from "@/components/drawer/ProductDrawer";
 import useProductFilter from "@/hooks/useProductFilter";
 import TableLoading from "@/components/preloader/TableLoading";
 import SelectCategory from "@/components/form/selectOption/SelectCategory";
@@ -34,6 +32,8 @@ import AddProductPopup from "@/components/drawer/AddDishPopup";
 const Products = () => {
   const { serviceId } = useToggleDrawer();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const { t } = useTranslation();
   const {
@@ -63,11 +63,30 @@ const Products = () => {
 
   console.log("product page ------->", data);
 
-  const handleSuccess = () => {
-    console.log("====================================");
-    console.log("Product added successfully");
-    console.log("====================================");
+  const handleEdit = (product) => {
+    setCurrentProduct(product);
+    setIsEditing(true);
+    setIsPopupOpen(true);
   };
+
+  const handleAddNew = () => {
+    setCurrentProduct(null);
+    setIsEditing(false);
+    setIsPopupOpen(true);
+  };
+
+  const handleSuccess = () => {
+    console.log("Product operation successful");
+    setIsPopupOpen(false);
+    setCurrentProduct(null);
+    setIsEditing(false);
+  };
+
+  // const handleSuccess = () => {
+  //   console.log("====================================");
+  //   console.log("Product added successfully");
+  //   console.log("====================================");
+  // };
 
   // react hooks
   const [isCheck, setIsCheck] = useState([]);
@@ -161,9 +180,17 @@ const Products = () => {
 
       <AddProductPopup
         isOpen={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
+        onClose={() => {
+          setIsPopupOpen(false);
+          setCurrentProduct(null);
+          setIsEditing(false);
+        }}
         onSuccess={handleSuccess}
-        addProduct={ProductServices.addDish}
+        addProduct={
+          isEditing ? ProductServices.updateDish : ProductServices.addDish
+        }
+        productData={currentProduct}
+        isEditing={isEditing}
       />
 
       {loading ? (
@@ -189,6 +216,7 @@ const Products = () => {
               isCheck={isCheck}
               products={data?.dishes}
               setIsCheck={setIsCheck}
+              onEdit={handleEdit}
             />
           </Table>
           <TableFooter>
