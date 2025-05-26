@@ -184,6 +184,14 @@ const addDish = async (req, res) => {
     const newDish = new Dish({
       ...req.body,
       image: `/uploads/${req.file.filename}`,
+      nutrition: req.body.nutrition || {
+        calories: 0,
+        fats: 0,
+        carbs: 0,
+        vitamins: 0,
+        proteins: 0,
+        minerals: 0,
+      },
     });
 
     await newDish.save();
@@ -203,7 +211,17 @@ const addDish = async (req, res) => {
 const updateDish = async (req, res) => {
   try {
     const { id } = req.params;
-    let updateData = { ...req.body };
+    let updateData = {
+      ...req.body,
+      nutrition: req.body.nutrition || {
+        calories: 0,
+        fats: 0,
+        carbs: 0,
+        vitamins: 0,
+        proteins: 0,
+        minerals: 0,
+      },
+    };
 
     // If new image was uploaded
     if (req.file) {

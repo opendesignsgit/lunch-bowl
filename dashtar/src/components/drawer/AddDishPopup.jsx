@@ -10,6 +10,14 @@ const initialState = {
   cuisine: "",
   image: null,
   status: "active",
+  nutrition: {
+    calories: "",
+    fats: "",
+    carbs: "",
+    vitamins: "",
+    proteins: "",
+    minerals: "",
+  },
 };
 
 const AddDishPopup = ({
@@ -24,6 +32,14 @@ const AddDishPopup = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const [nutritionErrors, setNutritionErrors] = useState({
+    calories: false,
+    fats: false,
+    carbs: false,
+    vitamins: false,
+    proteins: false,
+    minerals: false,
+  });
 
   // Styling classes
   const inputClasses =
@@ -36,6 +52,30 @@ const AddDishPopup = ({
   const imagePreviewClasses =
     "mt-2 w-full h-48 object-cover rounded-md border border-gray-300 dark:border-gray-600";
 
+  const NutritionInput = ({ name, label, unit, value, onChange, error }) => (
+    <div>
+      <label htmlFor={name} className={labelClasses}>
+        {label} {unit && `(${unit})`}
+      </label>
+      <input
+        id={name}
+        name={name}
+        type="number"
+        min="0"
+        max="5"
+        step="0.1" // Allows decimal values if needed
+        value={value === 0 ? "" : value}
+        onChange={onChange}
+        className={`${inputClasses} ${
+          error ? "border-red-500 focus:ring-red-500 focus:border-red-500" : ""
+        }`}
+      />
+      {error && (
+        <p className="mt-1 text-sm text-red-600">Value must be 5 or less</p>
+      )}
+    </div>
+  );
+
   // In your useEffect when productData is present
   useEffect(() => {
     if (productData) {
@@ -47,6 +87,23 @@ const AddDishPopup = ({
         cuisine: productData.cuisine || "",
         image: productData.image || null,
         status: productData.status || "active",
+        nutrition: productData.nutrition
+          ? {
+              calories: productData.nutrition.calories || "",
+              fats: productData.nutrition.fats || "",
+              carbs: productData.nutrition.carbs || "",
+              vitamins: productData.nutrition.vitamins || "",
+              proteins: productData.nutrition.proteins || "",
+              minerals: productData.nutrition.minerals || "",
+            }
+          : {
+              calories: "",
+              fats: "",
+              carbs: "",
+              vitamins: "",
+              proteins: "",
+              minerals: "",
+            },
       });
 
       // Improved image preview handling
@@ -87,13 +144,67 @@ const AddDishPopup = ({
     }
   };
 
+  const handleNutritionChange = (e) => {
+    const { name, value } = e.target;
+    const numericValue = value === "" ? "" : Number(value);
+
+    // Validate
+    const isValid = numericValue === "" || numericValue <= 5;
+
+    setNutritionErrors((prev) => ({
+      ...prev,
+      [name]: !isValid,
+    }));
+
+    // Only update if valid or empty
+    if (isValid) {
+      setForm((prev) => ({
+        ...prev,
+        nutrition: {
+          ...prev.nutrition,
+          [name]: numericValue === "" ? "" : numericValue,
+        },
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check for any nutrition errors
+    const hasErrors = Object.values(nutritionErrors).some(Boolean);
+    if (hasErrors) {
+      setError("Please correct the nutrition values (must be 5 or less)");
+      return;
+    }
+
+    // Check if any nutrition value exceeds 5
+    const exceedsLimit = Object.values(form.nutrition).some(
+      (val) => val !== "" && Number(val) > 5
+    );
+
+    if (exceedsLimit) {
+      setError("Nutrition values must be 5 or less");
+      return;
+    }
     setLoading(true);
     setError("");
 
     try {
       const formData = new FormData();
+
+      const nutritionData = {
+        calories:
+          form.nutrition.calories === "" ? 0 : Number(form.nutrition.calories),
+        fats: form.nutrition.fats === "" ? 0 : Number(form.nutrition.fats),
+        carbs: form.nutrition.carbs === "" ? 0 : Number(form.nutrition.carbs),
+        vitamins:
+          form.nutrition.vitamins === "" ? 0 : Number(form.nutrition.vitamins),
+        proteins:
+          form.nutrition.proteins === "" ? 0 : Number(form.nutrition.proteins),
+        minerals:
+          form.nutrition.minerals === "" ? 0 : Number(form.nutrition.minerals),
+      };
 
       // Append all form fields
       formData.append("primaryDishTitle", form.primaryDishTitle);
@@ -102,6 +213,14 @@ const AddDishPopup = ({
       formData.append("description", form.description);
       formData.append("cuisine", form.cuisine);
       formData.append("status", form.status);
+
+      // Append nutrition data
+      formData.append("nutrition[calories]", nutritionData.calories);
+      formData.append("nutrition[fats]", nutritionData.fats);
+      formData.append("nutrition[carbs]", nutritionData.carbs);
+      formData.append("nutrition[vitamins]", nutritionData.vitamins);
+      formData.append("nutrition[proteins]", nutritionData.proteins);
+      formData.append("nutrition[minerals]", nutritionData.minerals);
 
       // Image handling
       if (form.image instanceof File) {
@@ -312,6 +431,56 @@ const AddDishPopup = ({
               )}
             </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <NutritionInput
+            name="calories"
+            label="Calories"
+            value={form.nutrition.calories}
+            onChange={handleNutritionChange}
+            error={nutritionErrors.calories}
+          />
+          <NutritionInput
+            name="fats"
+            label="Fats"
+            unit="g"
+            value={form.nutrition.fats}
+            onChange={handleNutritionChange}
+            error={nutritionErrors.fats}
+          />
+          <NutritionInput
+            name="carbs"
+            label="Carbs"
+            unit="g"
+            value={form.nutrition.carbs}
+            onChange={handleNutritionChange}
+            error={nutritionErrors.carbs}
+          />
+          <NutritionInput
+            name="vitamins"
+            label="Vitamins"
+            unit="mg"
+            value={form.nutrition.vitamins}
+            onChange={handleNutritionChange}
+            error={nutritionErrors.vitamins}
+          />
+          <NutritionInput
+            name="proteins"
+            label="Proteins"
+            unit="g"
+            value={form.nutrition.proteins}
+            onChange={handleNutritionChange}
+            error={nutritionErrors.proteins}
+          />
+          <NutritionInput
+            name="minerals"
+            label="Minerals"
+            unit="mg"
+            value={form.nutrition.minerals}
+            onChange={handleNutritionChange}
+            error={nutritionErrors.minerals}
+          />
         </div>
 
         <div className="flex justify-end space-x-3 pt-4">
