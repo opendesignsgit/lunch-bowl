@@ -49,6 +49,7 @@ const Products = () => {
     sortedField,
     setSortedField,
     limitData,
+    setIsUpdate,
   } = useContext(SidebarContext);
 
   const { data, loading, error } = useAsync(() =>
@@ -75,18 +76,15 @@ const Products = () => {
     setIsPopupOpen(true);
   };
 
-  const handleSuccess = () => {
-    console.log("Product operation successful");
+  const handleSuccess = (responseData, success) => {
+    if (success) {
+      // Trigger a refetch by updating isUpdate
+      setIsUpdate(true);
+    }
     setIsPopupOpen(false);
     setCurrentProduct(null);
     setIsEditing(false);
   };
-
-  // const handleSuccess = () => {
-  //   console.log("====================================");
-  //   console.log("Product added successfully");
-  //   console.log("====================================");
-  // };
 
   // react hooks
   const [isCheck, setIsCheck] = useState([]);

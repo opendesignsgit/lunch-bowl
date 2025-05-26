@@ -237,10 +237,13 @@ const AddDishPopup = ({
         response = await ProductServices.addDish(formData);
       }
 
-      onSuccess?.(response.data);
-      onClose();
+     // Call onSuccess with both the response data and success status
+    onSuccess?.(response.data, true); // true indicates success
+    onClose();
     } catch (err) {
       setError(err.response?.data?.error || "Error processing dish");
+      // Call onSuccess with false to indicate failure
+    onSuccess?.(null, false);
       console.error("Error:", err);
     } finally {
       setLoading(false);
