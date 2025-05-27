@@ -1,155 +1,83 @@
-import {
-  Avatar,
-  Badge,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@windmill/react-ui";
-import { t } from "i18next";
-import { FiZoomIn } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { TableBody, TableCell, TableRow } from "@windmill/react-ui";
+import { FiEdit } from "react-icons/fi";
 
-//internal import
-import MainDrawer from "@/components/drawer/MainDrawer";
-import ProductDrawer from "@/components/drawer/ProductDrawer";
-import CheckBox from "@/components/form/others/CheckBox";
-import DeleteModal from "@/components/modal/DeleteModal";
-import EditDeleteButton from "@/components/table/EditDeleteButton";
-import ShowHideButton from "@/components/table/ShowHideButton";
-import Tooltip from "@/components/tooltip/Tooltip";
-import useToggleDrawer from "@/hooks/useToggleDrawer";
-import useUtilsFunction from "@/hooks/useUtilsFunction";
-
-//internal import
-
-const ProductTable = ({ products, isCheck, setIsCheck }) => {
-  const { title, serviceId, handleModalOpen, handleUpdate } = useToggleDrawer();
-  const { currency, showingTranslateValue, getNumberTwo } = useUtilsFunction();
-
-  const handleClick = (e) => {
-    const { id, checked } = e.target;
-    // console.log("id", id, checked);
-
-    setIsCheck([...isCheck, id]);
-    if (!checked) {
-      setIsCheck(isCheck.filter((item) => item !== id));
-    }
+const ProductTable = ({ products = [], setIsCheck, onEdit }) => {
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "";
+    return imagePath.startsWith("http")
+      ? imagePath
+      : `http://localhost:5055${imagePath}`;
   };
 
+  console.log("====================================");
+  console.log("ProductTable products:", products);
+  // Correct way to log first product's image (for debugging)
+  if (products.length > 0) {
+    console.log("First product image path:", products[0].image);
+  }
+  console.log("====================================");
+
   return (
-    <>
-      {isCheck?.length < 1 && <DeleteModal id={serviceId} title={title} />}
-
-      {isCheck?.length < 2 && (
-        <MainDrawer>
-          <ProductDrawer currency={currency} id={serviceId} />
-        </MainDrawer>
-      )}
-
-      <TableBody>
-        {products?.map((product, i) => (
-          <TableRow key={i + 1}>
-            <TableCell>
-              <CheckBox
-                type="checkbox"
-                name={product?.title?.en}
-                id={product._id}
-                handleClick={handleClick}
-                isChecked={isCheck?.includes(product._id)}
-              />
-            </TableCell>
-
-            <TableCell>
-              <div className="flex items-center">
-                {product?.image[0] ? (
-                  <Avatar
-                    className="hidden p-1 mr-2 md:block bg-gray-50 shadow-none"
-                    src={product?.image[0]}
-                    alt="product"
+    <TableBody>
+      {products.map((product) => (
+        <TableRow key={product._id}>
+          <TableCell className="px-4 py-3">
+            <div className="flex items-center">
+              {product.image && (
+                <div className="hidden sm:block mr-3">
+                  <img
+                    className="w-10 h-10 rounded-full object-cover"
+                    src={getImageUrl(product.image)}
+                    alt={product.primaryDishTitle}
                   />
-                ) : (
-                  <Avatar
-                    src={`https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png`}
-                    alt="product"
-                  />
-                )}
-                <div>
-                  <h2
-                    className={`text-sm font-medium ${
-                      product?.title.length > 30 ? "wrap-long-title" : ""
-                    }`}
-                  >
-                    {showingTranslateValue(product?.title)?.substring(0, 28)}
-                  </h2>
                 </div>
-              </div>
-            </TableCell>
-
-            <TableCell>
-              <span className="text-sm">
-                {showingTranslateValue(product?.category?.name)}
-              </span>
-            </TableCell>
-
-            <TableCell>
-              <span className="text-sm font-semibold">
-                {currency}
-                {product?.isCombination
-                  ? getNumberTwo(product?.variants[0]?.originalPrice)
-                  : getNumberTwo(product?.prices?.originalPrice)}
-              </span>
-            </TableCell>
-
-            <TableCell>
-              <span className="text-sm font-semibold">
-                {currency}
-                {product?.isCombination
-                  ? getNumberTwo(product?.variants[0]?.price)
-                  : getNumberTwo(product?.prices?.price)}
-              </span>
-            </TableCell>
-
-            <TableCell>
-              <span className="text-sm">{product.stock}</span>
-            </TableCell>
-            <TableCell>
-              {product.stock > 0 ? (
-                <Badge type="success">{t("Selling")}</Badge>
-              ) : (
-                <Badge type="danger">{t("SoldOut")}</Badge>
               )}
-            </TableCell>
-            <TableCell>
-              <Link
-                to={`/product/${product._id}`}
-                className="flex justify-center text-gray-400 hover:text-emerald-600"
+              <div>
+                <h2 className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                  {product?.primaryDishTitle || "Untitled"}
+                </h2>
+                {product.subDishTitle && (
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    {product.subDishTitle}
+                  </p>
+                )}
+              </div>
+            </div>
+          </TableCell>
+
+          <TableCell className="px-4 py-3">
+            <span className="text-sm text-gray-700 dark:text-gray-300">
+              {product?.cuisine || "Not specified"}
+            </span>
+          </TableCell>
+
+          <TableCell className="px-4 py-3 text-center">
+            <span
+              className={`inline-flex px-2 py-1 text-xs font-medium rounded-full 
+              ${
+                product?.status === "active"
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+              }`}
+            >
+              {product?.status === "active" ? "Active" : "Inactive"}
+            </span>
+          </TableCell>
+
+          <TableCell className="px-4 py-3 text-right">
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => onEdit(product)}
+                className="text-gray-600 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
+                aria-label="Edit"
               >
-                <Tooltip
-                  id="view"
-                  Icon={FiZoomIn}
-                  title={t("DetailsTbl")}
-                  bgColor="#10B981"
-                />
-              </Link>
-            </TableCell>
-            <TableCell className="text-center">
-              <ShowHideButton id={product._id} status={product.status} />
-              {/* {product.status} */}
-            </TableCell>
-            <TableCell>
-              <EditDeleteButton
-                id={product._id}
-                product={product}
-                isCheck={isCheck}
-                handleUpdate={handleUpdate}
-                handleModalOpen={handleModalOpen}
-                title={showingTranslateValue(product?.title)}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </>
+                <FiEdit className="w-5 h-5" />
+              </button>
+            </div>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
   );
 };
 

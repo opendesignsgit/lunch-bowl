@@ -1,6 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const {
+  singleUpload,
+  handleUploadErrors,
+} = require("../middleware/uploadMiddleware");
+const path = require("path"); // Make sure this is at the top of your controller file
+const fs = require("fs");
+
+const {
   addProduct,
   addAllProducts,
   getAllProducts,
@@ -13,6 +20,9 @@ const {
   deleteProduct,
   deleteManyProducts,
   getShowingStoreProducts,
+  getAllDishes,
+  addDish,
+  updateDish,
 } = require("../controller/productController");
 
 //add a product
@@ -22,7 +32,7 @@ router.post("/add", addProduct);
 router.post("/all", addAllProducts);
 
 //get a product
-router.post("/:id", getProductById);
+//router.post("/:id", getProductById);
 
 //get showing products only
 router.get("/show", getShowingProducts);
@@ -32,6 +42,13 @@ router.get("/store", getShowingStoreProducts);
 
 //get all products
 router.get("/", getAllProducts);
+
+router.get("/get-all-menu", getAllDishes);
+
+// Dish routes with upload middleware
+router.post("/add-dish", singleUpload, handleUploadErrors, addDish);
+router.put("/update-dish/:id", singleUpload, handleUploadErrors, updateDish);
+
 
 //get a product by slug
 router.get("/product/:slug", getProductBySlug);

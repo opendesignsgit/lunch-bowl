@@ -1,7 +1,22 @@
 const Product = require("../models/Product");
+const Dish = require("../models/DishSchema");
 const mongoose = require("mongoose");
 const Category = require("../models/Category");
 const { languageCodes } = require("../utils/data");
+const multer = require("multer");
+const path = require("path"); // Make sure this is at the top of your controller file
+const fs = require("fs");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 const addProduct = async (req, res) => {
   try {
@@ -121,6 +136,129 @@ const getAllProducts = async (req, res) => {
     // console.log("error", err);
     res.status(500).send({
       message: err.message,
+    });
+  }
+};
+
+const getAllDishes = async (req, res) => {
+  const { title, page, limit } = req.query;
+
+  const queryObject = {};
+
+  if (title && title !== "null") {
+    queryObject.$or = [
+      { primaryDishTitle: { $regex: title, $options: "i" } },
+      { subDishTitle: { $regex: title, $options: "i" } },
+    ];
+  }
+
+  const pages = Number(page) || 1;
+  const limits = Number(limit) || 10;
+  const skip = (pages - 1) * limits;
+
+  try {
+    const totalDoc = await Dish.countDocuments(queryObject);
+
+    const dishes = await Dish.find(queryObject)
+      .sort({ _id: -1 }) // Default: newest first
+      .skip(skip)
+      .limit(limits);
+
+    res.send({
+      dishes,
+      totalDoc,
+      limits,
+      pages,
+    });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const addDish = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
+    const newDish = new Dish({
+      ...req.body,
+      image: `/uploads/${req.file.filename}`,
+      nutrition: req.body.nutrition || {
+        calories: 0,
+        fats: 0,
+        carbs: 0,
+        vitamins: 0,
+        proteins: 0,
+        minerals: 0,
+      },
+    });
+
+    await newDish.save();
+
+    // Return response with full image URL
+    const responseDish = newDish.toObject();
+    responseDish.image = `${req.protocol}://${req.get("host")}${
+      responseDish.image
+    }`;
+
+    res.status(201).json(responseDish);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateDish = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let updateData = {
+      ...req.body,
+      nutrition: req.body.nutrition || {
+        calories: 0,
+        fats: 0,
+        carbs: 0,
+        vitamins: 0,
+        proteins: 0,
+        minerals: 0,
+      },
+    };
+
+    // If new image was uploaded
+    if (req.file) {
+      const imagePath = `/uploads/${req.file.filename}`;
+      updateData.image = imagePath;
+
+      // Delete old image if it exists
+      const oldDish = await Dish.findById(id);
+      if (oldDish && oldDish.image) {
+        const oldImagePath = path.join(__dirname, "../..", oldDish.image);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
+    }
+
+    const updatedDish = await Dish.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedDish) {
+      return res.status(404).json({ error: "Dish not found" });
+    }
+
+    // Return response with full image URL
+    const responseDish = updatedDish.toObject();
+    responseDish.image = `${req.protocol}://${req.get("host")}${
+      updatedDish.image
+    }`;
+
+    res.status(200).json(responseDish);
+  } catch (error) {
+    console.error("Update error:", error); // Log the full error
+    res.status(500).json({
+      error: error.message,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
 };
@@ -395,4 +533,7 @@ module.exports = {
   deleteProduct,
   deleteManyProducts,
   getShowingStoreProducts,
+  getAllDishes,
+  addDish,
+  updateDish,
 };
