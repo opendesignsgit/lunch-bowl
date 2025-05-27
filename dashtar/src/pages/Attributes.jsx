@@ -1,249 +1,168 @@
+import { useState } from "react";
 import {
   Button,
   Card,
   CardBody,
   Input,
-  Pagination,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Table,
-  TableCell,
   TableContainer,
-  TableFooter,
   TableHeader,
+  TableCell,
+  TableBody,
+  TableRow,
 } from "@windmill/react-ui";
-import React, { useContext, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { FiEdit, FiPlus, FiTrash2 } from "react-icons/fi";
-
-//internal import
-import AttributeTable from "@/components/attribute/AttributeTable";
-import UploadMany from "@/components/common/UploadMany";
-import AttributeDrawer from "@/components/drawer/AttributeDrawer";
-import BulkActionDrawer from "@/components/drawer/BulkActionDrawer";
-import MainDrawer from "@/components/drawer/MainDrawer";
-import CheckBox from "@/components/form/others/CheckBox";
-import DeleteModal from "@/components/modal/DeleteModal";
-import TableLoading from "@/components/preloader/TableLoading";
-import NotFound from "@/components/table/NotFound";
+import { FiPlus, FiTrash2, FiEdit } from "react-icons/fi";
 import PageTitle from "@/components/Typography/PageTitle";
-import { SidebarContext } from "@/context/SidebarContext";
 import useAsync from "@/hooks/useAsync";
-import useFilter from "@/hooks/useFilter";
-import useToggleDrawer from "@/hooks/useToggleDrawer";
-import AttributeServices from "@/services/AttributeServices";
-import AnimatedContent from "@/components/common/AnimatedContent";
+import HolidayServices from "@/services/HolidayServices";
+import { useTranslation } from "react-i18next";
+import HolidayModal from "@/components/drawer/HolidayModal";
 
-//internal import
-
-const Attributes = () => {
-  const { toggleDrawer, lang } = useContext(SidebarContext);
-  const { data, loading, error } = useAsync(() =>
-    AttributeServices.getAllAttributes({
-      type: "attribute",
-      option: "Dropdown",
-      option1: "Radio",
-    })
-  );
-
-  const { handleDeleteMany, allId, handleUpdateMany } = useToggleDrawer();
-
+const Holidays = () => {
   const { t } = useTranslation();
-
   const {
-    filename,
-    isDisabled,
-    dataTable,
-    serviceData,
-    totalResults,
-    attributeRef,
-    resultsPerPage,
-    handleSelectFile,
-    handleChangePage,
-    setAttributeTitle,
-    handleSubmitAttribute,
-    handleUploadMultiple,
-    handleRemoveSelectFile,
-  } = useFilter(data);
+    data = [],
+    loading,
+    reload,
+  } = useAsync(HolidayServices.getAllHolidays);
 
-  // react hooks
-  const [isCheckAll, setIsCheckAll] = useState(false);
-  const [isCheck, setIsCheck] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentHoliday, setCurrentHoliday] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [holidayToDelete, setHolidayToDelete] = useState(null);
 
-  const handleSelectAll = () => {
-    setIsCheckAll(!isCheckAll);
-    setIsCheck(data.map((value) => value._id));
-    if (isCheckAll) {
-      setIsCheck([]);
-    }
+  const openAddModal = () => {
+    setCurrentHoliday(null);
+    setIsModalOpen(true);
   };
-  // handle reset field function
-  const handleResetField = () => {
-    setAttributeTitle("");
-    attributeRef.current.value = "";
+
+  const openEditModal = (holiday) => {
+    setCurrentHoliday(holiday);
+    setIsModalOpen(true);
+  };
+
+  const openDeleteModal = (holiday) => {
+    setHolidayToDelete(holiday);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await HolidayServices.deleteHoliday(holidayToDelete._id);
+      reload();
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error("Error deleting holiday:", error);
+    }
   };
 
   return (
     <>
-      <PageTitle>{t("AttributeTitle")}</PageTitle>
-      <DeleteModal
-        ids={allId}
-        setIsCheck={setIsCheck}
-        title="Selected Attributes"
+      <PageTitle>{t("Holidays")}</PageTitle>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+      >
+        <ModalHeader>{t("Confirm Deletion")}</ModalHeader>
+        <ModalBody>
+          {t("Are you sure you want to delete the holiday")}{" "}
+          <strong>{holidayToDelete?.name}</strong> ({holidayToDelete?.date})?{" "}
+          {t("This action cannot be undone.")}.
+        </ModalBody>
+        <ModalFooter>
+          <Button layout="outline" onClick={() => setIsDeleteModalOpen(false)}>
+            {t("Cancel")}
+          </Button>
+          <Button layout="danger" onClick={handleDelete}>
+            {t("Delete")}
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/* Add/Edit Holiday Modal */}
+      <HolidayModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          reload();
+        }}
+        holiday={currentHoliday}
       />
-      <BulkActionDrawer ids={allId} title="Attributes" />
-      <MainDrawer>
-        <AttributeDrawer />
-      </MainDrawer>
 
-      <AnimatedContent>
-        <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 mb-5">
-          <CardBody>
-            <form
-              onSubmit={handleSubmitAttribute}
-              className="py-3  grid gap-4 lg:gap-6 xl:gap-6  xl:flex"
+      {/* Add Holiday Button */}
+      <Card className="min-w-0 shadow-xs overflow-hidden mb-5">
+        <CardBody>
+          <div className="flex justify-end">
+            <Button
+              onClick={openAddModal}
+              className="rounded-md"
+              iconLeft={FiPlus}
             >
-              <div className="flex justify-start xl:w-1/2  md:w-full">
-                <UploadMany
-                  title="Attribute"
-                  exportData={data}
-                  filename={filename}
-                  isDisabled={isDisabled}
-                  handleSelectFile={handleSelectFile}
-                  handleUploadMultiple={handleUploadMultiple}
-                  handleRemoveSelectFile={handleRemoveSelectFile}
-                />
-              </div>
+              {t("Add Holiday")}
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
 
-              <div className="lg:flex  md:flex xl:justify-end xl:w-1/2  md:w-full md:justify-start flex-grow-0">
-                <div className="w-full md:w-40 lg:w-40 xl:w-40 mr-3 mb-3 lg:mb-0">
-                  <Button
-                    disabled={isCheck.length < 1}
-                    onClick={() => handleUpdateMany(isCheck)}
-                    className="w-full rounded-md h-12 btn-gray text-gray-600"
-                  >
-                    <span className="mr-2">
-                      <FiEdit />
-                    </span>
-
-                    {t("BulkAction")}
-                  </Button>
-                </div>
-                <div className="w-full md:w-32 lg:w-32 xl:w-32 mr-3 mb-3 lg:mb-0">
-                  <Button
-                    disabled={isCheck.length < 1}
-                    onClick={() => handleDeleteMany(isCheck)}
-                    className="w-full rounded-md h-12 bg-red-500 btn-red"
-                  >
-                    <span className="mr-2">
-                      <FiTrash2 />
-                    </span>
-                    {t("Delete")}
-                  </Button>
-                </div>
-                <div className="w-full md:w-48 lg:w-48 xl:w-48">
-                  <Button
-                    onClick={toggleDrawer}
-                    className="w-full rounded-md h-12 "
-                  >
-                    <span className="mr-2">
-                      <FiPlus />
-                    </span>
-                    {t("CouponsAddAttributeBtn")}
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-        <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 mb-5">
-          <CardBody>
-            <form
-              onSubmit={handleSubmitAttribute}
-              className="py-3 grid gap-4 lg:gap-6 xl:gap-6 md:flex xl:flex"
-            >
-              <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
-                <Input
-                  ref={attributeRef}
-                  type="search"
-                  placeholder={t("SearchAttributePlaceholder")}
-                />
-              </div>
-              <div className="flex items-center gap-2 flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
-                <div className="w-full mx-1">
-                  <Button type="submit" className="h-12 w-full bg-emerald-700">
-                    Filter
-                  </Button>
-                </div>
-
-                <div className="w-full mx-1">
-                  <Button
-                    layout="outline"
-                    onClick={handleResetField}
-                    type="reset"
-                    className="px-4 md:py-1 py-2 h-12 text-sm dark:bg-gray-700"
-                  >
-                    <span className="text-black dark:text-gray-200">Reset</span>
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-      </AnimatedContent>
-
-      {loading ? (
-        <TableLoading row={12} col={6} width={180} height={20} />
-      ) : error ? (
-        <span className="text-center mx-auto text-red-500">{error}</span>
-      ) : serviceData?.length !== 0 ? (
-        <TableContainer className="mb-8">
-          <Table>
-            <TableHeader>
-              <tr>
-                <TableCell>
-                  <CheckBox
-                    type="checkbox"
-                    name="selectAll"
-                    id="selectAll"
-                    handleClick={handleSelectAll}
-                    isChecked={isCheckAll}
-                  />
-                </TableCell>
-                <TableCell> {t("Id")} </TableCell>
-                <TableCell> {t("AName")}</TableCell>
-                <TableCell> {t("ADisplayName")}</TableCell>
-                <TableCell>{t("AOption")}</TableCell>
-
-                <TableCell className="text-center">
-                  {t("catPublishedTbl")}
-                </TableCell>
-
-                <TableCell className="text-center">{t("Avalues")}</TableCell>
-
-                <TableCell className="text-right">{t("AAction")}</TableCell>
-              </tr>
-            </TableHeader>
-
-            <AttributeTable
-              lang={lang}
-              isCheck={isCheck}
-              setIsCheck={setIsCheck}
-              attributes={dataTable}
-            />
-          </Table>
-          <TableFooter>
-            <Pagination
-              totalResults={totalResults}
-              resultsPerPage={resultsPerPage}
-              onChange={handleChangePage}
-              label="Table navigation"
-            />
-          </TableFooter>
-        </TableContainer>
-      ) : (
-        <NotFound title="Sorry, There are no attributes right now." />
-      )}
+      {/* Holidays Table */}
+      <Card className="min-w-0 shadow-xs overflow-hidden">
+        <CardBody>
+          {loading ? (
+            <p>{t("Loading holidays...")}</p>
+          ) : data.length === 0 ? (
+            <p>{t("No holidays found. Add your first holiday.")}</p>
+          ) : (
+            <TableContainer>
+              <Table>
+                <TableHeader>
+                  <tr>
+                    <TableCell>{t("Date")}</TableCell>
+                    <TableCell>{t("Name")}</TableCell>
+                    <TableCell>{t("Actions")}</TableCell>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {data.map((holiday) => (
+                    <TableRow key={holiday._id}>
+                      <TableCell>
+                        {new Date(holiday.date).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>{holiday.name}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-4">
+                          <Button
+                            layout="link"
+                            size="small"
+                            onClick={() => openEditModal(holiday)}
+                          >
+                            <FiEdit className="w-5 h-5" />
+                          </Button>
+                          <Button
+                            layout="link"
+                            size="small"
+                            onClick={() => openDeleteModal(holiday)}
+                          >
+                            <FiTrash2 className="w-5 h-5 text-red-500" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </CardBody>
+      </Card>
     </>
   );
 };
 
-export default Attributes;
+export default Holidays;

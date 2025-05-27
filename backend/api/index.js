@@ -9,6 +9,7 @@ const path = require("path");
 const { connectDB } = require("../config/db");
 const productRoutes = require("../routes/productRoutes");
 const schoolRoutes = require("../routes/schoolRoutes");
+const holidays = require("../routes/holidayRoutes");
 
 const customerRoutes = require("../routes/customerRoutes");
 const adminRoutes = require("../routes/adminRoutes");
@@ -41,7 +42,6 @@ app.options("*", cors()); // include before other routes
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
 
-
 //root route
 app.get("/", (req, res) => {
   res.send("App works properly!");
@@ -49,6 +49,7 @@ app.get("/", (req, res) => {
 
 //this for route will need for store front, also for admin dashboard
 app.use("/api/products/", productRoutes);
+app.use("/api/holidays/", holidays);
 app.use("/api/schools/", schoolRoutes);
 app.use("/api/category/", categoryRoutes);
 app.use("/api/coupon/", couponRoutes);

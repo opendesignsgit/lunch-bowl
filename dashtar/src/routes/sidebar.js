@@ -28,7 +28,7 @@ const sidebar = [
     routes: [
       {
         path: "/products",
-        name: "Products",
+        name: "Menu",
       },
       {
         path: "/categories",
@@ -36,7 +36,7 @@ const sidebar = [
       },
       {
         path: "/attributes",
-        name: "Attributes",
+        name: "Holidays",
       },
       {
         path: "/coupons",

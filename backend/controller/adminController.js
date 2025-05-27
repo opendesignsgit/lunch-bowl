@@ -11,6 +11,7 @@ const {
 const { sendEmail } = require("../lib/email-sender/sender");
 const Admin = require("../models/Admin");
 const School = require("../models/School");
+const Holiday = require("../models/holidaySchema");
 
 const registerAdmin = async (req, res) => {
   try {
@@ -348,6 +349,123 @@ const deleteSchool = async (req, res) => {
   }
 };
 
+// @desc    Add a holiday
+// @route   POST /api/holidays/add-holiday
+// @access  Private/Admin
+const addHoliday = async (req, res) => {
+  try {
+    const { date, name } = req.body;
+
+    // Check if holiday already exists for this date
+    const existingHoliday = await Holiday.findOne({ date });
+    if (existingHoliday) {
+      return res.status(400).json({
+        success: false,
+        message: "Holiday already exists for this date",
+      });
+    }
+
+    const holiday = new Holiday({ date, name });
+    await holiday.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Holiday created successfully",
+      data: holiday,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Get all holidays
+// @route   GET /api/holidays/get-all-holidays
+// @access  Public
+const getAllHolidays = async (req, res) => {
+  try {
+    const holidays = await Holiday.find({}).sort({ date: 1 });
+    res.json({
+      success: true,
+      data: holidays,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Update holiday
+// @route   PUT /api/holidays/update-holiday/:id
+// @access  Private/Admin
+const updateHoliday = async (req, res) => {
+  try {
+    const { date, name } = req.body;
+    const holiday = await Holiday.findById(req.params.id);
+
+    if (!holiday) {
+      return res.status(404).json({
+        success: false,
+        message: "Holiday not found",
+      });
+    }
+
+    // Check if date is being changed and if new date already exists
+    if (date && holiday.date.toString() !== new Date(date).toString()) {
+      const existingHoliday = await Holiday.findOne({ date });
+      if (existingHoliday) {
+        return res.status(400).json({
+          success: false,
+          message: "Holiday already exists for this date",
+        });
+      }
+    }
+
+    holiday.date = date || holiday.date;
+    holiday.name = name || holiday.name;
+    const updatedHoliday = await holiday.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Holiday updated successfully",
+      data: updatedHoliday,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Delete holiday
+// @route   DELETE /api/holidays/delete-holiday/:id
+// @access  Private/Admin
+const deleteHoliday = async (req, res) => {
+  try {
+    const holiday = await Holiday.findByIdAndDelete(req.params.id);
+    if (!holiday) {
+      return res.status(404).json({
+        success: false,
+        message: "Holiday not found",
+      });
+    }
+    res.json({
+      success: true,
+      message: "Holiday removed successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerAdmin,
   loginAdmin,
@@ -364,4 +482,8 @@ module.exports = {
   getSchoolById,
   updateSchool,
   deleteSchool,
+  addHoliday,
+  getAllHolidays,
+  updateHoliday,
+  deleteHoliday,
 };
