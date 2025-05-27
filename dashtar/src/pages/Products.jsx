@@ -101,7 +101,7 @@ const Products = () => {
 
   return (
     <>
-      <PageTitle>{t("ProductsPage")}</PageTitle>
+      <PageTitle>{t("Menu")}</PageTitle>
 
       {/* <MainDrawer>
         <ProductDrawer id={serviceId} />
@@ -149,9 +149,9 @@ const Products = () => {
                 ></button>
               </div>
 
-              <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              {/* <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
                 <SelectCategory setCategory={setCategory} lang={lang} />
-              </div>
+              </div> */}
 
               <div className="flex items-center gap-2 flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
                 <div className="w-full mx-1">
