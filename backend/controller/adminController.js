@@ -10,6 +10,7 @@ const {
 } = require("../config/auth");
 const { sendEmail } = require("../lib/email-sender/sender");
 const Admin = require("../models/Admin");
+const School = require("../models/School");
 
 const registerAdmin = async (req, res) => {
   try {
@@ -272,6 +273,81 @@ const updatedStatus = async (req, res) => {
   }
 };
 
+const addSchool = async (req, res) => {
+  try {
+    const school = new School(req.body);
+    await school.save();
+    res.status(201).json({
+      success: true,
+      message: "School created successfully",
+      data: school,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getAllSchools = async (req, res) => {
+  try {
+    const schools = await School.find({});
+    res.json(schools);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getSchoolById = async (req, res) => {
+  try {
+    const school = await School.findById(req.params.id);
+    if (!school) {
+      return res.status(404).json({ message: "School not found" });
+    }
+    res.json(school);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update school
+// @route   PUT /api/schools/update-school/:id
+// @access  Private/Admin
+const updateSchool = async (req, res) => {
+  try {
+    const school = await School.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!school) {
+      return res.status(404).json({ message: "School not found" });
+    }
+    res.status(201).json({
+      success: true,
+      message: "School created successfully",
+      data: school,
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// @desc    Delete school
+// @route   DELETE /api/schools/delete-school/:id
+// @access  Private/Admin
+const deleteSchool = async (req, res) => {
+  try {
+    const school = await School.findByIdAndDelete(req.params.id);
+    if (!school) {
+      return res.status(404).json({ message: "School not found" });
+    }
+    res.json({ message: "School removed" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registerAdmin,
   loginAdmin,
@@ -283,4 +359,9 @@ module.exports = {
   updateStaff,
   deleteStaff,
   updatedStatus,
+  addSchool,
+  getAllSchools,
+  getSchoolById,
+  updateSchool,
+  deleteSchool,
 };

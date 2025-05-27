@@ -8,6 +8,8 @@ const path = require("path");
 
 const { connectDB } = require("../config/db");
 const productRoutes = require("../routes/productRoutes");
+const schoolRoutes = require("../routes/schoolRoutes");
+
 const customerRoutes = require("../routes/customerRoutes");
 const adminRoutes = require("../routes/adminRoutes");
 const orderRoutes = require("../routes/orderRoutes");
@@ -47,6 +49,7 @@ app.get("/", (req, res) => {
 
 //this for route will need for store front, also for admin dashboard
 app.use("/api/products/", productRoutes);
+app.use("/api/schools/", schoolRoutes);
 app.use("/api/category/", categoryRoutes);
 app.use("/api/coupon/", couponRoutes);
 app.use("/api/customer/", customerRoutes);

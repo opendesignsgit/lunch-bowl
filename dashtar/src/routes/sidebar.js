@@ -22,7 +22,6 @@ const sidebar = [
     icon: FiGrid, // icon
     name: "Dashboard", // name that appear in Sidebar
   },
-
   {
     icon: FiSlack,
     name: "Catalog",
@@ -33,7 +32,7 @@ const sidebar = [
       },
       {
         path: "/categories",
-        name: "Categories",
+        name: "School",
       },
       {
         path: "/attributes",
@@ -120,5 +119,4 @@ const sidebar = [
     ],
   },
 ];
-
 export default sidebar;
