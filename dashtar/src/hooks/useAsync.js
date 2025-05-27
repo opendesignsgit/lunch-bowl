@@ -6,82 +6,87 @@ import { SidebarContext } from "@/context/SidebarContext";
 const useAsync = (asyncFunction) => {
   const [data, setData] = useState([] || {});
   const [error, setError] = useState("");
-  // const [errCode, setErrCode] = useState('');
-  const [loading, setLoading] = useState(true);
-  const {
-    invoice,
-    status,
-    zone,
-    time,
-    source,
-    limitData,
-    startDate,
-    endDate,
-    method,
-    isUpdate,
-    setIsUpdate,
-    currentPage,
-    category,
-    searchText,
-    sortedField,
-  } = useContext(SidebarContext);
+    const [reloadCounter, setReloadCounter] = useState(0);
+    // const [errCode, setErrCode] = useState('');
+    const [loading, setLoading] = useState(true);
+    const {
+      invoice,
+      status,
+      zone,
+      time,
+      source,
+      limitData,
+      startDate,
+      endDate,
+      method,
+      isUpdate,
+      setIsUpdate,
+      currentPage,
+      category,
+      searchText,
+      sortedField,
+    } = useContext(SidebarContext);
 
-  useEffect(() => {
-    let unmounted = false;
-    let source = axios.CancelToken.source();
-    (async () => {
-      try {
-        const res = await asyncFunction({ cancelToken: source.token });
-        if (!unmounted) {
-          setData(res);
-          setError("");
-          setLoading(false);
-        }
-      } catch (err) {
-        if (!unmounted) {
-          setError(err.message);
-          if (axios.isCancel(err)) {
-            setError(err.message);
+    const reload = () => setReloadCounter((prev) => prev + 1);
+    useEffect(() => {
+      let unmounted = false;
+      let source = axios.CancelToken.source();
+      (async () => {
+        setLoading(true);
+        try {
+          const res = await asyncFunction({ cancelToken: source.token });
+          if (!unmounted) {
+            setData(res);
+            setError("");
             setLoading(false);
-            setData([]);
-          } else {
+          }
+        } catch (err) {
+          if (!unmounted) {
             setError(err.message);
-            setLoading(false);
-            setData([]);
+            if (axios.isCancel(err)) {
+              setError(err.message);
+              setLoading(false);
+              setData([]);
+            } else {
+              setError(err.message);
+              setLoading(false);
+              setData([]);
+            }
           }
         }
-      }
-    })();
+      })();
 
-    setIsUpdate(false);
+      setIsUpdate(false);
 
-    return () => {
-      unmounted = true;
-      source.cancel("Cancelled in cleanup");
+      return () => {
+        unmounted = true;
+        source.cancel("Cancelled in cleanup");
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      invoice,
+      status,
+      zone,
+      time,
+      method,
+      source,
+      limitData,
+      startDate,
+      endDate,
+      isUpdate,
+      currentPage,
+      category,
+      searchText,
+      sortedField,
+      reloadCounter,
+    ]);
+
+    return {
+      data,
+      error,
+      loading,
+      reload,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    invoice,
-    status,
-    zone,
-    time,
-    method,
-    source,
-    limitData,
-    startDate,
-    endDate,
-    isUpdate,
-    currentPage,
-    category,
-    searchText,
-    sortedField,
-  ]);
-
-  return {
-    data,
-    error,
-    loading,
-  };
 };
 
 export default useAsync;
