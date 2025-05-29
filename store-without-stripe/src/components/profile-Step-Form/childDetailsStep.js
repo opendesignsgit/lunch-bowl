@@ -18,6 +18,8 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloseIcon from "@mui/icons-material/Close";
 import stepTwo from "../../../public/profileStepImages/stepTwo.png";
 import useRegistration from "@hooks/useRegistration";
+import CategoryServices from "@services/CategoryServices";
+import useAsync from "@hooks/useAsync";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -59,6 +61,15 @@ const ChildDetailsStep = ({
   );
   const { submitHandler, loading } = useRegistration();
 
+  // Fetch schools data
+  const { data: schools, loading: schoolsLoading } = useAsync(
+    CategoryServices.getAllSchools
+  );
+
+  // State for filtered locations and lunch times
+  const [filteredLocations, setFilteredLocations] = useState([]);
+  const [filteredLunchTimes, setFilteredLunchTimes] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -66,11 +77,60 @@ const ChildDetailsStep = ({
     reset,
     watch,
     control,
+    setValue,
+    getValues,
   } = useForm({
     defaultValues: children[activeTab],
     resolver: yupResolver(schema),
     mode: "onTouched",
   });
+
+  // Watch school and location changes
+  const watchSchool = watch("school");
+  const watchLocation = watch("location");
+
+  // Update filtered locations when school changes
+  useEffect(() => {
+    if (watchSchool && schools) {
+      const schoolLocations = schools
+        .filter((school) => school.name === watchSchool)
+        .map((school) => school.location);
+
+      // Remove duplicates and set filtered locations
+      const uniqueLocations = [...new Set(schoolLocations)];
+      setFilteredLocations(uniqueLocations);
+
+      // Reset location and lunch time when school changes
+      setValue("location", "");
+      setValue("lunchTime", "");
+    } else {
+      setFilteredLocations([]);
+    }
+  }, [watchSchool, schools, setValue]);
+
+  // Update filtered lunch times when location changes
+  useEffect(() => {
+    if (watchLocation && watchSchool && schools) {
+      const matchingSchools = schools.filter(
+        (school) =>
+          school.name === watchSchool && school.location === watchLocation
+      );
+
+      if (matchingSchools.length > 0) {
+        const lunchTimes = matchingSchools.map((school) => school.lunchTime);
+        setFilteredLunchTimes(lunchTimes);
+
+        // If there's only one lunch time, auto-select it
+        if (lunchTimes.length === 1) {
+          setValue("lunchTime", lunchTimes[0]);
+        }
+      } else {
+        setFilteredLunchTimes([]);
+      }
+    } else {
+      setFilteredLunchTimes([]);
+    }
+  }, [watchLocation, watchSchool, schools, setValue]);
 
   useEffect(() => {
     if (children[activeTab]) {
@@ -123,10 +183,12 @@ const ChildDetailsStep = ({
   const onSubmit = async () => {
     try {
       // Validate all children first
-      await Promise.all(children.map(child => schema.validate(child, { abortEarly: false })));
+      await Promise.all(
+        children.map((child) => schema.validate(child, { abortEarly: false }))
+      );
 
       const res = await submitHandler({
-        formData:  children ,
+        formData: children,
         path: "step-Form-ChildDetails",
         _id,
       });
@@ -138,7 +200,7 @@ const ChildDetailsStep = ({
     } catch (err) {
       if (err.name === "ValidationError") {
         // Find the index of the first invalid child
-        const invalidIndex = children.findIndex(child => {
+        const invalidIndex = children.findIndex((child) => {
           try {
             schema.validateSync(child, { abortEarly: false });
             return false;
@@ -153,54 +215,10 @@ const ChildDetailsStep = ({
     }
   };
 
-  const dropdownFields = [
-    [
-      "CHILD'S LUNCH TIME*",
-      "lunchTime",
-      "Select Lunch Time",
-      ["12:30 PM", "1:00 PM", "1:30 PM"],
-    ],
-    [
-      "SCHOOL*",
-      "school",
-      "Select School",
-      [
-        "Akshar Arbol International School",
-        "Asan Memorial Senior Secondary School",
-        "D.A.V. Public School",
-        "Don Bosco Matriculation Higher Secondary School",
-        "Holy Angels Anglo Indian Higher Secondary School",
-        "KC High School",
-        "MCTM International School",
-        "P.S. Higher Secondary School",
-        "Padma Seshadri Bala Bhavan School",
-        "Sishya School",
-        "St. Patrick's Anglo Indian Higher Secondary School",
-        "Vidya Mandir Senior Secondary School, Mylapore",
-        "Bala Vidya Mandir",
-        "Sharanalaya Montessori School",
-        "Chetinad Harishree Vidyalayam",
-        "Vidyodaya School",
-        "Sprouts",
-        "St Michael Academy",
-        "Accord International School",
-        "St Johns English School",
-      ],
-    ],
-    [
-      "LOCATION*",
-      "location",
-      "Select Location",
-      ["Ambattur", "Pammal", "Kotturpuram", "Porur"],
-    ],
-    [
-      "CHILD CLASS*",
-      "childClass",
-      "Select Class",
-      ["LKG", "UKG", "Grade 1", "Grade 2", "Grade 3", "Grade 4"],
-    ],
-    ["CHILD SECTION*", "section", "Select Section", ["A", "B", "C"]],
-  ];
+  // Generate unique schools list
+  const uniqueSchools = schools
+    ? [...new Set(schools.map((school) => school.name))]
+    : [];
 
   return (
     <Box
@@ -336,51 +354,193 @@ const ChildDetailsStep = ({
             </LocalizationProvider>
           </Grid>
 
-          {/* Dropdowns */}
-          {dropdownFields.map(([label, name, placeholder, options]) => (
-            <Grid item className="formboxcol" key={name}>
-              <Typography
-                variant="subtitle2"
-                sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-              >
-                {label}
-              </Typography>
-              <Controller
-                name={name}
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    select
-                    fullWidth
-                    label={placeholder}
-                    {...field}
-                    error={!!errors[name]}
-                    helperText={errors[name]?.message}
-                    sx={{ width: "300px", minWidth: "300px" }}
-                    SelectProps={{
-                      MenuProps: {
-                        PaperProps: {
-                          style: {
-                            maxHeight: 200,
-                            overflow: "auto",
-                          },
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="" disabled>
-                      {placeholder}
+          {/* School Dropdown */}
+          <Grid item className="formboxcol" key="school">
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
+              SCHOOL*
+            </Typography>
+            <Controller
+              name="school"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  fullWidth
+                  label="Select School"
+                  {...field}
+                  error={!!errors.school}
+                  helperText={errors.school?.message}
+                  sx={{ width: "300px", minWidth: "300px" }}
+                  disabled={schoolsLoading}
+                >
+                  <MenuItem value="" disabled>
+                    {schoolsLoading ? "Loading schools..." : "Select School"}
+                  </MenuItem>
+                  {uniqueSchools.map((school) => (
+                    <MenuItem key={school} value={school}>
+                      {school}
                     </MenuItem>
-                    {options.map((option) => (
-                      <MenuItem key={option} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                )}
-              />
-            </Grid>
-          ))}
+                  ))}
+                </TextField>
+              )}
+            />
+          </Grid>
+
+          {/* Location Dropdown */}
+          <Grid item className="formboxcol" key="location">
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
+              LOCATION*
+            </Typography>
+            <Controller
+              name="location"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  fullWidth
+                  label="Select Location"
+                  {...field}
+                  error={!!errors.location}
+                  helperText={errors.location?.message}
+                  sx={{ width: "300px", minWidth: "300px" }}
+                  disabled={!watchSchool || filteredLocations.length === 0}
+                >
+                  <MenuItem value="" disabled>
+                    {!watchSchool
+                      ? "Select a school first"
+                      : filteredLocations.length === 0
+                      ? "No locations available"
+                      : "Select Location"}
+                  </MenuItem>
+                  {filteredLocations.map((location) => (
+                    <MenuItem key={location} value={location}>
+                      {location}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Grid>
+
+          {/* Lunch Time Dropdown */}
+          <Grid item className="formboxcol" key="lunchTime">
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
+              CHILD'S LUNCH TIME*
+            </Typography>
+            <Controller
+              name="lunchTime"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  fullWidth
+                  label="Select Lunch Time"
+                  {...field}
+                  error={!!errors.lunchTime}
+                  helperText={errors.lunchTime?.message}
+                  sx={{ width: "300px", minWidth: "300px" }}
+                  disabled={!watchLocation || filteredLunchTimes.length === 0}
+                >
+                  <MenuItem value="" disabled>
+                    {!watchLocation
+                      ? "Select a location first"
+                      : filteredLunchTimes.length === 0
+                      ? "No lunch times available"
+                      : "Select Lunch Time"}
+                  </MenuItem>
+                  {filteredLunchTimes.map((time) => (
+                    <MenuItem key={time} value={time}>
+                      {time}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Grid>
+
+          {/* Class Dropdown */}
+          <Grid item className="formboxcol" key="childClass">
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
+              CHILD CLASS*
+            </Typography>
+            <Controller
+              name="childClass"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  fullWidth
+                  label="Select Class"
+                  {...field}
+                  error={!!errors.childClass}
+                  helperText={errors.childClass?.message}
+                  sx={{ width: "300px", minWidth: "300px" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select Class
+                  </MenuItem>
+                  {[
+                    "LKG",
+                    "UKG",
+                    "Grade 1",
+                    "Grade 2",
+                    "Grade 3",
+                    "Grade 4",
+                  ].map((grade) => (
+                    <MenuItem key={grade} value={grade}>
+                      {grade}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Grid>
+
+          {/* Section Dropdown */}
+          <Grid item className="formboxcol" key="section">
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
+            >
+              CHILD SECTION*
+            </Typography>
+            <Controller
+              name="section"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  fullWidth
+                  label="Select Section"
+                  {...field}
+                  error={!!errors.section}
+                  helperText={errors.section?.message}
+                  sx={{ width: "300px", minWidth: "300px" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select Section
+                  </MenuItem>
+                  {["A", "B", "C"].map((section) => (
+                    <MenuItem key={section} value={section}>
+                      {section}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Grid>
 
           {/* Allergies */}
           <Grid item className="formboxcol">
@@ -407,9 +567,9 @@ const ChildDetailsStep = ({
           <Button variant="outlined" onClick={prevStep} className="backbtn">
             <span className="nextspan">Back</span>
           </Button>
-          <Button 
-            type="submit" 
-            variant="contained" 
+          <Button
+            type="submit"
+            variant="contained"
             className="nextbtn"
             disabled={loading}
           >
