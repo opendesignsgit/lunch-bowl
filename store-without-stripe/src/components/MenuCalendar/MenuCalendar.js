@@ -12,12 +12,26 @@ import CenterPanel from "./CenterPanel";
 import RightPanel from "./RightPanel";
 import MealPlanDialog from "./MealPlanDialog";
 import useRegistration from "@hooks/useRegistration";
+import AttributeServices from "../../services/AttributeServices";
+import useAsync from "../../hooks/useAsync";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 const MenuCalendar = () => {
   const today = dayjs();
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const {
+    data,
 
+    reload,
+  } = useAsync(AttributeServices.getAllHolidays);
+  console.log("====================================");
+  console.log("data", data);
+  console.log("====================================");
   const [currentMonth, setCurrentMonth] = useState(today.month());
   const [currentYear, setCurrentYear] = useState(today.year());
   const [selectedDate, setSelectedDate] = useState(today.date());
@@ -38,6 +52,22 @@ const MenuCalendar = () => {
   const [menuData, setMenuData] = useState([]);
 
   const { submitHandler, loading } = useRegistration();
+
+  useEffect(() => {
+    if (data && Array.isArray(data) && subscriptionStart && subscriptionEnd) {
+      const apiHolidays = data
+        .map((h) => ({
+          date: dayjs(h.date).format("YYYY-MM-DD"),
+          name: h.name,
+        }))
+        .filter(
+          (h) =>
+            dayjs(h.date).isSameOrAfter(subscriptionStart, "day") &&
+            dayjs(h.date).isSameOrBefore(subscriptionEnd, "day")
+        );
+      setHolidays(apiHolidays);
+    }
+  }, [data, subscriptionStart, subscriptionEnd]);
 
   const fetchSavedMealPlans = async () => {
     try {
@@ -96,11 +126,7 @@ const MenuCalendar = () => {
           "Creamy Curry Rice",
           "Ghee Rice and Dal",
         ]);
-        setHolidays([
-          { date: "2025-05-09", name: "Mahavir Jayanti" },
-          { date: "2025-04-16", name: "Tamil New Year" },
-          { date: "2025-04-18", name: "Good Friday" },
-        ]);
+
         setSubscriptionStart(dayjs(res.data.startDate));
         setSubscriptionEnd(dayjs(res.data.endDate));
         setCurrentMonth(dayjs(res.data.startDate).month());
