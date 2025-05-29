@@ -175,6 +175,16 @@ const getAllDishes = async (req, res) => {
   }
 };
 
+
+const getAllMenuDishes = async (req, res) => {
+  try {
+    const newDish = await Dish.find({});
+    res.json(newDish);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const addDish = async (req, res) => {
   try {
     if (!req.file) {
@@ -536,4 +546,5 @@ module.exports = {
   getAllDishes,
   addDish,
   updateDish,
+  getAllMenuDishes,
 };

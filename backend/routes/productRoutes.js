@@ -23,6 +23,7 @@ const {
   getAllDishes,
   addDish,
   updateDish,
+  getAllMenuDishes,
 } = require("../controller/productController");
 
 //add a product
@@ -44,6 +45,9 @@ router.get("/store", getShowingStoreProducts);
 router.get("/", getAllProducts);
 
 router.get("/get-all-menu", getAllDishes);
+
+router.get("/get-all-menu-dishes", getAllMenuDishes);
+
 
 // Dish routes with upload middleware
 router.post("/add-dish", singleUpload, handleUploadErrors, addDish);

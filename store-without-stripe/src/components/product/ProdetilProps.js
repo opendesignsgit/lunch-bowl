@@ -3,6 +3,7 @@ import Image from "next/image";
 import Slider from "react-slick";
 import { Dialog, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import Proimgtwobiriyani from "../../../public/home/biriyani-img-two.png";
 
 const ProdetilProps = ({ open, onClose, product }) => {
   const settings = {
@@ -51,7 +52,19 @@ const ProdetilProps = ({ open, onClose, product }) => {
                   <Image
                     className="w-full h-auto m-auto"
                     priority
-                    src="/home/biriyani-img.png"
+                    unoptimized
+                    crossorigin="anonymous"
+                    src={
+                      product.image
+                        ? product.image.startsWith("http")
+                          ? product.image
+                          : `http://localhost:5055${
+                              product.image.startsWith("/")
+                                ? product.image
+                                : `/${product.image}`
+                            }`
+                        : Proimgtwobiriyani
+                    }
                     alt={product?.primaryDishTitle || "Dish Image"}
                     width={500}
                     height={500}
@@ -63,7 +76,19 @@ const ProdetilProps = ({ open, onClose, product }) => {
                   <Image
                     className="w-full h-auto m-auto"
                     priority
-                    src="/home/biriyani-img-two.png"
+                    unoptimized
+                    crossorigin="anonymous"
+                    src={
+                      product.image
+                        ? product.image.startsWith("http")
+                          ? product.image
+                          : `http://localhost:5055${
+                              product.image.startsWith("/")
+                                ? product.image
+                                : `/${product.image}`
+                            }`
+                        : Proimgtwobiriyani
+                    }
                     alt={product?.primaryDishTitle || "Dish Image"}
                     width={500}
                     height={500}

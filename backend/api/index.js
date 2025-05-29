@@ -37,10 +37,15 @@ const app = express();
 app.set("trust proxy", 1);
 
 app.use(express.json({ limit: "4mb" }));
-app.use(helmet());
+//app.use(helmet());
 app.options("*", cors()); // include before other routes
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
 //root route
 app.get("/", (req, res) => {
