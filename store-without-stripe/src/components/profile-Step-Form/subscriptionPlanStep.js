@@ -95,9 +95,7 @@ const calculatePlans = (holidays) => {
   const plans = [
     {
       id: 1,
-      label: `1 Month Plan - 30 Working Days - Rs. ${(30 * 200).toLocaleString(
-        "en-IN"
-      )}`,
+      label: `30 Working Days - Rs. ${(30 * 200).toLocaleString("en-IN")}`,
       workingDays: 30,
       price: 30 * 200,
       discount: 0,
@@ -107,11 +105,9 @@ const calculatePlans = (holidays) => {
     },
     {
       id: 3,
-      label: `3 Months Plan - 90 Working Days - Rs. ${(
-        90 *
-        200 *
-        0.95
-      ).toLocaleString("en-IN")} (5% OFF)`,
+      label: `90 Working Days - Rs. ${(90 * 200 * 0.95).toLocaleString(
+        "en-IN"
+      )} (5% OFF)`,
       workingDays: 90,
       price: Math.round(90 * 200 * 0.95),
       discount: 0.05,
@@ -121,17 +117,15 @@ const calculatePlans = (holidays) => {
     },
     {
       id: 6,
-      label: `6 Months Plan - 180 Working Days - Rs. ${(
-        180 *
-        200 *
-        0.9
-      ).toLocaleString("en-IN")} (10% OFF)`,
-      workingDays: 180,
-      price: Math.round(180 * 200 * 0.9),
+      label: `150 Working Days - Rs. ${(150 * 200 * 0.9).toLocaleString(
+        "en-IN"
+      )} (10% OFF)`,
+      workingDays: 150,
+      price: Math.round(150 * 200 * 0.9),
       discount: 0.1,
       isOneMonth: false,
       startDate,
-      endDate: calculateEndDateByWorkingDays(startDate, 180, holidays),
+      endDate: calculateEndDateByWorkingDays(startDate, 150, holidays),
     },
   ];
   return plans;
@@ -571,7 +565,7 @@ const OffersSection = () => (
       </li>
       <li>
         <Typography fontSize={14}>
-          Save <strong>10%</strong> on the 180 Working Days Plan.
+          Save <strong>10%</strong> on the 150 Working Days Plan.
         </Typography>
       </li>
     </ul>
