@@ -150,7 +150,6 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
   // Initialize plans and dates
   useEffect(() => {
     if (holidays.length >= 0) {
-      // Changed condition to work even with empty holidays array
       const computedPlans = calculatePlans(holidays);
       setPlans(computedPlans);
       setStartDate(computedPlans[0].startDate);
@@ -291,7 +290,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
               onChange={handlePlanChange}
               className="radiogroub"
             >
-              {/* Render all plans */}
+              {/* Render all plans with calculation for discounted ones */}
               {plans.map((plan) => (
                 <Box
                   key={plan.id}
@@ -336,12 +335,44 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                           ml: 1,
                         }}
                       >
-                        {plan.label}
+                        {plan.workingDays} Working Days -
+                        {plan.discount > 0 ? (
+                          <>
+                            <span
+                              style={{
+                                textDecoration: "line-through",
+                                marginLeft: 4,
+                                color:
+                                  selectedPlan === plan.id.toString()
+                                    ? "#fff"
+                                    : "inherit",
+                              }}
+                            >
+                              Rs.{" "}
+                              {(plan.workingDays * 200).toLocaleString("en-IN")}
+                            </span>
+                            <span
+                              style={{
+                                marginLeft: 4,
+                                color:
+                                  selectedPlan === plan.id.toString()
+                                    ? "#fff"
+                                    : "#FF6A00",
+                              }}
+                            >
+                              ({plan.discount * 100}% OFF) - Rs.{" "}
+                              {plan.price.toLocaleString("en-IN")}
+                            </span>
+                          </>
+                        ) : (
+                          <span style={{ marginLeft: 4 }}>
+                            Rs. {plan.price.toLocaleString("en-IN")}
+                          </span>
+                        )}
                       </Typography>
                     }
                     sx={{ flex: 1 }}
                   />
-                  {/* Show calendar icon only for 1-month plan */}
                   {plan.isOneMonth && (
                     <IconButton onClick={() => setCalendarOpen(true)}>
                       <EventIcon
