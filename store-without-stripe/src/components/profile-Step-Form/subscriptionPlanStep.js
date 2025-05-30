@@ -11,36 +11,62 @@ import {
   IconButton,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import EventIcon from "@mui/icons-material/Event";
 import dayjs from "dayjs";
 import WorkingDaysCalendar from "./WorkingDaysCalendar";
 import SubscriptionDatePicker from "./SubscriptionDatePicker";
 import { useRouter } from "next/router";
 import useRegistration from "@hooks/useRegistration";
+import AttributeServices from "../../services/AttributeServices";
+import useAsync from "../../hooks/useAsync";
 
-// Helper functions
-const calculateWorkingDays = (startDate, endDate) => {
+// Helper functions for holidays/weekends
+const useHolidays = () => {
+  const [holidays, setHolidays] = useState([]);
+  const { data } = useAsync(AttributeServices.getAllHolidays);
+  useEffect(() => {
+    if (data && Array.isArray(data)) {
+      setHolidays(data.map((h) => dayjs(h.date).format("YYYY-MM-DD")));
+    }
+  }, [data]);
+  return holidays;
+};
+
+const isWeekend = (date) => [0, 6].includes(dayjs(date).day());
+const isHoliday = (date, holidays) =>
+  holidays.includes(dayjs(date).format("YYYY-MM-DD"));
+const isWorkingDay = (date, holidays) =>
+  !isWeekend(date) && !isHoliday(date, holidays);
+
+// Calculate working days including holidays
+const calculateWorkingDays = (startDate, endDate, holidays) => {
   let count = 0;
   let current = dayjs(startDate);
   const end = dayjs(endDate);
 
   while (current.isBefore(end) || current.isSame(end, "day")) {
-    if (current.day() !== 0 && current.day() !== 6) {
+    if (isWorkingDay(current, holidays)) {
       count++;
     }
     current = current.add(1, "day");
   }
-
   return count;
 };
 
-const calculateEndDateByWorkingDays = (startDate, workingDays) => {
+// Get the end date after a given number of working days from a start date
+const calculateEndDateByWorkingDays = (startDate, workingDays, holidays) => {
   let count = 0;
   let current = dayjs(startDate);
 
+  // First, ensure we start from a working day
+  while (!isWorkingDay(current, holidays)) {
+    current = current.add(1, "day");
+  }
+
+  // Count working days
   while (count < workingDays) {
-    if (current.day() !== 0 && current.day() !== 6) {
+    if (isWorkingDay(current, holidays)) {
       count++;
     }
     if (count < workingDays) {
@@ -48,68 +74,76 @@ const calculateEndDateByWorkingDays = (startDate, workingDays) => {
     }
   }
 
+  // Ensure we land on a working day
+  while (!isWorkingDay(current, holidays)) {
+    current = current.add(1, "day");
+  }
+
   return current;
 };
 
 // Plan calculation functions
-const calculateOneMonthPlan = () => {
-  const startDate = dayjs().add(2, "day"); // Start after 48 hours
-  const endOfMonth = dayjs(startDate).endOf("month");
+const calculatePlans = (holidays) => {
+  // Start from tomorrow + 1 day (2 days from now)
+  let startDate = dayjs().add(2, "day");
 
-  let endDate = endOfMonth;
-  while (endDate.day() === 0 || endDate.day() === 6) {
-    // Skip weekends
-    endDate = endDate.subtract(1, "day");
+  // Adjust start date to the next working day if needed
+  while (!isWorkingDay(startDate, holidays)) {
+    startDate = startDate.add(1, "day");
   }
 
-  const workingDays = calculateWorkingDays(startDate, endDate);
-
-  return {
-    id: 1,
-    label: `1 Month Plan - ${workingDays} Working Days - Rs. ${(
-      workingDays * 200
-    ).toLocaleString("en-IN")}`,
-    workingDays,
-    price: workingDays * 200,
-    isOneMonth: true,
-    startDate,
-    endDate,
-  };
-};
-
-const calculateMultiMonthPlans = () => {
-  const startDate = dayjs().add(2, "day"); // Start after 48 hours for all plans
-  return [3, 6, 12].map((months) => {
-    const endOfMonth = dayjs(startDate)
-      .add(months - 1, "month")
-      .endOf("month");
-
-    let endDate = endOfMonth;
-    while (endDate.day() === 0 || endDate.day() === 6) {
-      // Skip weekends
-      endDate = endDate.subtract(1, "day");
-    }
-
-    const workingDays = calculateWorkingDays(startDate, endDate);
-
-    return {
-      id: months,
-      label: `${months} Months Plan - ${workingDays} Working Days - Rs. ${(
-        workingDays * 200
-      ).toLocaleString("en-IN")}`,
-      workingDays,
-      price: workingDays * 200,
+  const plans = [
+    {
+      id: 1,
+      label: `1 Month Plan - 30 Working Days - Rs. ${(30 * 200).toLocaleString(
+        "en-IN"
+      )}`,
+      workingDays: 30,
+      price: 30 * 200,
+      discount: 0,
+      isOneMonth: true,
+      startDate,
+      endDate: calculateEndDateByWorkingDays(startDate, 30, holidays),
+    },
+    {
+      id: 3,
+      label: `3 Months Plan - 90 Working Days - Rs. ${(
+        90 *
+        200 *
+        0.95
+      ).toLocaleString("en-IN")} (5% OFF)`,
+      workingDays: 90,
+      price: Math.round(90 * 200 * 0.95),
+      discount: 0.05,
       isOneMonth: false,
       startDate,
-      endDate,
-    };
-  });
+      endDate: calculateEndDateByWorkingDays(startDate, 90, holidays),
+    },
+    {
+      id: 6,
+      label: `6 Months Plan - 180 Working Days - Rs. ${(
+        180 *
+        200 *
+        0.9
+      ).toLocaleString("en-IN")} (10% OFF)`,
+      workingDays: 180,
+      price: Math.round(180 * 200 * 0.9),
+      discount: 0.1,
+      isOneMonth: false,
+      startDate,
+      endDate: calculateEndDateByWorkingDays(startDate, 180, holidays),
+    },
+  ];
+  return plans;
 };
 
 const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
   const router = useRouter();
+  const holidays = useHolidays();
+
+  const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState("1");
-  const [startDate, setStartDate] = useState(dayjs().add(2, "day"));
+  const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [errors, setErrors] = useState({
     startDate: false,
@@ -117,18 +151,18 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
     dateOrder: false,
   });
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [plans, setPlans] = useState([]);
   const { submitHandler, loading } = useRegistration();
 
   // Initialize plans and dates
   useEffect(() => {
-    const oneMonthPlan = calculateOneMonthPlan();
-    const multiMonthPlans = calculateMultiMonthPlans();
-
-    setPlans([oneMonthPlan, ...multiMonthPlans]);
-    setStartDate(oneMonthPlan.startDate);
-    setEndDate(oneMonthPlan.endDate);
-  }, []);
+    if (holidays.length >= 0) {
+      // Changed condition to work even with empty holidays array
+      const computedPlans = calculatePlans(holidays);
+      setPlans(computedPlans);
+      setStartDate(computedPlans[0].startDate);
+      setEndDate(computedPlans[0].endDate);
+    }
+  }, [holidays]);
 
   // Handle plan selection change
   const handlePlanChange = (e) => {
@@ -137,12 +171,12 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
     setErrors({ startDate: false, endDate: false, dateOrder: false });
 
     if (newPlanId !== "byDate") {
-      const selectedPlan = plans.find(
+      const selectedPlanObj = plans.find(
         (plan) => plan.id.toString() === newPlanId
       );
-      if (selectedPlan) {
-        setStartDate(selectedPlan.startDate);
-        setEndDate(selectedPlan.endDate);
+      if (selectedPlanObj) {
+        setStartDate(selectedPlanObj.startDate);
+        setEndDate(selectedPlanObj.endDate);
       }
     }
   };
@@ -159,7 +193,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
       if (selected) {
         const newEndDate = calculateEndDateByWorkingDays(
           newValue,
-          selected.workingDays
+          selected.workingDays,
+          holidays
         );
         setEndDate(newEndDate);
       }
@@ -171,9 +206,13 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
     setErrors({ ...errors, endDate: false, dateOrder: false });
   };
 
-  const handleNext = async () => {
-    console.log("Selected Plan:", selectedPlan);
+  // Get the currently selected plan details
+  const currentPlan =
+    selectedPlan !== "byDate"
+      ? plans.find((plan) => plan.id.toString() === selectedPlan)
+      : null;
 
+  const handleNext = async () => {
     // Validation for custom date selection
     if (selectedPlan === "byDate") {
       const newErrors = {
@@ -187,17 +226,20 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
         return;
     }
 
+    let totalWorkingDays, totalPrice;
+    if (selectedPlan !== "byDate") {
+      totalWorkingDays = currentPlan?.workingDays;
+      totalPrice = currentPlan?.price;
+    } else {
+      totalWorkingDays = calculateWorkingDays(startDate, endDate, holidays);
+      totalPrice = totalWorkingDays * 200;
+    }
+
     // Construct the payload
     const payload = {
       selectedPlan,
-      workingDays:
-        selectedPlan !== "byDate"
-          ? currentPlan?.workingDays
-          : calculateWorkingDays(startDate, endDate),
-      totalPrice:
-        selectedPlan !== "byDate"
-          ? currentPlan?.price
-          : calculateWorkingDays(startDate, endDate) * 200,
+      workingDays: totalWorkingDays,
+      totalPrice,
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
     };
@@ -208,21 +250,14 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
         path: "step-Form-SubscriptionPlan",
         _id,
       });
-      // Proceed to the next step
-      if (res.status !== 200) {
+      if (res.status === 200) {
         nextStep();
-        router.push("/menuCalendarPage"); // Redirect to the menu calendar page
+        router.push("/menuCalendarPage");
       }
     } catch (error) {
       console.error("Error during subscription plan selection:", error);
     }
   };
-
-  // Get the currently selected plan details
-  const currentPlan =
-    selectedPlan !== "byDate"
-      ? plans.find((plan) => plan.id.toString() === selectedPlan)
-      : null;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -337,6 +372,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                 errors={errors}
                 onStartDateChange={handleStartDateChange}
                 onEndDateChange={handleEndDateChange}
+                holidays={holidays}
               />
             </RadioGroup>
 
@@ -346,7 +382,11 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
 
             {/* Show details for custom date selection */}
             {selectedPlan === "byDate" && startDate && endDate && (
-              <CustomDateDetails startDate={startDate} endDate={endDate} />
+              <CustomDateDetails
+                startDate={startDate}
+                endDate={endDate}
+                holidays={holidays}
+              />
             )}
 
             {/* Show details for selected plan */}
@@ -359,6 +399,9 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                 <Typography variant="body2">
                   <strong>End Date:</strong>{" "}
                   {currentPlan.endDate.format("DD MMM YYYY")}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Total Working Days:</strong> {currentPlan.workingDays}
                 </Typography>
               </Box>
             )}
@@ -374,7 +417,6 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
             </Typography>
 
             {/* Action Buttons */}
-
             <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
               <Button variant="outlined" onClick={prevStep} className="backbtn">
                 {" "}
@@ -384,6 +426,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                 variant="contained"
                 onClick={handleNext}
                 className="nextbtn"
+                disabled={loading}
               >
                 {" "}
                 <span className="nextspan">Next</span>{" "}
@@ -401,8 +444,9 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
         workingDays={
           selectedPlan !== "byDate" && currentPlan
             ? currentPlan.workingDays
-            : calculateWorkingDays(startDate, endDate)
+            : calculateWorkingDays(startDate, endDate, holidays)
         }
+        holidays={holidays}
       />
     </LocalizationProvider>
   );
@@ -414,8 +458,9 @@ const CustomDateSelection = ({
   startDate,
   endDate,
   errors,
-  onStartDateChange, // This is handleStartDateChange from parent
-  onEndDateChange, // This is handleEndDateChange from parent
+  onStartDateChange,
+  onEndDateChange,
+  holidays,
 }) => (
   <Box
     sx={{
@@ -451,7 +496,7 @@ const CustomDateSelection = ({
     />
     {selectedPlan === "byDate" && (
       <Grid container spacing={2}>
-        {/* Start Date Picker - Fixed */}
+        {/* Start Date Picker */}
         <Grid item xs={12} sm={6}>
           <Typography variant="subtitle2" gutterBottom>
             Start Date
@@ -461,13 +506,15 @@ const CustomDateSelection = ({
             value={startDate}
             onChange={onStartDateChange}
             minDate={dayjs().add(2, "day")}
+            shouldDisableDate={(date) => !isWorkingDay(date, holidays)}
+            holidays={holidays}
           />
           {errors.startDate && (
             <FormHelperText error>Start date is required</FormHelperText>
           )}
         </Grid>
 
-        {/* End Date Picker - Fixed */}
+        {/* End Date Picker */}
         <Grid item xs={12} sm={6}>
           <Typography variant="subtitle2" gutterBottom>
             End Date
@@ -477,6 +524,8 @@ const CustomDateSelection = ({
             value={endDate}
             onChange={onEndDateChange}
             minDate={startDate || dayjs().add(2, "day")}
+            shouldDisableDate={(date) => !isWorkingDay(date, holidays)}
+            holidays={holidays}
           />
           {errors.endDate && (
             <FormHelperText error>End date is required</FormHelperText>
@@ -492,18 +541,19 @@ const CustomDateSelection = ({
   </Box>
 );
 
-const CustomDateDetails = ({ startDate, endDate }) => (
-  <Box mt={2}>
-    <Typography variant="body2">
-      <strong>Working Days:</strong> {calculateWorkingDays(startDate, endDate)}{" "}
-      days
-    </Typography>
-    <Typography variant="body2">
-      <strong>Total Price:</strong> Rs.{" "}
-      {calculateWorkingDays(startDate, endDate) * 200}
-    </Typography>
-  </Box>
-);
+const CustomDateDetails = ({ startDate, endDate, holidays }) => {
+  const days = calculateWorkingDays(startDate, endDate, holidays);
+  return (
+    <Box mt={2}>
+      <Typography variant="body2">
+        <strong>Working Days:</strong> {days} days
+      </Typography>
+      <Typography variant="body2">
+        <strong>Total Price:</strong> Rs. {(days * 200).toLocaleString("en-IN")}
+      </Typography>
+    </Box>
+  );
+};
 
 const OffersSection = () => (
   <Box mt={3}>
@@ -516,12 +566,12 @@ const OffersSection = () => (
     <ul style={{ margin: 0 }}>
       <li>
         <Typography fontSize={14}>
-          Save <strong>5%</strong> on the 150 Working Days Plan.
+          Save <strong>5%</strong> on the 90 Working Days Plan.
         </Typography>
       </li>
       <li>
         <Typography fontSize={14}>
-          Save <strong>10%</strong> on the 260 Working Days Plan.
+          Save <strong>10%</strong> on the 180 Working Days Plan.
         </Typography>
       </li>
     </ul>
