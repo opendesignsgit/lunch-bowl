@@ -689,23 +689,24 @@ const createCustomer = async ({ firstName, lastName, mobile, email }) => {
 const loginCustomer = async (mobile) => {
   try {
     const customer = await Customer.findOne({ phone: mobile });
-
+    
     if (customer) {
       const token = signInToken(customer);
-      res.send({
+
+      return {
         success: true,
         token,
         _id: customer._id,
         name: customer.name,
         email: customer.email,
-        phone: customer.mobile,
+        phone: customer.phone,
         message: "Log in successful!",
-      });
+      };
     } else {
-      res.status(401).send({
+      return {
         message: "Invalid user or password!",
         error: "Invalid user or password!",
-      });
+      };
     }
   } catch (error) {
     console.error("Error during login:", error);
