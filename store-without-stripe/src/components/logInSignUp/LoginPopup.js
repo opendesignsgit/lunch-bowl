@@ -83,11 +83,6 @@ const LoginPopup = ({ open, onClose }) => {
 
     try {
       const res = await submitHandler({ phone: mobileNumber, path: "logIn" });
-
-      console.log("====================================");
-      console.log("Full Response:", res); // Ensure the response is an object
-
-      console.log("====================================");
       setOtp(res.otp);
 
       // generateOtp();
@@ -122,15 +117,11 @@ const LoginPopup = ({ open, onClose }) => {
         phone: mobileNumber,
         path: "logIn-otp",
       });
-      console.log("====================================");
-      console.log("verifyOtp---->", res);
-      console.log("====================================");
     }
 
     if (userOtp === otp) {
       setMessage({ type: "success", text: "OTP is correct!" });
       setErrors({ ...errors, otp: "" });
-      router.push("/user/profile-Step-Form");
     } else {
       setMessage({
         type: "error",

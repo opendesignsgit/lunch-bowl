@@ -44,18 +44,23 @@ export const getDynamicAuthOptions = async () => {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        phone: { label: "Phone", type: "text" },
+        token: { label: "Token", type: "text" },
+        name: { label: "Name", type: "text" },
+        _id: { label: "User ID", type: "text" },
       },
       authorize: async (credentials) => {
-        try {
-          const userInfo = await CustomerServices.loginCustomer(credentials);
-          return userInfo;
-        } catch (error) {
-          // Handle custom error from backend
-          const message =
-            error.response?.data?.message || "Login failed! Please try again.";
-          throw new Error(message); // Propagate error to client
+        // Don't verify again, just trust the values passed!
+        if (credentials.token && credentials.email) {
+          return {
+            id: credentials._id,
+            name: credentials.name,
+            email: credentials.email,
+            phone: credentials.phone,
+            token: credentials.token,
+          };
         }
+        return null;
       },
     }),
   ];
@@ -92,7 +97,7 @@ export const getDynamicAuthOptions = async () => {
       },
       async jwt({ token, user, trigger, session }) {
         if (user) {
-          token.id = user._id;
+          token.id = user.id;
           token.name = user.name;
           token.email = user.email;
           token.address = user.address;

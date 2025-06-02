@@ -48,12 +48,34 @@ const useLoginSubmit = () => {
         // Call the sign-up API which also handles sending the email verification
 
         const res = await CustomerServices.sendOtp({mobile: phone,path})
-        console.log("Full response------>:", res);
         return res
 
       }else if(path == "signUp-otp" || path == "logIn-otp"){
         const res = await CustomerServices.verifyOtp({firstName,lastName,email,mobile: phone,otp,path})
-        return res
+        if (res.success) {
+          const loginResult = await signIn("credentials", {
+            redirect: false,
+            email: res.email, // or whatever your provider expects
+            token: res.token, // pass the JWT token from backend
+            name: res.name, // optionally any other info
+            phone: res.phone, // pass the phone number
+            _id: res._id,
+            callbackUrl: "/user/dashboard",
+          });
+
+          console.log("Login result:", loginResult);
+
+          if (loginResult?.ok) {
+            router.push(redirectUrl || "/user/dashboard");
+          } else {
+            notifyError("Login failed");
+          }
+        } else {
+          notifyError(res.message || "OTP verification failed");
+        }
+
+        setLoading(false);
+        return res;
       }else if (router.pathname === "/auth/forget-password") {
         // Call the forget password API for reset password
         const res = await CustomerServices.forgetPassword({
