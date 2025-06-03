@@ -45,7 +45,12 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
 
   const onSubmit = async(data) => {
     console.log("Form data submitted:", data);
-    const res = await submitHandler({ formData: data, path: "step-Form-ParentDetails" ,_id});
+    const res = await submitHandler({
+      formData: data,
+      step: 1,
+      path: "step-Form-ParentDetails",
+      _id,
+    });
     if(res){
       setFormData(data);
       nextStep();

@@ -189,6 +189,7 @@ const ChildDetailsStep = ({
 
       const res = await submitHandler({
         formData: children,
+        step: 2,
         path: "step-Form-ChildDetails",
         _id,
       });

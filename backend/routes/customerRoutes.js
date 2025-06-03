@@ -25,6 +25,7 @@ const {
   getMenuCalendarDate,
   saveMealPlans,
   getSavedMeals,
+  stepCheck,
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -101,5 +102,8 @@ router.post("/save-Menu-Calendar", saveMealPlans);
 
 // Add to your routes
 router.post("/get-saved-meals", getSavedMeals);
+
+router.post("/Step-Check", stepCheck);
+
 
 module.exports = router;

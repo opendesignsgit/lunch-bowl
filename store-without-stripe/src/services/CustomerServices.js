@@ -63,6 +63,10 @@ const CustomerServices = {
     return requests.post("/customer/stepForm-Register", body);
   },
 
+  checkStep: async (body) => {
+    return requests.post("/customer/Step-Check", body);
+  },
+
   getMenuCalendar: async (body) => {
     return requests.post("/customer/get-Menu-Calendar", body);
   },

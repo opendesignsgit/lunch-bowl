@@ -240,12 +240,14 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
     try {
       const res = await submitHandler({
         payload,
+        step: 3,
         path: "step-Form-SubscriptionPlan",
         _id,
       });
-      if (res.status === 200) {
+      if (res) {
+        //  router.push("/user/menuCalendarPage");
+
         nextStep();
-        router.push("/menuCalendarPage");
       }
     } catch (error) {
       console.error("Error during subscription plan selection:", error);

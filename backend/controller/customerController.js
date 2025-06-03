@@ -719,7 +719,7 @@ const loginCustomer = async (mobile) => {
 
 const stepFormRegister = async (req, res) => {
   try {
-    const { formData, path, payload, _id } = req.body;
+    const { formData, path, payload, _id, step } = req.body;
 
     // Validate required fields
     if (!_id || !path || (!formData && !payload)) {
@@ -738,11 +738,12 @@ const stepFormRegister = async (req, res) => {
       });
     }
 
-    let update = {};
+    let update = { step }; // Always update the step number
+
     if (path === "step-Form-ParentDetails") {
-      update = { parentDetails: formData };
+      update.parentDetails = formData;
     } else if (path === "step-Form-ChildDetails") {
-      update = { children: formData };
+      update.children = formData;
     } else if (path === "step-Form-SubscriptionPlan") {
       if (
         !payload ||
@@ -757,14 +758,12 @@ const stepFormRegister = async (req, res) => {
           message: "Missing required subscription plan fields",
         });
       }
-      update = {
-        subscriptionPlan: {
-          planId: payload.selectedPlan,
-          startDate: payload.startDate,
-          endDate: payload.endDate,
-          workingDays: payload.workingDays,
-          price: payload.totalPrice,
-        },
+      update.subscriptionPlan = {
+        planId: payload.selectedPlan,
+        startDate: payload.startDate,
+        endDate: payload.endDate,
+        workingDays: payload.workingDays,
+        price: payload.totalPrice,
       };
     } else {
       return res.status(400).json({
@@ -782,6 +781,34 @@ const stepFormRegister = async (req, res) => {
     res.status(200).json({ success: true, data: form });
   } catch (error) {
     console.error("Error during stepFormRegister:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+const stepCheck = async (req, res) => {
+  try {
+    const _id = req.body._id;
+
+    if (!_id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const form = await Form.findOne({ user: mongoose.Types.ObjectId(_id) });
+
+    // If form not found, return step 1 as default
+    // If found, return the form's step
+    const step = form ? form.step : 1;
+
+    res.status(200).json({ success: true, data: step });
+  } catch (error) {
+    console.error("Error in stepCheck:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -1026,4 +1053,5 @@ module.exports = {
   getMenuCalendarDate,
   saveMealPlans,
   getSavedMeals,
+  stepCheck,
 };

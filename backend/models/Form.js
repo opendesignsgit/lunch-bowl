@@ -6,6 +6,10 @@ const FormSchema = new mongoose.Schema({
     ref: "Customer", // Referencing the Customer schema
     required: true,
   },
+  step: {
+    type: Number,
+    default: 1, // Start at step 1 by default
+  },
   parentDetails: {
     fatherFirstName: { type: String, required: true },
     fatherLastName: { type: String, required: true },

@@ -60,13 +60,13 @@ const useLoginSubmit = () => {
             name: res.name, // optionally any other info
             phone: res.phone, // pass the phone number
             _id: res._id,
-            callbackUrl: "/user/dashboard",
+            callbackUrl: "/user/DataRoutingPage",
           });
 
           console.log("Login result:", loginResult);
 
           if (loginResult?.ok) {
-            router.push(redirectUrl || "/user/dashboard");
+            router.push(redirectUrl || "/user/DataRoutingPage");
           } else {
             notifyError("Login failed");
           }

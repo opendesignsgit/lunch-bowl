@@ -16,11 +16,14 @@ import AttributeServices from "../../services/AttributeServices";
 import useAsync from "../../hooks/useAsync";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { useSession } from "next-auth/react";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 const MenuCalendar = () => {
+  const { data: session } = useSession();
+
   const today = dayjs();
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -50,6 +53,7 @@ const MenuCalendar = () => {
   const [subscriptionStart, setSubscriptionStart] = useState(dayjs());
   const [subscriptionEnd, setSubscriptionEnd] = useState(dayjs());
   const [menuData, setMenuData] = useState([]);
+  const _id = session?.user?.id;
 
   const { submitHandler, loading } = useRegistration();
 
@@ -72,7 +76,7 @@ const MenuCalendar = () => {
   const fetchSavedMealPlans = async () => {
     try {
       const res = await submitHandler({
-        _id: "663fa6b9ae09bfe5c4812c2e",
+        _id: _id,
         path: "get-saved-meals",
       });
 
@@ -100,7 +104,7 @@ const MenuCalendar = () => {
   const fetchInitialData = async () => {
     try {
       const res = await submitHandler({
-        _id: "663fa6b9ae09bfe5c4812c2e",
+        _id: _id,
         path: "get-Menu-Calendar",
       });
 
@@ -210,7 +214,7 @@ const MenuCalendar = () => {
     const allMenuData = getAllMenuData();
 
     const payload = {
-      userId: "663fa6b9ae09bfe5c4812c2e", // Replace with actual user ID
+      userId: _id, // Replace with actual user ID
       children: allMenuData.map((child) => ({
         childId: child.childId,
         meals: child.meals,
@@ -220,7 +224,7 @@ const MenuCalendar = () => {
       const allMenuData = getAllMenuData();
 
       const payload = {
-        userId: "663fa6b9ae09bfe5c4812c2e", // Replace with actual user ID
+        userId: _id, // Replace with actual user ID
         children: allMenuData.map((child) => ({
           childId: child.childId,
           meals: child.meals,
@@ -228,7 +232,7 @@ const MenuCalendar = () => {
       };
 
       const res = await submitHandler({
-        _id: "663fa6b9ae09bfe5c4812c2e",
+        _id: _id,
         path: "save-meals",
         data: payload,
       });
