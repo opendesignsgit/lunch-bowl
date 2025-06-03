@@ -7,7 +7,14 @@ const useRegistration = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const submitHandler = async ({ formData, path, payload, _id, data }) => {
+  const submitHandler = async ({
+    formData,
+    step,
+    path,
+    payload,
+    _id,
+    data,
+  }) => {
     setLoading(true);
 
     try {
@@ -18,6 +25,7 @@ const useRegistration = () => {
       ) {
         const res = await CustomerServices.stepFormRegister({
           formData,
+          step,
           path,
           payload,
           _id,
@@ -33,11 +41,20 @@ const useRegistration = () => {
           data,
         });
         return res;
-      }else if (path == "get-saved-meals") {
+      } else if (path == "get-saved-meals") {
         const res = await CustomerServices.getSavedMeals({
           _id,
           path,
         });
+        return res;
+      } else if (path == "Step-Check") {
+        const res = await CustomerServices.checkStep({
+          _id,
+          path,
+        });
+        console.log("====================================");
+        console.log("Step Check Result:", res);
+        console.log("====================================");
         return res;
       }
     } catch (error) {

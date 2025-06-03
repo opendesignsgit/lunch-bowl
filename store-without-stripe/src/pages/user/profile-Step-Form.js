@@ -6,6 +6,8 @@ import Accordion from '@components/faq/Accordion';
 import ParentDetailsStep from "@components/profile-Step-Form/ParentDetailsStep";
 import ChildDetailsStep from "@components/profile-Step-Form/childDetailsStep";
 import SubscriptionPlanStep from "@components/profile-Step-Form/subscriptionPlanStep";
+import PaymentStep from "@components/profile-Step-Form/PaymentStep";
+import { useSession } from "next-auth/react";
 
 
 const StepHeader = ({ step }) => {
@@ -75,6 +77,7 @@ const StepHeader = ({ step }) => {
 };
 
 const MultiStepForm = () => {
+  const { data: session } = useSession();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     fatherFirstName: "",
@@ -86,7 +89,9 @@ const MultiStepForm = () => {
     address: "",
     children: [], // assuming an array of child objects
   });
-  const _id = "682c088bf45b8c22e4d73652";
+  const _id = session?.user?.id;
+
+  console.log("Logged in as:", session);
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
@@ -200,7 +205,11 @@ const MultiStepForm = () => {
               />
             )}
 
-            {/* Steps 3 and 4 would go here */}
+            {step === 4 && (
+            <PaymentStep
+              prevStep={prevStep}
+            />
+          )}
           </Box>
         </Box>
 
