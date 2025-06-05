@@ -16,6 +16,15 @@ import axios from "axios";
 
 const PAGE_SIZE = 10;
 
+// Helper to get today's date in yyyy-mm-dd format
+const getTodayString = () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [total, setTotal] = useState(0);
@@ -23,14 +32,17 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Search states
+  // Search/filter states
   const [childName, setChildName] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(getTodayString());
 
   const childNameRef = useRef(null);
   const dateRef = useRef(null);
 
-  // Fetch orders function (search or get all based on if filters are used)
+  // Dish summary state
+  const [dishSummary, setDishSummary] = useState([]);
+
+  // Fetch orders function
   const fetchOrders = async (
     pageNumber = 1,
     childNameVal = "",
@@ -57,17 +69,52 @@ const Orders = () => {
       const response = await axios.get(url);
       setOrders(response.data.orders || []);
       setTotal(response.data.total || 0);
+
+      // Compute dish summary for selected date
+      if (dateVal) {
+        const allOrders =
+          childNameVal || dateVal
+            ? response.data.orders || []
+            : orders;
+        const dishCountMap = {};
+        allOrders.forEach((order) => {
+          if (
+            new Date(order.date).toLocaleDateString() ===
+            new Date(dateVal).toLocaleDateString()
+          ) {
+            if (dishCountMap[order.food]) {
+              dishCountMap[order.food]++;
+            } else {
+              dishCountMap[order.food] = 1;
+            }
+          }
+        });
+        const summaryArr = Object.entries(dishCountMap).map(
+          ([dish, count]) => ({ dish, count })
+        );
+        setDishSummary(summaryArr);
+      } else {
+        setDishSummary([]);
+      }
     } catch (err) {
       setError(err.response?.data?.message || err.message);
       setOrders([]);
       setTotal(0);
+      setDishSummary([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Initial and page change effect
+  // Load today's orders on first render
   useEffect(() => {
+    fetchOrders(1, "", getTodayString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // When page changes (after initial load), keep current filters
+  useEffect(() => {
+    if (page === 1) return;
     fetchOrders(page, childName, date);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
@@ -79,13 +126,14 @@ const Orders = () => {
     fetchOrders(1, childName, date);
   };
 
-  // Reset search
+  // Reset search: clear fields, load all data and clear dish summary
   const handleReset = () => {
     setChildName("");
     setDate("");
     if (childNameRef.current) childNameRef.current.value = "";
     if (dateRef.current) dateRef.current.value = "";
     setPage(1);
+    setDishSummary([]);
     fetchOrders(1, "", "");
   };
 
@@ -141,6 +189,26 @@ const Orders = () => {
           </form>
         </CardBody>
       </Card>
+
+      {/* Dish summary cards */}
+      {date && dishSummary.length > 0 && (
+        <div className="mb-6 flex flex-wrap gap-4">
+          {dishSummary.map((item, idx) => (
+            <Card
+              key={item.dish}
+              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 xl:w-1/6 min-w-[170px] bg-gradient-to-br from-emerald-200 to-emerald-100 border border-emerald-300"
+            >
+              <CardBody className="flex flex-col items-center text-center">
+                <span className="text-xl font-semibold text-emerald-800 mb-1">{item.dish}</span>
+                <span className="text-3xl font-bold text-emerald-900">{item.count}</span>
+                <span className="text-xs text-emerald-700 mt-1">
+                  {date ? `on ${new Date(date).toLocaleDateString()}` : ""}
+                </span>
+              </CardBody>
+            </Card>
+          ))}
+        </div>
+      )}
 
       <Card className="min-w-0 shadow-xs overflow-hidden">
         <CardBody>
