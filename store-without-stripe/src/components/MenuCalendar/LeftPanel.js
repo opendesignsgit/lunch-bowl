@@ -60,7 +60,6 @@ const LeftPanel = ({
       }
     }
 
-    // Call a prop function to pass this data up
     if (onMenuDataChange) {
       onMenuDataChange(Object.values(menuData));
     }
@@ -77,26 +76,22 @@ const LeftPanel = ({
     return <Box p={2}>No child data available.</Box>;
   }
 
-  // Get the first day of the current month
-  const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
+  const firstDayOfMonth = dayjs(
+    `${currentYear}-${currentMonth + 1}-01`
+  ).startOf("day");
 
-  // Calculate the effective start date (either subscription start or first day of month, whichever is later)
   const effectiveStartDate =
-    subscriptionStart && subscriptionStart.isAfter(firstDayOfMonth)
-      ? subscriptionStart
+    subscriptionStart &&
+    subscriptionStart.startOf("day").isAfter(firstDayOfMonth)
+      ? subscriptionStart.startOf("day")
       : firstDayOfMonth;
 
-  // Generate days array only from effective start date
   const daysInMonth = firstDayOfMonth.daysInMonth();
   const daysArray = [];
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const currentDate = dayjs(formatDate(day));
-    // Using isAfter or isSame instead of isSameOrAfter
-    if (
-      currentDate.isAfter(effectiveStartDate) ||
-      currentDate.isSame(effectiveStartDate)
-    ) {
+    const currentDate = dayjs(formatDate(day)).startOf("day");
+    if (currentDate.isSameOrAfter(effectiveStartDate)) {
       daysArray.push(day);
     }
   }
@@ -168,6 +163,7 @@ const LeftPanel = ({
             const isOutOfRange =
               dayjs(dateKey).isBefore(subscriptionStart) ||
               dayjs(dateKey).isAfter(subscriptionEnd);
+            const isWithin48Hours = dayjs(dateKey).diff(dayjs(), "hour") < 48;
 
             if (!dish) return null;
 
@@ -187,12 +183,13 @@ const LeftPanel = ({
                   <Typography variant="body2" noWrap>
                     {dish}
                   </Typography>
-                  {!isOutOfRange && (
+                  {!isOutOfRange && !isWithin48Hours && (
                     <IconButton
                       className="editbtn"
                       size="small"
                       onClick={() => onEditClick(dateKey)}
                       sx={{ color: "#f97316", ml: 0.5, p: 0 }}
+                      disabled={isWithin48Hours}
                     >
                       <svg
                         width="16"
@@ -203,14 +200,14 @@ const LeftPanel = ({
                         <g clipPath="url(#clip0_1237_7420)">
                           <path
                             d="M7.33398 2.66699H2.66732C2.3137 2.66699 1.97456 2.80747 1.72451 3.05752C1.47446 3.30756 1.33398 3.6467 1.33398 4.00033V13.3337C1.33398 13.6873 1.47446 14.0264 1.72451 14.2765C1.97456 14.5265 2.3137 14.667 2.66732 14.667H12.0007C12.3543 14.667 12.6934 14.5265 12.9435 14.2765C13.1935 14.0264 13.334 13.6873 13.334 13.3337V8.66699"
-                            stroke="#FF6514"
+                            stroke={isWithin48Hours ? "#ccc" : "#FF6514"}
                             strokeWidth="1.5"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                           />
                           <path
                             d="M12.334 1.66714C12.5992 1.40193 12.9589 1.25293 13.334 1.25293C13.7091 1.25293 14.0688 1.40193 14.334 1.66714C14.5992 1.93236 14.7482 2.29207 14.7482 2.66714C14.7482 3.04222 14.5992 3.40193 14.334 3.66714L8.00065 10.0005L5.33398 10.6671L6.00065 8.00048L12.334 1.66714Z"
-                            stroke="#FF6514"
+                            stroke={isWithin48Hours ? "#ccc" : "#FF6514"}
                             strokeWidth="1.5"
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -223,6 +220,15 @@ const LeftPanel = ({
                         </defs>
                       </svg>
                     </IconButton>
+                  )}
+                  {isWithin48Hours && !isOutOfRange && (
+                    <Typography
+                      variant="caption"
+                      color="textSecondary"
+                      sx={{ ml: 1 }}
+                    >
+                      Locked
+                    </Typography>
                   )}
                 </Box>
               </Box>
