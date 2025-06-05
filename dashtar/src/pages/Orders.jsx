@@ -69,6 +69,7 @@ const Orders = () => {
       const response = await axios.get(url);
       setOrders(response.data.orders || []);
       setTotal(response.data.total || 0);
+      setDishSummary(response.data.dishSummary || []);
 
       // Compute dish summary for selected date
       if (dateVal) {

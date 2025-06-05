@@ -820,11 +820,26 @@ const searchOrders = async (req, res) => {
     }
 
     // Filter by date (exact match)
+    let dishSummary = [];
     if (date) {
       const dateStr = new Date(date).toLocaleDateString();
       orders = orders.filter(
         (order) => new Date(order.date).toLocaleDateString() === dateStr
       );
+
+      // Dish summary for this date
+      const dishCountMap = {};
+      orders.forEach((order) => {
+        if (dishCountMap[order.food]) {
+          dishCountMap[order.food]++;
+        } else {
+          dishCountMap[order.food] = 1;
+        }
+      });
+      dishSummary = Object.entries(dishCountMap).map(([dish, count]) => ({
+        dish,
+        count,
+      }));
     }
 
     // Sort by date ascending
@@ -838,6 +853,7 @@ const searchOrders = async (req, res) => {
       total: orders.length,
       page: parseInt(page),
       limit: parseInt(limit),
+      dishSummary, // <-- ADD THIS
     });
   } catch (err) {
     res.status(500).send({
