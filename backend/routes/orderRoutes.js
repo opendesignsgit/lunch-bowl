@@ -12,7 +12,11 @@ const {
   getDashboardCount,
   getDashboardAmount,
   getAllFoodOrders,
+  searchOrders,
 } = require("../controller/orderController");
+
+// Add search route here
+router.get("/search", searchOrders);
 
 //get all orders
 router.get("/", getAllOrders);
