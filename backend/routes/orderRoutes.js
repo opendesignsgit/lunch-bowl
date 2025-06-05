@@ -11,6 +11,7 @@ const {
   getBestSellerProductChart,
   getDashboardCount,
   getDashboardAmount,
+  getAllFoodOrders,
 } = require("../controller/orderController");
 
 //get all orders
@@ -42,5 +43,7 @@ router.put("/:id", updateOrder);
 
 //delete a order
 router.delete("/:id", deleteOrder);
+
+router.get("/get-all/food-order", getAllFoodOrders);
 
 module.exports = router;

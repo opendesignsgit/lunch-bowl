@@ -1,4 +1,6 @@
 const Order = require("../models/Order");
+const UserMeal = require("../models/UserMeal");
+const Form = require("../models/Form");
 
 const getAllOrders = async (req, res) => {
   const {
@@ -661,6 +663,77 @@ const getDashboardOrders = async (req, res) => {
   }
 };
 
+const getAllFoodOrders = async (req, res) => {
+  try {
+    // Fetch all user meals
+    const userMeals = await UserMeal.find({});
+
+    // Collect all userIds and childIds in meals for lookup
+    const userChildPairs = [];
+    userMeals.forEach((userMeal) => {
+      userMeal.children.forEach((childEntry) => {
+        userChildPairs.push({
+          userId: userMeal.userId.toString(),
+          childId: childEntry.childId.toString(),
+        });
+      });
+    });
+
+    // Fetch all relevant forms in one query
+    const userIds = [...new Set(userChildPairs.map((pair) => pair.userId))];
+    const forms = await Form.find({ user: { $in: userIds } }).lean();
+
+    // Helper: Map userId -> childId -> childDetail
+    const userChildDetailsMap = {};
+    forms.forEach((form) => {
+      const userId = form.user.toString();
+      if (!userChildDetailsMap[userId]) userChildDetailsMap[userId] = {};
+      form.children.forEach((child) => {
+        userChildDetailsMap[userId][child._id.toString()] = child;
+      });
+    });
+
+    // Today's date at midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Flatten and enrich all orders
+    let orders = [];
+    userMeals.forEach((userMeal) => {
+      const userId = userMeal.userId.toString();
+      userMeal.children.forEach((childEntry) => {
+        const childId = childEntry.childId.toString();
+        const childDetails = userChildDetailsMap[userId]?.[childId];
+        childEntry.meals.forEach((meal) => {
+          // Only future or today
+          if (new Date(meal.mealDate) >= today) {
+            orders.push({
+              childId,
+              date: meal.mealDate,
+              food: meal.mealName,
+              // Enriched details
+              childFirstName: childDetails?.childFirstName || "",
+              childLastName: childDetails?.childLastName || "",
+              school: childDetails?.school || "",
+              lunchTime: childDetails?.lunchTime || "",
+              location: childDetails?.location || "",
+            });
+          }
+        });
+      });
+    });
+
+    // Sort by date ascending
+    orders.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
@@ -672,4 +745,5 @@ module.exports = {
   getDashboardRecentOrder,
   getDashboardCount,
   getDashboardAmount,
+  getAllFoodOrders,
 };
