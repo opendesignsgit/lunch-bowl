@@ -30,6 +30,31 @@ const OrderServices = {
     );
   },
 
+  getAllFoodOrders: async ({ page = 1, limit = 10, headers } = {}) => {
+    return requests.get(
+      `/orders/get-all/food-order?page=${page}&limit=${limit}`,
+      null,
+      headers
+    );
+  },
+
+  searchOrders: async ({
+    childName = "",
+    date = "",
+    page = 1,
+    limit = 10,
+    headers,
+  } = {}) => {
+    // Build query string only with supplied params
+    const params = new URLSearchParams();
+    params.append("page", page);
+    params.append("limit", limit);
+    if (childName) params.append("childName", childName);
+    if (date) params.append("date", date);
+
+    return requests.get(`/orders/search?${params.toString()}`, null, headers);
+  },
+
   getAllOrdersTwo: async ({ invoice, body, headers }) => {
     const searchInvoice = invoice !== null ? invoice : "";
     return requests.get(`/orders/all?invoice=${searchInvoice}`, body, headers);

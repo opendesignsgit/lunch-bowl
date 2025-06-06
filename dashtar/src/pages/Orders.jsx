@@ -12,7 +12,7 @@ import {
   Input,
 } from "@windmill/react-ui";
 import PageTitle from "@/components/Typography/PageTitle";
-import axios from "axios";
+import OrderServices from "@/services/OrderServices";
 
 const PAGE_SIZE = 10;
 
@@ -51,32 +51,32 @@ const Orders = () => {
     setLoading(true);
     setError(null);
     try {
-      let url;
-      const params = new URLSearchParams({
-        page: pageNumber,
-        limit: PAGE_SIZE,
-      });
-      if (childNameVal) params.append("childName", childNameVal);
-      if (dateVal) params.append("date", dateVal);
-
-      // Use search API if filters applied, else use get-all API
+      let data;
       if (childNameVal || dateVal) {
-        url = `http://localhost:5055/api/orders/search?${params.toString()}`;
+        // Use the new searchOrders method
+        const res = await OrderServices.searchOrders({
+          childName: childNameVal,
+          date: dateVal,
+          page: pageNumber,
+          limit: PAGE_SIZE,
+        });
+        data = res;
       } else {
-        url = `http://localhost:5055/api/orders/get-all/food-order?${params.toString()}`;
+        // Use the new getAllFoodOrders method
+        const res = await OrderServices.getAllFoodOrders({
+          page: pageNumber,
+          limit: PAGE_SIZE,
+        });
+        data = res;
       }
 
-      const response = await axios.get(url);
-      setOrders(response.data.orders || []);
-      setTotal(response.data.total || 0);
-      setDishSummary(response.data.dishSummary || []);
+      setOrders(data.orders || []);
+      setTotal(data.total || 0);
+      setDishSummary(data.dishSummary || []);
 
       // Compute dish summary for selected date
       if (dateVal) {
-        const allOrders =
-          childNameVal || dateVal
-            ? response.data.orders || []
-            : orders;
+        const allOrders = childNameVal || dateVal ? data.orders || [] : orders;
         const dishCountMap = {};
         allOrders.forEach((order) => {
           if (
@@ -200,8 +200,12 @@ const Orders = () => {
               className="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 xl:w-1/6 min-w-[170px] bg-gradient-to-br from-emerald-200 to-emerald-100 border border-emerald-300"
             >
               <CardBody className="flex flex-col items-center text-center">
-                <span className="text-xl font-semibold text-emerald-800 mb-1">{item.dish}</span>
-                <span className="text-3xl font-bold text-emerald-900">{item.count}</span>
+                <span className="text-xl font-semibold text-emerald-800 mb-1">
+                  {item.dish}
+                </span>
+                <span className="text-3xl font-bold text-emerald-900">
+                  {item.count}
+                </span>
                 <span className="text-xs text-emerald-700 mt-1">
                   {date ? `on ${new Date(date).toLocaleDateString()}` : ""}
                 </span>
