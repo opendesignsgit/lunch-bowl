@@ -1,4 +1,6 @@
 const Order = require("../models/Order");
+const UserMeal = require("../models/UserMeal");
+const Form = require("../models/Form");
 
 const getAllOrders = async (req, res) => {
   const {
@@ -661,6 +663,205 @@ const getDashboardOrders = async (req, res) => {
   }
 };
 
+const getAllFoodOrders = async (req, res) => {
+  try {
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Fetch all user meals
+    const userMeals = await UserMeal.find({});
+
+    // Collect all userIds and childIds in meals for lookup
+    const userChildPairs = [];
+    userMeals.forEach((userMeal) => {
+      userMeal.children.forEach((childEntry) => {
+        userChildPairs.push({
+          userId: userMeal.userId.toString(),
+          childId: childEntry.childId.toString(),
+        });
+      });
+    });
+
+    // Fetch all relevant forms in one query
+    const userIds = [...new Set(userChildPairs.map((pair) => pair.userId))];
+    const forms = await Form.find({ user: { $in: userIds } }).lean();
+
+    // Helper: Map userId -> childId -> childDetail
+    const userChildDetailsMap = {};
+    forms.forEach((form) => {
+      const userId = form.user.toString();
+      if (!userChildDetailsMap[userId]) userChildDetailsMap[userId] = {};
+      form.children.forEach((child) => {
+        userChildDetailsMap[userId][child._id.toString()] = child;
+      });
+    });
+
+    // Today's date at midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Flatten and enrich all orders
+    let orders = [];
+    userMeals.forEach((userMeal) => {
+      const userId = userMeal.userId.toString();
+      userMeal.children.forEach((childEntry) => {
+        const childId = childEntry.childId.toString();
+        const childDetails = userChildDetailsMap[userId]?.[childId];
+        childEntry.meals.forEach((meal) => {
+          // Only future or today
+          if (new Date(meal.mealDate) >= today) {
+            orders.push({
+              childId,
+              date: meal.mealDate,
+              food: meal.mealName,
+              // Enriched details
+              childFirstName: childDetails?.childFirstName || "",
+              childLastName: childDetails?.childLastName || "",
+              school: childDetails?.school || "",
+              lunchTime: childDetails?.lunchTime || "",
+              location: childDetails?.location || "",
+            });
+          }
+        });
+      });
+    });
+
+    // Sort by date ascending
+    orders.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Paginate
+    const paginatedOrders = orders.slice(skip, skip + limit);
+
+    res.status(200).json({
+      orders: paginatedOrders,
+      total: orders.length,
+      page,
+      limit,
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+};
+
+// ADD THIS FUNCTION TO THIS FILE
+const searchOrders = async (req, res) => {
+  try {
+    const { childName = "", date = "", page = 1, limit = 10 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    // Fetch all user meals
+    const userMeals = await UserMeal.find({});
+
+    // Collect all userIds and childIds in meals for lookup
+    const userChildPairs = [];
+    userMeals.forEach((userMeal) => {
+      userMeal.children.forEach((childEntry) => {
+        userChildPairs.push({
+          userId: userMeal.userId.toString(),
+          childId: childEntry.childId.toString(),
+        });
+      });
+    });
+
+    // Fetch all relevant forms in one query
+    const userIds = [...new Set(userChildPairs.map((pair) => pair.userId))];
+    const forms = await Form.find({ user: { $in: userIds } }).lean();
+
+    // Helper: Map userId -> childId -> childDetail
+    const userChildDetailsMap = {};
+    forms.forEach((form) => {
+      const userId = form.user.toString();
+      if (!userChildDetailsMap[userId]) userChildDetailsMap[userId] = {};
+      form.children.forEach((child) => {
+        userChildDetailsMap[userId][child._id.toString()] = child;
+      });
+    });
+
+    // Today's date at midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Flatten and enrich all orders
+    let orders = [];
+    userMeals.forEach((userMeal) => {
+      const userId = userMeal.userId.toString();
+      userMeal.children.forEach((childEntry) => {
+        const childId = childEntry.childId.toString();
+        const childDetails = userChildDetailsMap[userId]?.[childId];
+        childEntry.meals.forEach((meal) => {
+          if (new Date(meal.mealDate) >= today) {
+            orders.push({
+              childId,
+              date: meal.mealDate,
+              food: meal.mealName,
+              childFirstName: childDetails?.childFirstName || "",
+              childLastName: childDetails?.childLastName || "",
+              school: childDetails?.school || "",
+              lunchTime: childDetails?.lunchTime || "",
+              location: childDetails?.location || "",
+            });
+          }
+        });
+      });
+    });
+
+    // Filter by child name (case insensitive contains)
+    if (childName) {
+      const lowerChildName = childName.toLowerCase();
+      orders = orders.filter((order) =>
+        (order.childFirstName + " " + order.childLastName)
+          .toLowerCase()
+          .includes(lowerChildName)
+      );
+    }
+
+    // Filter by date (exact match)
+    let dishSummary = [];
+    if (date) {
+      const dateStr = new Date(date).toLocaleDateString();
+      orders = orders.filter(
+        (order) => new Date(order.date).toLocaleDateString() === dateStr
+      );
+
+      // Dish summary for this date
+      const dishCountMap = {};
+      orders.forEach((order) => {
+        if (dishCountMap[order.food]) {
+          dishCountMap[order.food]++;
+        } else {
+          dishCountMap[order.food] = 1;
+        }
+      });
+      dishSummary = Object.entries(dishCountMap).map(([dish, count]) => ({
+        dish,
+        count,
+      }));
+    }
+
+    // Sort by date ascending
+    orders.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Paginate
+    const paginatedOrders = orders.slice(skip, skip + parseInt(limit));
+
+    res.status(200).json({
+      orders: paginatedOrders,
+      total: orders.length,
+      page: parseInt(page),
+      limit: parseInt(limit),
+      dishSummary, // <-- ADD THIS
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
@@ -672,4 +873,6 @@ module.exports = {
   getDashboardRecentOrder,
   getDashboardCount,
   getDashboardAmount,
+  getAllFoodOrders,
+  searchOrders,
 };

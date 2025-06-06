@@ -11,7 +11,12 @@ const {
   getBestSellerProductChart,
   getDashboardCount,
   getDashboardAmount,
+  getAllFoodOrders,
+  searchOrders,
 } = require("../controller/orderController");
+
+// Add search route here
+router.get("/search", searchOrders);
 
 //get all orders
 router.get("/", getAllOrders);
@@ -42,5 +47,7 @@ router.put("/:id", updateOrder);
 
 //delete a order
 router.delete("/:id", deleteOrder);
+
+router.get("/get-all/food-order", getAllFoodOrders);
 
 module.exports = router;

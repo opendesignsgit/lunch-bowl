@@ -1,332 +1,295 @@
+import React, { useEffect, useState, useRef } from "react";
 import {
-  Button,
   Card,
   CardBody,
-  Input,
-  Label,
-  Pagination,
-  Select,
   Table,
-  TableCell,
   TableContainer,
-  TableFooter,
   TableHeader,
+  TableCell,
+  TableBody,
+  TableRow,
+  Button,
+  Input,
 } from "@windmill/react-ui";
-import { useContext, useState } from "react";
-import { IoCloudDownloadOutline } from "react-icons/io5";
-import { useTranslation } from "react-i18next";
-import exportFromJSON from "export-from-json";
-
-//internal import
-import { notifyError } from "@/utils/toast";
-import useAsync from "@/hooks/useAsync";
-import useFilter from "@/hooks/useFilter";
-import OrderServices from "@/services/OrderServices";
-import NotFound from "@/components/table/NotFound";
 import PageTitle from "@/components/Typography/PageTitle";
-import { SidebarContext } from "@/context/SidebarContext";
-import OrderTable from "@/components/order/OrderTable";
-import TableLoading from "@/components/preloader/TableLoading";
-import spinnerLoadingImage from "@/assets/img/spinner.gif";
-import useUtilsFunction from "@/hooks/useUtilsFunction";
-import AnimatedContent from "@/components/common/AnimatedContent";
+import OrderServices from "@/services/OrderServices";
+
+const PAGE_SIZE = 10;
+
+// Helper to get today's date in yyyy-mm-dd format
+const getTodayString = () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+};
 
 const Orders = () => {
-  const {
-    time,
-    setTime,
-    status,
-    endDate,
-    setStatus,
-    setEndDate,
-    startDate,
-    currentPage,
-    searchText,
-    searchRef,
-    method,
-    setMethod,
-    setStartDate,
-    setSearchText,
-    handleChangePage,
-    handleSubmitForAll,
-    resultsPerPage,
-  } = useContext(SidebarContext);
+  const [orders, setOrders] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { t } = useTranslation();
+  // Search/filter states
+  const [childName, setChildName] = useState("");
+  const [date, setDate] = useState(getTodayString());
 
-  const [loadingExport, setLoadingExport] = useState(false);
+  const childNameRef = useRef(null);
+  const dateRef = useRef(null);
 
-  const { data, loading, error } = useAsync(() =>
-    OrderServices.getAllOrders({
-      day: time,
-      method: method,
-      status: status,
-      page: currentPage,
-      endDate: endDate,
-      startDate: startDate,
-      limit: resultsPerPage,
-      customerName: searchText,
-    })
-  );
+  // Dish summary state
+  const [dishSummary, setDishSummary] = useState([]);
 
-  const { currency, getNumber, getNumberTwo } = useUtilsFunction();
-
-  const { dataTable, serviceData } = useFilter(data?.orders);
-
-  const handleDownloadOrders = async () => {
+  // Fetch orders function
+  const fetchOrders = async (
+    pageNumber = 1,
+    childNameVal = "",
+    dateVal = ""
+  ) => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoadingExport(true);
-      const res = await OrderServices.getAllOrders({
-        page: 1,
-        day: time,
-        method: method,
-        status: status,
-        endDate: endDate,
-        download: true,
-        startDate: startDate,
-        limit: data?.totalDoc,
-        customerName: searchText,
-      });
+      let data;
+      if (childNameVal || dateVal) {
+        // Use the new searchOrders method
+        const res = await OrderServices.searchOrders({
+          childName: childNameVal,
+          date: dateVal,
+          page: pageNumber,
+          limit: PAGE_SIZE,
+        });
+        data = res;
+      } else {
+        // Use the new getAllFoodOrders method
+        const res = await OrderServices.getAllFoodOrders({
+          page: pageNumber,
+          limit: PAGE_SIZE,
+        });
+        data = res;
+      }
 
-      // console.log("handleDownloadOrders", res);
-      const exportData = res?.orders?.map((order) => {
-        return {
-          _id: order._id,
-          invoice: order.invoice,
-          subTotal: getNumberTwo(order.subTotal),
-          shippingCost: getNumberTwo(order.shippingCost),
-          discount: getNumberTwo(order?.discount),
-          total: getNumberTwo(order.total),
-          paymentMethod: order.paymentMethod,
-          status: order.status,
-          user_info: order?.user_info?.name,
-          createdAt: order.createdAt,
-          updatedAt: order.updatedAt,
-        };
-      });
-      // console.log("exportData", exportData);
+      setOrders(data.orders || []);
+      setTotal(data.total || 0);
+      setDishSummary(data.dishSummary || []);
 
-      exportFromJSON({
-        data: exportData,
-        fileName: "orders",
-        exportType: exportFromJSON.types.csv,
-      });
-      setLoadingExport(false);
+      // Compute dish summary for selected date
+      if (dateVal) {
+        const allOrders = childNameVal || dateVal ? data.orders || [] : orders;
+        const dishCountMap = {};
+        allOrders.forEach((order) => {
+          if (
+            new Date(order.date).toLocaleDateString() ===
+            new Date(dateVal).toLocaleDateString()
+          ) {
+            if (dishCountMap[order.food]) {
+              dishCountMap[order.food]++;
+            } else {
+              dishCountMap[order.food] = 1;
+            }
+          }
+        });
+        const summaryArr = Object.entries(dishCountMap).map(
+          ([dish, count]) => ({ dish, count })
+        );
+        setDishSummary(summaryArr);
+      } else {
+        setDishSummary([]);
+      }
     } catch (err) {
-      setLoadingExport(false);
-      // console.log("err on orders download", err);
-      notifyError(err?.response?.data?.message || err?.message);
+      setError(err.response?.data?.message || err.message);
+      setOrders([]);
+      setTotal(0);
+      setDishSummary([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // handle reset field
-  const handleResetField = () => {
-    setTime("");
-    setMethod("");
-    setStatus("");
-    setEndDate("");
-    setStartDate("");
-    setSearchText("");
-    searchRef.current.value = "";
+  // Load today's orders on first render
+  useEffect(() => {
+    fetchOrders(1, "", getTodayString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // When page changes (after initial load), keep current filters
+  useEffect(() => {
+    if (page === 1) return;
+    fetchOrders(page, childName, date);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  // Search handler
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1);
+    fetchOrders(1, childName, date);
   };
-  // console.log("data in orders page", data);
+
+  // Reset search: clear fields, load all data and clear dish summary
+  const handleReset = () => {
+    setChildName("");
+    setDate("");
+    if (childNameRef.current) childNameRef.current.value = "";
+    if (dateRef.current) dateRef.current.value = "";
+    setPage(1);
+    setDishSummary([]);
+    fetchOrders(1, "", "");
+  };
+
+  const pageCount = Math.ceil((total || 0) / PAGE_SIZE);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <>
-      <PageTitle>{t("Orders")}</PageTitle>
+    <div>
+      <PageTitle>Orders</PageTitle>
 
-      <AnimatedContent>
-        <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 mb-5">
-          <CardBody>
-            <form onSubmit={handleSubmitForAll}>
-              <div className="grid gap-4 lg:gap-4 xl:gap-6 md:gap-2 md:grid-cols-5 py-2">
-                <div>
-                  <Input
-                    ref={searchRef}
-                    type="search"
-                    name="search"
-                    placeholder="Search by Customer Name"
-                  />
-                </div>
-
-                <div>
-                  <Select onChange={(e) => setStatus(e.target.value)}>
-                    <option value="Status" defaultValue hidden>
-                      {t("Status")}
-                    </option>
-                    <option value="Delivered">{t("PageOrderDelivered")}</option>
-                    <option value="Pending">{t("PageOrderPending")}</option>
-                    <option value="Processing">
-                      {t("PageOrderProcessing")}
-                    </option>
-                    <option value="Cancel">{t("OrderCancel")}</option>
-                  </Select>
-                </div>
-
-                <div>
-                  <Select onChange={(e) => setTime(e.target.value)}>
-                    <option value="Order limits" defaultValue hidden>
-                      {t("Orderlimits")}
-                    </option>
-                    <option value="5">{t("DaysOrders5")}</option>
-                    <option value="7">{t("DaysOrders7")}</option>
-                    <option value="15">{t("DaysOrders15")}</option>
-                    <option value="30">{t("DaysOrders30")}</option>
-                  </Select>
-                </div>
-                <div>
-                  <Select onChange={(e) => setMethod(e.target.value)}>
-                    <option value="Method" defaultValue hidden>
-                      {t("Method")}
-                    </option>
-
-                    <option value="Cash">{t("Cash")}</option>
-                    <option value="Card">{t("Card")}</option>
-                    <option value="Credit">{t("Credit")}</option>
-                  </Select>
-                </div>
-                <div>
-                  {loadingExport ? (
-                    <Button
-                      disabled={true}
-                      type="button"
-                      className="h-12 w-full"
-                    >
-                      <img
-                        src={spinnerLoadingImage}
-                        alt="Loading"
-                        width={20}
-                        height={10}
-                      />{" "}
-                      <span className="font-serif ml-2 font-light">
-                        Processing
-                      </span>
-                    </Button>
-                  ) : (
-                    <button
-                      onClick={handleDownloadOrders}
-                      disabled={data?.orders?.length <= 0 || loadingExport}
-                      type="button"
-                      className={`${
-                        (data?.orders?.length <= 0 || loadingExport) &&
-                        "opacity-50 cursor-not-allowed bg-emerald-600"
-                      } flex items-center justify-center text-sm leading-5 h-12 w-full text-center transition-colors duration-150 font-medium px-6 py-2 rounded-md text-white bg-emerald-500 border border-transparent active:bg-emerald-600 hover:bg-emerald-600 `}
-                    >
-                      Download All Orders
-                      <span className="ml-2 text-base">
-                        <IoCloudDownloadOutline />
-                      </span>
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid gap-4 lg:gap-6 xl:gap-6 lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 py-2">
-                <div>
-                  <Label>Start Date</Label>
-                  <Input
-                    type="date"
-                    name="startDate"
-                    onChange={(e) => setStartDate(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <Label>End Date</Label>
-                  <Input
-                    type="date"
-                    name="startDate"
-                    onChange={(e) => setEndDate(e.target.value)}
-                  />
-                </div>
-                <div className="mt-2 md:mt-0 flex items-center xl:gap-x-4 gap-x-1 flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
-                  <div className="w-full mx-1">
-                    <Label style={{ visibility: "hidden" }}>Filter</Label>
-                    <Button
-                      type="submit"
-                      className="h-12 w-full bg-emerald-700"
-                    >
-                      Filter
-                    </Button>
-                  </div>
-
-                  <div className="w-full">
-                    <Label style={{ visibility: "hidden" }}>Reset</Label>
-                    <Button
-                      layout="outline"
-                      onClick={handleResetField}
-                      type="reset"
-                      className="px-4 md:py-1 py-3 text-sm dark:bg-gray-700"
-                    >
-                      <span className="text-black dark:text-gray-200">
-                        Reset
-                      </span>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-      </AnimatedContent>
-      {data?.methodTotals?.length > 0 && (
-        <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 rounded-t-lg rounded-0 mb-4">
-          <CardBody>
-            <div className="flex gap-1">
-              {data?.methodTotals?.map((el, i) => (
-                <div key={i + 1} className="dark:text-gray-300">
-                  {el?.method && (
-                    <>
-                      <span className="font-medium"> {el.method}</span> :{" "}
-                      <span className="font-semibold mr-2">
-                        {currency}
-                        {getNumber(el.total)}
-                      </span>
-                    </>
-                  )}
-                </div>
-              ))}
+      <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 mb-5">
+        <CardBody>
+          <form
+            onSubmit={handleSearch}
+            className="py-3 grid gap-4 lg:gap-6 xl:gap-6 md:flex xl:flex"
+          >
+            <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              <Input
+                ref={childNameRef}
+                type="search"
+                name="childName"
+                value={childName}
+                onChange={(e) => setChildName(e.target.value)}
+                placeholder="Search by Child Name"
+                className="mb-2"
+              />
             </div>
-          </CardBody>
-        </Card>
+            <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              <Input
+                ref={dateRef}
+                type="date"
+                name="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="mb-2"
+              />
+            </div>
+            <div className="flex items-center gap-2 flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              <Button type="submit" className="h-12 w-full bg-emerald-700">
+                Filter
+              </Button>
+              <Button
+                layout="outline"
+                onClick={handleReset}
+                type="reset"
+                className="px-4 md:py-1 py-2 h-12 text-sm dark:bg-gray-700"
+              >
+                <span className="text-black dark:text-gray-200">Reset</span>
+              </Button>
+            </div>
+          </form>
+        </CardBody>
+      </Card>
+
+      {/* Dish summary cards */}
+      {date && dishSummary.length > 0 && (
+        <div className="mb-6 flex flex-wrap gap-4">
+          {dishSummary.map((item, idx) => (
+            <Card
+              key={item.dish}
+              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 xl:w-1/6 min-w-[170px] bg-gradient-to-br from-emerald-200 to-emerald-100 border border-emerald-300"
+            >
+              <CardBody className="flex flex-col items-center text-center">
+                <span className="text-xl font-semibold text-emerald-800 mb-1">
+                  {item.dish}
+                </span>
+                <span className="text-3xl font-bold text-emerald-900">
+                  {item.count}
+                </span>
+                <span className="text-xs text-emerald-700 mt-1">
+                  {date ? `on ${new Date(date).toLocaleDateString()}` : ""}
+                </span>
+              </CardBody>
+            </Card>
+          ))}
+        </div>
       )}
 
-      {loading ? (
-        <TableLoading row={12} col={7} width={160} height={20} />
-      ) : error ? (
-        <span className="text-center mx-auto text-red-500">{error}</span>
-      ) : serviceData?.length !== 0 ? (
-        <TableContainer className="mb-8 dark:bg-gray-900">
-          <Table>
-            <TableHeader>
-              <tr>
-                <TableCell>{t("InvoiceNo")}</TableCell>
-                <TableCell>{t("TimeTbl")}</TableCell>
-                <TableCell>{t("CustomerName")}</TableCell>
-                <TableCell>{t("MethodTbl")}</TableCell>
-                <TableCell>{t("AmountTbl")}</TableCell>
-                <TableCell>{t("OderStatusTbl")}</TableCell>
-                <TableCell>{t("ActionTbl")}</TableCell>
-                <TableCell className="text-right">{t("InvoiceTbl")}</TableCell>
-              </tr>
-            </TableHeader>
+      <Card className="min-w-0 shadow-xs overflow-hidden">
+        <CardBody>
+          {Array.isArray(orders) && orders.length === 0 ? (
+            <p>No orders found.</p>
+          ) : (
+            <TableContainer>
+              <Table>
+                <TableHeader>
+                  <tr>
+                    <TableCell>#</TableCell>
+                    <TableCell>Child Name</TableCell>
+                    <TableCell>School</TableCell>
+                    <TableCell>Lunch Time</TableCell>
+                    <TableCell>Location</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Food</TableCell>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {orders.map((order, idx) => (
+                    <TableRow key={order.childId + order.date + order.food}>
+                      <TableCell>{(page - 1) * PAGE_SIZE + idx + 1}</TableCell>
+                      <TableCell>
+                        {order.childFirstName} {order.childLastName}
+                      </TableCell>
+                      <TableCell>{order.school}</TableCell>
+                      <TableCell>{order.lunchTime}</TableCell>
+                      <TableCell>{order.location}</TableCell>
+                      <TableCell>
+                        {order.date
+                          ? new Date(order.date).toLocaleDateString()
+                          : ""}
+                      </TableCell>
+                      <TableCell>{order.food}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
 
-            <OrderTable orders={dataTable} />
-          </Table>
-
-          <TableFooter>
-            <Pagination
-              totalResults={data?.totalDoc}
-              resultsPerPage={resultsPerPage}
-              onChange={handleChangePage}
-              label="Table navigation"
-            />
-          </TableFooter>
-        </TableContainer>
-      ) : (
-        <NotFound title="Sorry, There are no orders right now." />
-      )}
-    </>
+          {/* Pagination Controls */}
+          {total > 0 && (
+            <div
+              style={{
+                marginTop: "1em",
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                layout="outline"
+                size="small"
+                onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                disabled={page === 1}
+              >
+                Prev
+              </Button>
+              <span style={{ margin: "0 1em" }}>
+                Page {page} of {pageCount}
+              </span>
+              <Button
+                layout="outline"
+                size="small"
+                onClick={() => setPage((p) => Math.min(p + 1, pageCount))}
+                disabled={page === pageCount}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </CardBody>
+      </Card>
+    </div>
   );
 };
 
