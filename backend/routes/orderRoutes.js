@@ -13,6 +13,7 @@ const {
   getDashboardAmount,
   getAllFoodOrders,
   searchOrders,
+  userSubscription,
 } = require("../controller/orderController");
 
 // Add search route here
@@ -49,5 +50,7 @@ router.put("/:id", updateOrder);
 router.delete("/:id", deleteOrder);
 
 router.get("/get-all/food-order", getAllFoodOrders);
+
+router.get("/get-All/user-Subscription", userSubscription);
 
 module.exports = router;

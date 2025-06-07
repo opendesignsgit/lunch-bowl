@@ -47,6 +47,11 @@ const FormSchema = new mongoose.Schema({
     workingDays: { type: Number, required: true },
     price: { type: Number, required: true },
   },
+  paymentStatus: {
+    type: Boolean,
+    default: false, // false = not paid, true = paid
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Form", FormSchema);

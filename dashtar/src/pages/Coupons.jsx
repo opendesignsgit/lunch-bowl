@@ -1,246 +1,262 @@
+import React, { useEffect, useState, useRef } from "react";
 import {
-  Button,
   Card,
   CardBody,
-  Input,
-  Pagination,
   Table,
-  TableCell,
   TableContainer,
-  TableFooter,
   TableHeader,
+  TableCell,
+  TableBody,
+  TableRow,
+  Button,
+  Input,
 } from "@windmill/react-ui";
-import { useContext, useState } from "react";
-import { FiEdit, FiPlus, FiTrash2 } from "react-icons/fi";
-import { useTranslation } from "react-i18next";
-
-//internal import
-import { SidebarContext } from "@/context/SidebarContext";
-import CouponServices from "@/services/CouponServices";
-import useAsync from "@/hooks/useAsync";
-import useToggleDrawer from "@/hooks/useToggleDrawer";
-import useFilter from "@/hooks/useFilter";
 import PageTitle from "@/components/Typography/PageTitle";
-import DeleteModal from "@/components/modal/DeleteModal";
-import BulkActionDrawer from "@/components/drawer/BulkActionDrawer";
-import MainDrawer from "@/components/drawer/MainDrawer";
-import CouponDrawer from "@/components/drawer/CouponDrawer";
-import TableLoading from "@/components/preloader/TableLoading";
-import CheckBox from "@/components/form/others/CheckBox";
-import CouponTable from "@/components/coupon/CouponTable";
-import NotFound from "@/components/table/NotFound";
-import UploadMany from "@/components/common/UploadMany";
-import AnimatedContent from "@/components/common/AnimatedContent";
+import axios from "axios";
 
-const Coupons = () => {
-  const { t } = useTranslation();
-  const { toggleDrawer, lang } = useContext(SidebarContext);
-  const { data, loading, error } = useAsync(CouponServices.getAllCoupons);
-  // console.log('data',data)
-  const [isCheckAll, setIsCheckAll] = useState(false);
-  const [isCheck, setIsCheck] = useState([]);
+const PAGE_SIZE = 10;
 
-  const { allId, serviceId, handleDeleteMany, handleUpdateMany } =
-    useToggleDrawer();
+const SubscriptionTable = () => {
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const {
-    filename,
-    isDisabled,
-    couponRef,
-    dataTable,
-    serviceData,
-    totalResults,
-    resultsPerPage,
-    handleChangePage,
-    handleSelectFile,
-    setSearchCoupon,
-    handleSubmitCoupon,
-    handleUploadMultiple,
-    handleRemoveSelectFile,
-  } = useFilter(data);
+  // Filter states
+  const [fatherName, setFatherName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleSelectAll = () => {
-    setIsCheckAll(!isCheckAll);
-    setIsCheck(data?.map((li) => li._id));
-    if (isCheckAll) {
-      setIsCheck([]);
+  const fatherNameRef = useRef(null);
+  const mobileRef = useRef(null);
+  const emailRef = useRef(null);
+
+  // Fetch subscriptions from backend with pagination and filters
+  const fetchSubscriptions = async (
+    pageNumber = 1,
+    fatherNameVal = "",
+    mobileVal = "",
+    emailVal = ""
+  ) => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Backend should accept these as query params
+      const res = await axios.get(
+        "http://localhost:5055/api/orders/get-All/user-Subscription",
+        {
+          params: {
+            page: pageNumber,
+            limit: PAGE_SIZE,
+            fatherName: fatherNameVal,
+            mobile: mobileVal,
+            email: emailVal,
+          },
+        }
+      );
+      // Response should be { subscriptions, total, page, limit }
+      setSubscriptions(res.data.subscriptions || []);
+      setTotal(res.data.total || 0);
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      setSubscriptions([]);
+      setTotal(0);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // handle reset field function
-  const handleResetField = () => {
-    setSearchCoupon("");
-    couponRef.current.value = "";
+  // Initial load and when filters change
+  useEffect(() => {
+    fetchSubscriptions(1, fatherName, mobile, email);
+    setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fatherName, mobile, email]);
+
+  // When page changes (but not filters)
+  useEffect(() => {
+    if (page === 1) return;
+    fetchSubscriptions(page, fatherName, mobile, email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1);
+    fetchSubscriptions(1, fatherName, mobile, email);
   };
 
+  const handleReset = () => {
+    setFatherName("");
+    setMobile("");
+    setEmail("");
+    if (fatherNameRef.current) fatherNameRef.current.value = "";
+    if (mobileRef.current) mobileRef.current.value = "";
+    if (emailRef.current) emailRef.current.value = "";
+    setPage(1);
+    fetchSubscriptions(1, "", "", "");
+  };
+
+  const pageCount = Math.ceil((total || 0) / PAGE_SIZE);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <>
-      <PageTitle>{t("CouponspageTitle")}</PageTitle>
-      <DeleteModal
-        ids={allId}
-        setIsCheck={setIsCheck}
-        title="Selected Coupon"
-      />
-      <BulkActionDrawer ids={allId} title="Coupons" />
+    <div>
+      <PageTitle>User Subscriptions</PageTitle>
 
-      <MainDrawer>
-        <CouponDrawer id={serviceId} />
-      </MainDrawer>
+      <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 mb-5">
+        <CardBody>
+          <form
+            onSubmit={handleSearch}
+            className="py-3 grid gap-4 lg:gap-6 xl:gap-6 md:flex xl:flex"
+          >
+            <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              <Input
+                ref={fatherNameRef}
+                type="search"
+                name="fatherName"
+                value={fatherName}
+                onChange={(e) => setFatherName(e.target.value)}
+                placeholder="Search by Father's Name"
+                className="mb-2"
+              />
+            </div>
+            <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              <Input
+                ref={mobileRef}
+                type="search"
+                name="mobile"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                placeholder="Search by Mobile"
+                className="mb-2"
+              />
+            </div>
+            <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              <Input
+                ref={emailRef}
+                type="search"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Search by Email"
+                className="mb-2"
+              />
+            </div>
+            <div className="flex items-center gap-2 flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
+              <Button type="submit" className="h-12 w-full bg-emerald-700">
+                Filter
+              </Button>
+              <Button
+                layout="outline"
+                onClick={handleReset}
+                type="reset"
+                className="px-4 md:py-1 py-2 h-12 text-sm dark:bg-gray-700"
+              >
+                <span className="text-black dark:text-gray-200">Reset</span>
+              </Button>
+            </div>
+          </form>
+        </CardBody>
+      </Card>
 
-      <AnimatedContent>
-        <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 mb-5">
-          <CardBody>
-            <form
-              onSubmit={handleSubmitCoupon}
-              className="py-3 grid gap-4 lg:gap-6 xl:gap-6  xl:flex"
+      <Card className="min-w-0 shadow-xs overflow-hidden">
+        <CardBody>
+          {Array.isArray(subscriptions) && subscriptions.length === 0 ? (
+            <p>No subscriptions found.</p>
+          ) : (
+            <TableContainer>
+              <Table>
+                <TableHeader>
+                  <tr>
+                    <TableCell>#</TableCell>
+                    <TableCell>Father Name</TableCell>
+                    <TableCell>Mobile</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Plan</TableCell>
+                    <TableCell>Start Date</TableCell>
+                    <TableCell>End Date</TableCell>
+                    <TableCell>Amount</TableCell>
+                    <TableCell>Payment Status</TableCell>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {subscriptions.map((sub, idx) => (
+                    <TableRow key={sub._id || idx}>
+                      <TableCell>{(page - 1) * PAGE_SIZE + idx + 1}</TableCell>
+                      <TableCell>{sub.parentName}</TableCell>
+                      <TableCell>{sub.mobile}</TableCell>
+                      <TableCell>{sub.email}</TableCell>
+                      <TableCell>{sub.planDetails?.planId || ""}</TableCell>
+                      <TableCell>
+                        {sub.planDetails?.startDate
+                          ? new Date(
+                              sub.planDetails.startDate
+                            ).toLocaleDateString()
+                          : ""}
+                      </TableCell>
+                      <TableCell>
+                        {sub.planDetails?.endDate
+                          ? new Date(
+                              sub.planDetails.endDate
+                            ).toLocaleDateString()
+                          : ""}
+                      </TableCell>
+                      <TableCell>
+                        {sub.planDetails?.price
+                          ? `₹${sub.planDetails.price}`
+                          : ""}
+                      </TableCell>
+                      <TableCell>
+                        {sub.paymentStatus === true && "Paid"}
+                        {sub.paymentStatus === false && "Pending"}
+                        {typeof sub.paymentStatus !== "boolean" && ""}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
+          {/* Pagination Controls */}
+          {total > 0 && (
+            <div
+              style={{
+                marginTop: "1em",
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
             >
-              <div className="flex justify-start xl:w-1/2  md:w-full">
-                <UploadMany
-                  title="Coupon"
-                  exportData={data}
-                  filename={filename}
-                  isDisabled={isDisabled}
-                  handleSelectFile={handleSelectFile}
-                  handleUploadMultiple={handleUploadMultiple}
-                  handleRemoveSelectFile={handleRemoveSelectFile}
-                />
-              </div>
-
-              <div className="lg:flex  md:flex xl:justify-end xl:w-1/2  md:w-full md:justify-start flex-grow-0">
-                <div className="w-full md:w-40 lg:w-40 xl:w-40 mr-3 mb-3 lg:mb-0">
-                  <Button
-                    disabled={isCheck.length < 1}
-                    onClick={() => handleUpdateMany(isCheck)}
-                    className="w-full rounded-md h-12 btn-gray text-gray-600"
-                  >
-                    <span className="mr-2">
-                      <FiEdit />
-                    </span>
-                    {t("BulkAction")}
-                  </Button>
-                </div>
-
-                <div className="w-full md:w-32 lg:w-32 xl:w-32 mr-3 mb-3 lg:mb-0">
-                  <Button
-                    disabled={isCheck.length < 1}
-                    onClick={() => handleDeleteMany(isCheck)}
-                    className="w-full rounded-md h-12 bg-red-500 btn-red"
-                  >
-                    <span className="mr-2">
-                      <FiTrash2 />
-                    </span>
-
-                    {t("Delete")}
-                  </Button>
-                </div>
-
-                <div className="w-full md:w-48 lg:w-48 xl:w-48">
-                  <Button
-                    onClick={toggleDrawer}
-                    className="w-full rounded-md h-12"
-                  >
-                    <span className="mr-2">
-                      <FiPlus />
-                    </span>
-                    {t("AddCouponsBtn")}
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-
-        <Card className="min-w-0 shadow-xs overflow-hidden bg-white dark:bg-gray-800 mb-5">
-          <CardBody>
-            <form
-              onSubmit={handleSubmitCoupon}
-              className="py-3 grid gap-4 lg:gap-6 xl:gap-6 md:flex xl:flex"
-            >
-              <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
-                <Input
-                  ref={couponRef}
-                  type="search"
-                  placeholder={t("SearchCoupon")}
-                />
-              </div>
-              <div className="flex items-center gap-2 flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
-                <div className="w-full mx-1">
-                  <Button type="submit" className="h-12 w-full bg-emerald-700">
-                    Filter
-                  </Button>
-                </div>
-
-                <div className="w-full mx-1">
-                  <Button
-                    layout="outline"
-                    onClick={handleResetField}
-                    type="reset"
-                    className="px-4 md:py-1 py-2 h-12 text-sm dark:bg-gray-700"
-                  >
-                    <span className="text-black dark:text-gray-200">Reset</span>
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-      </AnimatedContent>
-
-      {loading ? (
-        // <Loading loading={loading} />
-        <TableLoading row={12} col={8} width={140} height={20} />
-      ) : error ? (
-        <span className="text-center mx-auto text-red-500">{error}</span>
-      ) : serviceData?.length !== 0 ? (
-        <TableContainer className="mb-8">
-          <Table>
-            <TableHeader>
-              <tr>
-                <TableCell>
-                  <CheckBox
-                    type="checkbox"
-                    name="selectAll"
-                    id="selectAll"
-                    handleClick={handleSelectAll}
-                    isChecked={isCheckAll}
-                  />
-                </TableCell>
-                <TableCell>{t("CoupTblCampaignsName")}</TableCell>
-                <TableCell>{t("CoupTblCode")}</TableCell>
-                <TableCell>{t("Discount")}</TableCell>
-
-                <TableCell className="text-center">
-                  {t("catPublishedTbl")}
-                </TableCell>
-                <TableCell>{t("CoupTblStartDate")}</TableCell>
-                <TableCell>{t("CoupTblEndDate")}</TableCell>
-                <TableCell>{t("CoupTblStatus")}</TableCell>
-                <TableCell className="text-right">
-                  {t("CoupTblActions")}
-                </TableCell>
-              </tr>
-            </TableHeader>
-            <CouponTable
-              lang={lang}
-              isCheck={isCheck}
-              coupons={dataTable}
-              setIsCheck={setIsCheck}
-            />
-          </Table>
-          <TableFooter>
-            <Pagination
-              totalResults={totalResults}
-              resultsPerPage={resultsPerPage}
-              onChange={handleChangePage}
-              label="Table navigation"
-            />
-          </TableFooter>
-        </TableContainer>
-      ) : (
-        <NotFound title="Sorry, There are no coupons right now." />
-      )}
-    </>
+              <Button
+                layout="outline"
+                size="small"
+                onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                disabled={page === 1}
+              >
+                Prev
+              </Button>
+              <span style={{ margin: "0 1em" }}>
+                Page {page} of {pageCount}
+              </span>
+              <Button
+                layout="outline"
+                size="small"
+                onClick={() => setPage((p) => Math.min(p + 1, pageCount))}
+                disabled={page === pageCount}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </CardBody>
+      </Card>
+    </div>
   );
 };
 
-export default Coupons;
+export default SubscriptionTable;

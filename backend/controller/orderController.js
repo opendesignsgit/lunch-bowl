@@ -862,6 +862,49 @@ const searchOrders = async (req, res) => {
   }
 };
 
+
+const userSubscription = async (req, res) => {
+  try {
+    // Get pagination values from query params, default to page 1, limit 10
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Get total count for pagination
+    const total = await Form.countDocuments({ step: { $gte: 3 } });
+
+    // Get paginated forms
+    const forms = await Form.find({ step: { $gte: 3 } })
+      .skip(skip)
+      .limit(limit);
+
+    // Map only the required fields for each subscription
+    const subscriptions = forms.map((form) => ({
+      parentName:
+        (form.parentDetails?.fatherFirstName || "") +
+        " " +
+        (form.parentDetails?.fatherLastName || ""),
+      mobile: form.parentDetails?.mobile || "",
+      email: form.parentDetails?.email || "",
+      subscriptionDate: form.subscriptionPlan?.startDate,
+      planDetails: form.subscriptionPlan || {},
+      paymentStatus: form.paymentStatus,
+      step: form.step,
+    }));
+
+    res.status(200).json({
+      subscriptions,
+      total,
+      page,
+      limit,
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
@@ -875,4 +918,5 @@ module.exports = {
   getDashboardAmount,
   getAllFoodOrders,
   searchOrders,
+  userSubscription,
 };
