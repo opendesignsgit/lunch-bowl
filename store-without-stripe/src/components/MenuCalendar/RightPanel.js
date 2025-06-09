@@ -13,42 +13,13 @@ import {
   FormControl,
   Link,
 } from "@mui/material";
-import { ArrowForward, Close } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
+import mealPlanData from "../../jsonHelper/meal_plan.json"; // Adjust the path if needed
 
-const meals = [
-  "Veg Biryani and Raita",
-  "Burnt garlic veg fried rice and Veg in black bean sauce",
-  "Pav Bhaji",
-  "Aglio E Olio Veg Pasta and cheesy garlic bread",
-  "Veg Noodles and gravy",
-  "Alfredo Pasta Garlic bread",
-  "Mac and Cheese, Garlic Bread",
-  "Aloo Paratha",
-  "Hummus and Pita, Jalapeno Cheese Poppers",
-  "Creamy curd rice and potato roast",
-  "Ghee rice and Paneer curry",
-  "Phulka+ Paneer butter masala",
-  "Avocado sandwich and Hash brown potatoes",
-  "Arabiata Pasta and Garlic bread",
-  "Edamame Momos and Crispy lotus stem",
-  "Veg spring roll and Pan fried noodles with Veggies",
-  "Phulka and Chanamasala",
-  "Veg Hakka Noodles",
-  "5 spice fried rice and Baby Corn",
-  "Hummus and Pita, Jalapeno Cheese Poppers",
-  "Veg Noodles and gravy",
-  "Creamy curd rice and potato roast",
-  "Aloo Paratha",
-  "Alfredo Pasta Garlic bread",
-  "Phulka+ Paneer butter masala",
-  "Mac and Cheese, Garlic Bread",
-  "Edamame Momos and Crispy lotus stem",
-  "Mac and Cheese, Garlic Bread",
-  "Ghee rice and Paneer curry",
-  "Pav Bhaji",
-];
+// Extract the meal_plan array from the imported JSON
+const mealPlanArray = mealPlanData.meal_plan;
 
 const RightPanel = ({
   isSmall,
@@ -58,7 +29,6 @@ const RightPanel = ({
   dummyChildren,
   menuSelections,
   handleMenuChange,
-  dummyMenus,
   formatDate,
   onClose,
   editMode,
@@ -82,47 +52,46 @@ const RightPanel = ({
   const isWithin48Hours = selectedDateObj.diff(dayjs(), "hour") < 48;
   const isSunday = selectedDateObj.day() === 0;
 
+  // Helper to get menu for the selected day (loops if days > 33)
+  const getDayMenu = (selectedDate) => {
+    if (!mealPlanArray || mealPlanArray.length === 0) return [];
+    const menuIndex = (selectedDate - 1) % mealPlanArray.length;
+    return mealPlanArray[menuIndex]?.meals || [];
+  };
+
+  // Meal plan features for radio selection (if you use them)
   const mealPlans = [
-    { id: 1, name: "Meal Plan 1", meals: meals },
-    { id: 2, name: "Meal Plan 2", meals: [...meals].reverse() },
+    {
+      id: 1,
+      name: "Meal Plan 1",
+      meals: mealPlanArray.map((day) => day.meals).flat(),
+    },
+    {
+      id: 2,
+      name: "Meal Plan 2",
+      meals: mealPlanArray
+        .slice()
+        .reverse()
+        .map((day) => day.meals)
+        .flat(),
+    },
   ];
 
   const handlePlanChange = (childId, planId) => {
-    if (isWithin48Hours) return; // Prevent changes within 48 hours
-
+    if (isWithin48Hours) return;
     setSelectedPlans((prev) => ({ ...prev, [childId]: planId }));
-
-    // Find the child index to set as active
     const childIndex = dummyChildren.findIndex((child) => child.id === childId);
-    if (childIndex !== -1) {
-      setActiveChild(childIndex);
-    }
-
-    // Apply the meal plan for this specific child
-    if (applyMealPlan) {
-      applyMealPlan(planId, childId);
-    }
+    if (childIndex !== -1) setActiveChild(childIndex);
+    if (applyMealPlan) applyMealPlan(planId, childId);
   };
 
-  const handleViewPlan1 = () => {
-    setDialogOpen1(true);
-  };
-
-  const handleViewPlan2 = () => {
-    setDialogOpen2(true);
-  };
-
-  const handleCloseDialog1 = () => {
-    setDialogOpen1(false);
-  };
-
-  const handleCloseDialog2 = () => {
-    setDialogOpen2(false);
-  };
+  const handleViewPlan1 = () => setDialogOpen1(true);
+  const handleViewPlan2 = () => setDialogOpen2(true);
+  const handleCloseDialog1 = () => setDialogOpen1(false);
+  const handleCloseDialog2 = () => setDialogOpen2(false);
 
   const handleApplyToAllChange = (e) => {
-    if (isWithin48Hours) return; // Prevent changes within 48 hours
-
+    if (isWithin48Hours) return;
     const { checked } = e.target;
     setApplyToAll(checked);
     if (checked && dummyChildren.length > 1) {
@@ -136,8 +105,7 @@ const RightPanel = ({
   };
 
   const handleFirstChildMenuChange = (childId, value) => {
-    if (isWithin48Hours) return; // Prevent changes within 48 hours
-
+    if (isWithin48Hours) return;
     handleMenuChange(childId, value);
     if (applyToAll && dummyChildren.length > 1) {
       dummyChildren.slice(1).forEach((child) => {
@@ -147,7 +115,7 @@ const RightPanel = ({
   };
 
   const handleMenuSelectionChange = (childId, value) => {
-    if (isWithin48Hours) return; // Prevent changes within 48 hours
+    if (isWithin48Hours) return;
     handleMenuChange(childId, value);
   };
 
@@ -351,7 +319,7 @@ const RightPanel = ({
                           }}
                         >
                           <MenuItem value="">Select Dish</MenuItem>
-                          {dummyMenus.map((menu, i) => (
+                          {getDayMenu(selectedDate).map((menu, i) => (
                             <MenuItem key={i} value={menu}>
                               {menu}
                             </MenuItem>
@@ -381,7 +349,6 @@ const RightPanel = ({
                 </>
               )}
             </div>
-
             <div className="childbtnsbox">
               {isSelectedHoliday && (
                 <Box mb={2}>
