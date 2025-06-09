@@ -14,6 +14,7 @@ const {
   getAllFoodOrders,
   searchOrders,
   userSubscription,
+  searchUserSubscriptions,
 } = require("../controller/orderController");
 
 // Add search route here
@@ -52,5 +53,8 @@ router.delete("/:id", deleteOrder);
 router.get("/get-all/food-order", getAllFoodOrders);
 
 router.get("/get-All/user-Subscription", userSubscription);
+
+// Search orders with filters
+router.get("/get-All/user-Subscription/search", searchUserSubscriptions);
 
 module.exports = router;

@@ -28,11 +28,18 @@ const SubscriptionTable = () => {
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
 
+  // Local state to store last used filters
+  const [lastFilters, setLastFilters] = useState({
+    fatherName: "",
+    mobile: "",
+    email: "",
+  });
+
   const fatherNameRef = useRef(null);
   const mobileRef = useRef(null);
   const emailRef = useRef(null);
 
-  // Fetch subscriptions from backend with pagination and filters
+  // Fetch subscriptions with filters and pagination
   const fetchSubscriptions = async (
     pageNumber = 1,
     fatherNameVal = "",
@@ -42,20 +49,21 @@ const SubscriptionTable = () => {
     setLoading(true);
     setError(null);
     try {
-      // Backend should accept these as query params
-      const res = await axios.get(
-        "http://localhost:5055/api/orders/get-All/user-Subscription",
-        {
-          params: {
-            page: pageNumber,
-            limit: PAGE_SIZE,
-            fatherName: fatherNameVal,
-            mobile: mobileVal,
-            email: emailVal,
-          },
-        }
-      );
-      // Response should be { subscriptions, total, page, limit }
+      const hasFilter =
+        fatherNameVal.trim() || mobileVal.trim() || emailVal.trim();
+      const url = hasFilter
+        ? "http://localhost:5055/api/orders/get-All/user-Subscription/search"
+        : "http://localhost:5055/api/orders/get-All/user-Subscription";
+
+      const res = await axios.get(url, {
+        params: {
+          page: pageNumber,
+          limit: PAGE_SIZE,
+          fatherName: fatherNameVal,
+          mobile: mobileVal,
+          email: emailVal,
+        },
+      });
       setSubscriptions(res.data.subscriptions || []);
       setTotal(res.data.total || 0);
     } catch (err) {
@@ -67,23 +75,33 @@ const SubscriptionTable = () => {
     }
   };
 
-  // Initial load and when filters change
+  // Initial load (no filters)
   useEffect(() => {
-    fetchSubscriptions(1, fatherName, mobile, email);
+    fetchSubscriptions(1, "", "", "");
+    setLastFilters({ fatherName: "", mobile: "", email: "" });
     setPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fatherName, mobile, email]);
+  }, []);
 
-  // When page changes (but not filters)
+  // When page changes, use last used filters
   useEffect(() => {
     if (page === 1) return;
-    fetchSubscriptions(page, fatherName, mobile, email);
+    fetchSubscriptions(
+      page,
+      lastFilters.fatherName,
+      lastFilters.mobile,
+      lastFilters.email
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
+    setLastFilters({
+      fatherName,
+      mobile,
+      email,
+    });
     fetchSubscriptions(1, fatherName, mobile, email);
   };
 
@@ -95,6 +113,7 @@ const SubscriptionTable = () => {
     if (mobileRef.current) mobileRef.current.value = "";
     if (emailRef.current) emailRef.current.value = "";
     setPage(1);
+    setLastFilters({ fatherName: "", mobile: "", email: "" });
     fetchSubscriptions(1, "", "", "");
   };
 

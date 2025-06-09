@@ -905,6 +905,71 @@ const userSubscription = async (req, res) => {
   }
 };
 
+
+// Add this to your controller file (or wherever you keep userSubscription)
+const searchUserSubscriptions = async (req, res) => {
+  try {
+    const { fatherName = "", mobile = "", email = "", page = 1, limit = 10 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    // Build dynamic filter
+    const filter = { step: { $gte: 3 } };
+
+    // We'll filter in-memory for fatherName because it's concatenated from two fields
+    // But for mobile/email, we can filter in Mongo query for efficiency
+    if (mobile) {
+      // Partial match (contains), case-insensitive
+      filter["parentDetails.mobile"] = { $regex: mobile, $options: "i" };
+    }
+    if (email) {
+      filter["parentDetails.email"] = { $regex: email, $options: "i" };
+    }
+
+    // Get all forms matching mobile/email filters
+    let forms = await Form.find(filter).lean();
+
+    // Filter by father's name (first+last) in-memory for flexibility
+    let subscriptions = forms
+      .filter((form) => {
+        if (!fatherName) return true;
+        const fullName =
+          (form.parentDetails?.fatherFirstName || "") +
+          " " +
+          (form.parentDetails?.fatherLastName || "");
+        return fullName.toLowerCase().includes(fatherName.toLowerCase());
+      })
+      .map((form) => ({
+        parentName:
+          (form.parentDetails?.fatherFirstName || "") +
+          " " +
+          (form.parentDetails?.fatherLastName || ""),
+        mobile: form.parentDetails?.mobile || "",
+        email: form.parentDetails?.email || "",
+        subscriptionDate: form.subscriptionPlan?.startDate,
+        planDetails: form.subscriptionPlan || {},
+        paymentStatus: form.paymentStatus,
+        step: form.step,
+      }));
+
+    // Total after in-memory filtering
+    const total = subscriptions.length;
+
+    // Paginate
+    subscriptions = subscriptions.slice(skip, skip + parseInt(limit));
+
+    res.status(200).json({
+      subscriptions,
+      total,
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
@@ -919,4 +984,5 @@ module.exports = {
   getAllFoodOrders,
   searchOrders,
   userSubscription,
+  searchUserSubscriptions,
 };
