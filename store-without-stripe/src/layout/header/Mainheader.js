@@ -11,6 +11,8 @@ import SignUpPopup from "../../components/logInSignUp/SignUpPopup";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import LogoutConfirmationPopup from "../../components/logInSignUp/LogoutConfirmationPopup";
+import { signOut } from "next-auth/react";
 
 const Mainheader = ({ title, description, children }) => {
   const { data: session, status } = useSession();
@@ -24,8 +26,17 @@ const Mainheader = ({ title, description, children }) => {
   const [showSignUp, setShowSignUp] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyAccount, setShowMyAccount] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const userId = session?.user?.id;
+
+  const handleLogout = async () => {
+    setShowLogoutConfirm(false);
+    await signOut({ callbackUrl: "/" }); // next-auth signOut, redirects to home
+    // If you use any custom localStorage/sessionStorage, clear them here as well:
+    localStorage.clear();
+    sessionStorage.clear();
+  };
 
   if (pageWidth > 801) {
     const body = document.body;
@@ -127,10 +138,13 @@ const Mainheader = ({ title, description, children }) => {
                     </li>
                     <li style={{ padding: "5px 10px" }}>
                       <button
-                        onClick={() => {
-                          // handle logout logic here
-                          console.log("Logging out...", userId);
-                          // Example: window.location.href = "/logout";
+                        onClick={() => setShowLogoutConfirm(true)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          width: "100%",
+                          textAlign: "left",
                         }}
                       >
                         Log Out
@@ -213,6 +227,11 @@ const Mainheader = ({ title, description, children }) => {
         onClose={() => setFreeTrialPopup(false)}
       />
       <SignUpPopup open={showSignUp} onClose={() => setShowSignUp(false)} />
+      <LogoutConfirmationPopup
+        open={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={handleLogout}
+      />
     </>
   );
 };
