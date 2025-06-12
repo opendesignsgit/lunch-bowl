@@ -5,12 +5,16 @@ import Head from "next/head";
 import myLogo from "../../../public/logo/lunchbowl-logo.svg";
 import closeicon from "../../../public/menuclose-icon.svg";
 import LoginPopup from "../../components/logInSignUp/LoginPopup";
-import { useState } from "react";
 import HamburgerMenuImg from "../../../public/HamburgerMenuImg.jpg";
 import FreeTrialPopup from "../../components/home/FreeTrialPopup";
 import SignUpPopup from "../../components/logInSignUp/SignUpPopup";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Mainheader = ({ title, description, children }) => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   var pageWidth = window.innerWidth;
   var body = document.getElementsByTagName("body")[0];
   var script = document.createElement("script");
@@ -18,6 +22,10 @@ const Mainheader = ({ title, description, children }) => {
   const [openLogin, setOpenLogin] = useState(false);
   const [freeTrialPopup, setFreeTrialPopup] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMyAccount, setShowMyAccount] = useState(false);
+
+  const userId = session?.user?.id;
 
   if (pageWidth > 801) {
     const body = document.body;
@@ -85,6 +93,52 @@ const Mainheader = ({ title, description, children }) => {
                   <span>Start Free Trial</span>
                 </button>
               </li>
+
+              {/* NEW MENU BUTTON */}
+              <li className="userMenuBtn" style={{ position: "relative" }}>
+                <button onClick={() => setShowUserMenu((prev) => !prev)}>
+                  <span>Menu</span>
+                </button>
+                {showUserMenu && (
+                  <ul
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      right: 0,
+                      background: "#fff",
+                      border: "1px solid #ddd",
+                      padding: "10px",
+                      zIndex: 999,
+                    }}
+                  >
+                    <li style={{ padding: "5px 10px" }}>
+                      <button
+                        onClick={() => router.push("user/my-account")}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          width: "100%",
+                          textAlign: "left",
+                        }}
+                      >
+                        My Account
+                      </button>
+                    </li>
+                    <li style={{ padding: "5px 10px" }}>
+                      <button
+                        onClick={() => {
+                          // handle logout logic here
+                          console.log("Logging out...", userId);
+                          // Example: window.location.href = "/logout";
+                        }}
+                      >
+                        Log Out
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </li>
             </ul>
             <div className="hmenubox" onClick={() => setShow(true)}>
               <h6>Menu</h6>
@@ -132,7 +186,6 @@ const Mainheader = ({ title, description, children }) => {
                   <li className="nav__item hamnavlink">
                     <Link href="/contact-us">Contact Us</Link>
                   </li>
-                
                 </ul>
                 <ul className="HamSMediaul">
                   <li className="nav__item hamnavlink">
@@ -150,6 +203,10 @@ const Mainheader = ({ title, description, children }) => {
           </div>
         </div>
       </div>
+      {/* MyAccount component popup/modal */}
+      {showMyAccount && (
+        <MyAccount userId={userId} onClose={() => setShowMyAccount(false)} />
+      )}
       <LoginPopup open={openLogin} onClose={() => setOpenLogin(false)} />
       <FreeTrialPopup
         open={freeTrialPopup}

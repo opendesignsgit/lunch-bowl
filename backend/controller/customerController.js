@@ -1022,6 +1022,62 @@ const getSavedMeals = async (req, res) => {
   }
 };
 
+
+const accountDetails = async (req, res) => {
+  try {
+    const { userId, updateField, updateValue } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
+    // If updateField and updateValue are present, perform update in both schemas
+    if (
+      updateField &&
+      ["email", "mobile"].includes(updateField) &&
+      updateValue
+    ) {
+      // Update Customer schema
+      const customerUpdate = {};
+      if (updateField === "email") customerUpdate.email = updateValue;
+      if (updateField === "mobile") customerUpdate.phone = updateValue;
+      await Customer.findByIdAndUpdate(userId, customerUpdate);
+
+      // Update Form schema (parentDetails)
+      const form = await Form.findOne({ user: userId });
+      if (form && form.parentDetails) {
+        if (updateField === "email") form.parentDetails.email = updateValue;
+        if (updateField === "mobile") form.parentDetails.mobile = updateValue;
+        await form.save();
+      }
+    }
+
+    // Always return latest details
+    const user = await Form.findOne({ user: mongoose.Types.ObjectId(userId) });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    console.error("Error fetching/updating account details:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 // Helper function to check if date is in current month
 function isDateInCurrentMonth(date, currentMonth) {
   const mealDate = new Date(date);
@@ -1054,4 +1110,5 @@ module.exports = {
   saveMealPlans,
   getSavedMeals,
   stepCheck,
+  accountDetails,
 };
