@@ -17,7 +17,7 @@ export async function middleware(request) {
   // );
 
   if (!userInfo) {
-    return NextResponse.redirect(new URL(`/auth/login`, request.url));
+    return NextResponse.redirect(new URL(`/`, request.url));
   }
 
   return NextResponse.next();
