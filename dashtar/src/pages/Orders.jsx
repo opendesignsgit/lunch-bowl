@@ -138,6 +138,67 @@ const Orders = () => {
     fetchOrders(1, "", "");
   };
 
+  // CSV download function
+  const downloadCSV = () => {
+    // Dish Summary Section
+    let dishSummarySection = "";
+    if (date && dishSummary.length > 0) {
+      dishSummarySection += `Dish Summary for ${new Date(
+        date
+      ).toLocaleDateString()}\n`;
+      dishSummarySection += ["Dish", "Count"].join(",") + "\n";
+      dishSummary.forEach((item) => {
+        dishSummarySection +=
+          [`"${item.dish.replace(/"/g, '""')}"`, `"${item.count}"`].join(",") +
+          "\n";
+      });
+      dishSummarySection += "\n";
+    }
+
+    // Prepare CSV headers
+    const headers = [
+      "#",
+      "Child Name",
+      "School",
+      "Lunch Time",
+      "Location",
+      "Date",
+      "Food",
+    ].join(",");
+
+    // Prepare CSV rows
+    const rows = orders.map((order, idx) =>
+      [
+        (page - 1) * PAGE_SIZE + idx + 1,
+        `${order.childFirstName} ${order.childLastName}`,
+        order.school,
+        order.lunchTime,
+        order.location,
+        order.date ? new Date(order.date).toLocaleDateString() : "",
+        order.food,
+      ]
+        .map((field) => `"${String(field).replace(/"/g, '""')}"`)
+        .join(",")
+    );
+
+    // Combine dish summary and order table
+    const csvContent = dishSummarySection + [headers, ...rows].join("\n");
+
+    // Create download link
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `orders_${new Date().toISOString().slice(0, 10)}.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const pageCount = Math.ceil((total || 0) / PAGE_SIZE);
 
   if (loading) return <div>Loading...</div>;
@@ -256,35 +317,39 @@ const Orders = () => {
             </TableContainer>
           )}
 
-          {/* Pagination Controls */}
+          {/* Pagination Controls and Download Button */}
           {total > 0 && (
             <div
               style={{
                 marginTop: "1em",
                 display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <Button
-                layout="outline"
-                size="small"
-                onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                disabled={page === 1}
-              >
-                Prev
+              <Button onClick={downloadCSV} layout="outline" size="small">
+                Download CSV
               </Button>
-              <span style={{ margin: "0 1em" }}>
-                Page {page} of {pageCount}
-              </span>
-              <Button
-                layout="outline"
-                size="small"
-                onClick={() => setPage((p) => Math.min(p + 1, pageCount))}
-                disabled={page === pageCount}
-              >
-                Next
-              </Button>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Button
+                  layout="outline"
+                  size="small"
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                  disabled={page === 1}
+                >
+                  Prev
+                </Button>
+                <span style={{ margin: "0 1em" }}>
+                  Page {page} of {pageCount}
+                </span>
+                <Button
+                  layout="outline"
+                  size="small"
+                  onClick={() => setPage((p) => Math.min(p + 1, pageCount))}
+                  disabled={page === pageCount}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           )}
         </CardBody>
