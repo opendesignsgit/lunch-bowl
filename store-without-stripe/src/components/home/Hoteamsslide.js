@@ -16,8 +16,8 @@ const Hoteamsslide = () => {
         <div className="slider-container">
       <Slider {...settings} className='teamsliders'>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden layone'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -27,8 +27,8 @@ const Hoteamsslide = () => {
             </div> 
         </div>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden laytwo'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -38,8 +38,8 @@ const Hoteamsslide = () => {
             </div> 
         </div>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden laythree'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -49,8 +49,8 @@ const Hoteamsslide = () => {
             </div> 
         </div>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden layfour'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -60,8 +60,8 @@ const Hoteamsslide = () => {
             </div> 
         </div>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden layone'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -71,8 +71,8 @@ const Hoteamsslide = () => {
             </div> 
         </div>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden laytwo'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -82,8 +82,8 @@ const Hoteamsslide = () => {
             </div>  
         </div>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden laythree'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -93,8 +93,8 @@ const Hoteamsslide = () => {
             </div>  
         </div>
         <div>
-            <div className='flex teambox items-center group relative rounded-full overflow-hidden'>
-                <div className='flex-1 teamboximg rounded-full overflow-hidden'>
+                      <div className='flex teambox items-center group relative overflow-hidden layfour'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                     <Image className="w-full h-auto m-auto" priority src= {teamimgone} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>

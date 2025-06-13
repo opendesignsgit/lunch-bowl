@@ -22,6 +22,23 @@ import img4 from "../../public/about/environ-img4.jpg";
 import img5 from "../../public/about/environ-img5.jpg";
 import img6 from "../../public/about/environ-img6.jpg";
 
+import hintroicon1 from "../../public/home/icons/hintro/yellowround-flower.svg";
+import hintroicon2 from "../../public/home/icons/hintro/blue-and-orange-star.svg";
+import hintroicon3 from "../../public/home/icons/hintro/blur-and-yellow-star.svg";
+import hintroicon4 from "../../public/home/icons/hintro/violet-flower.svg";
+import hintroicon5 from "../../public/home/icons/hintro/skyblueround-line.svg";
+import hintroicon6 from "../../public/home/icons/hintro/orange-star.svg";
+import hintroicon7 from "../../public/home/icons/hintro/yellow-flower.svg";
+import abbanicon1 from "../../public/about/icons/herosec/pink-rounded-lines.svg";
+import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
+import ateamicon1 from "../../public/about/icons/meetteam/pinksmileyflower.svg";
+import ateamicon2 from "../../public/about/icons/meetteam/red-triangle.svg";
+import ateamicon3 from "../../public/about/icons/meetteam/yellowstar.svg";
+import ateamicon4 from "../../public/about/icons/meetteam/skyblue-leaf.svg";
+import ateamicon5 from "../../public/about/icons/meetteam/red-flower.svg";
+import ateamicon6 from "../../public/about/icons/meetteam/violetyellow-star.svg";
+import ateamicon7 from "../../public/about/icons/meetteam/pinkroundedlines.svg";
+import ateamicon8 from "../../public/about/icons/meetteam/darkgreen-arrow.svg";
 
 const AboutUs = () => {
   return ( 
@@ -37,10 +54,14 @@ const AboutUs = () => {
                         <Breadcrumbs/>
                     </div>
                   </div>
+            <div className='abbanIconss'>
+              <div className='abbanicn iconone absolute'><Image src={abbanicon1} priority alt='Icon' className='iconrotates' /></div>
+              <div className='abbanicn icontwo absolute'><Image src={abbanicon2} priority alt='Icon' /></div>
+            </div>
                 </div>
               </section>
               <section className='HintroSec aboutintrosec introbrsec relative bg-white flex py-[12vh]'>
-                <div className='container mx-auto' >
+          <div className='container mx-auto relative'  >
                     <div className='flex items-center max-md:flex-col-reverse' >
                         <div className='flex-1 hbanLeft flex justify-center flex-col' >
                             <div className='hintroimgone rounded-[50%] overflow-hidden' >
@@ -61,16 +82,30 @@ const AboutUs = () => {
                             </div>
                         </div>
                     </div>
+            <div className='hintroIconss'>
+              <div className='hintroicn iconone absolute'><Image src={hintroicon1} priority alt='Icon' className='iconrotates' /></div>
+              <div className='hintroicn icontwo absolute'><Image src={hintroicon2} priority alt='Icon' /></div>
+              <div className='hintroicn iconthree absolute'><Image src={hintroicon3} priority alt='Icon' /></div>
+              <div className='hintroicn iconfour absolute'><Image src={hintroicon4} priority alt='Icon' className='iconrotates' /></div>
+              <div className='hintroicn iconfive absolute'><Image src={hintroicon5} priority alt='Icon' className='iconrubberband' /></div>
+              <div className='hintroicn iconsix absolute'><Image src={hintroicon6} priority alt='Icon' /></div>
+              <div className='hintroicn iconseven absolute'><Image src={hintroicon7} priority alt='Icon' className='iconrotates' /></div>
+            </div>
                 </div>
               </section>
               <section className='HmteamSec relative bg-FFE6E6 flex py-[12vh]'>
-                <div className='container mx-auto' >
+          <div className='container mx-auto relative' >
                     <div className='hintroLeft combtntb comtilte text-center mb-[5vh]'>
                         <h4>Meet the team</h4>
                         <h3 className='flex flex-col text4AB138'>
                             <span className='block'>Behind the Magic</span> 
                         </h3>
                         <p>Experts in creating kid-friendly meals who combined inventiveness and fresh <br/>ingredients to create a nourishing and enchanted lunchtime experience.</p>
+
+              <div className='ateamIconss'>
+                <div className='ateamicn iconone absolute'><Image src={ateamicon1} priority alt='Icon' /></div>
+                <div className='ateamicn iconeight absolute'><Image src={ateamicon8} priority alt='Icon' /></div>
+              </div>
                     </div>
                     <div className='flex flex-wrap items-center mteamitembox ' >
                         <div className='w-[25%] flex-none flex mteambox relative group'>
@@ -178,6 +213,14 @@ const AboutUs = () => {
                             </div>
                         </div>
                     </div>
+            <div className='ateamIconss'>
+              <div className='ateamicn icontwo absolute'><Image src={ateamicon2} priority alt='Icon' className="iconrotates" /></div>
+              <div className='ateamicn iconthree absolute'><Image src={ateamicon3} priority alt='Icon' className="iconrotates" /></div>
+              <div className='ateamicn iconfour absolute'><Image src={ateamicon4} priority alt='Icon' /></div>
+              <div className='ateamicn iconfive absolute'><Image src={ateamicon5} priority alt='Icon' className="iconrotates" /></div>
+              <div className='ateamicn iconsix absolute'><Image src={ateamicon6} priority alt='Icon' /></div>
+              <div className='ateamicn iconseven absolute'><Image src={ateamicon7} priority alt='Icon' className="zoominoutanimi" /></div>
+            </div>
                 </div>
               </section>              
               <section className='HmvisionSec relative bg-FF6514 flex '>

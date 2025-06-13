@@ -62,6 +62,17 @@ const Home = () => {
                         <h3>During School Lunch Time!</h3>
                         <p>Healthy, delectable alternatives that are loaded with <br/>vital vitamins and minerals.</p>
                         <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+
+                          <div className='hbanIconss'>
+                              <div className='hbicn iconone'></div>
+                              <div className='hbicn icontwo'></div>
+                              <div className='hbicn iconthree'></div>
+                              <div className='hbicn iconfour'></div>
+                              <div className='hbicn iconfive'></div>
+                              <div className='hbicn iconsix'></div>
+                              <div className='hbicn iconseven'></div>
+                          </div>
+
                     </div>
                 </div>
                 <div className='hbanRight relative'>

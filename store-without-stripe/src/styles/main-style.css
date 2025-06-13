@@ -110,6 +110,7 @@ body .comffamily{font-family: 'Baloo';font-weight: 100;letter-spacing: -0.5px;}
 .hbanCont h3{font-size: 2.2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';margin-bottom: 15px;letter-spacing: -1px;}
 .hbanCont p{}
 
+
 .bg-FFF4D7{background: #FFF4D7;}
 .bg-FF6514{background: #FF6514;}
 .bg-FFE6E6{background: #FFE6E6;}
@@ -162,9 +163,51 @@ ul.footmenu{}
 ul.footmenu li{margin-inline: 20px;}
 ul.footmenu li a{color: #FFFFFF;}
 .footcopyrow {border-top: 1px solid rgb(255 255 255 / 50%);}
+.hbanLeft {
+  position: relative;
+}
 
-.hintroimgone{width: 75%;}
-.hintroimgtwo{width: 45%;margin-top: -30%;border: 10px solid #fff4d7;}
+.hintroimgone {
+  width: 75%;
+  position: relative;
+}
+
+.HintroSec .hbanLeft:before {
+  content: '';
+  position: absolute;
+  width: 3vw;
+  height: 60%;
+  left: -25px;
+  top: 44.5%;
+  transform: translateY(-50%);
+  background: url(/home/icons/hintro/redArch.svg) no-repeat center center;
+  background-size: 100%;
+  pointer-events: none;
+}
+
+.HintroSec .hbanLeft:after {
+  content: '';
+  position: absolute;
+  width: 3.5vw;
+  height: 46%;
+  right: -13px;
+  bottom: -22.5%;
+  transform: translateY(-50%);
+  background: url(/home/icons/hintro/greenArch.svg) no-repeat center center;
+  background-size: 100%;
+  pointer-events: none;
+}
+
+.hintroimgtwo {
+  width: 45%;
+  margin-top: -30%;
+  border: 10px solid #fff4d7;
+  z-index: 9;
+}
+
+.aboutuspage .hintroimgtwo {
+  border-color: #ffffff;
+}
 
 .proboxtitle{}
 .proboxtitle h5{font-size: 1.1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;}
@@ -189,7 +232,9 @@ ul.footmenu li a{color: #FFFFFF;}
   }
 
 .HProlistSec{background: #FF6514 !important;}
-.menulistpage .HProlistSec{background: #FFF4D7;}
+.menulistpage .HProlistSec {
+  background: #FFF4D7 !important;
+}
 .HProlistSec:before{content: '';position: absolute;width: 100%;height: 40px;bottom: 0;left: 0;background: url(/home/btmWaveVector.png) repeat-x top center;background-size: auto 85%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;
   -webkit-animation: slide 50s linear infinite;pointer-events: none;}
 .arrowIcon{box-shadow: 4px 4px 10px #3333333d}
@@ -256,7 +301,42 @@ ul.footmenu li a{color: #FFFFFF;}
 .HteamSec{}
 .HteamSec::before{content: '';position: absolute;width: 100%;height: 40px;top: 12px;left: 0;background: url(/home/topWaveVector.png) repeat-x bottom center;background-size: auto 85%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);z-index: 9;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;pointer-events: none;}
 .HteamSec::after{content: '';position: absolute;width: 100%;height: 68px;bottom: 0;left: 0;background: url(/home/teambgbeforimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;pointer-events: none;}
-.teambox{width: calc(100% - 30px);margin-inline: auto;}
+.teambox {
+  width: calc(100% - 30px);
+  margin-inline: auto;
+  position: relative;
+}
+
+.teambox:before {
+  content: '';
+  position: absolute;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  top: -1px;
+  left: -1px;
+  z-index: 9;
+  pointer-events: none;
+}
+
+.teambox.layone:before {
+  background: url(/home/icons/hteam/TeamLayOne.svg) no-repeat center center;
+  background-size: 100%;
+}
+
+.teambox.laytwo:before {
+  background: url(/home/icons/hteam/TeamLayTwo.svg) no-repeat center center;
+  background-size: 100%;
+}
+
+.teambox.laythree:before {
+  background: url(/home/icons/hteam/TeamLayThree.svg) no-repeat center center;
+  background-size: 100%;
+}
+
+.teambox.layfour:before {
+  background: url(/home/icons/hteam/TeamLayfour.svg) no-repeat center center;
+  background-size: 100%;
+}
 .teamboxcont {background: rgb(255 255 255 / 31%);backdrop-filter: blur(4px);opacity: 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
 .teamboxcont h4{font-family: 'Baloo';font-size: 1.2vw;}
 .teamboxcont p{}
@@ -273,7 +353,43 @@ ul.footmenu li a{color: #FFFFFF;}
 .HteamSec .combtntb p.parabtn a span{color: #FF6514;background: #ffffff;}
 .HteamSec .combtntb p.parabtn a::before{border-color: #ffffff;}
 .HteamSec .combtntb p.parabtn a span::after{filter: brightness(0) saturate(100%) invert(49%) sepia(90%) saturate(1395%) hue-rotate(359deg) brightness(105%) contrast(105%);}
-.hNutritionintImg{width: 50%;margin-inline: auto;}
+.hNutritionintImg {
+  width: 50%;
+  margin-inline: auto;
+  position: relative;
+}
+
+.hNutritionintImg::before {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 21%;
+  top: 0;
+  left: 9%;
+  background: url(/home/icons/hdoctors/greenarch.svg) no-repeat bottom center;
+  background-size: auto 100%;
+  -webkit-transform: translateY(-20%);
+  -ms-transform: translateY(-20%);
+  transform: translateY(-20%);
+  z-index: 9;
+  pointer-events: none;
+}
+
+.hNutritionintImg::after {
+  content: '';
+  position: absolute;
+  width: 45%;
+  height: 20%;
+  bottom: 0;
+  right: 11.5%;
+  background: url(/home/icons/hdoctors/redarch.svg) no-repeat bottom center;
+  background-size: 100%;
+  -webkit-transform: translateY(20%);
+  -ms-transform: translateY(20%);
+  transform: translateY(20%);
+  z-index: 9;
+  pointer-events: none;
+}
 .hNutritionintImg img{border-radius: 50%;}
 
 .HfaqSec::before{content: '';position: absolute;width: 100%;height: 130px;top: 12px;left: 0;background: url(/faqbeforetopimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);z-index: 9;pointer-events: none;}
@@ -297,7 +413,10 @@ ul.footmenu li a{color: #FFFFFF;}
 .HfaqSec.senddesfaq .Hfaqinrow::before{opacity: 0;}
 
 .pagebansec {height: 55vh;padding-top: 10vh;}
-.pagebansec{background: url(/about/aboutbanbg.jpg) no-repeat bottom center;background-size: 100%;}
+.pagebansec {
+  background: url(/about/aboutbanbg.jpg) no-repeat bottom center;
+  background-size: cover;
+}
 .pagebansec h1{font-family: 'Baloo';font-size: 3.2vw;line-height: 1;text-transform: uppercase;}
 .pagebansec h1 span.firstspan{color: #4AB138;}
 .pagebansec p{font-weight: 500;}
@@ -311,7 +430,16 @@ ul.footmenu li a{color: #FFFFFF;}
 .pagebansec::before{content: '';position: absolute;width: 100%;height: 35px;bottom: -1px;left: 0;background: url(/introtopbefrimg.png) repeat-x top center;background-size: 90%;-webkit-transform: translateY(00%);-ms-transform: translateY(00%);transform: translateY(00%);z-index: 9;pointer-events: none;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .MenusLbanersec.pagebansec::before{background: url(/introtopbefrimg-fff4d7.png) repeat-x top center;background-size: 90%;}
 .aboutbanersec .pageinconter::after{content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: 0;background: url(/about/about-banimg.png) no-repeat center bottom;background-size: 100%;}
-.contusbanersec .pageinconter::after{content: '';position: absolute;width: 25%;height: 110%;right: 20%;bottom: 0;background: url(/contus/contusbanbg.png) no-repeat center bottom;background-size: 100%;}
+.contusbanersec .pageinconter::after {
+  content: '';
+  position: absolute;
+  width: 25%;
+  height: 110%;
+  right: 14%;
+  bottom: 0;
+  background: url(/contus/contusbanbg.png) no-repeat center bottom;
+  background-size: 100%;
+}
 .MenusLbanersec .pageinconter::after{content: '';position: absolute;width: 45%;height: 110%;right: 0%;bottom: 0;background: url(/MenuListbanimg.png) no-repeat center bottom;background-size: 100%;filter: drop-shadow(2px 4px 6px rgb(51 51 51 / 12%));}
 .pagebansec.setpbanersec { height: 42vh;}
 
