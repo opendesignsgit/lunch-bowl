@@ -6,6 +6,8 @@ import Mainheader from '@layout/header/Mainheader';
 import Mainfooter from '@layout/footer/Mainfooter';
 import HomeProductCard from '@components/product/HomeProductCard';
 
+import ateamicon1 from "../../public/menulist/icons/ban/yellowround-flower.svg";
+import ateamicon2 from "../../public/menulist/icons/ban/redstar.svg";
 const Menulist = () => {
   return (
     <>
@@ -21,6 +23,10 @@ const Menulist = () => {
                         <Breadcrumbs/>
                     </div>
                   </div>
+              <div className='menulIconss'>
+                <div className='menulicn iconone absolute'><Image src={ateamicon1} priority alt='Icon' className='iconrotates' /></div>
+                <div className='menulicn icontwo absolute'><Image src={ateamicon2} priority alt='Icon' className='iconrotates' /></div>
+              </div>
                 </div>
               </section>
                 <section className='HProlistSec inProListsec bg-FFF4D7 relative  flex py-[12vh]'>

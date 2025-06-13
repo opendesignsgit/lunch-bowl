@@ -1,0 +1,148 @@
+/***** Icon Style *****/
+
+.iconrotates{
+    -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+.iconrubberband{
+    -webkit-animation:rubberband 4s linear infinite;
+    -moz-animation:rubberband 4s linear infinite;
+    animation:rubberband 4s linear infinite;
+}
+.zoominoutanimi{-webkit-animation: zoom-in-zoom-out 2s ease-out infinite;animation: zoom-in-zoom-out 2s ease-out infinite;}
+
+@keyframes rubberband {
+    0%{
+        transform: scaleX(1);
+    }
+    40%{
+        transform: scaleX(1.12) scaleY(0.75);
+    }
+    55%{
+        transform: scaleX(0.85) scaleY(1);
+    }
+    65%{
+        transform: scaleX(1.09) scaleY(0.85);
+    }
+    75%{
+        transform: scaleX(0.9)  scaleY(1);
+    }
+    90%{
+        transform: scaleX(1.05) scaleY(0.95);
+    }
+    100%{
+        transform: scaleX(1) scaleY(1);
+    }
+}
+@-webkit-keyframes zoom-in-zoom-out {
+  0% {
+    -webkit-transform: scale(0.3, 0.3);
+            transform: scale(0.3, 0.3);
+  }
+  50% {
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+  100% {
+    -webkit-transform: scale(0.3, 0.3);
+            transform: scale(0.3, 0.3);
+  }
+}
+@keyframes zoom-in-zoom-out {
+  0% {
+    -webkit-transform: scale(0.3, 0.3);
+            transform: scale(0.3, 0.3);
+  }
+  50% {
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+  100% {
+    -webkit-transform: scale(0.3, 0.3);
+            transform: scale(0.3, 0.3);
+  }
+}
+/*****Home*****/
+.hbanIconss{}
+
+.hbanIconss .hbicn{aspect-ratio: 1;pointer-events: none;}
+.hbanIconss .hbicn img{width: 100%;height: 100%;}
+.hbanIconss .iconone{top: 0;left: 0;-webkit-transform: translate(-45%, -40%);-ms-transform: translate(-45%, -40%);transform: translate(-45%, -40%);}
+.hbanIconss .icontwo{top: 0;left: 26%;-webkit-transform: translateY(-180%);-ms-transform: translateY(-180%);transform: translateY(-180%);}
+.hbanIconss .iconthree{top: 0;left: 65%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);}
+.hbanIconss .iconfour{top: 35%;right: 0;-webkit-transform: translate(100%, -100%);-ms-transform: translate(100%, -100%);transform: translate(100%, -100%);}
+.hbanIconss .iconfive{bottom: 0;right: 25%;}
+.hbanIconss .iconsix{bottom: 30%;left: 0%;-webkit-transform: translateX(-120%);-ms-transform: translateX(-120%);transform: translateX(-120%);}
+
+.hintroIconss .hintroicn{aspect-ratio: 1;pointer-events: none;}
+.hintroIconss .hintroicn img{width: 100%;height: 100%;}
+.hintroIconss .iconone{right: 0;top: 50%;width: 4.5vw;}
+.hintroIconss .icontwo{right: 15%;bottom: 0;width: 4vw;}
+.hintroIconss .iconthree{left: 0;bottom: 40%;-webkit-transform: translateX(-150%);-ms-transform: translateX(-150%);transform: translateX(-150%);width: 4vw;}
+.hintroIconss .iconfour{bottom: 5%;left: 20%;width: 2.5vw;}
+.hintroIconss .iconfive{bottom: 56%;left: 35%;width: 2vw;}
+.hintroIconss .iconsix{bottom: 23%;left: 2.5%;width: 1.4vw;}
+.hintroIconss .iconseven{top: 7%;left: 1%;width: 1.5vw;}
+
+.aboutuspage .hintroIconss .icontwo{    bottom: -6%;}
+
+.hlfoutIconss .hlfouticn{aspect-ratio: 1;pointer-events: none;}
+.hlfoutIconss .hlfouticn img{width: 100%;height: 100%;}
+.hlfoutIconss .iconone{right: 37%;top: 29%;width: 7vw;}
+
+.hteamIconss .hteamicn{aspect-ratio: 1;pointer-events: none;}
+.hteamIconss .hteamicn img{width: 100%;height: 100%;}
+.hteamIconss .iconone{left: 15%;top: 8%;}
+.hteamIconss .icontwo{top: 12%;right: 12%;}
+.hteamIconss .iconthree{top: 42%;right: 0;-webkit-transform: translateX(150%);-ms-transform: translateX(150%);transform: translateX(150%);}
+.hteamIconss .iconfour{bottom: 0;right: 0;-webkit-transform: translateX(50%);-ms-transform: translateX(50%);transform: translateX(50%);}
+.hteamIconss .iconfive{bottom: 0;left: 0;-webkit-transform: translateX(-50%);-ms-transform: translateX(-50%);transform: translateX(-50%);   }
+.hteamIconss .iconsix{top: 20%;left: 0;-webkit-transform: translateX(-120%);-ms-transform: translateX(-120%);transform: translateX(-120%);}
+
+.hDoctIconss .hDocticn{aspect-ratio: 1;pointer-events: none;} 
+.hDoctIconss .hDocticn img{width: 100%;height: 100%;}
+.hDoctIconss .iconone{top: -5%; right: 31%;}
+.hDoctIconss .icontwo{top: 40%;right: 0;transform: translate(140%, -50%);}
+.hDoctIconss .iconthree{bottom: 16%;right: 6%;}
+.hDoctIconss .iconfour{bottom: -7%;left: 36%;}
+.hDoctIconss .iconfive{top: 50%;left: 0;transform: translateX(-150%);}
+.hDoctIconss .iconsix{top: 17%;left: 2%;}
+
+.hfformIconss .hfformicn{aspect-ratio: 1;pointer-events: none;} 
+.hfformIconss .hfformicn img{width: 100%;height: 100%;}
+.hfformIconss .iconone{top: 0%; right: 31%;}
+.hfformIconss .icontwo{top: 18%;right: 15%;}
+.hfformIconss .iconthree{bottom: 25%;right: 12%;}
+.hfformIconss .iconfour{bottom: -3%;right: 35%;}
+.hfformIconss .iconfive{bottom: 10%;left: 30%;}
+.hfformIconss .iconsix{top: 52%;left: 15%;}
+.hfformIconss .iconseven{top: 5%;left: 16%;}
+
+.abbanIconss .abbanicn{aspect-ratio: 1;pointer-events: none;}
+.abbanIconss .abbanicn img{width: 100%;height: 100%;}
+
+.abbanIconss .iconone{top: 50%;right: 42%;}
+.abbanIconss .icontwo{top: 22%;right: 7%;}
+
+.ateamIconss .ateamicn{aspect-ratio: 1;pointer-events: none;}
+.ateamIconss .ateamicn img{width: 100%;height: 100%;}
+.ateamIconss .iconone{top: 8%;right: 14%;}
+.ateamIconss .icontwo{top: 27%;right: 0%;transform: translateX(120%);}
+.ateamIconss .iconthree{top: 50%;right: 0%;transform: translateX(120%);}
+.ateamIconss .iconfour{bottom: 15%;right: 0%;transform: translateX(120%);}
+.ateamIconss .iconfive{bottom: 15%;left: 0%;transform: translateX(-120%);}
+.ateamIconss .iconsix{top: 50%;left: 0%;transform: translateX(-120%);}
+.ateamIconss .iconseven{top: 27%;left: 0%;transform: translateX(-120%);}
+.ateamIconss .iconeight{top: 5%;left: 12%;}
+
+.menulIconss .menulicn{aspect-ratio: 1;pointer-events: none;}
+.menulIconss .menulicn img{width: 100%;height: 100%;}
+.menulIconss .iconone{top: 26%;right: -4%;}
+.menulIconss .icontwo{top: 43%;right: 47%;}
+

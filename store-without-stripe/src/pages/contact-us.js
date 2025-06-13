@@ -16,6 +16,8 @@ import contforming from '../../public/contus/contforming.png'
 import phoneicon from '../../public/contus/phone-icon.png'
 import mailicon from '../../public/contus/mail-icon.png'
 import locaticon from '../../public/contus/locat-icon.png'
+import ateamicon1 from "../../public/menulist/icons/ban/yellowround-flower.svg";
+import ateamicon2 from "../../public/menulist/icons/ban/redstar.svg";
 
 const ContactUs = () => {
   const { t } = useTranslation();
@@ -102,6 +104,10 @@ const ContactUs = () => {
                       <Breadcrumbs/>
                   </div>
                 </div>
+            <div className='menulIconss'>
+              <div className='menulicn iconone absolute'><Image src={ateamicon1} priority alt='Icon' className='iconrotates' /></div>
+              <div className='menulicn icontwo absolute'><Image src={ateamicon2} priority alt='Icon' className='iconrotates' /></div>
+            </div>
               </div>
           </section>
           <section className="formsec pt-[10vh] pb-[14vh]">

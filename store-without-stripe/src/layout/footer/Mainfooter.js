@@ -6,6 +6,14 @@ import myLogo from "../../../public/logo/lunchbowl-logo.svg";
 import {FacebookIcon,LinkedinIcon,TwitterIcon,WhatsappIcon,} from "react-share";
 import GetinTouch from './GetinTouch';
 
+import hldocticon1 from "../../../public/home/icons/footfrom/violet-and-yellow-star.svg";
+import hldocticon2 from "../../../public/home/icons/footfrom/rounded.svg";
+import hldocticon3 from "../../../public/home/icons/footfrom/skybluestar.svg";
+import hldocticon4 from "../../../public/home/icons/footfrom/greenlayer-yellowstar.svg";
+import hldocticon5 from "../../../public/home/icons/footfrom/greenheart.svg";
+import hldocticon6 from "../../../public/home/icons/footfrom/pinkstar.svg";
+import hldocticon7 from "../../../public/home/icons/footfrom/line-and-pinkround.svg";
+
 const Mainfooter = () => {
 
   const [open, setOpen] = useState(false);
@@ -32,6 +40,15 @@ const Mainfooter = () => {
                     <p className=''>We are super excited in cooking and <br/>providing the best meals to your kids. <br/>Give us a try.</p>                
                     <p className="parabtn flex mt-[3vh]"><Link href="/" className="emenulink relative" onClick={handleOpenDialog}><span className='block flex items-center relative'>Get in Touch</span></Link></p>
                 </div>
+          <div className='hfformIconss'>
+            <div className='hfformicn iconone absolute'><Image src={hldocticon1} priority alt='Icon' /></div>
+            <div className='hfformicn icontwo absolute'><Image src={hldocticon2} priority alt='Icon' className='iconrotates' /></div>
+            <div className='hfformicn iconthree absolute'><Image src={hldocticon3} priority alt='Icon' /></div>
+            <div className='hfformicn iconfour absolute'><Image src={hldocticon4} priority alt='Icon' className='iconrotates' /></div>
+            <div className='hfformicn iconfive absolute'><Image src={hldocticon5} priority alt='Icon' className="zoominoutanimi" /></div>
+            <div className='hfformicn iconsix absolute'><Image src={hldocticon6} priority alt='Icon' /></div>
+            <div className='hfformicn iconseven absolute'><Image src={hldocticon7} priority alt='Icon' className='iconrubberband' /></div>
+          </div>
             </div>
         </section>
     
@@ -89,11 +106,10 @@ const Mainfooter = () => {
                     </ul>
                     <ul className='footmenu flex justify-center'>
                         <li><Link href="/" className="relative" ><span className='block flex items-center relative'>Home</span></Link></li>
-                        <li><Link href="/" className="relative" ><span className='block flex items-center relative'>About Us</span></Link></li>
+              <li><Link href="/about-us" className="relative" ><span className='block flex items-center relative'>About Us</span></Link></li>
                         <li><Link href="/" className="relative" ><span className='block flex items-center relative'>My Account</span></Link></li>
-                        <li><Link href="/" className="relative" ><span className='block flex items-center relative'>Food Menu</span></Link></li>
-                        <li><Link href="/" className="relative" ><span className='block flex items-center relative'>Career</span></Link></li>
-                        <li><Link href="/" className="relative" ><span className='block flex items-center relative'>Contact Us</span></Link></li>
+              <li><Link href="/Menulist" className="relative" ><span className='block flex items-center relative'>Food Menu</span></Link></li>
+              <li><Link href="/contact-us" className="relative" ><span className='block flex items-center relative'>Contact Us</span></Link></li>
                     </ul>
                 </div>
                 <div className='footcopyrow columns-2 py-3'>
