@@ -60,7 +60,14 @@ const handleUploadErrors = (err, req, res, next) => {
   next();
 };
 
+// Multi-field upload for two images: 'image' (required), 'dishImage2' (optional)
+const multiUpload = upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "dishImage2", maxCount: 1 }
+]);
+
 module.exports = {
   singleUpload: upload.single("image"),
+  multiUpload,
   handleUploadErrors
 };
