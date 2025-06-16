@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Box,
   Typography,
@@ -14,6 +13,7 @@ import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
 import Accordion from "@components/faq/Accordion";
 import { useSession } from "next-auth/react";
+import AccountServices from "@services/AccountServices";
 
 const StepHeader = ({ label }) => (
   <Box className="SetpTabNav" sx={{ textAlign: "center", mb: 6 }}>
@@ -68,20 +68,20 @@ const MyAccount = () => {
 
   const userId = session?.user?.id;
 
-  // Unified get (and update) function
+  // Unified get (and update) function using AccountServices
   const fetchAccountDetails = async (updateField, updateValue) => {
     setLoading(true);
     try {
-      const body = { userId };
-      if (updateField && updateValue) {
-        body.updateField = updateField;
-        body.updateValue = updateValue;
-      }
-      const res = await axios.post(
-        "http://localhost:5055/api/customer/account-details",
-        body
-      );
-      setUserDetails(res.data.data);
+      const updateData =
+        updateField && updateValue
+          ? {
+              field: updateField,
+              value: updateValue,
+            }
+          : null;
+
+      const res = await AccountServices.getAccountDetails(userId, updateData);
+      setUserDetails(res.data);
     } catch {
       setUserDetails(null);
     } finally {

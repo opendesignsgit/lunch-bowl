@@ -52,6 +52,11 @@ const FormSchema = new mongoose.Schema({
     default: false, // false = not paid, true = paid
     required: true,
   },
+  subscriptionCount: {
+    type: Number,
+    default: 0, // Start with 0 subscriptions
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Form", FormSchema);
