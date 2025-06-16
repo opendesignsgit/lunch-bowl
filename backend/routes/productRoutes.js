@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  singleUpload,
+  multiUpload,
   handleUploadErrors,
 } = require("../middleware/uploadMiddleware");
 const path = require("path"); // Make sure this is at the top of your controller file
@@ -48,10 +48,9 @@ router.get("/get-all-menu", getAllDishes);
 
 router.get("/get-all-menu-dishes", getAllMenuDishes);
 
-
 // Dish routes with upload middleware
-router.post("/add-dish", singleUpload, handleUploadErrors, addDish);
-router.put("/update-dish/:id", singleUpload, handleUploadErrors, updateDish);
+router.post("/add-dish", multiUpload, handleUploadErrors, addDish);
+router.put("/update-dish/:id", multiUpload, handleUploadErrors, updateDish);
 
 
 //get a product by slug

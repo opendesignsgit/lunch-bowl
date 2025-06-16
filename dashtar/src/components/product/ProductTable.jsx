@@ -26,6 +26,8 @@ const ProductTable = ({ products = [], setIsCheck, onEdit }) => {
               {product.image && (
                 <div className="hidden sm:block mr-3">
                   <img
+                    crossorigin="anonymous"
+                    priority
                     className="w-10 h-10 rounded-full object-cover"
                     src={getImageUrl(product.image)}
                     alt={product.primaryDishTitle}

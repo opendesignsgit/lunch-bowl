@@ -187,30 +187,34 @@ const getAllMenuDishes = async (req, res) => {
 
 const addDish = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No image uploaded" });
+    // Main image required
+    if (!req.files || !req.files.image) {
+      return res.status(400).json({ error: "No main image uploaded" });
     }
+
+    // dishImage2 is optional
+    let imagePath = `/uploads/${req.files.image[0].filename}`;
+    let dishImage2Path =
+      req.files.dishImage2 && req.files.dishImage2[0]
+        ? `/uploads/${req.files.dishImage2[0].filename}`
+        : null;
 
     const newDish = new Dish({
       ...req.body,
-      image: `/uploads/${req.file.filename}`,
-      nutrition: req.body.nutrition || {
-        calories: 0,
-        fats: 0,
-        carbs: 0,
-        vitamins: 0,
-        proteins: 0,
-        minerals: 0,
-      },
+      image: imagePath,
+      dishImage2: dishImage2Path,
     });
 
     await newDish.save();
 
-    // Return response with full image URL
+    // Return response with full image URLs
     const responseDish = newDish.toObject();
     responseDish.image = `${req.protocol}://${req.get("host")}${
       responseDish.image
     }`;
+    responseDish.dishImage2 = responseDish.dishImage2
+      ? `${req.protocol}://${req.get("host")}${responseDish.dishImage2}`
+      : null;
 
     res.status(201).json(responseDish);
   } catch (error) {
@@ -221,29 +225,36 @@ const addDish = async (req, res) => {
 const updateDish = async (req, res) => {
   try {
     const { id } = req.params;
-    let updateData = {
-      ...req.body,
-      nutrition: req.body.nutrition || {
-        calories: 0,
-        fats: 0,
-        carbs: 0,
-        vitamins: 0,
-        proteins: 0,
-        minerals: 0,
-      },
-    };
+    let updateData = { ...req.body };
 
-    // If new image was uploaded
-    if (req.file) {
-      const imagePath = `/uploads/${req.file.filename}`;
-      updateData.image = imagePath;
-
-      // Delete old image if it exists
-      const oldDish = await Dish.findById(id);
-      if (oldDish && oldDish.image) {
-        const oldImagePath = path.join(__dirname, "../..", oldDish.image);
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
+    // If new images were uploaded
+    if (req.files) {
+      // Main image
+      if (req.files.image && req.files.image[0]) {
+        updateData.image = `/uploads/${req.files.image[0].filename}`;
+        // Delete old main image
+        const oldDish = await Dish.findById(id);
+        if (oldDish && oldDish.image) {
+          const oldImagePath = path.join(__dirname, "../..", oldDish.image);
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
+        }
+      }
+      // dishImage2
+      if (req.files.dishImage2 && req.files.dishImage2[0]) {
+        updateData.dishImage2 = `/uploads/${req.files.dishImage2[0].filename}`;
+        // Delete old dishImage2 if it exists
+        const oldDish = await Dish.findById(id);
+        if (oldDish && oldDish.dishImage2) {
+          const oldImage2Path = path.join(
+            __dirname,
+            "../..",
+            oldDish.dishImage2
+          );
+          if (fs.existsSync(oldImage2Path)) {
+            fs.unlinkSync(oldImage2Path);
+          }
         }
       }
     }
@@ -257,15 +268,18 @@ const updateDish = async (req, res) => {
       return res.status(404).json({ error: "Dish not found" });
     }
 
-    // Return response with full image URL
+    // Return response with full image URLs
     const responseDish = updatedDish.toObject();
     responseDish.image = `${req.protocol}://${req.get("host")}${
       updatedDish.image
     }`;
+    responseDish.dishImage2 = updatedDish.dishImage2
+      ? `${req.protocol}://${req.get("host")}${updatedDish.dishImage2}`
+      : null;
 
     res.status(200).json(responseDish);
   } catch (error) {
-    console.error("Update error:", error); // Log the full error
+    console.error("Update error:", error);
     res.status(500).json({
       error: error.message,
       stack: process.env.NODE_ENV === "development" ? error.stack : undefined,

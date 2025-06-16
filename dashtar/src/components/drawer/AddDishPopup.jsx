@@ -9,15 +9,8 @@ const initialState = {
   description: "",
   cuisine: "",
   image: null,
+  dishImage2: null, // New field for second image
   status: "active",
-  nutrition: {
-    calories: "",
-    fats: "",
-    carbs: "",
-    vitamins: "",
-    proteins: "",
-    minerals: "",
-  },
 };
 
 const AddDishPopup = ({
@@ -32,14 +25,7 @@ const AddDishPopup = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const [nutritionErrors, setNutritionErrors] = useState({
-    calories: false,
-    fats: false,
-    carbs: false,
-    vitamins: false,
-    proteins: false,
-    minerals: false,
-  });
+  const [dishImage2Preview, setDishImage2Preview] = useState(""); // Preview for new image
 
   // Styling classes
   const inputClasses =
@@ -52,31 +38,6 @@ const AddDishPopup = ({
   const imagePreviewClasses =
     "mt-2 w-full h-48 object-cover rounded-md border border-gray-300 dark:border-gray-600";
 
-  const NutritionInput = ({ name, label, unit, value, onChange, error }) => (
-    <div>
-      <label htmlFor={name} className={labelClasses}>
-        {label} {unit && `(${unit})`}
-      </label>
-      <input
-        id={name}
-        name={name}
-        type="number"
-        min="0"
-        max="5"
-        step="0.1" // Allows decimal values if needed
-        value={value === 0 ? "" : value}
-        onChange={onChange}
-        className={`${inputClasses} ${
-          error ? "border-red-500 focus:ring-red-500 focus:border-red-500" : ""
-        }`}
-      />
-      {error && (
-        <p className="mt-1 text-sm text-red-600">Value must be 5 or less</p>
-      )}
-    </div>
-  );
-
-  // In your useEffect when productData is present
   useEffect(() => {
     if (productData) {
       setForm({
@@ -86,24 +47,8 @@ const AddDishPopup = ({
         description: productData.description || "",
         cuisine: productData.cuisine || "",
         image: productData.image || null,
+        dishImage2: productData.dishImage2 || null,
         status: productData.status || "active",
-        nutrition: productData.nutrition
-          ? {
-              calories: productData.nutrition.calories || "",
-              fats: productData.nutrition.fats || "",
-              carbs: productData.nutrition.carbs || "",
-              vitamins: productData.nutrition.vitamins || "",
-              proteins: productData.nutrition.proteins || "",
-              minerals: productData.nutrition.minerals || "",
-            }
-          : {
-              calories: "",
-              fats: "",
-              carbs: "",
-              vitamins: "",
-              proteins: "",
-              minerals: "",
-            },
       });
 
       // Improved image preview handling
@@ -114,15 +59,25 @@ const AddDishPopup = ({
           : productData.image.startsWith("/")
           ? `http://localhost:5055${productData.image}`
           : productData.image;
-        console.log("---------->", imageUrl);
-
         setImagePreview(imageUrl);
       } else {
         setImagePreview("");
       }
+
+      if (productData.dishImage2) {
+        const imageUrl2 = productData.dishImage2.startsWith("http")
+          ? productData.dishImage2
+          : productData.dishImage2.startsWith("/")
+          ? `http://localhost:5055${productData.dishImage2}`
+          : productData.dishImage2;
+        setDishImage2Preview(imageUrl2);
+      } else {
+        setDishImage2Preview("");
+      }
     } else {
       setForm(initialState);
       setImagePreview("");
+      setDishImage2Preview("");
     }
   }, [productData]);
 
@@ -131,80 +86,26 @@ const AddDishPopup = ({
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e, field, previewSetter) => {
     const file = e.target.files[0];
     if (file) {
       // Create preview URL and store it
       const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
-      setForm((prev) => ({ ...prev, image: file }));
-
+      previewSetter(previewUrl);
+      setForm((prev) => ({ ...prev, [field]: file }));
       // Clean up the object URL when component unmounts or when image changes
       return () => URL.revokeObjectURL(previewUrl);
-    }
-  };
-
-  const handleNutritionChange = (e) => {
-    const { name, value } = e.target;
-    const numericValue = value === "" ? "" : Number(value);
-
-    // Validate
-    const isValid = numericValue === "" || numericValue <= 5;
-
-    setNutritionErrors((prev) => ({
-      ...prev,
-      [name]: !isValid,
-    }));
-
-    // Only update if valid or empty
-    if (isValid) {
-      setForm((prev) => ({
-        ...prev,
-        nutrition: {
-          ...prev.nutrition,
-          [name]: numericValue === "" ? "" : numericValue,
-        },
-      }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check for any nutrition errors
-    const hasErrors = Object.values(nutritionErrors).some(Boolean);
-    if (hasErrors) {
-      setError("Please correct the nutrition values (must be 5 or less)");
-      return;
-    }
-
-    // Check if any nutrition value exceeds 5
-    const exceedsLimit = Object.values(form.nutrition).some(
-      (val) => val !== "" && Number(val) > 5
-    );
-
-    if (exceedsLimit) {
-      setError("Nutrition values must be 5 or less");
-      return;
-    }
     setLoading(true);
     setError("");
 
     try {
       const formData = new FormData();
-
-      const nutritionData = {
-        calories:
-          form.nutrition.calories === "" ? 0 : Number(form.nutrition.calories),
-        fats: form.nutrition.fats === "" ? 0 : Number(form.nutrition.fats),
-        carbs: form.nutrition.carbs === "" ? 0 : Number(form.nutrition.carbs),
-        vitamins:
-          form.nutrition.vitamins === "" ? 0 : Number(form.nutrition.vitamins),
-        proteins:
-          form.nutrition.proteins === "" ? 0 : Number(form.nutrition.proteins),
-        minerals:
-          form.nutrition.minerals === "" ? 0 : Number(form.nutrition.minerals),
-      };
 
       // Append all form fields
       formData.append("primaryDishTitle", form.primaryDishTitle);
@@ -214,20 +115,18 @@ const AddDishPopup = ({
       formData.append("cuisine", form.cuisine);
       formData.append("status", form.status);
 
-      // Append nutrition data
-      formData.append("nutrition[calories]", nutritionData.calories);
-      formData.append("nutrition[fats]", nutritionData.fats);
-      formData.append("nutrition[carbs]", nutritionData.carbs);
-      formData.append("nutrition[vitamins]", nutritionData.vitamins);
-      formData.append("nutrition[proteins]", nutritionData.proteins);
-      formData.append("nutrition[minerals]", nutritionData.minerals);
-
       // Image handling
       if (form.image instanceof File) {
         formData.append("image", form.image);
       } else if (isEditing && form.image) {
-        // For editing without changing image
         formData.append("existingImage", form.image);
+      }
+
+      // Handle new image field
+      if (form.dishImage2 instanceof File) {
+        formData.append("dishImage2", form.dishImage2);
+      } else if (isEditing && form.dishImage2) {
+        formData.append("existingDishImage2", form.dishImage2);
       }
 
       let response;
@@ -237,13 +136,11 @@ const AddDishPopup = ({
         response = await ProductServices.addDish(formData);
       }
 
-     // Call onSuccess with both the response data and success status
-    onSuccess?.(response.data, true); // true indicates success
-    onClose();
+      onSuccess?.(response.data, true); // true indicates success
+      onClose();
     } catch (err) {
       setError(err.response?.data?.error || "Error processing dish");
-      // Call onSuccess with false to indicate failure
-    onSuccess?.(null, false);
+      onSuccess?.(null, false);
       console.error("Error:", err);
     } finally {
       setLoading(false);
@@ -360,12 +257,11 @@ const AddDishPopup = ({
           </div>
         </div>
 
+        {/* First Image */}
         <div>
           <label htmlFor="image" className={labelClasses}>
             Dish Image {!isEditing && "*"}
           </label>
-
-          {/* Improved image upload box */}
           <div
             className={`border-2 border-dashed rounded-lg p-4 ${
               !imagePreview
@@ -377,6 +273,8 @@ const AddDishPopup = ({
               {imagePreview ? (
                 <>
                   <img
+                    crossorigin="anonymous"
+                    priority
                     src={imagePreview}
                     alt="Preview"
                     className={`${imagePreviewClasses} mb-3`}
@@ -392,7 +290,9 @@ const AddDishPopup = ({
                     name="image"
                     type="file"
                     accept="image/*"
-                    onChange={handleImageChange}
+                    onChange={(e) =>
+                      handleImageChange(e, "image", setImagePreview)
+                    }
                     className="hidden"
                   />
                 </>
@@ -423,9 +323,11 @@ const AddDishPopup = ({
                     name="image"
                     type="file"
                     accept="image/*"
-                    onChange={handleImageChange}
+                    onChange={(e) =>
+                      handleImageChange(e, "image", setImagePreview)
+                    }
                     className="hidden"
-                    required={!isEditing} // Only required for new dishes
+                    required={!isEditing}
                   />
                   <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     JPG, PNG, or GIF (Max 5MB)
@@ -436,54 +338,84 @@ const AddDishPopup = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <NutritionInput
-            name="calories"
-            label="Calories"
-            value={form.nutrition.calories}
-            onChange={handleNutritionChange}
-            error={nutritionErrors.calories}
-          />
-          <NutritionInput
-            name="fats"
-            label="Fats"
-            unit="g"
-            value={form.nutrition.fats}
-            onChange={handleNutritionChange}
-            error={nutritionErrors.fats}
-          />
-          <NutritionInput
-            name="carbs"
-            label="Carbs"
-            unit="g"
-            value={form.nutrition.carbs}
-            onChange={handleNutritionChange}
-            error={nutritionErrors.carbs}
-          />
-          <NutritionInput
-            name="vitamins"
-            label="Vitamins"
-            unit="mg"
-            value={form.nutrition.vitamins}
-            onChange={handleNutritionChange}
-            error={nutritionErrors.vitamins}
-          />
-          <NutritionInput
-            name="proteins"
-            label="Proteins"
-            unit="g"
-            value={form.nutrition.proteins}
-            onChange={handleNutritionChange}
-            error={nutritionErrors.proteins}
-          />
-          <NutritionInput
-            name="minerals"
-            label="Minerals"
-            unit="mg"
-            value={form.nutrition.minerals}
-            onChange={handleNutritionChange}
-            error={nutritionErrors.minerals}
-          />
+        {/* Second Image */}
+        <div>
+          <label htmlFor="dishImage2" className={labelClasses}>
+            Second Dish Image
+          </label>
+          <div
+            className={`border-2 border-dashed rounded-lg p-4 ${
+              !dishImage2Preview
+                ? "border-gray-300 dark:border-gray-600"
+                : "border-emerald-500"
+            }`}
+          >
+            <div className="flex flex-col items-center justify-center">
+              {dishImage2Preview ? (
+                <>
+                  <img
+                    crossorigin="anonymous"
+                    priority
+                    src={dishImage2Preview}
+                    alt="Preview"
+                    className={`${imagePreviewClasses} mb-3`}
+                  />
+                  <label
+                    htmlFor="dishImage2"
+                    className="cursor-pointer text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 font-medium"
+                  >
+                    Change Image
+                  </label>
+                  <input
+                    id="dishImage2"
+                    name="dishImage2"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleImageChange(e, "dishImage2", setDishImage2Preview)
+                    }
+                    className="hidden"
+                  />
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-12 h-12 text-gray-400 mb-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <label
+                    htmlFor="dishImage2"
+                    className="cursor-pointer bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900 dark:text-emerald-100 dark:hover:bg-emerald-800 px-4 py-2 rounded-md font-medium"
+                  >
+                    Select Image
+                  </label>
+                  <input
+                    id="dishImage2"
+                    name="dishImage2"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleImageChange(e, "dishImage2", setDishImage2Preview)
+                    }
+                    className="hidden"
+                  />
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    JPG, PNG, or GIF (Max 5MB)
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-end space-x-3 pt-4">
@@ -494,6 +426,7 @@ const AddDishPopup = ({
               onClose();
               setForm(initialState);
               setImagePreview("");
+              setDishImage2Preview("");
             }}
             disabled={loading}
           >
