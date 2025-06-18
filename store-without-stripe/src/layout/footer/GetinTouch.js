@@ -84,7 +84,7 @@ const GetinTouch = ({ open, onClose }) => {
     <div>
       <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth className="gintpopus compopups" sx={{
         '& .MuiDialog-paper': {
-          height: '75vh',
+          height: 'auto',
         } }}>
         <IconButton className="popClose" onClick={onClose} sx={{ position: "absolute", top: 16, right: 16, zIndex: 99, }} > <CloseIcon />  </IconButton>
         <Box className='gintPopBox Box flex bg-white relative h-full'>
@@ -106,7 +106,7 @@ const GetinTouch = ({ open, onClose }) => {
                 helperText={errors.fullName}
                 margin="normal"
                 variant="outlined"
-                placeholder="Joe Bloggs"
+                placeholder="Joe Bloggs" className="fieldbox"
               />
               <TextField
                 fullWidth
@@ -120,7 +120,7 @@ const GetinTouch = ({ open, onClose }) => {
                 helperText={errors.email}
                 margin="normal"
                 variant="outlined"
-                placeholder="example@domain.com"
+                placeholder="example@domain.com" className="fieldbox"
               />
               <TextField
                 fullWidth
@@ -133,7 +133,7 @@ const GetinTouch = ({ open, onClose }) => {
                 error={!!errors.password}
                 helperText={errors.password}
                 margin="normal"
-                variant="outlined"
+                variant="outlined" className="fieldbox"
               />
               <Button
   color="primary"

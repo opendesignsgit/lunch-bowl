@@ -118,9 +118,9 @@ const Mainfooter = () => {
                     </div>
                     <div className='copymenucol'>
                         <ul className='footmenu flex justify-end'>
-                            <li><Link href="/" className="relative" >Terms & Condition</Link></li>
-                            <li><Link href="/" className="relative" >Privacy Policy</Link></li>
-                            <li><Link href="/" className="relative" >Refund Policy</Link></li>
+                <li><Link href="/terms-and-conditions/" className="relative" >Terms & Condition</Link></li>
+                <li><Link href="/privacy-policy/" className="relative" >Privacy Policy</Link></li>
+                <li><Link href="/refund-cancellation-policy/" className="relative" >Refund Policy</Link></li>
                         </ul>    
                     </div>
                 </div>

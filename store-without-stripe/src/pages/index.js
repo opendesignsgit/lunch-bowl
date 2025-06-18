@@ -11,11 +11,12 @@ import Htoworkslider from '@components/home/Htoworkslider';
 import Hoteamsslide from '@components/home/Hoteamsslide';
 import Accordion from '@components/faq/Accordion';
 import HomepopVideo from '@components/home/HomepopVideo';
+import NutritiousEnquire from '@components/home/NutritiousEnquirepop';
+
 import Homebanimg from "../../public/home/homebanimg.jpeg";
 import hintroImgOne from "../../public/home/hintroImg-one.jpg";
 import hintroImgTwo from "../../public/home/hintroImg-two.jpg";
 import HNutritionImg from "../../public/home/HNutritionImg.jpg";
-
 import banicon1 from "../../public/home/icons/hban/lines.svg";
 import banicon2 from "../../public/home/icons/hban/round.svg";
 import banicon3 from "../../public/home/icons/hban/lines1.svg";
@@ -87,7 +88,15 @@ const Home = () => {
         },
       ];
 
+    const [popopen, setpopOpen] = useState(false);
 
+    const handlepopOpenDialog = () => {
+        setpopOpen(true);
+    };
+
+    const handlepopCloseDialog = () => {
+        setpopOpen(false);
+    };
 
 
 
@@ -120,7 +129,7 @@ const Home = () => {
                 </div>
             </section>
 
-              <section className='HintroSec bg-FFF4D7 relative flex py-[12vh]'>
+              <section className='HintroSec bg-FFF4D7 relative flex secpaddblock'>
                   <div className='container mx-auto relative' >
                     <div className='flex items-center max-md:flex-col-reverse' >
                         <div className='flex-1 hbanLeft flex justify-center flex-col' >
@@ -153,7 +162,7 @@ const Home = () => {
                       </div>
                   </div>
             </section>
-            <section className='HProlistSec bg-FF6514 relative bg-white flex py-[12vh]'>
+              <section className='HProlistSec bg-FF6514 relative bg-white flex secpaddblock'>
                   <div className='container mx-auto relative' >
                     <div className='hProListTitle combtntb comtilte textcenter mb-[8vh]'>
                         <h3>Small Bites, Huge Impact</h3>
@@ -180,7 +189,7 @@ const Home = () => {
                       </div> */}
                 </div>
             </section>
-            <section className='HLFOlistSec bg-FFE6E6 relative  flex pt-[20vh] pb-[12vh]'>
+              <section className='HLFOlistSec bg-FFE6E6 relative flex'>
                   <div className='container mx-auto flex flex-col items-start relative' >
                     <div className='hLFOTitle combtntb comtilte mb-[5vh]'>
                         <h3 className='text-[#000000]'>serving your school</h3>
@@ -197,7 +206,7 @@ const Home = () => {
                       </div>
                 </div>
             </section>
-            <section className='HworktabSec relative bg-white flex py-[12vh]'>
+              <section className='HworktabSec relative bg-white flex secpaddblock'>
                 <div className='container mx-auto' >
                     <div className='hworkTitle combtntb comtilte textcenter  mb-[5vh]'>
                         <h4 className='text-[#000000]'>How IT</h4>
@@ -209,7 +218,7 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-            <section className='HteamSec relative bg-FF6514 flex py-[12vh]'>
+              <section className='HteamSec relative bg-FF6514 flex secpaddblock'>
                   <div className='container mx-auto relative' >
                     <div className='hworkTitle combtntb comtilte textcenter mb-[5vh]'>
                         <h4 className='text-[#000000]'>Meet the team</h4>
@@ -232,7 +241,7 @@ const Home = () => {
                       </div>
                 </div>
             </section>
-            <section className='HNutritionSec relative bg-FFF4D7 flex py-[12vh]'>
+              <section className='HNutritionSec relative bg-FFF4D7 flex secpaddblock'>
                   <div className='container mx-auto relative' >
                     <div className='hNutritionTitle combtntb comtilte textcenter mb-[4vh]'>
                         <h4 className='text-[#000000]'>Explore Nutritious food</h4>
@@ -251,7 +260,7 @@ const Home = () => {
                     </div>
                     <div className='hNutritionTitle combtntb comtilte textcenter mt-[4vh]'>      
                         <p className=''>Kickstart your child's wellness with a complimentary session to explore our <br/>yummy and healthy meal options. See how our nutritious food can make a positive difference!</p>      
-                        <p className="parabtn flex"><Link href="/" className="emenulink relative" ><span className='block flex items-center relative'>Lets Talk</span></Link></p>
+                          <p className="parabtn flex"><Link href="/" className="emenulink relative" onClick={handlepopOpenDialog}><span className='block flex items-center relative'>Lets Talk</span></Link></p>
                     </div>
                 </div>
             </section>
@@ -274,6 +283,7 @@ const Home = () => {
         </div>
         <Mainfooter/>
         <HomepopVideo open={open} onClose={handleCloseDialog}/>
+          <NutritiousEnquire open={popopen} onClose={handlepopCloseDialog} />
     </div>
   );
 }

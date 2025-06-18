@@ -227,6 +227,7 @@ const RightPanel = ({
                               );
                               setActiveChild(childIndex);
                             }}
+                            className="RGradiobtnSSS"
                           >
                             {mealPlans.map((plan) => (
                               <Box
@@ -234,6 +235,7 @@ const RightPanel = ({
                                 display="flex"
                                 alignItems="center"
                                 mb={0.5}
+                                className="RGradiobtn"
                               >
                                 <Radio
                                   value={plan.id}
@@ -328,7 +330,7 @@ const RightPanel = ({
                       </Box>
                       {childIndex === 0 && (
                         <Box sx={{ mt: 1 }}>
-                          <FormControlLabel
+                          <FormControlLabel className="cbapplysbtn"
                             control={
                               <Checkbox
                                 checked={applyToAll}

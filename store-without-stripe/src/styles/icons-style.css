@@ -146,3 +146,29 @@
 .menulIconss .iconone{top: 26%;right: -4%;}
 .menulIconss .icontwo{top: 43%;right: 47%;}
 
+@media screen and (max-width:1420px) {
+  .hbanIconss .iconone {
+    width: 40px;
+  }
+
+  .hbanIconss .icontwo {
+    width: 20px;
+  }
+
+  .hbanIconss .iconthree {
+    width: 65px;
+  }
+
+  .hbanIconss .iconfour {
+    width: 35px;
+  }
+
+.hbanIconss .iconfive {
+  width: 38px;
+}
+
+.hbanIconss .iconsix {
+  width: 50px;
+}
+
+}
