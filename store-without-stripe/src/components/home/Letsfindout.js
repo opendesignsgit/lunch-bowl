@@ -16,9 +16,7 @@ const Letsfindout = () => {
     reload,
   } = useAsync(CategoryServices.getAllSchools);
 
-  console.log("====================================");
-  console.log("Available Schools:", schools);
-  console.log("====================================");
+
 
   const handleInputChange = (e) => {
     setSchoolName(e.target.value);
