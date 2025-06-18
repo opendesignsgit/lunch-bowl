@@ -469,17 +469,8 @@ const deleteHoliday = async (req, res) => {
 
 const sendSchoolEnquiryMail = async (req, res) => {
   try {
-    const { firstName, lastName, mobileNumber, schoolName, message } = req.body;
-
-    console.log("====================================");
-    console.log("New School Enquiry Data:", {
-      firstName,
-      lastName,
-      mobileNumber,
-      schoolName,
-      message,
-    });
-    console.log("====================================");
+    const { firstName, lastName, mobileNumber, schoolName, message, email } =
+      req.body;
 
     // Create a transporter object using SMTP transport
     const transporter = nodemailer.createTransport({
@@ -490,16 +481,26 @@ const sendSchoolEnquiryMail = async (req, res) => {
       },
     });
 
+    // Determine subject based on enquiry type
+    const enquiryType =
+      schoolName === "Nutrition Enquiry" ? "Nutrition" : "School Service";
+    const subject = `New ${enquiryType} Enquiry from ${firstName} ${lastName}`;
+
     // Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: "shivarex.c@gmail.com",
-      subject: `New School Service Enquiry from ${firstName} ${lastName}`,
+      subject: subject,
       html: `
-        <h2>New School Service Enquiry</h2>
+        <h2>New ${enquiryType} Enquiry</h2>
         <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+        ${email ? `<p><strong>Email:</strong> ${email}</p>` : ""}
         <p><strong>Mobile Number:</strong> ${mobileNumber}</p>
-        <p><strong>School Name:</strong> ${schoolName}</p>
+        ${
+          schoolName && schoolName !== "Nutrition Enquiry"
+            ? `<p><strong>School Name:</strong> ${schoolName}</p>`
+            : ""
+        }
         <p><strong>Message:</strong> ${
           message || "No additional message provided"
         }</p>
