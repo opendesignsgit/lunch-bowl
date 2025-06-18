@@ -11,6 +11,7 @@ const {
   updateStaff,
   deleteStaff,
   updatedStatus,
+  sendSchoolEnquiryMail,
 } = require("../controller/adminController");
 const { passwordVerificationLimit } = require("../lib/email-sender/sender");
 
@@ -25,6 +26,8 @@ router.put("/forget-password", passwordVerificationLimit, forgetPassword);
 
 //reset-password
 router.put("/reset-password", resetPassword);
+
+router.post("/school-enquiry", sendSchoolEnquiryMail);
 
 //add a staff
 router.post("/add", addStaff);
@@ -43,5 +46,7 @@ router.put("/update-status/:id", updatedStatus);
 
 //delete a staff
 router.delete("/:id", deleteStaff);
+
+
 
 module.exports = router;
