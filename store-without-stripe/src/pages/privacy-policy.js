@@ -1,119 +1,83 @@
 import React from "react";
+import Image from "next/image";
+import Breadcrumbs from "@layout/Breadcrumbs";
+import Mainheader from '@layout/header/Mainheader';
+import Mainfooter from '@layout/footer/Mainfooter';
 
-//internal import
-import Layout from "@layout/Layout";
-import useGetSetting from "@hooks/useGetSetting";
-import PageHeader from "@components/header/PageHeader";
-import CMSkeleton from "@components/preloader/CMSkeleton";
-import useUtilsFunction from "@hooks/useUtilsFunction";
-
+import abbanicon1 from "../../public/about/icons/herosec/pink-rounded-lines.svg";
+import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
 const PrivacyPolicy = () => {
-  const { storeCustomizationSetting, loading, error } = useGetSetting();
-  const { showingTranslateValue } = useUtilsFunction();
-  // console.log("data", storeCustomizationSetting);
-
   return (
-    <Layout title="Privacy Policy" description="This is privacy policy page">
-      <PageHeader
-        headerBg={storeCustomizationSetting?.privacy_policy?.header_bg}
-        title={showingTranslateValue(
-          storeCustomizationSetting?.privacy_policy?.title
-        )}
-      />
-      <div className="bg-white">
-        <div className="max-w-screen-2xl mx-auto lg:py-20 py-10 px-4 sm:px-10">
-          <CMSkeleton
-            html
-            count={15}
-            height={15}
-            error={error}
-            loading={loading}
-            data={storeCustomizationSetting?.privacy_policy?.description}
-          />
-          <br />
-          <CMSkeleton count={15} height={15} loading={loading} />
-          <br />
-          <CMSkeleton count={15} height={15} loading={loading} />
-          {/* <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-consent")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-consent-docs")}</p>
+    <div className="privacypolicypage allpolicypage">
+      <Mainheader title="Privacy Policy" description="This is Privacy Policy page" />
+      <div className='pagebody'>
+        <section className="pagebansec aboutbanersec relative">
+          <div className='container mx-auto relative h-full' >
+            <div className='pageinconter relative h-full w-full flex items-center'>
+              <div className='hworkTitle combtntb comtilte'>
+                <h1 className='flex flex-col textFF6514'> <span className='block firstspan'>Privacy </span> <span className='block'>Policy</span> </h1>
+                <Breadcrumbs />
+              </div>
+            </div>
+            <div className='abbanIconss'>
+              <div className='abbanicn iconone absolute'><Image src={abbanicon1} priority alt='Icon' className='iconrotates' /></div>
+              <div className='abbanicn icontwo absolute'><Image src={abbanicon2} priority alt='Icon' /></div>
             </div>
           </div>
-          <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-information")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-information-docs1")}</p>
-              <p>{t("common:privacy-policy-information-docs2")}</p>
-            </div>
-          </div>
-          <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-use-information")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-use-information-docs")}</p>
+        </section>
+        <section className="PolicyCont relative secpaddblock">
+          <div className='container mx-auto relative' >
 
-              <ol>
-                <li>{t("common:privacy-policy-use-information-docs1")}</li>
-                <li>{t("common:privacy-policy-use-information-docs2")}</li>
-                <li>{t("common:privacy-policy-use-information-docs3")}</li>
-                <li>{t("common:privacy-policy-use-information-docs4")}</li>
-                <li>{t("common:privacy-policy-use-information-docs5")}</li>
-                <li>{t("common:privacy-policy-use-information-docs6")}</li>
-                <li>{t("common:privacy-policy-use-information-docs7")}</li>
-              </ol>
+            <div className='combtntb comtilte policycomtb'>
+              <div className="policyintb">
+                <h3 className='flex flex-col text4AB138'>
+                  <span className='block'>Privacy Policy Statement</span>
+                </h3>
+                <p>This Privacy Policy outlines how Lunch Bowl collects, uses, discloses, and safeguards personal information provided by users.</p>
+              </div >
+              <div className="policyintb">
+                <h4>1. Information Collected</h4>
+                <p>We may collect and store the following types of information:</p>
+                <ul>
+                  <li>Parent/guardian name, contact number, and email address</li>
+                  <li>Child’s name, school, class, and dietary preferences</li>
+                  <li>Payment and transaction data (processed via secure third-party gateways)</li>
+                </ul>
+              </div>
+              <div className="policyintb">
+
+                <h4>2. Use of Information</h4>
+                <p>Your information may be used for:</p>
+                <ul>
+                  <li>Processing orders and facilitating deliveries</li>
+                  <li>Personalizing menus and accommodating dietary needs</li>
+                  <li>Communicating order updates, service changes, and promotional offers</li>
+                  <li>Internal analytics and service improvement</li>
+                </ul>
+              </div>
+              <div className="policyintb">
+
+                <h4>3. Disclosure of Information</h4>
+                <p>We do not sell or rent your personal data. Your information may be shared with trusted partners (such as delivery or payment providers) strictly for the purpose of fulfilling services.</p>
+              </div>
+              <div className="policyintb">
+
+                <h4>4. Data Security</h4>
+                <p>We implement reasonable physical, electronic, and managerial safeguards to protect your information. However, no method of transmission over the Internet is 100% secure.</p>
+              </div>
+              <div className="policyintb">
+
+                <h4>5. User Rights</h4>
+                <p>You may request access, correction, or deletion of your personal data by contacting us at [Insert Contact Email].</p>
+              </div>
+
             </div>
           </div>
-          <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-log-file")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-log-file-docs")}</p>
-            </div>
-          </div>
-          <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-advertising")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-advertising-docs")}</p>
-            </div>
-          </div>
-          <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-third-party")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-third-party-docs1")}</p>
-              <p>{t("common:privacy-policy-third-party-docs2")}</p>
-            </div>
-          </div>
-          <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-ccpa-rights")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-ccpa-rights-docs")}</p>
-            </div>
-          </div>
-          <div className="mb-8 lg:mb-12 last:mb-0">
-            <h2 className="text-xl xl:text-2xl xl:leading-7 font-semibold font-serif mb-2 lg:mb-4">
-              {t("common:privacy-policy-children-information")}
-            </h2>
-            <div className="font-sans leading-7">
-              <p>{t("common:privacy-policy-children-information-docs1")}</p>
-              <p>{t("common:privacy-policy-children-information-docs2")}</p>
-            </div>
-          </div> */}
-        </div>
+        </section>
       </div>
-    </Layout>
+      <Mainfooter />
+    </div>
+
   );
 };
 

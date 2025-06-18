@@ -112,7 +112,7 @@ const ContactUs = () => {
           </section>
           <section className="formsec pt-[10vh] pb-[14vh]">
             <div className="container mx-auto">
-              <div className="items-center flex flex-col flex-wrap md:flex-row w-full justify-between">
+            <div className="items-center flex flex-col flex-wrap md:flex-row w-full justify-between contustop">
                 <div className="flex contaddsboxs w-full">
                     <div className="flex-1">
                       <div className="addsboxss adboxone">
@@ -138,10 +138,10 @@ const ContactUs = () => {
                       </div>
                     </div>
                 </div>
-                <div className="hidden md:w-full lg:w-5/12 lg:flex flex-col h-full">
+              <div className="hidden md:w-full lg:w-5/12 lg:flex flex-col h-full contusmid">
                   <Image src={contforming} alt="logo" className="block w-full" />
                 </div>
-                <div className="px-0 pb-2 lg:w-5/12 flex flex-col md:flex-row formbox">
+              <div className="px-0 pb-2 lg:w-5/12 flex flex-col md:flex-row formbox contuslast">
                   <form onSubmit={handleSubmit(submitHandler)} className="w-full mx-auto flex flex-col justify-center">
                     <div className="flex flex-col space-y-5">
                       <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">

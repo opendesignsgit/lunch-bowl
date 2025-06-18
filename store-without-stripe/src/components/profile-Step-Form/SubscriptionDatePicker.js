@@ -148,31 +148,32 @@ const SubscriptionDatePicker = ({
         open={open}
         onClose={() => setOpen(false)}
         maxWidth="xs"
-        fullWidth
+        fullWidth className="dpmodalbox"
       >
-        <DialogTitle>
+        <DialogTitle className="poptitle">
           Select {type === "start" ? "Start" : "End"} Date
-          <Box sx={{ mt: 1 }}>
-            <Chip
-              label={dayjs(`${currentYear}-${currentMonth + 1}-01`).format(
-                "MMMM YYYY"
-              )}
-              color="primary"
-              size="small"
-            />
-          </Box>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent className="dateboxss">
           <Box sx={{ p: 2 }}>
             <Box
               display="flex"
               justifyContent="space-between"
               alignItems="center"
               mb={2}
+              className="dateboxarrow"
             >
               <IconButton onClick={() => handleMonthChange(-1)}>
                 <ChevronLeft />
               </IconButton>
+              <Box sx={{ mt: 1 }} className="datebtn">
+                <Chip
+                  label={dayjs(`${currentYear}-${currentMonth + 1}-01`).format(
+                    "MMMM YYYY"
+                  )}
+                  color="primary"
+                  size="small"
+                />
+              </Box>
               <IconButton onClick={() => handleMonthChange(1)}>
                 <ChevronRight />
               </IconButton>
@@ -183,6 +184,7 @@ const SubscriptionDatePicker = ({
               gridTemplateColumns="repeat(7, 1fr)"
               textAlign="center"
               mb={1}
+              className="poptopdays"
             >
               {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
                 <Typography key={day} variant="caption" color="textSecondary">
@@ -191,7 +193,7 @@ const SubscriptionDatePicker = ({
               ))}
             </Box>
 
-            <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" gap={1}>
+            <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" gap={1} className="popbtmdays" >
               {calendarDates.map((date, idx) => {
                 if (date === null) return <Box key={idx} />;
 
@@ -212,7 +214,6 @@ const SubscriptionDatePicker = ({
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    height={36}
                     sx={{
                       cursor: disabled ? "default" : "pointer",
                       mx: "auto",
@@ -238,8 +239,8 @@ const SubscriptionDatePicker = ({
               })}
             </Box>
 
-            <Box mt={3} display="flex" justifyContent="space-between">
-              <Box>
+            <Box className='submitbtn'>
+              <div className='subbcont'>
                 {type === "start" && (
                   <Typography variant="caption" color="text.secondary">
                     Weekends and holidays are not selectable
@@ -250,19 +251,19 @@ const SubscriptionDatePicker = ({
                     Only the last working day is selectable
                   </Typography>
                 )}
-              </Box>
-              <Box>
-                <Button onClick={() => setOpen(false)} sx={{ mr: 1 }}>
+              </div>
+              <div className='subbtnss'>
+                <Button onClick={() => setOpen(false)} sx={{ mr: 1 }} className="cancelbtn">
                   Cancel
                 </Button>
                 <Button
                   variant="contained"
                   onClick={() => setOpen(false)}
-                  disabled={!valueDayjs}
+                  disabled={!valueDayjs} className="confirmbtn"
                 >
                   Confirm
                 </Button>
-              </Box>
+              </div>
             </Box>
 
             {holidays.some((h) =>
@@ -271,12 +272,12 @@ const SubscriptionDatePicker = ({
                 "month"
               )
             ) && (
-              <Box mt={2}>
+              <Box mt={2} className="holidyssmth">
                 <Typography variant="caption" color="text.secondary">
                   Holidays this month:
                 </Typography>
                 <Box
-                  sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 0.5 }}
+                  sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 0.5, justifyContent: "center", }}
                 >
                   {holidays
                     .filter((h) =>
