@@ -119,7 +119,7 @@ const ContactUs = () => {
                         <div className="addsIcon"><Image src={phoneicon} alt=""/></div>
                         <h3>Feel free to get in touch</h3>
                         <p>Give us a call today</p>
-                        <p className="parabtn"><Link href="tel:+911234567890">+91 12345 67890</Link></p>
+                    <p className="parabtn"><Link href="tel:+919176917602">+91 9176 9176 02</Link></p>
                       </div>
                     </div>
                     <div className="flex-1">
@@ -127,14 +127,14 @@ const ContactUs = () => {
                         <div className="addsIcon"><Image src={mailicon} alt=""/></div>
                         <h3>Write to us</h3>
                         <p>Send us an email</p>
-                        <p className="parabtn"><Link href="mailto:lorem@url.in">lorem@url.in</Link></p>
+                    <p className="parabtn"><Link href="mailto:reachus@lunchbowl.co.in">reachus@lunchbowl.co.in</Link></p>
                       </div>
                     </div>
                     <div className="flex-1">
                       <div className="addsboxss adboxone">
                         <div className="addsIcon"><Image src={locaticon} alt=""/></div>
                         <h3>Where to Find Us</h3>
-                        <p className="parabtn"><Link href="/">Lorem ipsum dolor sit amet consec <br/>tetur. Mauris adipiscing- 600 049.</Link></p>
+                    <p className="parabtn"><Link href="/">1B, KG Natraj Palace, 53/22, <br />Saravana Street, T Nagar, <br />Chennai 600017.</Link></p>
                       </div>
                     </div>
                 </div>
