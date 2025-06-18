@@ -89,6 +89,9 @@ header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 
 .compopup textarea{}
 
 body .comffamily{font-family: 'Baloo';font-weight: 100;letter-spacing: -0.5px;}
+body .secpaddblock {
+  padding-block: 12vh;
+}
 
 .HbanSec{}
 .HbanSec::before{content:'';position: absolute;width: 100%;height:7%;left: 0px;bottom: -3px;background: url(/home/banbtmpattern.png) no-repeat top center;background-size: 100%;pointer-events: none;z-index: 9;}
@@ -237,6 +240,12 @@ ul.footmenu li a{color: #FFFFFF;}
 }
 .HProlistSec:before{content: '';position: absolute;width: 100%;height: 40px;bottom: 0;left: 0;background: url(/home/btmWaveVector.png) repeat-x top center;background-size: auto 85%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;
   -webkit-animation: slide 50s linear infinite;pointer-events: none;}
+.menulistpage .HProlistSec:before {
+  animation: none;
+  background: url(/menulist-shape.png) no-repeat bottom center;
+  background-size: 100% auto;
+  height: 5vh;
+}
 .arrowIcon{box-shadow: 4px 4px 10px #3333333d}
 .progroupitem{border: 1px solid #777777;cursor: pointer;width: calc(33.333% - 20px);margin: 10px;}
 .nutritionboxs {}
@@ -262,7 +271,11 @@ ul.footmenu li a{color: #FFFFFF;}
   to { background-position: -500% 0; }
 }
 
-.HLFOlistSec{background: url(/home/bgImgTwo.jpg) no-repeat center bottom;background-size: 100%;}
+.HLFOlistSec {
+  background: url(/home/bgImgTwo.jpg) no-repeat center bottom;
+  background-size: 100%;
+  padding-block: 20vh 12vh;
+}
 .HLFOlistSec:before{content: '';position: absolute;width: 100%;height: 68px;bottom: 0;left: 0;background: url(/home/lfobgbeforimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;pointer-events: none;}
 .HLFOlistSec .comtilte h3{font-size: 3.5vw;}
 .hLFOintrow{}
@@ -408,6 +421,18 @@ ul.footmenu li a{color: #FFFFFF;}
 .faqAccordionitems .incont{padding-block: 20px;}
 .faqAccordionitems.active .faqbodycont{}
 
+.contuspage .HfaqSec::before {
+  background: url(/contactfaqshape.jpg) no-repeat bottom center;
+  background-size: 100%;
+}
+
+.contuspage .HfaqSec::after {
+  opacity: 0;
+}
+
+.HfaqSec .Hfaqinrow::before {
+  opacity: 0;
+}
 .HfaqSec.senddesfaq::before{background: url(/contus/contfaqbg.png) no-repeat top center; background-size: 100%;height: 65px;}
 .HfaqSec.senddesfaq::after{opacity: 0;}
 .HfaqSec.senddesfaq .Hfaqinrow::before{opacity: 0;}
@@ -428,6 +453,10 @@ ul.footmenu li a{color: #FFFFFF;}
 .pagebansec .breadcrumbs ol li a:hover{color: #4ab238;}
 .pagebansec .breadcrumbs ol li span{font-weight: 600;}
 .pagebansec::before{content: '';position: absolute;width: 100%;height: 35px;bottom: -1px;left: 0;background: url(/introtopbefrimg.png) repeat-x top center;background-size: 90%;-webkit-transform: translateY(00%);-ms-transform: translateY(00%);transform: translateY(00%);z-index: 9;pointer-events: none;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
+.allpolicypage .pagebansec::before {
+  background: url(/introtopbefrimg-fafafa.png) repeat-x top center;
+  background-size: 90%;
+}
 .MenusLbanersec.pagebansec::before{background: url(/introtopbefrimg-fff4d7.png) repeat-x top center;background-size: 90%;}
 .aboutbanersec .pageinconter::after{content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: 0;background: url(/about/about-banimg.png) no-repeat center bottom;background-size: 100%;}
 .contusbanersec .pageinconter::after {
@@ -629,6 +658,7 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .childlistbox .checkboxbtn span input:focus{outline: none;box-shadow: none;}
 .childlistbox .checkboxbtn span svg{display: none;}
 .childlistbox .checkboxbtn>p{color: #ffffff;font-weight: 500;letter-spacing: -0.5px;font-size: 14px;line-height: 1.2;}
+.childinputbox .childmlist {}
 .btngroups{}
 .btngroups button{position: relative;padding: 0;border: none;width: auto;background: transparent;box-shadow: none;}
 .btngroups button::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #ffffff;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
@@ -637,12 +667,12 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .btngroups button span.MuiTouchRipple-root{display: none;}
 .btngroups button span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: brightness(0) saturate(100%) invert(49%) sepia(90%) saturate(1395%) hue-rotate(359deg) brightness(105%) contrast(105%);}
 .btngroups button:hover span::after{top: -3px;right: -3px;}
-
 .btngroups button.cancelbtn span{background: transparent;color: #ffffff;}
 .btngroups button.cancelbtn span::after{display: none;}
-
 .radiobtngroup {}
-.radiobtngroup .radiobtrow {}
+.radiobtngroup .radiobtnss {}
+.radiobtngroup .radiobtnss .RGradiobtn p {  color: #ffffff;  font-weight: 700;  text-transform: uppercase;}
+.radiobtngroup .radiobtnss .RGradiobtn span {  color: #ffffff;}
 .radiobtngroup .radiobtrow .MuiBox-root{margin-bottom: 10px;padding: 5px 10px;border: 1px solid rgb(255 255 255 / 24%);border-radius: 6px;}
 .radiobtngroup .radiobtrow .radiobtnsinput {padding: 0;color: #ffffff;}
 .radiobtngroup .radiobtrow .radiobtnstext  {color: #ffffff;padding-left: 6px;font-size: 14px;font-weight: 500;}
@@ -698,14 +728,132 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .ProdfilterBox {}
 .homepage .ProdfilterBox {display: none;}
 .ProdfilterBox ul{border-bottom: 1px dashed #CCCCCC;}
-.ProdfilterBox ul li{padding-bottom: 10px;}
-.ProdfilterBox ul li button{font-family: 'Baloo';color: #777777;padding-inline: 30px;position: relative;height: 30px;font-size: 1vw;}
+.ProdfilterBox ul li {padding-bottom: 10px;  -webkit-box-flex: 1;  -ms-flex: 1;  flex: 1;  display: -webkit-box;  display: -ms-flexbox;  display: flex;  -webkit-box-pack: center;  -ms-flex-pack: center;  justify-content: center;  position: relative;}
+
+.ProdfilterBox ul li::before {  content: '';  position: absolute;  width: 100%;  height: 1px;  left: 0;  bottom: -1px;  background: #FF6514;  opacity: 0;  visibility: hidden;}
+.ProdfilterBox ul li.active::before {  opacity: 1;  visibility: visible;}
+.ProdfilterBox ul li button {  font-family: 'Baloo';  color: #777777;  padding-inline: 30px;  position: relative;  height: 30px;  font-size: 1vw;  width: 100%;  text-transform: uppercase;}
 .ProdfilterBox ul li button::before{content: '';position: absolute;top: 0;left: 0; border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-left: 15px solid #FFF4D7;}
 .ProdfilterBox ul li button::after{content: '';position: absolute;top: 0;right: 0; border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-right: 15px solid #FFF4D7;}
-.ProdfilterBox ul li button.active{background: #FF6514;color: #ffffff;}
+.ProdfilterBox ul li.active button {  background: #FF6514;  color: #ffffff;}
+.custdatepick {  margin-top: 15px;}
+.custdatepick button {  color: #f86213;  border-color: #f86213;  background: #ffffff;}
+.custdatepick button:hover {  background: #f86213;  color: #ffffff;}
+.dpmodalbox h2 {  font-family: 'Baloo';  font-size: 1.2vw;  font-weight: 100;  line-height: 1;  padding-bottom: 0;  text-align: center;}
+.dateboxarrow .datebtn {  margin-top: 0;}
+.datebtn div {  background: transparent;}
+.datebtn div span {  letter-spacing: 1px;  text-transform: uppercase;  color: #f86213;}
+.dateboxss>div {  padding-inline: 0;}
+.dpmodalbox .dateboxarrow {  margin-bottom: 0;}
+.dateboxss .poptopdays {  border: 1px solid #cccccc;  margin-bottom: 0;}
+.poptopdays>span {  border-right: 1px solid #cccccc;  font-weight: 500;  color: #333;  display: flex;  aspect-ratio: 2 / 1;  align-items: center;  justify-content: center;  line-height: 0;}
+.poptopdays>span:last-child {  border-right: 0px solid #cccccc;}
+.dateboxss .popbtmdays {  border: 1px solid #cccccc;  border-top: none;}
+.dateboxss .popbtmdays div {  width: 80%;  aspect-ratio: 1;}
+.dateboxss .popbtmdays div.css-0 {}
+.popbtmdays div p {}
+.dpmodalbox .dateboxss>div {  padding-bottom: 0;}
+.submitbtn {  text-align: center;}
+
+.subbtnss button {  padding-block: 0;  line-height: 36px;  padding-inline: 20px;  margin-inline: 8px;  border: 2px solid #333;  background: #333;  color: #ffffff;}
+.subbtnss .cancelbtn:hover {  background: #ffffff;  color: #333333;}
+.subbtnss .confirmbtn {  background: #f86213;  border-color: #f86213;}
+.subbtnss .confirmbtn:hover {  background: #ffffff;  color: #f86213;}
+.holidyssmth {  text-align: center;}
+.cbapplysbtn {  margin-right: 0;}
+.cbapplysbtn svg {  fill: #ffffff;}
+.PolicyCont {  background: #fafafa;}
+.policycomtb {}
+.policycomtb .policyintb {  margin-bottom: 4vh;}
+.policycomtb .policyintb:last-child {  margin-bottom: 0px;}
+.policycomtb .policyintb ul {  margin-top: 10px;}
+.policycomtb .policyintb ul li {  padding-left: 12px;  position: relative;}
+.policycomtb .policyintb ul li::before {  content: '';  position: absolute;  top: 8px; left: 0;  border-top: 5px solid transparent;  border-bottom: 5px solid transparent;  border-left: 5px solid #f86213;}
+body .compopups .fieldbox {}
+body .compopups .fieldbox label {}
+body .compopups .fieldbox input {}
+body .compopups .fieldbox input:focus,
+body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shadow: none;}
 
 
+@media (min-width: 1100px) {
+  .container {max-width: 980px;  }
+}
+@media (min-width: 1400px) {
+  .container {max-width: 1050px;  }
+}
+@media (min-width: 1460px) {
+  .container {max-width: 1200px;  }
+}
+@media (min-width: 1620px) {
+  .container {max-width: 1320px;  }
+}
 
-@media (min-width: 1536px) {
-  .container {max-width: 1320px;}
+@media screen and (max-width:1800px) {
+  body {font-size: 17px;}
+}
+
+@media screen and (max-width:1620px) {
+  body {font-size: 16px;}
+  .myLogo {width: 6vw;}
+  .HteamSec::after {height: 40px;  }
+  .logsinul li button,  .combtntb p.parabtn a span {    line-height: 40px;    padding-inline: 25px;    font-size: 16px;  }
+  .inputbox button span {    line-height: 40px;    padding-inline: 25px;    font-size: 14px;  }
+  .teamsliders .slick-arrow {    top: calc(100% + 60px);  }
+  .faqcontain {    padding-block: 4vw;    padding-inline: 6vw;  }
+  .HfaqSec::before {    height: 84px;  }
+  .faqAccordionitems .incont {    padding-block: 15px;  }
+  .faqAccordionitems button {    line-height: 1;  }
+  .faqcontain::after {    height: 34px;  }
+}
+
+@media screen and (max-width:1520px) {
+  body {    font-size: 14.5px;  }
+  .homepage {    overflow: hidden;  }
+  body .nutripopup .fieldbox input {    padding: 0 20px;    height: 40px;    font-size: 14px;  }
+  body .nutripopup .fieldbox label {    top: -6px;    font-size: 14px;  }
+  .HLFOlistSec:before {    height: 35px;  }
+  .faqcontain:before {    height: 32px;  }
+  .teamsliders .slick-arrow::before {    font-size: 2.5vw;  }
+  .DetlsSepBox .subbtnrow button.backbtn span,  .DetlsSepBox .subbtnrow button.nextbtn span {    line-height: 40px;    font-size: 14px;  }
+}
+
+@media screen and (max-width:1420px) {
+  body {    font-size: 13.5px;  }
+  header {    padding: 2vh 4vw 1vh;  }
+  .logsinul li button,  .combtntb p.parabtn a span {    line-height: 36px;    padding-inline: 22px;    font-size: 14px;  }
+  .inputbox button span {    line-height: 36px;    padding-inline: 22px;    font-size: 13px;  }
+  .inputbox select,  .inputbox input {    font-size: 14px;    line-height: 36px;  }
+  .faqAccordionitems.active .faqbodycont {    max-height: initial !important;  }
+  .addsboxss {    padding: 22px;  }
+  .contusmid {    width: 50%;    padding-inline: 20px;  }
+  .contuslast {    width: 50%;    padding-inline: 20px;  }
+  .compopups {}
+  .faqAccordionitems button {    font-size: 17px;  }
+  .MCcalendy .MCMainPanel,  .MCcalendy .MCLeftPanel {    min-height: 90vh;  }
+  .MCcalendy .MCMiddlePanel .clandhead p {    font-size: 13px;  }
+  .fixcheckboxs label>p {    font-size: 12px;  }
+  body .SetpContainer {    padding-block: 80px;  }
+  body .SetpContainer .DetlsSepBox {    max-width: 75vw;  }
+  .DetlsSepBox h6 {    font-size: 12px;  }
+  .DetlsSepBox .formboxrow .formboxcol .MuiFormControl-root {    width: 100%;    min-width: auto;  }
+  .DetlsSepBox .formboxrow .formboxcol .MuiFormControl-root .MuiPickersSectionList-root {font-size: 13px;padding-block: 13px;}
+  .DetlsSepBox input,   .DetlsSepBox .formboxrow .formboxcol .MuiSelect-select {line-height: 45px;font-size: 13px;   height: 45px;  }
+  .DetlsSepBox textarea {font-size: 13px;}
+  .DetlsSepBox .formboxrow .formboxcol .MuiTextField-root .MuiInputLabel-formControl {font-size: 14px}
+  .DetlsSepBox .formboxrow .formboxcol .MuiFormControl-root .MuiPickersInputBase-root {}
+  .SetpTabli p {font-size: 14px;}
+  .radiogroub>.MuiBox-root {padding: 8px 20px;}
+  .ProdfilterBox ul li button {  font-size: 15px;}
+}
+
+@media screen and (max-width:1200px) {
+  body {font-size: 13px;  }
+  .HLFOlistSec {padding-block: 80px;}
+  .logsinul li button, .combtntb p.parabtn a span {line-height: 32px;padding-inline: 15px;font-size: 13px;}
+  .logsinul li button::after {width: 10px;}
+  .HintroSec .hbanLeft:before{width: 45px;left: -18px;}
+  .lfooutfild h6 {font-size: 15px;}
+  .lfooutfild h6 small{display: block;font-size: 90%;margin-top: 5px;}
+  .hLFOintrow {width: 46%;}
 }

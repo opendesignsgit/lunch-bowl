@@ -489,7 +489,7 @@ const CustomDateSelection = ({
   onEndDateChange,
   holidays,
 }) => (
-  <Box
+  <Box className="custmontplan"
     sx={{
       border: "1px solid #ddd",
       borderRadius: "8px",
@@ -522,9 +522,9 @@ const CustomDateSelection = ({
       }
     />
     {selectedPlan === "byDate" && (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className="custdatepick">
         {/* Start Date Picker */}
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} className="cusdpstart">
           <Typography variant="subtitle2" gutterBottom>
             Start Date
           </Typography>
@@ -542,7 +542,7 @@ const CustomDateSelection = ({
         </Grid>
 
         {/* End Date Picker */}
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} className="cusdpend">
           <Typography variant="subtitle2" gutterBottom>
             End Date
           </Typography>
