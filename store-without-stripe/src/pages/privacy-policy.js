@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
               <div className="policyintb">
 
                 <h4>5. User Rights</h4>
-                <p>You may request access, correction, or deletion of your personal data by contacting us at [Insert Contact Email].</p>
+                <p>You may request access, correction, or deletion of your personal data by contacting us at <a href='mailto:reachus@lunchbowl.co.in'>reachus@lunchbowl.co.in</a>.</p>
               </div>
 
             </div>
