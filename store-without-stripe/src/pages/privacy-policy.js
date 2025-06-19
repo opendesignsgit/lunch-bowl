@@ -9,75 +9,110 @@ import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
 const PrivacyPolicy = () => {
   return (
     <div className="privacypolicypage allpolicypage">
-      <Mainheader title="Privacy Policy" description="This is Privacy Policy page" />
-      <div className='pagebody'>
+      <Mainheader
+        title="Privacy Policy"
+        description="This is Privacy Policy page"
+      />
+      <div className="pagebody">
         <section className="pagebansec aboutbanersec relative">
-          <div className='container mx-auto relative h-full' >
-            <div className='pageinconter relative h-full w-full flex items-center'>
-              <div className='hworkTitle combtntb comtilte'>
-                <h1 className='flex flex-col textFF6514'> <span className='block firstspan'>Privacy </span> <span className='block'>Policy</span> </h1>
+          <div className="container mx-auto relative h-full">
+            <div className="pageinconter relative h-full w-full flex items-center">
+              <div className="hworkTitle combtntb comtilte">
+                <h1 className="flex flex-col textFF6514">
+                  {" "}
+                  <span className="block firstspan">Privacy </span>{" "}
+                  <span className="block">Policy</span>{" "}
+                </h1>
                 <Breadcrumbs />
               </div>
             </div>
-            <div className='abbanIconss'>
-              <div className='abbanicn iconone absolute'><Image src={abbanicon1} priority alt='Icon' className='iconrotates' /></div>
-              <div className='abbanicn icontwo absolute'><Image src={abbanicon2} priority alt='Icon' /></div>
+            <div className="abbanIconss">
+              <div className="abbanicn iconone absolute">
+                <Image
+                  src={abbanicon1}
+                  priority
+                  alt="Icon"
+                  className="iconrotates"
+                />
+              </div>
+              <div className="abbanicn icontwo absolute">
+                <Image src={abbanicon2} priority alt="Icon" />
+              </div>
             </div>
           </div>
         </section>
         <section className="PolicyCont relative secpaddblock">
-          <div className='container mx-auto relative' >
-
-            <div className='combtntb comtilte policycomtb'>
+          <div className="container mx-auto relative">
+            <div className="combtntb comtilte policycomtb">
               <div className="policyintb">
-                <h3 className='flex flex-col text4AB138'>
-                  <span className='block'>Privacy Policy Statement</span>
+                <h3 className="flex flex-col text4AB138">
+                  <span className="block">Privacy Policy Statement</span>
                 </h3>
-                <p>This Privacy Policy outlines how Lunch Bowl collects, uses, discloses, and safeguards personal information provided by users.</p>
-              </div >
+                <p>
+                  This Privacy Policy outlines how Lunch Bowl collects, uses,
+                  discloses, and safeguards personal information provided by
+                  users.
+                </p>
+              </div>
               <div className="policyintb">
                 <h4>1. Information Collected</h4>
-                <p>We may collect and store the following types of information:</p>
+                <p>
+                  We may collect and store the following types of information:
+                </p>
                 <ul>
-                  <li>Parent/guardian name, contact number, and email address</li>
+                  <li>
+                    Parent/guardian name, contact number, and email address
+                  </li>
                   <li>Child’s name, school, class, and dietary preferences</li>
-                  <li>Payment and transaction data (processed via secure third-party gateways)</li>
+                  <li>
+                    Payment and transaction data (processed via secure
+                    third-party gateways)
+                  </li>
                 </ul>
               </div>
               <div className="policyintb">
-
                 <h4>2. Use of Information</h4>
                 <p>Your information may be used for:</p>
                 <ul>
                   <li>Processing orders and facilitating deliveries</li>
                   <li>Personalizing menus and accommodating dietary needs</li>
-                  <li>Communicating order updates, service changes, and promotional offers</li>
+                  <li>
+                    Communicating order updates, service changes, and
+                    promotional offers
+                  </li>
                   <li>Internal analytics and service improvement</li>
                 </ul>
               </div>
               <div className="policyintb">
-
                 <h4>3. Disclosure of Information</h4>
-                <p>We do not sell or rent your personal data. Your information may be shared with trusted partners (such as delivery or payment providers) strictly for the purpose of fulfilling services.</p>
+                <p>
+                  We do not sell or rent your personal data. Your information
+                  may be shared with trusted partners (such as delivery or
+                  payment providers) strictly for the purpose of fulfilling
+                  services.
+                </p>
               </div>
               <div className="policyintb">
-
                 <h4>4. Data Security</h4>
-                <p>We implement reasonable physical, electronic, and managerial safeguards to protect your information. However, no method of transmission over the Internet is 100% secure.</p>
+                <p>
+                  We implement reasonable physical, electronic, and managerial
+                  safeguards to protect your information. However, no method of
+                  transmission over the Internet is 100% secure.
+                </p>
               </div>
               <div className="policyintb">
-
                 <h4>5. User Rights</h4>
-                <p>You may request access, correction, or deletion of your personal data by contacting us at [Insert Contact Email].</p>
+                <p>
+                  You may request access, correction, or deletion of your
+                  personal data by contacting us at reachus@lunchbowl.co.in.
+                </p>
               </div>
-
             </div>
           </div>
         </section>
       </div>
       <Mainfooter />
     </div>
-
   );
 };
 
