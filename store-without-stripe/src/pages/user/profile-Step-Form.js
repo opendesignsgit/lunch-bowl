@@ -96,48 +96,82 @@ const MultiStepForm = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const faqItems = [
-    {
-      title: "How do you ensure the food is nutritious and safe for my child?",
-      content:
-        "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies.",
-    },
-    {
-      title: "What if my child has specific dietary restrictions or allergies?",
-      content:
-        "We take effort to accommodate allergies and provide menus that may be customized. We prevent cross-contamination with strict protocols.",
-    },
-    {
-      title:
-        "How does the delivery process work, and can I trust it will arrive on time?",
-      content:
-        "For prompt delivery in temperature-controlled trucks, we work with schools. Confirmations will be sent to you, and any delays will be quickly communicated.",
-    },
-    {
-      title:
-        "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
-      content:
-        "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters.  To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery.",
-    },
-    {
-      title:
-        "Over time, what type of variation can I anticipate in the lunch bowl options? ",
-      content:
-        "We make an effort to provide a varied and ever-changing menu to keep your child engaged.  In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients.",
-    },
-    {
-      title:
-        "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
-      content:
-        "Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws.",
-    },
-    {
-      title:
-        "How can I go about giving comments or resolving any issues I might have with the lunch bowls? ",
-      content:
-        " We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously.",
-    },
-  ];
+const faqItems = [
+  {
+    title: "What is Lunch Bowl?",
+    content:
+      "Lunch bowl is an initiative to simplify mealtime for parents by delivering thoughtfully crafted, nutritionist-approved lunch boxes that are fresh, flavourful and tailored to children's preferences, and delivered to the child just ahead of their lunch time to their respective schools.",
+  },
+  {
+    title: "How do I subscribe?",
+    content:
+      "Go to the website (URL)- provide your details, your child's details, select the menu for each day or the meal plan, make payment and you are set.",
+  },
+  {
+    title: "What is the cost of subscription?",
+    content:
+      "Cost of each Lunch bowl is Rs. 200/-. One month subscription would cost you Rs.6000/- (30 meals). You have 3 month, 6 month and yearly subscriptions too which you can avail at a discount.",
+  },
+  {
+    title: "Do I need to select meal for each day?",
+    content:
+      "You may choose to select meal for each day for 30 calendar days or you may choose from the list of Favourite meal Plan or Dietician approved meal plan for 30 days.",
+  },
+  {
+    title: "How is the food prepared?",
+    content:
+      "The food is prepared in a highly clean environment by a team of professional Chefs. Each Box is packed with high quality ingredients and no preservatives are added. The food also meets the daily nutritional value needed by your child.",
+  },
+  {
+    title: "How is the food delivered?",
+    content:
+      "Food is delivered to the school, with the name of the child and class printed on each box. The child will need to pick it from the entrance of the school/ designated place during lunch time.",
+  },
+  {
+    title: "How is the food packed?",
+    content:
+      "The boxes used for packing the food are environmental friendly and made of sugarcane. No plastics are used.",
+  },
+  {
+    title: "How do I opt for trial meal?",
+    content:
+      "When you opt for subscription, you may select the trial meal option, select the food that you want to try from the list that appears, provide your delivery address and the meal will be delivered.",
+  },
+  {
+    title: "What if I need to change the menu item for a particular day?",
+    content:
+      "You may change the menu item 48 hours before the day you want to make the changes, you may select from the list of the items that appear on that particular day to make changes.",
+  },
+  {
+    title: "What if I need to cancel for the lunch box for a particular day?",
+    content:
+      "The cancellations will be accepted if they are made within 48 hours for a particular day.",
+  },
+  {
+    title: "What happens when my 30 day subscription ends?",
+    content:
+      "You will be reminded via whatsapp or SMS prior to the date your subscription ends and you may select from the list of plans as well as present menu options for renewing your subscription.",
+  },
+  {
+    title:
+      "How is cancellation for the days I have not availed lunch refunded?",
+    content:
+      "If you have not availed lunch and paid for 30 day subscription, the same will be adjusted when you renew your next subscription.",
+  },
+  {
+    title: "Any discounts available for siblings?",
+    content: "There is a flat 10% discount available for siblings.",
+  },
+  {
+    title: "How do I track if the order is being delivered?",
+    content: "",
+  },
+  {
+    title: "How do I book an appointment with Dietician?",
+    content:
+      "You may visit our website or app to book for the appointment with dietician, the first consultation is absolutely free for you.",
+  },
+];
 
   return (
     <div className="steppage">
