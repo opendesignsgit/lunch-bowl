@@ -12,6 +12,7 @@ const { sendEmail } = require("../lib/email-sender/sender");
 const Admin = require("../models/Admin");
 const School = require("../models/School");
 const Holiday = require("../models/holidaySchema");
+const nodemailer = require("nodemailer");
 
 const registerAdmin = async (req, res) => {
   try {
@@ -466,6 +467,65 @@ const deleteHoliday = async (req, res) => {
   }
 };
 
+const sendSchoolEnquiryMail = async (req, res) => {
+  try {
+    const { firstName, lastName, mobileNumber, schoolName, message, email } =
+      req.body;
+
+    // Create a transporter object using SMTP transport
+    const transporter = nodemailer.createTransport({
+      service: "gmail", // or your email service
+      auth: {
+        user: process.env.EMAIL_USER, // your email
+        pass: process.env.EMAIL_PASS, // your email password or app password
+      },
+    });
+
+    // Determine subject based on enquiry type
+    const enquiryType =
+      schoolName === "Nutrition Enquiry" ? "Nutrition" : "School Service";
+    const subject = `New ${enquiryType} Enquiry from ${firstName} ${lastName}`;
+
+    // Email content
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: "shivarex.c@gmail.com",
+      subject: subject,
+      html: `
+        <h2>New ${enquiryType} Enquiry</h2>
+        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+        ${email ? `<p><strong>Email:</strong> ${email}</p>` : ""}
+        <p><strong>Mobile Number:</strong> ${mobileNumber}</p>
+        ${
+          schoolName && schoolName !== "Nutrition Enquiry"
+            ? `<p><strong>School Name:</strong> ${schoolName}</p>`
+            : ""
+        }
+        <p><strong>Message:</strong> ${
+          message || "No additional message provided"
+        }</p>
+        <br>
+        <p>This enquiry was submitted through the website contact form.</p>
+      `,
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({
+      success: true,
+      message: "Enquiry submitted successfully. We will contact you soon.",
+    });
+  } catch (err) {
+    console.error("Error sending email:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   registerAdmin,
   loginAdmin,
@@ -486,4 +546,5 @@ module.exports = {
   getAllHolidays,
   updateHoliday,
   deleteHoliday,
+  sendSchoolEnquiryMail,
 };

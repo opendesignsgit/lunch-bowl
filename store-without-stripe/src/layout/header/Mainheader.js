@@ -124,6 +124,20 @@ const Mainheader = ({ title, description, children }) => {
                   >
                     <li style={{ padding: "5px 10px" }}>
                       <button
+                        onClick={() => router.push("user/userDashBoard")}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          width: "100%",
+                          textAlign: "left",
+                        }}
+                      >
+                        Dashboard
+                      </button>
+                    </li>
+                    <li style={{ padding: "5px 10px" }}>
+                      <button
                         onClick={() => router.push("user/my-account")}
                         style={{
                           background: "none",

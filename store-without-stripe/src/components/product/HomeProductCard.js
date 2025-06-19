@@ -70,9 +70,9 @@ const HomeProductCard = ({ limit }) => {
       {/* Filter Component */}
       <div className="ProdfilterBox mb-6">
         <ul className="flex justify-center gap-4">
-          <li>
+          <li className={`${selectedCuisine === "" ? "active" : ""}`}>
             <button
-              className={`filter-btn ${selectedCuisine === "" ? "active" : ""}`}
+              className='filter-btn'
               onClick={() => setSelectedCuisine("")}
             >
               All
@@ -80,11 +80,11 @@ const HomeProductCard = ({ limit }) => {
           </li>
           {/* Dynamically generate filter buttons */}
           {cuisines.map((cuisine, index) => (
-            <li key={index}>
-              <button
-                className={`filter-btn ${
+            <li key={index} className={`${
                   selectedCuisine === cuisine ? "active" : ""
-                }`}
+              }`}>
+              <button
+                className='filter-btn'
                 onClick={() => setSelectedCuisine(cuisine)}
               >
                 {cuisine}

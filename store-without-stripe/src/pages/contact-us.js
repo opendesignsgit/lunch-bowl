@@ -284,6 +284,7 @@ const ContactUs = () => {
         <section className="HfaqSec relative bg-4AB138 flex">
           <div className="Hfaqinrow w-full relative py-[12vh]">
             <div className="container mx-auto">
+<<<<<<< HEAD
               <div className="faqcontain py-[6vw] px-[8vw] bg-white relative">
                 <div className="hfaqTitle combtntb comtilte mb-[4vh]">
                   <h4 className="text-[#000000]">Frequently Asked</h4>
@@ -294,6 +295,82 @@ const ContactUs = () => {
                 </div>
                 <div className="hfaqAccordion ">
                   <Accordion items={faqItems} />
+=======
+            <div className="items-center flex flex-col flex-wrap md:flex-row w-full justify-between contustop">
+                <div className="flex contaddsboxs w-full">
+                    <div className="flex-1">
+                      <div className="addsboxss adboxone">
+                        <div className="addsIcon"><Image src={phoneicon} alt=""/></div>
+                        <h3>Feel free to get in touch</h3>
+                        <p>Give us a call today</p>
+                        <p className="parabtn"><Link href="tel:+911234567890">+91 12345 67890</Link></p>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="addsboxss adboxone">
+                        <div className="addsIcon"><Image src={mailicon} alt=""/></div>
+                        <h3>Write to us</h3>
+                        <p>Send us an email</p>
+                        <p className="parabtn"><Link href="mailto:lorem@url.in">lorem@url.in</Link></p>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="addsboxss adboxone">
+                        <div className="addsIcon"><Image src={locaticon} alt=""/></div>
+                        <h3>Where to Find Us</h3>
+                        <p className="parabtn"><Link href="/">Lorem ipsum dolor sit amet consec <br/>tetur. Mauris adipiscing- 600 049.</Link></p>
+                      </div>
+                    </div>
+                </div>
+              <div className="hidden md:w-full lg:w-5/12 lg:flex flex-col h-full contusmid">
+                  <Image src={contforming} alt="logo" className="block w-full" />
+                </div>
+              <div className="px-0 pb-2 lg:w-5/12 flex flex-col md:flex-row formbox contuslast">
+                  <form onSubmit={handleSubmit(submitHandler)} className="w-full mx-auto flex flex-col justify-center">
+                    <div className="flex flex-col space-y-5">
+                      <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
+                        <div className="w-full md:w-1/2 inputbox">
+                          <label>First Name<sub>*</sub></label>
+                          <InputArea register={register} name="firstname" type="text" placeholder='Enter First Name'/>
+                          <Error errorName={errors.name} />
+                        </div>
+                        <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
+                          <label>Last name<sub>*</sub></label>
+                          <InputArea register={register} name="Lastname" type="text" placeholder='Enter Last Name'/>
+                          <Error errorName={errors.name} />
+                        </div>
+                      </div>
+                      <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
+                        <div className="w-full md:w-1/2 inputbox">
+                          <label>Mobile Number<sub>*</sub></label>
+                          <InputArea register={register} name="phone" type="tel" placeholder='Enter Mobile Number'/>
+                          <Error errorName={errors.name} />
+                        </div>
+                        <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
+                          <label>Email<sub>*</sub></label>
+                          <InputArea register={register} name="email" type="email" placeholder='Enter Email' />
+                          <Error errorName={errors.email} />
+                        </div>
+                      </div>
+                      <div className="relative mb-4 inputbox">
+                        <label>Message<sub>*</sub></label>
+                        <textarea {...register("message", {required: `Message is required!`, })} name="message" className="px-4 py-3 flex items-center w-full rounded appearance-none opacity-75 transition duration-300 ease-in-out text-sm focus:ring-0 bg-white border border-gray-300 focus:shadow-none focus:outline-none focus:border-gray-500 placeholder-body" autoComplete="off" spellCheck="false" rows="2" placeholder="Feel free to type here if you'd like to share something with us."></textarea>
+                        <Error errorName={errors.message} />
+                      </div>
+                      <div className="relative mb-4 agreebox">
+                        <div className="flex items-start">
+                          <input id="consent" name="consent" type="checkbox" checked={formData.consent} onChange={handleChange} className="mt-1 mr-2" required />
+                          <label htmlFor="consent" className="text-sm">I agree to be contacted by <strong>Lunch Bowl</strong> via call, SMS, email, or WhatsApp regarding their services.</label>
+                        </div>
+                      </div>
+                      <div className="relative">
+                        <button data-variant="flat" className="">
+                          <span>Submit</span>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+>>>>>>> 025e6f39d9070f1e51032af2e58cc51c042189de
                 </div>
               </div>
             </div>
