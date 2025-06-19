@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Popup from "./Popup";
 import ProductServices from "@/services/ProductServices";
+import { FiPlus, FiX } from "react-icons/fi";
 
 const initialState = {
   primaryDishTitle: "",
@@ -9,15 +10,16 @@ const initialState = {
   description: "",
   cuisine: "",
   image: null,
-  dishImage2: null, // New field for second image
+  dishImage2: null,
   status: "active",
+  ingredients: [""], // First one is mandatory
+  nutritionValues: [""], // First one is mandatory
 };
 
 const AddDishPopup = ({
   isOpen,
   onClose,
   onSuccess,
-  addProduct,
   productData,
   isEditing,
 }) => {
@@ -25,7 +27,7 @@ const AddDishPopup = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const [dishImage2Preview, setDishImage2Preview] = useState(""); // Preview for new image
+  const [dishImage2Preview, setDishImage2Preview] = useState("");
 
   // Styling classes
   const inputClasses =
@@ -49,19 +51,21 @@ const AddDishPopup = ({
         image: productData.image || null,
         dishImage2: productData.dishImage2 || null,
         status: productData.status || "active",
+        ingredients:
+          productData.ingredients?.length > 0 ? productData.ingredients : [""],
+        nutritionValues:
+          productData.nutritionValues?.length > 0
+            ? productData.nutritionValues
+            : [""],
       });
 
-      // Improved image preview handling
       if (productData.image) {
-        // Check if it's already a full URL or needs to be constructed
         const imageUrl = productData.image.startsWith("http")
           ? productData.image
           : productData.image.startsWith("/")
           ? `http://localhost:5055${productData.image}`
           : productData.image;
         setImagePreview(imageUrl);
-      } else {
-        setImagePreview("");
       }
 
       if (productData.dishImage2) {
@@ -71,8 +75,6 @@ const AddDishPopup = ({
           ? `http://localhost:5055${productData.dishImage2}`
           : productData.dishImage2;
         setDishImage2Preview(imageUrl2);
-      } else {
-        setDishImage2Preview("");
       }
     } else {
       setForm(initialState);
@@ -86,20 +88,46 @@ const AddDishPopup = ({
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleArrayFieldChange = (field, index, value) => {
+    setForm((prev) => {
+      const newArray = [...prev[field]];
+      newArray[index] = value;
+      return { ...prev, [field]: newArray };
+    });
+  };
+
+  const addArrayField = (field) => {
+    setForm((prev) => ({ ...prev, [field]: [...prev[field], ""] }));
+  };
+
+  const removeArrayField = (field, index) => {
+    // Don't allow removing the first (mandatory) field
+    if (index === 0) return;
+
+    setForm((prev) => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index),
+    }));
+  };
+
   const handleImageChange = (e, field, previewSetter) => {
     const file = e.target.files[0];
     if (file) {
-      // Create preview URL and store it
       const previewUrl = URL.createObjectURL(file);
       previewSetter(previewUrl);
       setForm((prev) => ({ ...prev, [field]: file }));
-      // Clean up the object URL when component unmounts or when image changes
       return () => URL.revokeObjectURL(previewUrl);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate mandatory fields
+    if (!form.ingredients[0] || !form.nutritionValues[0]) {
+      setError("Please fill in all mandatory fields");
+      return;
+    }
 
     setLoading(true);
     setError("");
@@ -115,6 +143,14 @@ const AddDishPopup = ({
       formData.append("cuisine", form.cuisine);
       formData.append("status", form.status);
 
+      // Append array fields
+      form.ingredients.forEach((ing, i) =>
+        formData.append(`ingredients[${i}]`, ing)
+      );
+      form.nutritionValues.forEach((nut, i) =>
+        formData.append(`nutritionValues[${i}]`, nut)
+      );
+
       // Image handling
       if (form.image instanceof File) {
         formData.append("image", form.image);
@@ -122,7 +158,6 @@ const AddDishPopup = ({
         formData.append("existingImage", form.image);
       }
 
-      // Handle new image field
       if (form.dishImage2 instanceof File) {
         formData.append("dishImage2", form.dishImage2);
       } else if (isEditing && form.dishImage2) {
@@ -136,7 +171,7 @@ const AddDishPopup = ({
         response = await ProductServices.addDish(formData);
       }
 
-      onSuccess?.(response.data, true); // true indicates success
+      onSuccess?.(response.data, true);
       onClose();
     } catch (err) {
       setError(err.response?.data?.error || "Error processing dish");
@@ -145,6 +180,48 @@ const AddDishPopup = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  const renderArrayField = (field, label, placeholder) => {
+    return (
+      <div className="mb-4">
+        <label className={labelClasses}>{label}</label>
+        {form[field].map((value, index) => (
+          <div key={index} className="flex items-center mb-2">
+            <input
+              type="text"
+              value={value}
+              onChange={(e) =>
+                handleArrayFieldChange(field, index, e.target.value)
+              }
+              placeholder={placeholder}
+              className={`${inputClasses} flex-grow`}
+              required={index === 0}
+            />
+            {index === 0 ? (
+              <span className="ml-2 text-red-500">*</span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => removeArrayField(field, index)}
+                className="ml-2 p-2 text-red-500 hover:text-red-700"
+                aria-label={`Remove ${label}`}
+              >
+                <FiX />
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => addArrayField(field)}
+          className="flex items-center text-emerald-600 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300"
+        >
+          <FiPlus className="mr-1" />
+          Add {label}
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -222,6 +299,20 @@ const AddDishPopup = ({
             required
           />
         </div>
+
+        {/* Ingredients Field */}
+        {renderArrayField(
+          "ingredients",
+          "Ingredients",
+          "Enter an ingredient (e.g., 1 cup flour)"
+        )}
+
+        {/* Nutrition Values Field */}
+        {renderArrayField(
+          "nutritionValues",
+          "Nutrition Values",
+          "Enter nutrition info (e.g., Calories: 250)"
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

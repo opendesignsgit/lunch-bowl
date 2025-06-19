@@ -187,9 +187,28 @@ const getAllMenuDishes = async (req, res) => {
 
 const addDish = async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.ingredients || !req.body.nutritionValues) {
+      return res.status(400).json({
+        error: "Ingredients and nutrition values are required",
+      });
+    }
+
     // Main image required
     if (!req.files || !req.files.image) {
       return res.status(400).json({ error: "No main image uploaded" });
+    }
+
+    // Process ingredients and nutrition values from stringified arrays
+    let ingredients = req.body.ingredients;
+    let nutritionValues = req.body.nutritionValues;
+
+    // If they come as stringified arrays, parse them
+    if (typeof ingredients === "string") {
+      ingredients = JSON.parse(ingredients);
+    }
+    if (typeof nutritionValues === "string") {
+      nutritionValues = JSON.parse(nutritionValues);
     }
 
     // dishImage2 is optional
@@ -201,6 +220,8 @@ const addDish = async (req, res) => {
 
     const newDish = new Dish({
       ...req.body,
+      ingredients,
+      nutritionValues,
       image: imagePath,
       dishImage2: dishImage2Path,
     });
@@ -218,7 +239,11 @@ const addDish = async (req, res) => {
 
     res.status(201).json(responseDish);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Add dish error:", error);
+    res.status(500).json({
+      error: error.message,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+    });
   }
 };
 
@@ -226,6 +251,20 @@ const updateDish = async (req, res) => {
   try {
     const { id } = req.params;
     let updateData = { ...req.body };
+
+    // Process ingredients and nutrition values if provided
+    if (req.body.ingredients) {
+      updateData.ingredients =
+        typeof req.body.ingredients === "string"
+          ? JSON.parse(req.body.ingredients)
+          : req.body.ingredients;
+    }
+    if (req.body.nutritionValues) {
+      updateData.nutritionValues =
+        typeof req.body.nutritionValues === "string"
+          ? JSON.parse(req.body.nutritionValues)
+          : req.body.nutritionValues;
+    }
 
     // If new images were uploaded
     if (req.files) {
