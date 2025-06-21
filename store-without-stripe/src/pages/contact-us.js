@@ -154,7 +154,7 @@ const ContactUs = () => {
                     <p>Send us an email</p>
                     <p className="parabtn">
                       <Link href="mailto:lorem@url.in">
-                        reachus@lunchbowl.co.in
+                        contactus@lunchbowl.co.in
                       </Link>
                     </p>
                   </div>
