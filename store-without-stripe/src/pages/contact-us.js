@@ -141,7 +141,7 @@ const ContactUs = () => {
                     <h3>Feel free to get in touch</h3>
                     <p>Give us a call today</p>
                     <p className="parabtn">
-                      <Link href="tel:+911234567890">+91 9176 9176 02</Link>
+                      <Link href="tel:+919176917602">+91 9176 9176 02</Link>
                     </p>
                   </div>
                 </div>
@@ -153,7 +153,7 @@ const ContactUs = () => {
                     <h3>Write to us</h3>
                     <p>Send us an email</p>
                     <p className="parabtn">
-                      <Link href="mailto:lorem@url.in">
+                      <Link href="mailto:contactus@lunchbowl.co.in">
                         contactus@lunchbowl.co.in
                       </Link>
                     </p>
@@ -167,7 +167,7 @@ const ContactUs = () => {
                     <h3>Where to Find Us</h3>
                     <h3>Lunchbowl by Earth Tech Concepts Private Limited</h3>
                     <p className="parabtn">
-                      <Link href="/">
+                      <Link href="https://maps.app.goo.gl/wHSi6cLKhQBkKd1q8">
                         1B, KG Natraj Palace, 53/22, Saravana Street, T Nagar{" "}
                         <br />
                         Chennai 600017
@@ -303,7 +303,7 @@ const ContactUs = () => {
         </section>
         <section className="contmapssec relative">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d242.9424573648606!2d80.23815376801967!3d13.030620836000514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267902684955d%3A0xfdf0c7a6d19abf5e!2sTemple%20Towers!5e0!3m2!1sen!2sin!4v1745314215818!5m2!1sen!2sin"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4610.708751752066!2d80.2405698!3d13.0379553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267002fc8e3ed%3A0xc8eb66b7d153fa91!2sKG%20NATARAJ%20PALACE!5e1!3m2!1sen!2sin!4v1750498617264!5m2!1sen!2sin"
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
