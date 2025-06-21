@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -9,6 +9,7 @@ import {
   Button,
   FormHelperText,
   IconButton,
+  LinearProgress,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -21,16 +22,21 @@ import useRegistration from "@hooks/useRegistration";
 import AttributeServices from "../../services/AttributeServices";
 import useAsync from "../../hooks/useAsync";
 
+// Constants
+const BASE_PRICE_PER_DAY = 200;
+
 // Helper functions for holidays/weekends
 const useHolidays = () => {
   const [holidays, setHolidays] = useState([]);
-  const { data } = useAsync(AttributeServices.getAllHolidays);
+  const { data, loading: holidaysLoading } = useAsync(
+    AttributeServices.getAllHolidays
+  );
   useEffect(() => {
     if (data && Array.isArray(data)) {
       setHolidays(data.map((h) => dayjs(h.date).format("YYYY-MM-DD")));
     }
   }, [data]);
-  return holidays;
+  return { holidays, holidaysLoading };
 };
 
 const isWeekend = (date) => [0, 6].includes(dayjs(date).day());
@@ -83,7 +89,7 @@ const calculateEndDateByWorkingDays = (startDate, workingDays, holidays) => {
 };
 
 // Plan calculation functions
-const calculatePlans = (holidays) => {
+const calculatePlans = (holidays, childCount = 1) => {
   // Start from tomorrow + 1 day (2 days from now)
   let startDate = dayjs().add(2, "day");
 
@@ -95,9 +101,13 @@ const calculatePlans = (holidays) => {
   const plans = [
     {
       id: 1,
-      label: `30 Working Days - Rs. ${(30 * 200).toLocaleString("en-IN")}`,
+      label: `30 Working Days - Rs. ${(
+        30 *
+        BASE_PRICE_PER_DAY *
+        childCount
+      ).toLocaleString("en-IN")}`,
       workingDays: 30,
-      price: 30 * 200,
+      price: 30 * BASE_PRICE_PER_DAY * childCount,
       discount: 0,
       isOneMonth: true,
       startDate,
@@ -105,11 +115,11 @@ const calculatePlans = (holidays) => {
     },
     {
       id: 3,
-      label: `90 Working Days - Rs. ${(90 * 200 * 0.95).toLocaleString(
-        "en-IN"
-      )} (5% OFF)`,
+      label: `90 Working Days - Rs. ${Math.round(
+        90 * BASE_PRICE_PER_DAY * 0.95 * childCount
+      ).toLocaleString("en-IN")} (5% OFF)`,
       workingDays: 90,
-      price: Math.round(90 * 200 * 0.95),
+      price: Math.round(90 * BASE_PRICE_PER_DAY * 0.95 * childCount),
       discount: 0.05,
       isOneMonth: false,
       startDate,
@@ -117,11 +127,11 @@ const calculatePlans = (holidays) => {
     },
     {
       id: 6,
-      label: `150 Working Days - Rs. ${(150 * 200 * 0.9).toLocaleString(
-        "en-IN"
-      )} (10% OFF)`,
+      label: `150 Working Days - Rs. ${Math.round(
+        150 * BASE_PRICE_PER_DAY * 0.9 * childCount
+      ).toLocaleString("en-IN")} (10% OFF)`,
       workingDays: 150,
-      price: Math.round(150 * 200 * 0.9),
+      price: Math.round(150 * BASE_PRICE_PER_DAY * 0.9 * childCount),
       discount: 0.1,
       isOneMonth: false,
       startDate,
@@ -131,9 +141,18 @@ const calculatePlans = (holidays) => {
   return plans;
 };
 
-const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
+const SubscriptionPlanStep = ({
+  nextStep,
+  prevStep,
+  _id,
+  numberOfChildren = 1,
+}) => {
   const router = useRouter();
-  const holidays = useHolidays();
+  const { holidays, holidaysLoading } = useHolidays();
+  const isWorkingDayMemo = useCallback(
+    (date) => isWorkingDay(date, holidays),
+    [holidays]
+  );
 
   const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState("1");
@@ -150,12 +169,12 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
   // Initialize plans and dates
   useEffect(() => {
     if (holidays.length >= 0) {
-      const computedPlans = calculatePlans(holidays);
+      const computedPlans = calculatePlans(holidays, numberOfChildren);
       setPlans(computedPlans);
       setStartDate(computedPlans[0].startDate);
       setEndDate(computedPlans[0].endDate);
     }
-  }, [holidays]);
+  }, [holidays, numberOfChildren]);
 
   // Handle plan selection change
   const handlePlanChange = (e) => {
@@ -225,7 +244,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
       totalPrice = currentPlan?.price;
     } else {
       totalWorkingDays = calculateWorkingDays(startDate, endDate, holidays);
-      totalPrice = totalWorkingDays * 200;
+      totalPrice = totalWorkingDays * BASE_PRICE_PER_DAY * numberOfChildren;
     }
 
     // Construct the payload
@@ -235,6 +254,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
       totalPrice,
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
+      numberOfChildren,
     };
 
     try {
@@ -245,8 +265,6 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
         _id,
       });
       if (res) {
-        //  router.push("/user/menuCalendarPage");
-
         nextStep();
       }
     } catch (error) {
@@ -275,7 +293,15 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
             <Typography variant="h6" fontWeight="bold">
               SUBSCRIPTION PLAN:
             </Typography>
+            {/* {numberOfChildren > 1 && (
+              <Typography color="primary" sx={{ mt: 1 }}>
+                Pricing for {numberOfChildren} children
+              </Typography>
+            )} */}
           </div>
+
+          {holidaysLoading && <LinearProgress />}
+
           <Typography
             sx={{ color: "#FF6A00", fontWeight: 600, mt: 2, mb: 1 }}
             variant="subtitle2"
@@ -351,7 +377,11 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                               }}
                             >
                               Rs.{" "}
-                              {(plan.workingDays * 200).toLocaleString("en-IN")}
+                              {(
+                                plan.workingDays *
+                                BASE_PRICE_PER_DAY *
+                                numberOfChildren
+                              ).toLocaleString("en-IN")}
                             </span>
                             <span
                               style={{
@@ -400,6 +430,8 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                 onStartDateChange={handleStartDateChange}
                 onEndDateChange={handleEndDateChange}
                 holidays={holidays}
+                isWorkingDay={isWorkingDayMemo}
+                numberOfChildren={numberOfChildren}
               />
             </RadioGroup>
 
@@ -413,6 +445,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                 startDate={startDate}
                 endDate={endDate}
                 holidays={holidays}
+                numberOfChildren={numberOfChildren}
               />
             )}
 
@@ -430,16 +463,27 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                 <Typography variant="body2">
                   <strong>Total Working Days:</strong> {currentPlan.workingDays}
                 </Typography>
+                {numberOfChildren > 1 && (
+                  <Typography variant="body2">
+                    <strong>Children:</strong> {numberOfChildren}
+                  </Typography>
+                )}
+                <Typography variant="body2">
+                  <strong>Total Price:</strong> Rs.{" "}
+                  {currentPlan.price.toLocaleString("en-IN")}
+                </Typography>
               </Box>
             )}
 
             {/* Offers section */}
-            <OffersSection />
+            <OffersSection numberOfChildren={numberOfChildren} />
 
             <Typography mt={2} fontSize={12}>
               <strong>
-                Note: Per Day Meal = Rs. 200 (No. of Days X Rs. 200 =
-                Subscription Amount)
+                Note: Per Day Meal = Rs. {BASE_PRICE_PER_DAY} (No. of Days × Rs.{" "}
+                {BASE_PRICE_PER_DAY} × {numberOfChildren}{" "}
+                {numberOfChildren > 1 ? "children" : "child"} = Subscription
+                Amount)
               </strong>
             </Typography>
 
@@ -453,7 +497,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
                 variant="contained"
                 onClick={handleNext}
                 className="nextbtn"
-                disabled={loading}
+                disabled={loading || holidaysLoading}
               >
                 {" "}
                 <span className="nextspan">Next</span>{" "}
@@ -479,7 +523,7 @@ const SubscriptionPlanStep = ({ nextStep, prevStep, _id }) => {
   );
 };
 
-// Extracted components for better organization
+// Extracted components
 const CustomDateSelection = ({
   selectedPlan,
   startDate,
@@ -488,8 +532,11 @@ const CustomDateSelection = ({
   onStartDateChange,
   onEndDateChange,
   holidays,
+  isWorkingDay,
+  numberOfChildren,
 }) => (
-  <Box className="custmontplan"
+  <Box
+    className="custmontplan"
     sx={{
       border: "1px solid #ddd",
       borderRadius: "8px",
@@ -518,12 +565,21 @@ const CustomDateSelection = ({
           <Typography component="span" fontSize={12} color="#777">
             (Pre Book)
           </Typography>
+          {numberOfChildren > 1 && (
+            <Typography
+              component="span"
+              fontSize={12}
+              color="#777"
+              sx={{ ml: 1 }}
+            >
+              for {numberOfChildren} children
+            </Typography>
+          )}
         </Typography>
       }
     />
     {selectedPlan === "byDate" && (
       <Grid container spacing={2} className="custdatepick">
-        {/* Start Date Picker */}
         <Grid item xs={12} sm={6} className="cusdpstart">
           <Typography variant="subtitle2" gutterBottom>
             Start Date
@@ -533,15 +589,13 @@ const CustomDateSelection = ({
             value={startDate}
             onChange={onStartDateChange}
             minDate={dayjs().add(2, "day")}
-            shouldDisableDate={(date) => !isWorkingDay(date, holidays)}
-            holidays={holidays}
+            shouldDisableDate={(date) => !isWorkingDay(date)}
           />
           {errors.startDate && (
             <FormHelperText error>Start date is required</FormHelperText>
           )}
         </Grid>
 
-        {/* End Date Picker */}
         <Grid item xs={12} sm={6} className="cusdpend">
           <Typography variant="subtitle2" gutterBottom>
             End Date
@@ -551,8 +605,7 @@ const CustomDateSelection = ({
             value={endDate}
             onChange={onEndDateChange}
             minDate={startDate || dayjs().add(2, "day")}
-            shouldDisableDate={(date) => !isWorkingDay(date, holidays)}
-            holidays={holidays}
+            shouldDisableDate={(date) => !isWorkingDay(date)}
           />
           {errors.endDate && (
             <FormHelperText error>End date is required</FormHelperText>
@@ -568,21 +621,38 @@ const CustomDateSelection = ({
   </Box>
 );
 
-const CustomDateDetails = ({ startDate, endDate, holidays }) => {
+const CustomDateDetails = ({
+  startDate,
+  endDate,
+  holidays,
+  numberOfChildren = 1,
+}) => {
   const days = calculateWorkingDays(startDate, endDate, holidays);
+  const basePrice = days * BASE_PRICE_PER_DAY;
+  const totalPrice = basePrice * numberOfChildren;
+
   return (
     <Box mt={2}>
       <Typography variant="body2">
         <strong>Working Days:</strong> {days} days
       </Typography>
       <Typography variant="body2">
-        <strong>Total Price:</strong> Rs. {(days * 200).toLocaleString("en-IN")}
+        <strong>Price per child:</strong> Rs.{" "}
+        {basePrice.toLocaleString("en-IN")}
+      </Typography>
+      {numberOfChildren > 1 && (
+        <Typography variant="body2">
+          <strong>Children:</strong> {numberOfChildren}
+        </Typography>
+      )}
+      <Typography variant="body2">
+        <strong>Total Price:</strong> Rs. {totalPrice.toLocaleString("en-IN")}
       </Typography>
     </Box>
   );
 };
 
-const OffersSection = () => (
+const OffersSection = ({ numberOfChildren = 1 }) => (
   <Box mt={3}>
     <Typography
       sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }}
@@ -594,11 +664,13 @@ const OffersSection = () => (
       <li>
         <Typography fontSize={14}>
           Save <strong>5%</strong> on the 90 Working Days Plan.
+          {/* {numberOfChildren > 1 && <span> (Applied per child)</span>} */}
         </Typography>
       </li>
       <li>
         <Typography fontSize={14}>
           Save <strong>10%</strong> on the 150 Working Days Plan.
+          {/* {numberOfChildren > 1 && <span> (Applied per child)</span>} */}
         </Typography>
       </li>
     </ul>
