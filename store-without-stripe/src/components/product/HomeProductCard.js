@@ -17,14 +17,6 @@ const HomeProductCard = ({ limit }) => {
     reload,
   } = useAsync(ProductServices.getAllMenuDishes);
 
-  console.log("====================================");
-  console.log("Products------->", products);
-  console.log(
-    "Nutrition data for all products------->",
-    products.map((p) => p.nutrition)
-  );
-  console.log("====================================");
-
   const handleOpenDialog = (product) => {
     setSelectedProduct(product);
     setOpen(true);
@@ -72,7 +64,7 @@ const HomeProductCard = ({ limit }) => {
         <ul className="flex justify-center gap-4">
           <li className={`${selectedCuisine === "" ? "active" : ""}`}>
             <button
-              className='filter-btn'
+              className="filter-btn"
               onClick={() => setSelectedCuisine("")}
             >
               All
@@ -80,11 +72,12 @@ const HomeProductCard = ({ limit }) => {
           </li>
           {/* Dynamically generate filter buttons */}
           {cuisines.map((cuisine, index) => (
-            <li key={index} className={`${
-                  selectedCuisine === cuisine ? "active" : ""
-              }`}>
+            <li
+              key={index}
+              className={`${selectedCuisine === cuisine ? "active" : ""}`}
+            >
               <button
-                className='filter-btn'
+                className="filter-btn"
                 onClick={() => setSelectedCuisine(cuisine)}
               >
                 {cuisine}
