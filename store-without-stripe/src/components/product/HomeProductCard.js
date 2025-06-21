@@ -12,8 +12,9 @@ const HomeProductCard = ({ limit }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const {
-    data: products,
+    data: products = [], // Initialize as empty array if undefined
     loading,
+    error,
     reload,
   } = useAsync(ProductServices.getAllMenuDishes);
 
@@ -32,17 +33,18 @@ const HomeProductCard = ({ limit }) => {
   // Get unique cuisines from product data (only active products)
   const cuisines = [
     ...new Set(
-      (products || [])
-        .filter((product) => product.status === "active")
-        .map((item) => item.cuisine)
+      products
+        .filter((product) => product?.status === "active")
+        .map((item) => item?.cuisine)
+        .filter(Boolean) // Remove any undefined/null values
     ),
   ];
 
   // Filter products based on selected cuisine and active status
-  const filteredProducts = (products || [])
-    .filter((product) => product.status === "active")
+  const filteredProducts = products
+    .filter((product) => product?.status === "active")
     .filter((product) =>
-      selectedCuisine ? product.cuisine === selectedCuisine : true
+      selectedCuisine ? product?.cuisine === selectedCuisine : true
     );
 
   const displayedProducts = limit
@@ -53,7 +55,11 @@ const HomeProductCard = ({ limit }) => {
     return <div>Loading products...</div>;
   }
 
-  if (!products || products.length === 0) {
+  if (error) {
+    return <div>Error loading products: {error.message}</div>;
+  }
+
+  if (!products.length) {
     return <div>No products available</div>;
   }
 
