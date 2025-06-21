@@ -17,61 +17,66 @@ import { signOut } from "next-auth/react";
 const Mainheader = ({ title, description, children }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  var pageWidth = window.innerWidth;
-  var body = document.getElementsByTagName("body")[0];
-  var script = document.createElement("script");
-  script.type = "text/javascript";
   const [openLogin, setOpenLogin] = useState(false);
   const [freeTrialPopup, setFreeTrialPopup] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyAccount, setShowMyAccount] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [shadow, setShow] = React.useState();
 
   const userId = session?.user?.id;
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const pageWidth = window.innerWidth;
+      const body = document.body;
+
+      if (pageWidth > 801) {
+        const scrollUp = "scroll-up";
+        const scrollDown = "scroll-down";
+        const scrollanimi = "sscroll-animi";
+        let lastScroll = 0;
+
+        const handleScroll = () => {
+          const currentScroll = window.pageYOffset;
+          if (currentScroll <= 0) {
+            body.classList.remove(scrollUp);
+            body.classList.remove(scrollanimi);
+            return;
+          }
+
+          if (
+            currentScroll > lastScroll &&
+            !body.classList.contains(scrollDown)
+          ) {
+            body.classList.remove(scrollUp);
+            body.classList.add(scrollDown);
+            body.classList.add(scrollanimi);
+          } else if (
+            currentScroll < lastScroll &&
+            body.classList.contains(scrollDown)
+          ) {
+            body.classList.remove(scrollDown);
+            body.classList.add(scrollUp);
+            body.classList.add(scrollanimi);
+          }
+          lastScroll = currentScroll;
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }
+    }
+  }, []);
+
   const handleLogout = async () => {
     setShowLogoutConfirm(false);
-    await signOut({ callbackUrl: "/" }); // next-auth signOut, redirects to home
-    // If you use any custom localStorage/sessionStorage, clear them here as well:
+    await signOut({ callbackUrl: "/" });
     localStorage.clear();
     sessionStorage.clear();
   };
 
-  if (pageWidth > 801) {
-    const body = document.body;
-    const scrollUp = "scroll-up";
-    const scrollDown = "scroll-down";
-    const scrollanimi = "sscroll-animi";
-    let lastScroll = 0;
-
-    window.addEventListener("scroll", () => {
-      const currentScroll = window.pageYOffset;
-      if (currentScroll <= 0) {
-        body.classList.remove(scrollUp);
-        body.classList.remove(scrollanimi);
-        return;
-      }
-
-      if (currentScroll > lastScroll && !body.classList.contains(scrollDown)) {
-        body.classList.remove(scrollUp);
-        body.classList.add(scrollDown);
-        body.classList.add(scrollanimi);
-      } else if (
-        currentScroll < lastScroll &&
-        body.classList.contains(scrollDown)
-      ) {
-        body.classList.remove(scrollDown);
-        body.classList.add(scrollUp);
-        body.classList.add(scrollanimi);
-      }
-      lastScroll = currentScroll;
-    });
-  } else {
-  }
-  body.appendChild(script);
-
-  const [shadow, setShow] = React.useState();
   return (
     <>
       <Head>
@@ -93,11 +98,14 @@ const Mainheader = ({ title, description, children }) => {
           </div>
           <div className="navbox">
             <ul className="flex items-center logsinul">
-              <li className="logbtn">
-                <button onClick={() => setOpenLogin(true)}>
-                  <span>Login</span>
-                </button>
-              </li>
+              {/* Only show login button if user is not logged in */}
+              {!session && (
+                <li className="logbtn">
+                  <button onClick={() => setOpenLogin(true)}>
+                    <span>Login</span>
+                  </button>
+                </li>
+              )}
 
               <li className="trialbtn">
                 <button onClick={() => setShowSignUp(true)}>
@@ -105,68 +113,70 @@ const Mainheader = ({ title, description, children }) => {
                 </button>
               </li>
 
-              {/* NEW MENU BUTTON */}
-              <li className="userMenuBtn" style={{ position: "relative" }}>
-                <button onClick={() => setShowUserMenu((prev) => !prev)}>
-                  <span>Menu</span>
-                </button>
-                {showUserMenu && (
-                  <ul
-                    style={{
-                      position: "absolute",
-                      top: "100%",
-                      right: 0,
-                      background: "#fff",
-                      border: "1px solid #ddd",
-                      padding: "10px",
-                      zIndex: 999,
-                    }}
-                  >
-                    <li style={{ padding: "5px 10px" }}>
-                      <button
-                        onClick={() => router.push("user/userDashBoard")}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          width: "100%",
-                          textAlign: "left",
-                        }}
-                      >
-                        Dashboard
-                      </button>
-                    </li>
-                    <li style={{ padding: "5px 10px" }}>
-                      <button
-                        onClick={() => router.push("user/my-account")}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          width: "100%",
-                          textAlign: "left",
-                        }}
-                      >
-                        My Account
-                      </button>
-                    </li>
-                    <li style={{ padding: "5px 10px" }}>
-                      <button
-                        onClick={() => setShowLogoutConfirm(true)}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          width: "100%",
-                          textAlign: "left",
-                        }}
-                      >
-                        Log Out
-                      </button>
-                    </li>
-                  </ul>
-                )}
-              </li>
+              {/* Only show user menu if user is logged in */}
+              {session && (
+                <li className="userMenuBtn" style={{ position: "relative" }}>
+                  <button onClick={() => setShowUserMenu((prev) => !prev)}>
+                    <span>Menu</span>
+                  </button>
+                  {showUserMenu && (
+                    <ul
+                      style={{
+                        position: "absolute",
+                        top: "100%",
+                        right: 0,
+                        background: "#fff",
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        zIndex: 999,
+                      }}
+                    >
+                      <li style={{ padding: "5px 10px" }}>
+                        <button
+                          onClick={() => router.push("user/userDashBoard")}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            width: "100%",
+                            textAlign: "left",
+                          }}
+                        >
+                          Dashboard
+                        </button>
+                      </li>
+                      <li style={{ padding: "5px 10px" }}>
+                        <button
+                          onClick={() => router.push("user/my-account")}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            width: "100%",
+                            textAlign: "left",
+                          }}
+                        >
+                          My Account
+                        </button>
+                      </li>
+                      <li style={{ padding: "5px 10px" }}>
+                        <button
+                          onClick={() => setShowLogoutConfirm(true)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            width: "100%",
+                            textAlign: "left",
+                          }}
+                        >
+                          Log Out
+                        </button>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              )}
             </ul>
             <div className="hmenubox" onClick={() => setShow(true)}>
               <h6>Menu</h6>
@@ -202,9 +212,11 @@ const Mainheader = ({ title, description, children }) => {
                   <li className="nav__item hamnavlink">
                     <Link href="/">Home</Link>
                   </li>
-                  <li className="nav__item hamnavlink">
-                    <Link href="/">My Account</Link>
-                  </li>
+                  {session && (
+                    <li className="nav__item hamnavlink">
+                      <Link href="/user/my-account">My Account</Link>
+                    </li>
+                  )}
                   <li className="nav__item hamnavlink">
                     <Link href="/about-us">About Us</Link>
                   </li>

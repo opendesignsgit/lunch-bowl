@@ -40,6 +40,7 @@ const ChildDetailsStep = ({
   nextStep,
   prevStep,
   _id,
+  setChildCount,
 }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [children, setChildren] = useState(
@@ -196,6 +197,7 @@ const ChildDetailsStep = ({
 
       if (res) {
         setFormData({ ...formData, children });
+        setChildCount(children.length); // Update the child count
         nextStep();
       }
     } catch (err) {
