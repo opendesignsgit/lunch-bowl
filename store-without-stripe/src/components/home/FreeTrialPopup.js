@@ -18,6 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 import { useRouter } from "next/router";
 
@@ -41,7 +42,10 @@ const FormBox = styled(Box)(({ theme }) => ({
 }));
 
 export default function FreeTrialPopup({ open, onClose }) {
-    const router = useRouter(); 
+  const { data: session, status } = useSession();
+  const userId = session?.user?.id;
+
+  const router = useRouter();
   const [formData, setFormData] = useState({
     date: null,
     time: "",
@@ -127,13 +131,13 @@ export default function FreeTrialPopup({ open, onClose }) {
       maxWidth="lg"
       fullWidth
       sx={{
-        '& .MuiDialog-paper': {
-      height: '75vh',
-    }
+        "& .MuiDialog-paper": {
+          height: "75vh",
+        },
       }}
     >
       <IconButton
-       className="popClose"
+        className="popClose"
         onClick={onClose}
         sx={{
           position: "absolute",
@@ -150,7 +154,11 @@ export default function FreeTrialPopup({ open, onClose }) {
       </IconButton>
 
       <DialogContent sx={{ p: 0, height: "100%" }}>
-        <Box container sx={{ height: "100%" }} className="flex popinboxs p-[5px]">
+        <Box
+          container
+          sx={{ height: "100%" }}
+          className="flex popinboxs p-[5px]"
+        >
           {/* Left Image Section */}
           <Box item xs={12} md={6} sx={{ height: "100%" }} className="w-[50%]">
             <ImageBox>
@@ -193,22 +201,25 @@ export default function FreeTrialPopup({ open, onClose }) {
                       Address: {formData.address}
                     </Typography>
                     <div className="mt-3">
-                      <Button className="sotpbtn"
+                      <Button
+                        className="sotpbtn"
                         variant="contained"
                         color="primary"
-                        onClick={() => router.push("/profile-Step-Form")} 
+                        onClick={() => router.push("/profile-Step-Form")}
                       >
                         <span>Complete your registration </span>
                       </Button>
                     </div>
                   </div>
                 </Box>
-                
               ) : (
                 <>
                   <div className="loginfiledss">
                     <div className="fretryrow mb-[2vh] mt-[2vh]">
-                      <Typography variant="subtitle2" className="text-[#FF6514]">
+                      <Typography
+                        variant="subtitle2"
+                        className="text-[#FF6514]"
+                      >
                         SELECT YOUR PREFERRED SLOT FOR DELIVERY*
                       </Typography>
 
@@ -249,76 +260,86 @@ export default function FreeTrialPopup({ open, onClose }) {
                           ))}
                         </TextField>
                       </Box>
-                  </div>
-                  <div className="fretryrow  mb-[2vh]">
-                    <Typography variant="subtitle2" className="text-[#FF6514]">
-                      SELECT YOUR PREFERRED FOOD*
-                    </Typography>
-                    <div className="mt-[1vh]">
-                      <TextField
-                        select
-                        fullWidth
-                        value={formData.food}
-                        onChange={handleChange("food")}
-                        size="small"
-                        error={!!errors.food}
-                        helperText={errors.food}
+                    </div>
+                    <div className="fretryrow  mb-[2vh]">
+                      <Typography
+                        variant="subtitle2"
+                        className="text-[#FF6514]"
                       >
-                          <MenuItem value="Paneer Butter Masala"> Paneer Butter Masala </MenuItem>
+                        SELECT YOUR PREFERRED FOOD*
+                      </Typography>
+                      <div className="mt-[1vh]">
+                        <TextField
+                          select
+                          fullWidth
+                          value={formData.food}
+                          onChange={handleChange("food")}
+                          size="small"
+                          error={!!errors.food}
+                          helperText={errors.food}
+                        >
+                          <MenuItem value="Paneer Butter Masala">
+                            {" "}
+                            Paneer Butter Masala{" "}
+                          </MenuItem>
                           <MenuItem value="Dal Tadka"> Dal Tadka </MenuItem>
                           <MenuItem value="Aloo Gobi"> Aloo Gobi </MenuItem>
-                      </TextField>
+                        </TextField>
+                      </div>
                     </div>
-                  </div>
-                  <div className="fretryrow mb-[2vh]">
-                    <Typography variant="subtitle2" className="text-[#FF6514]">
-                      RESIDENTIAL ADDRESS*
-                    </Typography>
-                    <div className="mt-[1vh]">
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={3}
-                        value={formData.address}
-                        onChange={handleChange("address")}
-                        size="small"
-                        error={!!errors.address}
-                        helperText={errors.address}
-                        placeholder="Enter your delivery address"
-                      />
+                    <div className="fretryrow mb-[2vh]">
+                      <Typography
+                        variant="subtitle2"
+                        className="text-[#FF6514]"
+                      >
+                        RESIDENTIAL ADDRESS*
+                      </Typography>
+                      <div className="mt-[1vh]">
+                        <TextField
+                          fullWidth
+                          multiline
+                          rows={3}
+                          value={formData.address}
+                          onChange={handleChange("address")}
+                          size="small"
+                          error={!!errors.address}
+                          helperText={errors.address}
+                          placeholder="Enter your delivery address"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="fretryrow  mb-[2vh]">
-                    <Typography variant="subtitle2" className="text-[#FF6514]">
-                      MESSAGE
-                    </Typography>
-                    <div className="mt-[1vh]">
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={2}
-                        value={formData.message}
-                        onChange={handleChange("message")}
-                        placeholder="Feel free to type here if you'd like to share something with us."
-                        size="small"
-                      />
+                    <div className="fretryrow  mb-[2vh]">
+                      <Typography
+                        variant="subtitle2"
+                        className="text-[#FF6514]"
+                      >
+                        MESSAGE
+                      </Typography>
+                      <div className="mt-[1vh]">
+                        <TextField
+                          fullWidth
+                          multiline
+                          rows={2}
+                          value={formData.message}
+                          onChange={handleChange("message")}
+                          placeholder="Feel free to type here if you'd like to share something with us."
+                          size="small"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="fretryrow">
-                    <p className="text-[14px]">
-                      Submit your request before{" "}
-                      <span className="text-[#FF6514]">
-                        12 PM
-                      </span>{" "}
-                      for{" "}
-                      <span className="text-[#FF6514]">
-                        Same-day Delivery
-                      </span>
-                      .
-                    </p>
-                  </div>
+                    <div className="fretryrow">
+                      <p className="text-[14px]">
+                        Submit your request before{" "}
+                        <span className="text-[#FF6514]">12 PM</span> for{" "}
+                        <span className="text-[#FF6514]">
+                          Same-day Delivery
+                        </span>
+                        .
+                      </p>
+                    </div>
                     <div className="fretryrow lastrow">
-                      <Button  className="sotpbtn"
+                      <Button
+                        className="sotpbtn"
                         type="submit"
                         variant="contained"
                         color="warning"
