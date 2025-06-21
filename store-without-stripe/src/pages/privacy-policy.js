@@ -49,9 +49,17 @@ const PrivacyPolicy = () => {
                   <span className="block">Privacy Policy Statement</span>
                 </h3>
                 <p>
-                  This Privacy Policy outlines how Lunch Bowl collects, uses,
-                  discloses, and safeguards personal information provided by
-                  users.
+                  Lunch Bowl services are operated by Earth Tech Concepts
+                  Private Limited, a company
+                  <br /> registered under the Companies Act, 2013, having its
+                  registered office at:
+                  <br />
+                  1B, KG Natraj Palace, 53/22, Saravana Street, T. Nagar,
+                  <br />
+                  Chennai – 600017
+                  <br />
+                  <br /> This policy outlines how we collect, use, and protect
+                  your personal data when you use our website or services.
                 </p>
               </div>
               <div className="policyintb">
