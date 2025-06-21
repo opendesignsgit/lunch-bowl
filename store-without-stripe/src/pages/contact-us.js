@@ -165,6 +165,7 @@ const ContactUs = () => {
                       <Image src={locaticon} alt="" />
                     </div>
                     <h3>Where to Find Us</h3>
+                    <h3>Lunchbowl by Earth Tech Concepts Private Limited</h3>
                     <p className="parabtn">
                       <Link href="/">
                         1B, KG Natraj Palace, 53/22, Saravana Street, T Nagar{" "}
