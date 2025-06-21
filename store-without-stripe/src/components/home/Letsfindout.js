@@ -13,10 +13,9 @@ const Letsfindout = () => {
   const {
     data: schools,
     loading,
+    error,
     reload,
   } = useAsync(CategoryServices.getAllSchools);
-
-
 
   const handleInputChange = (e) => {
     setSchoolName(e.target.value);
@@ -40,6 +39,27 @@ const Letsfindout = () => {
     setShowSchoolForm(true);
   };
 
+  // Null check for schools data
+  const renderSchoolOptions = () => {
+    if (loading) {
+      return <option>Loading schools...</option>;
+    }
+
+    if (error) {
+      return <option>Error loading schools</option>;
+    }
+
+    if (!schools || schools.length === 0) {
+      return <option>No schools available</option>;
+    }
+
+    return schools.map((school) => (
+      <option key={school._id} value={school.name}>
+        {school.name} - {school.location}
+      </option>
+    ));
+  };
+
   return (
     <>
       <div className="lfooutfild">
@@ -51,15 +71,7 @@ const Letsfindout = () => {
             onChange={handleSchoolSelect}
           >
             <option value="">Select School Name</option>
-            {loading ? (
-              <option>Loading schools...</option>
-            ) : (
-              schools?.map((school) => (
-                <option key={school._id} value={school.name}>
-                  {school.name} - {school.location}
-                </option>
-              ))
-            )}
+            {renderSchoolOptions()}
           </select>
           <button
             className="btn"
