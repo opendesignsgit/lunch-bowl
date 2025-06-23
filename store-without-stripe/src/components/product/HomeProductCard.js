@@ -48,13 +48,6 @@ const HomeProductCard = ({ limit }) => {
     return <div>No products available</div>;
   }
 
-  // Function to handle image source
-  const getImageSource = (imagePath) => {
-    if (!imagePath) return Proimgtwobiriyani;
-    if (imagePath.startsWith("http")) return imagePath;
-    return biriyaniImg; // Use local image for all items
-  };
-
   return (
     <div>
       {/* Filter Component */}
@@ -103,7 +96,7 @@ const HomeProductCard = ({ limit }) => {
                   <Image
                     className="w-full h-auto"
                     priority
-                    src={getImageSource(item.image)}
+                    src={biriyaniImg}
                     alt={`${item.primaryDishTitle} ${item.subDishTitle}`}
                     width={500}
                     height={500}
@@ -127,7 +120,7 @@ const HomeProductCard = ({ limit }) => {
                   <Image
                     className="w-full h-auto"
                     priority
-                    src={getImageSource(item.image)}
+                    src={Proimgtwobiriyani}
                     alt={`${item.primaryDishTitle} ${item.subDishTitle}`}
                     width={500}
                     height={500}
