@@ -10,6 +10,7 @@ import {
   FormHelperText,
   IconButton,
   LinearProgress,
+  Divider,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -90,7 +91,6 @@ const calculateEndDateByWorkingDays = (startDate, workingDays, holidays) => {
 
 // Plan calculation functions
 const calculatePlans = (holidays, childCount = 1) => {
-  // Start from tomorrow + 1 day (2 days from now)
   let startDate = dayjs().add(2, "day");
 
   // Adjust start date to the next working day if needed
@@ -188,7 +188,6 @@ const SubscriptionPlanStep = ({
     }
   }, [holidays, numberOfChildren]);
 
-  // Handle plan selection change
   const handlePlanChange = (e) => {
     const newPlanId = e.target.value;
     setSelectedPlan(newPlanId);
@@ -205,7 +204,6 @@ const SubscriptionPlanStep = ({
     }
   };
 
-  // Handle custom date selection changes
   const handleStartDateChange = (newValue) => {
     setStartDate(newValue);
     setErrors({ ...errors, startDate: false, dateOrder: false });
@@ -256,6 +254,7 @@ const SubscriptionPlanStep = ({
       totalPrice = currentPlan?.price;
     } else {
       totalWorkingDays = calculateWorkingDays(startDate, endDate, holidays);
+      // No discount applied for custom date selection, but multiply by number of children
       totalPrice = totalWorkingDays * BASE_PRICE_PER_DAY * numberOfChildren;
     }
 
@@ -305,6 +304,11 @@ const SubscriptionPlanStep = ({
             <Typography variant="h6" fontWeight="bold">
               SUBSCRIPTION PLAN:
             </Typography>
+            {/* {numberOfChildren > 1 && (
+              <Typography color="primary" sx={{ mt: 1 }}>
+                Pricing for {numberOfChildren} children
+              </Typography>
+            )} */}
           </div>
 
           {holidaysLoading && <LinearProgress />}
@@ -458,7 +462,13 @@ const SubscriptionPlanStep = ({
 
             {/* Show details for selected plan */}
             {currentPlan && (
-              <Box mt={2}>
+              <Box
+                mt={2}
+                sx={{ border: "1px solid #eee", p: 2, borderRadius: 1 }}
+              >
+                <Typography variant="body2" gutterBottom>
+                  <strong>Subscription Details:</strong>
+                </Typography>
                 <Typography variant="body2">
                   <strong>Start Date:</strong>{" "}
                   {currentPlan.startDate.format("DD MMM YYYY")}
@@ -470,14 +480,38 @@ const SubscriptionPlanStep = ({
                 <Typography variant="body2">
                   <strong>Total Working Days:</strong> {currentPlan.workingDays}
                 </Typography>
-                {numberOfChildren > 1 && (
-                  <Typography variant="body2">
-                    <strong>Children:</strong> {numberOfChildren}
-                  </Typography>
-                )}
                 <Typography variant="body2">
+                  <strong>Price per day per child:</strong> Rs.{" "}
+                  {BASE_PRICE_PER_DAY}
+                </Typography>
+                {numberOfChildren > 1 && (
+                  <>
+                    <Typography variant="body2">
+                      <strong>Number of Children:</strong> {numberOfChildren}
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Total Price Calculation:</strong>{" "}
+                      {currentPlan.workingDays} days × Rs. {BASE_PRICE_PER_DAY}{" "}
+                      × {numberOfChildren} children
+                    </Typography>
+                  </>
+                )}
+                <Divider sx={{ my: 1 }} />
+                <Typography variant="body2" fontWeight="bold">
                   <strong>Total Price:</strong> Rs.{" "}
                   {currentPlan.price.toLocaleString("en-IN")}
+                  {currentPlan.discount > 0 && (
+                    <span style={{ color: "#FF6A00", marginLeft: "8px" }}>
+                      (Saved Rs.{" "}
+                      {Math.round(
+                        currentPlan.workingDays *
+                          BASE_PRICE_PER_DAY *
+                          numberOfChildren *
+                          currentPlan.discount
+                      ).toLocaleString("en-IN")}
+                      )
+                    </span>
+                  )}
                 </Typography>
               </Box>
             )}
@@ -491,6 +525,8 @@ const SubscriptionPlanStep = ({
                 {BASE_PRICE_PER_DAY} × {numberOfChildren}{" "}
                 {numberOfChildren > 1 ? "children" : "child"} = Subscription
                 Amount)
+                {selectedPlan === "byDate" &&
+                  " No discounts apply to custom date selections."}
               </strong>
             </Typography>
 
@@ -635,24 +671,44 @@ const CustomDateDetails = ({
   numberOfChildren = 1,
 }) => {
   const days = calculateWorkingDays(startDate, endDate, holidays);
-  const basePrice = days * BASE_PRICE_PER_DAY;
-  const totalPrice = basePrice * numberOfChildren;
+  const pricePerChild = days * BASE_PRICE_PER_DAY;
+  const totalPrice = pricePerChild * numberOfChildren;
 
   return (
-    <Box mt={2}>
+    <Box mt={2} sx={{ border: "1px solid #eee", p: 2, borderRadius: 1 }}>
+      <Typography variant="body2" gutterBottom>
+        <strong>Subscription Details:</strong>
+      </Typography>
       <Typography variant="body2">
-        <strong>Working Days:</strong> {days} days
+        <strong>Start Date:</strong> {startDate.format("DD MMM YYYY")}
+      </Typography>
+      <Typography variant="body2">
+        <strong>End Date:</strong> {endDate.format("DD MMM YYYY")}
+      </Typography>
+      <Typography variant="body2">
+        <strong>Total Working Days:</strong> {days} days
+      </Typography>
+      <Typography variant="body2">
+        <strong>Price per day per child:</strong> Rs. {BASE_PRICE_PER_DAY}
       </Typography>
       <Typography variant="body2">
         <strong>Price per child:</strong> Rs.{" "}
-        {basePrice.toLocaleString("en-IN")}
+        {pricePerChild.toLocaleString("en-IN")}({days} days × Rs.{" "}
+        {BASE_PRICE_PER_DAY})
       </Typography>
       {numberOfChildren > 1 && (
-        <Typography variant="body2">
-          <strong>Children:</strong> {numberOfChildren}
-        </Typography>
+        <>
+          <Typography variant="body2">
+            <strong>Number of Children:</strong> {numberOfChildren}
+          </Typography>
+          <Typography variant="body2">
+            <strong>Total Price Calculation:</strong> {days} days × Rs.{" "}
+            {BASE_PRICE_PER_DAY} × {numberOfChildren} children
+          </Typography>
+        </>
       )}
-      <Typography variant="body2">
+      <Divider sx={{ my: 1 }} />
+      <Typography variant="body2" fontWeight="bold">
         <strong>Total Price:</strong> Rs. {totalPrice.toLocaleString("en-IN")}
       </Typography>
     </Box>
@@ -703,6 +759,11 @@ const OffersSection = ({ numberOfChildren = 1 }) => (
           </li>
         </>
       )}
+      <li>
+        <Typography fontSize={14} fontStyle="italic">
+          Discounts do not apply to custom date selections.
+        </Typography>
+      </li>
     </ul>
   </Box>
 );
