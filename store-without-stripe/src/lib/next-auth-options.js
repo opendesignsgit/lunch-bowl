@@ -57,6 +57,7 @@ export const getDynamicAuthOptions = async () => {
             name: credentials.name,
             email: credentials.email,
             phone: credentials.phone,
+            freeTrial: credentials.freeTrial || false,
             token: credentials.token,
           };
         }
