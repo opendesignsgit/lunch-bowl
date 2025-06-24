@@ -76,6 +76,11 @@ const customerSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    freeTrial: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     password: {
       type: String,
       required: false,

@@ -59,6 +59,7 @@ const useLoginSubmit = () => {
             token: res.token, // pass the JWT token from backend
             name: res.name, // optionally any other info
             phone: res.phone, // pass the phone number
+            freeTrial: res.freeTrial, // pass the free trial status
             _id: res._id,
             callbackUrl: "/user/DataRoutingPage",
           });
@@ -66,6 +67,8 @@ const useLoginSubmit = () => {
           console.log("Login result:", loginResult);
 
           if (loginResult?.ok) {
+            console.log("Login result------->:", loginResult);
+
             router.push(redirectUrl || "/user/DataRoutingPage");
           } else {
             notifyError("Login failed");

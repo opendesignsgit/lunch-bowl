@@ -7,9 +7,9 @@ import {
   Button,
   Typography,
   Box,
-  Grid,
   IconButton,
   FormHelperText,
+  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
@@ -19,12 +19,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const timeOptions = ["1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM"];
 
-// Styled Components (unchanged)
 const ImageBox = styled(Box)({
   position: "relative",
   width: "100%",
@@ -38,13 +37,12 @@ const ImageBox = styled(Box)({
 
 const FormBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
+  paddingBottom: theme.spacing(8), // Extra space at bottom for better scrolling
   width: "100%",
 }));
 
 export default function FreeTrialPopup({ open, onClose }) {
-  const { data: session, status } = useSession();
-  const userId = session?.user?.id;
-
+  const { data: session } = useSession();
   const router = useRouter();
   const [formData, setFormData] = useState({
     date: null,
@@ -52,11 +50,15 @@ export default function FreeTrialPopup({ open, onClose }) {
     food: "",
     address: "",
     message: "",
+    email: session?.user?.email || "",
+    name: session?.user?.name || "",
+    // Add userId to initial state
+    userId: session?.user?.id || "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  // Reset form when popup opens
   useEffect(() => {
     if (open) {
       setFormData({
@@ -65,11 +67,14 @@ export default function FreeTrialPopup({ open, onClose }) {
         food: "",
         address: "",
         message: "",
+        email: session?.user?.email || "",
+        name: session?.user?.name || "",
+        userId: session?.user?.id || "",
       });
       setErrors({});
       setSubmitted(false);
     }
-  }, [open]);
+  }, [open, session]);
 
   const handleChange = (field) => (event) => {
     setFormData((prev) => ({
@@ -91,35 +96,59 @@ export default function FreeTrialPopup({ open, onClose }) {
     } else if (formData.date.isSame(dayjs(), "day")) {
       const currentHour = dayjs().hour();
       const currentMinute = dayjs().minute();
-
-      // Check if current time is 12:00 PM or later
       if (currentHour > 12 || (currentHour === 12 && currentMinute >= 0)) {
         newErrors.date = "Same-day delivery is closed after 12 PM";
       }
     }
-
     if (!formData.time) newErrors.time = "Please select a time";
     if (!formData.food) newErrors.food = "Please select a dish";
     if (!formData.address.trim()) newErrors.address = "Address is required";
-
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Valid email is required";
+    if (!formData.name || !formData.name.trim())
+      newErrors.name = "Name is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Function to disable dates in the DatePicker
   const shouldDisableDate = (date) => {
     const currentHour = dayjs().hour();
     const currentMinute = dayjs().minute();
     const isAfterNoon =
       currentHour > 12 || (currentHour === 12 && currentMinute >= 0);
-
     return date.isSame(dayjs(), "day") && isAfterNoon;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
+    if (!validate()) return;
+    setLoading(true);
+
+    const [firstName, ...lastNameParts] = (formData.name || "").split(" ");
+    const lastName = lastNameParts.join(" ");
+
+    try {
+      await axios.post("http://localhost:5055/api/admin/school-enquiry", {
+        firstName,
+        lastName,
+        email: formData.email,
+        mobileNumber: "", // You can add a phone field if needed
+        address: formData.address,
+        schoolName: "Free Trial",
+        message: `Dish: ${
+          formData.food
+        }\nDelivery Date: ${formData.date?.format("YYYY-MM-DD")}\nTime: ${
+          formData.time
+        }\n${formData.message}`,
+        userId: formData.userId, // Include the userId in the payload
+      });
       setSubmitted(true);
+    } catch (err) {
+      setErrors({
+        submit: "There was an error submitting your request. Please try again.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,14 +181,12 @@ export default function FreeTrialPopup({ open, onClose }) {
       >
         <CloseIcon />
       </IconButton>
-
       <DialogContent sx={{ p: 0, height: "100%" }}>
         <Box
           container
           sx={{ height: "100%" }}
           className="flex popinboxs p-[5px]"
         >
-          {/* Left Image Section */}
           <Box item xs={12} md={6} sx={{ height: "100%" }} className="w-[50%]">
             <ImageBox>
               <Image
@@ -172,9 +199,26 @@ export default function FreeTrialPopup({ open, onClose }) {
               />
             </ImageBox>
           </Box>
-
-          {/* Right Form Section */}
-          <Box className="flex relative h-full  relative overflow-hidden w-[50%] ">
+          <Box
+            className="flex relative h-full relative w-[50%]"
+            sx={{
+              overflowY: "auto",
+              maxHeight: "100%",
+              "&::-webkit-scrollbar": {
+                width: "6px",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "#f1f1f1",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "#888",
+                borderRadius: "3px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: "#555",
+              },
+            }}
+          >
             <FormBox component="form" onSubmit={handleSubmit}>
               <div className="poptitles">
                 <Typography variant="h4" fontWeight="bold" mb={2}>
@@ -186,35 +230,71 @@ export default function FreeTrialPopup({ open, onClose }) {
               </div>
               {submitted ? (
                 <Box mt={5}>
-                  <div className="loginfiledss">
-                    <Typography variant="h6" color="success.main" gutterBottom>
-                      Your order will be delivered on time.
-                    </Typography>
-                    <Typography variant="body1">
-                      Delivery scheduled for:{" "}
-                      {formData.date?.format("MMMM D, YYYY")} at {formData.time}
-                    </Typography>
-                    <Typography variant="body1" mt={1}>
-                      Dish: {formData.food}
-                    </Typography>
-                    <Typography variant="body1">
-                      Address: {formData.address}
-                    </Typography>
-                    <div className="mt-3">
-                      <Button
-                        className="sotpbtn"
-                        variant="contained"
-                        color="primary"
-                        onClick={() => router.push("/profile-Step-Form")}
-                      >
-                        <span>Complete your registration </span>
-                      </Button>
-                    </div>
+                  <Typography variant="h6" color="success.main" gutterBottom>
+                    Your order will be delivered on time.
+                  </Typography>
+                  <Typography variant="body1">
+                    Delivery scheduled for:{" "}
+                    {formData.date?.format("MMMM D, YYYY")} at {formData.time}
+                  </Typography>
+                  <Typography variant="body1" mt={1}>
+                    Dish: {formData.food}
+                  </Typography>
+                  <Typography variant="body1">
+                    Address: {formData.address}
+                  </Typography>
+                  <div className="mt-3">
+                    <Button
+                      className="sotpbtn"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => router.push("/profile-Step-Form")}
+                    >
+                      <span>Complete your registration </span>
+                    </Button>
                   </div>
                 </Box>
               ) : (
                 <>
                   <div className="loginfiledss">
+                    <div className="fretryrow mb-[2vh]">
+                      <Typography
+                        variant="subtitle2"
+                        className="text-[#FF6514]"
+                      >
+                        FULL NAME*
+                      </Typography>
+                      <div className="mt-[1vh]">
+                        <TextField
+                          fullWidth
+                          value={formData.name}
+                          onChange={handleChange("name")}
+                          size="small"
+                          error={!!errors.name}
+                          helperText={errors.name}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="fretryrow mb-[2vh]">
+                      <Typography
+                        variant="subtitle2"
+                        className="text-[#FF6514]"
+                      >
+                        EMAIL ADDRESS*
+                      </Typography>
+                      <div className="mt-[1vh]">
+                        <TextField
+                          fullWidth
+                          value={formData.email}
+                          onChange={handleChange("email")}
+                          size="small"
+                          error={!!errors.email}
+                          helperText={errors.email}
+                        />
+                      </div>
+                    </div>
+
                     <div className="fretryrow mb-[2vh] mt-[2vh]">
                       <Typography
                         variant="subtitle2"
@@ -222,7 +302,6 @@ export default function FreeTrialPopup({ open, onClose }) {
                       >
                         SELECT YOUR PREFERRED SLOT FOR DELIVERY*
                       </Typography>
-
                       <Box display="flex" gap={2} className="mt-2">
                         <Box flex={1}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -261,7 +340,7 @@ export default function FreeTrialPopup({ open, onClose }) {
                         </TextField>
                       </Box>
                     </div>
-                    <div className="fretryrow  mb-[2vh]">
+                    <div className="fretryrow mb-[2vh]">
                       <Typography
                         variant="subtitle2"
                         className="text-[#FF6514]"
@@ -279,11 +358,10 @@ export default function FreeTrialPopup({ open, onClose }) {
                           helperText={errors.food}
                         >
                           <MenuItem value="Paneer Butter Masala">
-                            {" "}
-                            Paneer Butter Masala{" "}
+                            Paneer Butter Masala
                           </MenuItem>
-                          <MenuItem value="Dal Tadka"> Dal Tadka </MenuItem>
-                          <MenuItem value="Aloo Gobi"> Aloo Gobi </MenuItem>
+                          <MenuItem value="Dal Tadka">Dal Tadka</MenuItem>
+                          <MenuItem value="Aloo Gobi">Aloo Gobi</MenuItem>
                         </TextField>
                       </div>
                     </div>
@@ -308,7 +386,7 @@ export default function FreeTrialPopup({ open, onClose }) {
                         />
                       </div>
                     </div>
-                    <div className="fretryrow  mb-[2vh]">
+                    <div className="fretryrow mb-[2vh]">
                       <Typography
                         variant="subtitle2"
                         className="text-[#FF6514]"
@@ -327,6 +405,9 @@ export default function FreeTrialPopup({ open, onClose }) {
                         />
                       </div>
                     </div>
+                    {errors.submit && (
+                      <FormHelperText error>{errors.submit}</FormHelperText>
+                    )}
                     <div className="fretryrow">
                       <p className="text-[14px]">
                         Submit your request before{" "}
@@ -345,6 +426,8 @@ export default function FreeTrialPopup({ open, onClose }) {
                         color="warning"
                         fullWidth
                         sx={{ mt: 2, py: 1.5 }}
+                        disabled={loading}
+                        endIcon={loading && <CircularProgress size={20} />}
                       >
                         <span>Get Free Trial</span>
                       </Button>

@@ -700,6 +700,7 @@ const loginCustomer = async (mobile) => {
         name: customer.name,
         email: customer.email,
         phone: customer.phone,
+        freeTrial: customer.freeTrial || false,
         message: "Log in successful!",
       };
     } else {

@@ -57,6 +57,7 @@ export const getDynamicAuthOptions = async () => {
             name: credentials.name,
             email: credentials.email,
             phone: credentials.phone,
+            freeTrial: credentials.freeTrial || false,
             token: credentials.token,
           };
         }
@@ -84,6 +85,7 @@ export const getDynamicAuthOptions = async () => {
               user.address = res.address;
               user.phone = res.phone;
               user.image = res.image;
+              user.freeTrial = res.freeTrial || false;
             } else {
               console.error("OAuth sign-in: No token received");
               return false;
@@ -104,6 +106,7 @@ export const getDynamicAuthOptions = async () => {
           token.phone = user.phone;
           token.image = user.image;
           token.token = user.token;
+          token.freeTrial = user.freeTrial || false;
         }
 
         if (trigger === "update" && session) {
@@ -123,6 +126,7 @@ export const getDynamicAuthOptions = async () => {
         session.user.phone = token.phone;
         session.user.image = token.image;
         session.user.token = token.token;
+        session.user.freeTrial = token.freeTrial || false;
 
         return session;
       },
