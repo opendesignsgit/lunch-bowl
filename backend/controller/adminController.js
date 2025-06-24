@@ -13,6 +13,7 @@ const Admin = require("../models/Admin");
 const School = require("../models/School");
 const Holiday = require("../models/holidaySchema");
 const nodemailer = require("nodemailer");
+const Customer = require("../models/Customer");
 
 const registerAdmin = async (req, res) => {
   try {
@@ -469,41 +470,70 @@ const deleteHoliday = async (req, res) => {
 
 const sendSchoolEnquiryMail = async (req, res) => {
   try {
-    const { firstName, lastName, mobileNumber, schoolName, message, email } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      mobileNumber,
+      schoolName,
+      message,
+      email,
+      address,
+      userId,
+    } = req.body;
 
-    // Create a transporter object using SMTP transport
+    // Is this a free trial?
+    const isFreeTrial = schoolName === "Free Trial";
+    let _id = userId;
+
+    // If it's a free trial, update customer with freeTrial: true
+    if (isFreeTrial && email) {
+      // Update existing customer or create new one if needed
+      await Customer.findOneAndUpdate(
+        { _id },
+        { freeTrial: true, email, firstName, lastName, mobileNumber },
+        { upsert: true, new: true }
+      );
+    }
+
+    // Email setup
     const transporter = nodemailer.createTransport({
-      service: "gmail", // or your email service
+      service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER, // your email
-        pass: process.env.EMAIL_PASS, // your email password or app password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
-    // Determine subject based on enquiry type
-    const enquiryType =
-      schoolName === "Nutrition Enquiry" ? "Nutrition" : "School Service";
-    const subject = `New ${enquiryType} Enquiry from ${firstName} ${lastName}`;
+    const enquiryType = isFreeTrial
+      ? "Free Trial"
+      : schoolName === "Nutrition Enquiry"
+      ? "Nutrition"
+      : "School Service";
+
+    const subject = isFreeTrial
+      ? `New Free Trial Request from ${firstName} ${lastName}`
+      : `New ${enquiryType} Enquiry from ${firstName} ${lastName}`;
 
     // Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: "shivarex.c@gmail.com",
-      subject: subject,
+      subject,
       html: `
-        <h2>New ${enquiryType} Enquiry</h2>
+        <h2>${enquiryType} Enquiry</h2>
         <p><strong>Name:</strong> ${firstName} ${lastName}</p>
         ${email ? `<p><strong>Email:</strong> ${email}</p>` : ""}
         <p><strong>Mobile Number:</strong> ${mobileNumber}</p>
+        ${address ? `<p><strong>Address:</strong> ${address}</p>` : ""}
         ${
-          schoolName && schoolName !== "Nutrition Enquiry"
+          !isFreeTrial && schoolName && schoolName !== "Nutrition Enquiry"
             ? `<p><strong>School Name:</strong> ${schoolName}</p>`
             : ""
         }
         <p><strong>Message:</strong> ${
           message || "No additional message provided"
         }</p>
+        ${isFreeTrial ? "<p>This is a Free Trial enquiry.</p>" : ""}
         <br>
         <p>This enquiry was submitted through the website contact form.</p>
       `,
@@ -514,7 +544,9 @@ const sendSchoolEnquiryMail = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Enquiry submitted successfully. We will contact you soon.",
+      message: isFreeTrial
+        ? "Free trial request submitted successfully. We will contact you soon."
+        : "Enquiry submitted successfully. We will contact you soon.",
     });
   } catch (err) {
     console.error("Error sending email:", err);

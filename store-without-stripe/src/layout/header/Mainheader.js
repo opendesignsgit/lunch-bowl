@@ -26,6 +26,7 @@ const Mainheader = ({ title, description, children }) => {
   const [shadow, setShow] = React.useState();
 
   const userId = session?.user?.id;
+  const freeTrial = session?.user?.freeTrial;
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -106,12 +107,17 @@ const Mainheader = ({ title, description, children }) => {
                   </button>
                 </li>
               )}
-
-              <li className="trialbtn">
-                <button onClick={() => setShowSignUp(true)}>
-                  <span>Start Free Trial</span>
-                </button>
-              </li>
+              {!freeTrial && (
+                <li className="trialbtn">
+                  <button
+                    onClick={() =>
+                      session ? setFreeTrialPopup(true) : setShowSignUp(true)
+                    }
+                  >
+                    <span>Start Free Trial</span>
+                  </button>
+                </li>
+              )}
 
               {/* Only show user menu if user is logged in */}
               {session && (
