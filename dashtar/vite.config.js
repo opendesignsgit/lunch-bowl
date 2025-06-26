@@ -107,6 +107,13 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    allowedHosts: [
+      "dashboard.lunchbowl.co.in",
+      "lunchbowl.co.in",
+      "api.lunchbowl.co.in",
+      "localhost",
+      "127.0.0.1"
+    ],
   },
   define: {
     "process.env": process.env,

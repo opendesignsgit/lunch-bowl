@@ -23,10 +23,10 @@ const currencyRoutes = require("../routes/currencyRoutes");
 const languageRoutes = require("../routes/languageRoutes");
 const notificationRoutes = require("../routes/notificationRoutes");
 const { isAuth, isAdmin } = require("../config/auth");
-// const {
-//   getGlobalSetting,
-//   getStoreCustomizationSetting,
-// } = require("../lib/notification/setting");
+const {
+  getGlobalSetting,
+  getStoreCustomizationSetting,
+} = require("../lib/notification/setting");
 
 connectDB();
 const app = express();

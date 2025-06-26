@@ -16,7 +16,8 @@ const useGetCData = () => {
 
   // Function to decrypt data
   const decryptData = async (encryptedData, iv) => {
-    const secretKey = import.meta.env.VITE_APP_ENCRYPT_PASSWORD; // Your secret password
+    // const secretKey = import.meta.env.VITE_APP_ENCRYPT_PASSWORD; // Your secret password
+    const secretKey = "856305f1a5b7ba87b8448e69b3bb7a4631c23f0afa2ca5331fa1373f7e372345"; // Your secret password
 
     // Ensure the secret key is exactly 32 bytes
     const keyBuffer = await crypto.subtle.digest(

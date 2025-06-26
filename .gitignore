@@ -1,0 +1,5 @@
+# Ignore db folder at root
+/db/
+
+# Ignore dist folder inside dashtar
+/dashtar/dist/
