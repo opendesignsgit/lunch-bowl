@@ -723,11 +723,10 @@ const stepFormRegister = async (req, res) => {
     const { formData, path, payload, _id, step } = req.body;
 
     // Validate required fields
-    if (!_id || !path || (!formData && !payload)) {
+    if (!_id || !path) {
       return res.status(400).json({
         success: false,
-        message:
-          "Missing required fields: _id, path, and either formData or payload",
+        message: "Missing required fields: _id and path",
       });
     }
 
@@ -739,7 +738,7 @@ const stepFormRegister = async (req, res) => {
       });
     }
 
-    let update = { step }; // Always update the step number
+    let update = { step };
 
     if (path === "step-Form-ParentDetails") {
       update.parentDetails = formData;
@@ -766,6 +765,24 @@ const stepFormRegister = async (req, res) => {
         workingDays: payload.workingDays,
         price: payload.totalPrice,
       };
+    } else if (path === "step-Form-Payment") {
+      // Handle payment status update
+      if (typeof payload.paymentStatus !== "boolean") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid payment status",
+        });
+      }
+      update.paymentStatus = payload.paymentStatus;
+      if (payload.paymentStatus) {
+        update.$inc = { subscriptionCount: 1 };
+        update.subscriptionPlan = {
+          ...update.subscriptionPlan,
+          paymentDate: new Date(),
+          paymentMethod: "CCAvenue",
+          transactionId: payload.transactionId || null,
+        };
+      }
     } else {
       return res.status(400).json({
         success: false,
@@ -786,6 +803,62 @@ const stepFormRegister = async (req, res) => {
       success: false,
       message: "Internal server error",
       error: error.message,
+    });
+  }
+};
+
+const handleCCAvenueResponse = async (req, res) => {
+  try {
+    const { encResponse } = req.body;
+
+    if (!encResponse) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No response data received" });
+    }
+
+    // Decrypt logic would be here, but it's better in the route file
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("CCAvenue response error:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+const verifyCCAvenuePayment = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+
+    if (!orderId) {
+      return res.status(400).json({
+        success: false,
+        message: "Order ID is required",
+      });
+    }
+
+    const form = await Form.findOne({ "subscriptionPlan.orderId": orderId });
+
+    if (!form) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: form.paymentStatus,
+      message: form.paymentStatus
+        ? "Payment verified successfully"
+        : "Payment not verified",
+      data: form,
+    });
+  } catch (error) {
+    console.error("Payment verification failed:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
     });
   }
 };
@@ -1023,7 +1096,6 @@ const getSavedMeals = async (req, res) => {
   }
 };
 
-
 const accountDetails = async (req, res) => {
   try {
     const { userId, updateField, updateValue } = req.body;
@@ -1079,6 +1151,33 @@ const accountDetails = async (req, res) => {
   }
 };
 
+const getFormData = async (req, res) => {
+  try {
+    const form = await Form.findOne({ user: req.params.userId })
+      .populate("user")
+      .lean();
+
+    if (!form) {
+      return res.status(404).json({
+        success: false,
+        message: "Form data not found for this user",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: form,
+    });
+  } catch (error) {
+    console.error("Error fetching form data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 // Helper function to check if date is in current month
 function isDateInCurrentMonth(date, currentMonth) {
   const mealDate = new Date(date);
@@ -1107,9 +1206,12 @@ module.exports = {
   sendOtp,
   verifyOtp,
   stepFormRegister,
+  handleCCAvenueResponse,
+  verifyCCAvenuePayment,
   getMenuCalendarDate,
   saveMealPlans,
   getSavedMeals,
   stepCheck,
   accountDetails,
+  getFormData,
 };

@@ -10,6 +10,7 @@ const { connectDB } = require("../config/db");
 const productRoutes = require("../routes/productRoutes");
 const schoolRoutes = require("../routes/schoolRoutes");
 const holidays = require("../routes/holidayRoutes");
+const ccavenueRoutes = require("../routes/ccavenue");
 
 const customerRoutes = require("../routes/customerRoutes");
 const adminRoutes = require("../routes/adminRoutes");
@@ -39,7 +40,12 @@ app.set("trust proxy", 1);
 app.use(express.json({ limit: "4mb" }));
 //app.use(helmet());
 app.options("*", cors()); // include before other routes
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use("/uploads", express.static("uploads"));
 app.use(
   helmet({
@@ -65,6 +71,7 @@ app.use("/api/setting/", settingRoutes);
 app.use("/api/currency/", isAuth, currencyRoutes);
 app.use("/api/language/", languageRoutes);
 app.use("/api/notification/", isAuth, notificationRoutes);
+app.use("/api/ccavenue/", ccavenueRoutes);
 
 //if you not use admin dashboard then these two route will not needed.
 app.use("/api/admin/", adminRoutes);

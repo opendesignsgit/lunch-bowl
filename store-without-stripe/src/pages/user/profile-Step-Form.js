@@ -243,7 +243,7 @@ const MultiStepForm = () => {
                />
              )}
 
-             {step === 4 && <PaymentStep prevStep={prevStep} />}
+             {step === 4 && <PaymentStep prevStep={prevStep} _id={_id} />}
            </Box>
          </Box>
 

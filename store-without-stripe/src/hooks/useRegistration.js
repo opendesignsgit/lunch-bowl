@@ -31,6 +31,9 @@ const useRegistration = () => {
           _id,
         });
         return res;
+      }else if (path == "get-customer-form") {
+        const res = await CustomerServices.getCustomerFormData(_id);
+        return res;
       } else if (path == "get-Menu-Calendar") {
         const res = await CustomerServices.getMenuCalendar({ _id, path });
         return res;

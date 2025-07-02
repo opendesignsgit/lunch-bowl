@@ -78,6 +78,9 @@ const CustomerServices = {
   getSavedMeals: async (body) => {
     return requests.post("/customer/get-saved-meals", body);
   },
+  getCustomerFormData: async (id) => {
+    return requests.get(`/customer/form/${id}`);
+  },
 };
 
 export default CustomerServices;

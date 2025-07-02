@@ -46,6 +46,11 @@ const FormSchema = new mongoose.Schema({
     endDate: { type: Date, required: true },
     workingDays: { type: Number, required: true },
     price: { type: Number, required: true },
+    orderId: { type: String }, // Added for CCAvenue order tracking
+    paymentAmount: { type: Number }, // Actual amount paid
+    paymentDate: { type: Date }, // When payment was made
+    paymentMethod: { type: String, default: "CCAvenue" },
+    transactionId: { type: String },
   },
   paymentStatus: {
     type: Boolean,
