@@ -27,12 +27,19 @@ const {
   getSavedMeals,
   stepCheck,
   accountDetails,
+  verifyCCAvenuePayment,
+  handleCCAvenueResponse,
+  getFormData, // Add this new controller method
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
   emailVerificationLimit,
   phoneVerificationLimit,
 } = require("../lib/email-sender/sender");
+
+// Import CCAvenue routes
+const ccavenueRoutes = require("./ccavenue");
+router.use("/ccavenue", ccavenueRoutes);
 
 //verify email
 router.post("/verify-email", emailVerificationLimit, verifyEmailAddress);
@@ -82,6 +89,9 @@ router.get("/", getAllCustomers);
 //get a user
 router.get("/:id", getCustomerById);
 
+// Get form data by user ID
+router.get("/form/:userId", getFormData);
+
 //update a user
 router.put("/:id", updateCustomer);
 
@@ -108,5 +118,10 @@ router.post("/Step-Check", stepCheck);
 
 router.post("/account-details", accountDetails);
 
+// CCAvenue Payment Verification
+router.post("/payment/verify", verifyCCAvenuePayment);
+
+// CCAvenue Response Handler
+router.post("/payment/response", handleCCAvenueResponse);
 
 module.exports = router;
