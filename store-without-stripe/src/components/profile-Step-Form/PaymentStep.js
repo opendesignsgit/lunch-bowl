@@ -21,7 +21,7 @@ const PaymentStep = ({ prevStep, _id }) => {
     currency: "INR",
     language: "EN",
     endpoint:
-      "https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction",
+      "https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction",
   };
 
   // Encryption function
@@ -106,6 +106,7 @@ const PaymentStep = ({ prevStep, _id }) => {
       const form = document.createElement("form");
       form.method = "POST";
       form.action = ccavenueConfig.endpoint;
+      alert("Redirecting to CCAvenue for payment...");
 
       const addInput = (name, value) => {
         const input = document.createElement("input");
