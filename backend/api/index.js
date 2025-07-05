@@ -40,12 +40,7 @@ app.set("trust proxy", 1);
 app.use(express.json({ limit: "4mb" }));
 //app.use(helmet());
 app.options("*", cors()); // include before other routes
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use(
   helmet({
@@ -105,12 +100,12 @@ app.listen(PORT, () => console.log(`server running on port ${PORT}`));
 //     origin: [
 //       "http://localhost:3000",
 //       "http://localhost:4100",
-//       "https://admin-lunchBowl.vercel.app",
+//       "https://admin-kachabazar.vercel.app",
 //       "https://dashtar-admin.vercel.app",
-//       "https://lunchBowl-store.vercel.app",
-//       "https://lunchBowl-admin.netlify.app",
+//       "https://kachabazar-store.vercel.app",
+//       "https://kachabazar-admin.netlify.app",
 //       "https://dashtar-admin.netlify.app",
-//       "https://lunchBowl-store-nine.vercel.app",
+//       "https://kachabazar-store-nine.vercel.app",
 //     ], //add your origin here instead of this
 //     methods: ["PUT", "GET", "POST", "DELETE", "PATCH", "OPTIONS"],
 //     credentials: false,
@@ -152,4 +147,4 @@ app.listen(PORT, () => console.log(`server running on port ${PORT}`));
 //     console.log(`Socket ${socket.id} disconnected!`);
 //   });
 // });
-// server.listen(PORT, () => console.log(`server running on port ${PORT}`));
+// server.listen(PORT, () => console.log(`server running on port ${PORT}`));   
