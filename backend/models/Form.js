@@ -52,11 +52,8 @@ const FormSchema = new mongoose.Schema({
     paymentMethod: { type: String, default: "CCAvenue" },
     transactionId: { type: String },
   },
-  paymentStatus: {
-    type: Boolean,
-    default: false, // false = not paid, true = paid
-    required: true,
-  },
+  paymentStatus: { type: String, required: true },
+
   subscriptionCount: {
     type: Number,
     default: 0, // Start with 0 subscriptions
