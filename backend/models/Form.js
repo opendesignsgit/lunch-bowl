@@ -26,6 +26,25 @@ const FormSchema = new mongoose.Schema({
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
     address: { type: String, required: true },
+    // New fields added below
+    pincode: {
+      type: String,
+      required: true,
+      match: /^[0-9]{6}$/, // Validates 6-digit pincode
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+      default: "India", // Default value set to India
+    },
   },
   children: [
     {
