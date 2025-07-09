@@ -78,7 +78,7 @@ const StepHeader = ({ step }) => {
 
 const MultiStepForm = () => {
   const { data: session } = useSession();
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
    const [childCount, setChildCount] = useState(1); // Add this state
    const [formData, setFormData] = useState({
      fatherFirstName: "",
