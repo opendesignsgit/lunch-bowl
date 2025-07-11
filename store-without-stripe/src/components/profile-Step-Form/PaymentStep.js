@@ -71,11 +71,13 @@ const PaymentStep = ({ prevStep, _id }) => {
         throw new Error(response?.message || "Failed to fetch form data");
       }
 
-      const { subscriptionPlan, user } = response.data || {};
+      const { subscriptionPlan, user, parentDetails } = response.data || {};
       if (!subscriptionPlan || !user) {
         throw new Error("Required data missing in response");
       }
-
+      console.log("====================================");
+      console.log("Subscription Plan:", response);
+      console.log("====================================");
       // Prepare payment data
       const orderId = generateOrderId();
       const paymentData = {
@@ -89,16 +91,21 @@ const PaymentStep = ({ prevStep, _id }) => {
         billing_name: (user?.name || "Customer").substring(0, 50),
         billing_email: (user?.email || "no-email@example.com").substring(0, 50),
         billing_tel: (user?.phone || "0000000000").substring(0, 20),
-        billing_address: "Not Provided".substring(0, 100),
-        billing_city: "Chennai".substring(0, 50),
-        billing_state: "Tamil Nadu".substring(0, 50),
-        billing_zip: "600001".substring(0, 10),
-        billing_country: "India".substring(0, 50),
+        billing_address: (parentDetails?.address || "Not Provided").substring(
+          0,
+          100
+        ),
+        billing_city: (parentDetails?.city || "Chennai").substring(0, 50),
+        billing_state: (parentDetails?.state || "Tamil Nadu").substring(0, 50),
+        billing_zip: (parentDetails?.pincode || "600001").substring(0, 10),
+        billing_country: (parentDetails?.country || "India").substring(0, 50),
         merchant_param1: _id,
         merchant_param2: subscriptionPlan.planId,
         merchant_param3: orderId,
       };
-
+      console.log("====================================");
+      console.log("Payment Data:", paymentData);
+      console.log("====================================");
       // Create request string
       const plainText = Object.entries(paymentData)
         .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
