@@ -131,8 +131,8 @@ const PaymentStep = ({ prevStep, _id }) => {
       addInput("encRequest", encryptedData);
       addInput("access_code", ccavenueConfig.access_code);
 
-      // document.body.appendChild(form);
-      // form.submit();
+      document.body.appendChild(form);
+      form.submit();
     } catch (err) {
       console.error("Payment error:", err);
       setError(err.message || "Payment initiation failed");
