@@ -16,9 +16,9 @@ import {
 import { Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
+import HolidayPayment from "./HolidayPayment";
 import mealPlanData from "../../jsonHelper/meal_plan.json"; // Adjust the path if needed
 
-// Extract the meal_plan array from the imported JSON
 const mealPlanArray = mealPlanData.meal_plan;
 
 const RightPanel = ({
@@ -45,6 +45,8 @@ const RightPanel = ({
   const [applyToAll, setApplyToAll] = useState(false);
   const [dialogOpen1, setDialogOpen1] = useState(false);
   const [dialogOpen2, setDialogOpen2] = useState(false);
+  const [holidayPaymentOpen, setHolidayPaymentOpen] = useState(false);
+  const [holidayPaymentData, setHolidayPaymentData] = useState([]);
 
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
@@ -52,14 +54,12 @@ const RightPanel = ({
   const isWithin48Hours = selectedDateObj.diff(dayjs(), "hour") < 48;
   const isSunday = selectedDateObj.day() === 0;
 
-  // Helper to get menu for the selected day (loops if days > 33)
   const getDayMenu = (selectedDate) => {
     if (!mealPlanArray || mealPlanArray.length === 0) return [];
     const menuIndex = (selectedDate - 1) % mealPlanArray.length;
     return mealPlanArray[menuIndex]?.meals || [];
   };
 
-  // Meal plan features for radio selection (if you use them)
   const mealPlans = [
     {
       id: 1,
@@ -118,6 +118,10 @@ const RightPanel = ({
     if (isWithin48Hours) return;
     handleMenuChange(childId, value);
   };
+
+  const activeChildId = dummyChildren[activeChild]?.id;
+  const activeChildDish =
+    menuSelections[formatDate(selectedDate)]?.[activeChildId] || "";
 
   return (
     <Box
@@ -205,9 +209,8 @@ const RightPanel = ({
               >
                 SELECT YOUR CHILD'S MENU
               </Typography>
-              {useMealPlan ? (
-                <>
-                  {dummyChildren.map((child, childIndex) => (
+              {useMealPlan
+                ? dummyChildren.map((child, childIndex) => (
                     <Box key={child.id} className="childmlist">
                       <Typography className="menuddtitle">
                         {(child.name || "").toUpperCase()}
@@ -256,9 +259,7 @@ const RightPanel = ({
                                   sx={{
                                     color: "#f97316",
                                     textDecoration: "none",
-                                    "&:hover": {
-                                      textDecoration: "underline",
-                                    },
+                                    "&:hover": { textDecoration: "underline" },
                                   }}
                                   onClick={(e) => {
                                     e.preventDefault();
@@ -276,11 +277,8 @@ const RightPanel = ({
                         </FormControl>
                       </Box>
                     </Box>
-                  ))}
-                </>
-              ) : (
-                <>
-                  {dummyChildren.map((child, childIndex) => (
+                  ))
+                : dummyChildren.map((child, childIndex) => (
                     <Box key={child.id} className="childmlist">
                       <Typography className="menuddtitle">
                         {(child.name || "").toUpperCase()}
@@ -330,7 +328,8 @@ const RightPanel = ({
                       </Box>
                       {childIndex === 0 && (
                         <Box sx={{ mt: 1 }}>
-                          <FormControlLabel className="cbapplysbtn"
+                          <FormControlLabel
+                            className="cbapplysbtn"
                             control={
                               <Checkbox
                                 checked={applyToAll}
@@ -348,9 +347,8 @@ const RightPanel = ({
                       )}
                     </Box>
                   ))}
-                </>
-              )}
             </div>
+
             <div className="childbtnsbox">
               {isSelectedHoliday && (
                 <Box mb={2}>
@@ -368,7 +366,19 @@ const RightPanel = ({
                   variant="outlined"
                   className="paysavebtn"
                   onClick={() => {
-                    if (typeof onSave === "function") {
+                    if (isSelectedHoliday) {
+                      const formattedDate = formatDate(selectedDate);
+                      const data = dummyChildren
+                        .map((child) => ({
+                          childId: child.id,
+                          dish:
+                            menuSelections[formattedDate]?.[child.id] || null,
+                        }))
+                        .filter((item) => !!item.dish); // Only include if dish is selected
+
+                      setHolidayPaymentData(data);
+                      setHolidayPaymentOpen(true);
+                    } else if (typeof onSave === "function") {
                       onSave();
                     }
                   }}
@@ -392,6 +402,18 @@ const RightPanel = ({
         onClose={handleCloseDialog2}
         planId={2}
         startDate={formatDate(selectedDate)}
+      />
+
+      {/* Holiday Payment Dialog */}
+      <HolidayPayment
+        open={holidayPaymentOpen}
+        onClose={() => setHolidayPaymentOpen(false)}
+        selectedDate={formatDate(selectedDate)}
+        childrenData={holidayPaymentData} // <-- array of { childId, dish }
+        onSuccess={() => {
+          setHolidayPaymentOpen(false);
+          onSave?.(); // Save after successful payment
+        }}
       />
     </Box>
   );

@@ -46,7 +46,7 @@ const MenuCalendar = () => {
     open: false,
     startDate: null,
   });
-
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [children, setChildren] = useState([]);
   const [menus, setMenus] = useState([]);
   const [holidays, setHolidays] = useState([]);
@@ -255,8 +255,8 @@ const MenuCalendar = () => {
     ).padStart(2, "0")}`;
 
   const isHoliday = (day, month = currentMonth, year = currentYear) => {
-    // Handle case where only day is provided (for backward compatibility)
-    if (arguments.length === 1) {
+    // If month and year are the default values, we might have received only day
+    if (month === currentMonth && year === currentYear) {
       const date = dayjs(formatDate(day));
       return (
         date.day() === 0 ||
