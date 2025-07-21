@@ -39,6 +39,7 @@ const RightPanel = ({
   activeChild,
   setActiveChild,
   onSave,
+  saveSelectedMeals,
 }) => {
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
@@ -374,12 +375,12 @@ const RightPanel = ({
                           dish:
                             menuSelections[formattedDate]?.[child.id] || null,
                         }))
-                        .filter((item) => !!item.dish); // Only include if dish is selected
+                        .filter((item) => !!item.dish);
 
                       setHolidayPaymentData(data);
                       setHolidayPaymentOpen(true);
-                    } else if (typeof onSave === "function") {
-                      onSave();
+                    } else if (typeof saveSelectedMeals === "function") {
+                      saveSelectedMeals();
                     }
                   }}
                 >
@@ -412,7 +413,7 @@ const RightPanel = ({
         childrenData={holidayPaymentData} // <-- array of { childId, dish }
         onSuccess={() => {
           setHolidayPaymentOpen(false);
-          onSave?.(); // Save after successful payment
+          saveSelectedMeals(); // Save after successful payment
         }}
       />
     </Box>

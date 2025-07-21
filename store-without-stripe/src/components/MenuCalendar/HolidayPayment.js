@@ -21,7 +21,8 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
     merchant_id: "4381442",
     access_code: "AVRM80MF59BY86MRYB",
     working_key: "2A561B005709D8B4BAF69D049B23546B",
-    redirect_url: "https://api.lunchbowl.co.in/api/ccavenue/response",
+    redirect_url:
+      "https://api.lunchbowl.co.in/api/ccavenue/response/holiydayPayment",
     cancel_url: "https://api.lunchbowl.co.in/api/ccavenue/response",
     currency: "INR",
     language: "EN",
@@ -34,11 +35,15 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
     const key = CryptoJS.enc.Hex.parse(md5Hash.toString(CryptoJS.enc.Hex));
     const iv = CryptoJS.enc.Hex.parse("000102030405060708090a0b0c0d0e0f");
 
-    const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(plainText), key, {
-      iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
+    const encrypted = CryptoJS.AES.encrypt(
+      CryptoJS.enc.Utf8.parse(plainText),
+      key,
+      {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      }
+    );
 
     return encrypted.ciphertext.toString();
   };
@@ -51,7 +56,8 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
       const paymentData = {
         merchant_id: ccavenueConfig.merchant_id,
         order_id: orderId,
-        amount: totalAmount.toFixed(2),
+        //amount: totalAmount.toFixed(2),
+        amount: 1,
         currency: ccavenueConfig.currency,
         redirect_url: ccavenueConfig.redirect_url,
         cancel_url: ccavenueConfig.cancel_url,

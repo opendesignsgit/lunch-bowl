@@ -209,319 +209,315 @@ const MenuCalendar = () => {
     return allMenuData;
   };
 
-  // Add this function to handle the save button click
-  const handleSave = async () => {
-    const allMenuData = getAllMenuData();
 
-    const payload = {
-      userId: _id, // Replace with actual user ID
-      children: allMenuData.map((child) => ({
-        childId: child.childId,
-        meals: child.meals,
-      })),
-    };
-    try {
-      const allMenuData = getAllMenuData();
+ const saveSelectedMeals = async () => {
+   const allMenuData = getAllMenuData();
+   const payload = {
+     userId: _id,
+     children: allMenuData.map((child) => ({
+       childId: child.childId,
+       meals: child.meals,
+     })),
+   };
+   try {
+     const res = await submitHandler({
+       _id: _id,
+       path: "save-meals",
+       data: payload,
+     });
 
-      const payload = {
-        userId: _id, // Replace with actual user ID
-        children: allMenuData.map((child) => ({
-          childId: child.childId,
-          meals: child.meals,
-        })),
-      };
+     if (res.success) {
+       // Show success notification
+     } else {
+       console.error("Failed to save meals:", res.message);
+       // Show error notification
+     }
+   } catch (error) {
+     console.error("Error saving meals:", error);
+     // Show error notification
+   }
+ };
 
-      const res = await submitHandler({
-        _id: _id,
-        path: "save-meals",
-        data: payload,
-      });
+ // 2. For normal save button, just call saveSelectedMeals
+ const handleSave = async () => {
+   await saveSelectedMeals();
+ };
 
-      if (res.success) {
-        // Show success notification
-      } else {
-        console.error("Failed to save meals:", res.message);
-        // Show error notification
-      }
-    } catch (error) {
-      console.error("Error saving meals:", error);
-      // Show error notification
-    }
-  };
+ const formatDate = (day) =>
+   `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
+     day
+   ).padStart(2, "0")}`;
 
-  const formatDate = (day) =>
-    `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
+ const isHoliday = (day, month = currentMonth, year = currentYear) => {
+   // If month and year are the default values, we might have received only day
+   if (month === currentMonth && year === currentYear) {
+     const date = dayjs(formatDate(day));
+     return (
+       date.day() === 0 ||
+       date.day() === 6 ||
+       holidays.some((h) => h.date === date.format("YYYY-MM-DD"))
+     );
+   }
 
-  const isHoliday = (day, month = currentMonth, year = currentYear) => {
-    // If month and year are the default values, we might have received only day
-    if (month === currentMonth && year === currentYear) {
-      const date = dayjs(formatDate(day));
-      return (
-        date.day() === 0 ||
-        date.day() === 6 ||
-        holidays.some((h) => h.date === date.format("YYYY-MM-DD"))
-      );
-    }
+   // Normal case with all parameters
+   const date = dayjs(`${year}-${month + 1}-${day}`);
+   const isWeekend = date.day() === 0 || date.day() === 6;
+   const dateString = date.format("YYYY-MM-DD");
+   const isCustomHoliday = holidays.some((h) => h.date === dateString);
+   return isWeekend || isCustomHoliday;
+ };
 
-    // Normal case with all parameters
-    const date = dayjs(`${year}-${month + 1}-${day}`);
-    const isWeekend = date.day() === 0 || date.day() === 6;
-    const dateString = date.format("YYYY-MM-DD");
-    const isCustomHoliday = holidays.some((h) => h.date === dateString);
-    return isWeekend || isCustomHoliday;
-  };
+ const handleMenuChange = (childId, dish) => {
+   const dateKey = formatDate(selectedDate);
+   setMenuSelections((prev) => ({
+     ...prev,
+     [dateKey]: {
+       ...(prev[dateKey] || {}),
+       [childId]: dish,
+     },
+   }));
+   if (editMode) {
+     setEditMode(false);
+     if (isSmall) setOpenDialog(false);
+   }
+ };
 
-  const handleMenuChange = (childId, dish) => {
-    const dateKey = formatDate(selectedDate);
-    setMenuSelections((prev) => ({
-      ...prev,
-      [dateKey]: {
-        ...(prev[dateKey] || {}),
-        [childId]: dish,
-      },
-    }));
-    if (editMode) {
-      setEditMode(false);
-      if (isSmall) setOpenDialog(false);
-    }
-  };
+ const getDayName = (day) => {
+   const date = new Date(currentYear, currentMonth, day);
+   return date.toLocaleDateString("en-US", { weekday: "long" });
+ };
 
-  const getDayName = (day) => {
-    const date = new Date(currentYear, currentMonth, day);
-    return date.toLocaleDateString("en-US", { weekday: "long" });
-  };
+ const getCalendarGridDates = () => {
+   const daysInMonth = dayjs(
+     `${currentYear}-${currentMonth + 1}`
+   ).daysInMonth();
+   const startDay =
+     (dayjs(`${currentYear}-${currentMonth + 1}-01`).day() + 6) % 7;
 
-  const getCalendarGridDates = () => {
-    const daysInMonth = dayjs(
-      `${currentYear}-${currentMonth + 1}`
-    ).daysInMonth();
-    const startDay =
-      (dayjs(`${currentYear}-${currentMonth + 1}-01`).day() + 6) % 7;
+   const daysArray = [];
+   for (let i = 0; i < startDay; i++) daysArray.push(null);
+   for (let i = 1; i <= daysInMonth; i++) daysArray.push(i);
+   return daysArray;
+ };
 
-    const daysArray = [];
-    for (let i = 0; i < startDay; i++) daysArray.push(null);
-    for (let i = 1; i <= daysInMonth; i++) daysArray.push(i);
-    return daysArray;
-  };
+ const applyMealPlan = (planId, childId) => {
+   const selectedPlan = planId === 1 ? menus : [...menus].reverse();
+   const updates = {};
 
-  const applyMealPlan = (planId, childId) => {
-    const selectedPlan = planId === 1 ? menus : [...menus].reverse();
-    const updates = {};
+   const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
+   const daysInMonth = firstDayOfMonth.daysInMonth();
 
-    const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
-    const daysInMonth = firstDayOfMonth.daysInMonth();
+   for (let day = 1; day <= daysInMonth; day++) {
+     const currentDate = dayjs(
+       `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
+     );
+     if (!isHoliday(day, currentMonth, currentYear)) {
+       // Pass all three params
+       const mealDate = currentDate.format("YYYY-MM-DD");
+       const meal = selectedPlan[(day - 1) % selectedPlan.length];
+       updates[mealDate] = {
+         ...(menuSelections[mealDate] || {}),
+         [childId]: meal,
+       };
+     }
+   }
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const currentDate = dayjs(
-        `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
-      );
-      if (!isHoliday(day, currentMonth, currentYear)) {
-        // Pass all three params
-        const mealDate = currentDate.format("YYYY-MM-DD");
-        const meal = selectedPlan[(day - 1) % selectedPlan.length];
-        updates[mealDate] = {
-          ...(menuSelections[mealDate] || {}),
-          [childId]: meal,
-        };
-      }
-    }
+   setMenuSelections((prev) => ({
+     ...prev,
+     ...updates,
+   }));
+ };
 
-    setMenuSelections((prev) => ({
-      ...prev,
-      ...updates,
-    }));
-  };
+ const calendarDates = getCalendarGridDates();
 
-  const calendarDates = getCalendarGridDates();
+ const handleMonthChange = (direction) => {
+   let newMonth = currentMonth + direction;
+   let newYear = currentYear;
 
-  const handleMonthChange = (direction) => {
-    let newMonth = currentMonth + direction;
-    let newYear = currentYear;
+   if (newMonth < 0) {
+     newMonth = 11;
+     newYear--;
+   } else if (newMonth > 11) {
+     newMonth = 0;
+     newYear++;
+   }
 
-    if (newMonth < 0) {
-      newMonth = 11;
-      newYear--;
-    } else if (newMonth > 11) {
-      newMonth = 0;
-      newYear++;
-    }
+   const newMonthStart = dayjs(`${newYear}-${newMonth + 1}-01`);
+   const newMonthEnd = newMonthStart.endOf("month");
 
-    const newMonthStart = dayjs(`${newYear}-${newMonth + 1}-01`);
-    const newMonthEnd = newMonthStart.endOf("month");
+   if (
+     newMonthEnd.isBefore(subscriptionStart) ||
+     newMonthStart.isAfter(subscriptionEnd)
+   ) {
+     return;
+   }
 
-    if (
-      newMonthEnd.isBefore(subscriptionStart) ||
-      newMonthStart.isAfter(subscriptionEnd)
-    ) {
-      return;
-    }
+   setCurrentMonth(newMonth);
+   setCurrentYear(newYear);
+ };
 
-    setCurrentMonth(newMonth);
-    setCurrentYear(newYear);
-  };
+ const handleDateClick = (date) => {
+   setSelectedDate(date);
+   setEditMode(false);
+   if (isSmall) {
+     setOpenDialog(true);
+   }
+ };
 
-  const handleDateClick = (date) => {
-    setSelectedDate(date);
-    setEditMode(false);
-    if (isSmall) {
-      setOpenDialog(true);
-    }
-  };
+ const handleEditClick = (dateString) => {
+   const [year, month, day] = dateString.split("-");
+   setCurrentMonth(parseInt(month) - 1);
+   setCurrentYear(parseInt(year));
+   setSelectedDate(parseInt(day));
+   setEditMode(true);
+   if (isSmall) {
+     setOpenDialog(true);
+   }
+ };
 
-  const handleEditClick = (dateString) => {
-    const [year, month, day] = dateString.split("-");
-    setCurrentMonth(parseInt(month) - 1);
-    setCurrentYear(parseInt(year));
-    setSelectedDate(parseInt(day));
-    setEditMode(true);
-    if (isSmall) {
-      setOpenDialog(true);
-    }
-  };
+ const handleDialogClose = () => {
+   setOpenDialog(false);
+   setEditMode(false);
+ };
 
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setEditMode(false);
-  };
+ if (loading || !children.length) {
+   return <CircularProgress />;
+ }
 
-  if (loading || !children.length) {
-    return <CircularProgress />;
-  }
+ return (
+   <Box
+     className="MCMainPanel"
+     display="flex"
+     flexDirection={isSmall ? "column" : "row"}
+     bgcolor="#fff"
+     mx="auto"
+     borderRadius={2}
+     boxShadow={2}
+     overflow="hidden"
+   >
+     {isSmall && (
+       <CenterPanel
+         isSmall={isSmall}
+         currentMonth={currentMonth}
+         currentYear={currentYear}
+         handleMonthChange={handleMonthChange}
+         calendarDates={calendarDates}
+         selectedDate={selectedDate}
+         setSelectedDate={handleDateClick}
+         isHoliday={(day) => isHoliday(day, currentMonth, currentYear)}
+         dummyHolidays={holidays}
+         subscriptionStart={subscriptionStart}
+         subscriptionEnd={subscriptionEnd}
+       />
+     )}
 
-  return (
-    <Box
-      className="MCMainPanel"
-      display="flex"
-      flexDirection={isSmall ? "column" : "row"}
-      bgcolor="#fff"
-      mx="auto"
-      borderRadius={2}
-      boxShadow={2}
-      overflow="hidden"
-    >
-      {isSmall && (
-        <CenterPanel
-          isSmall={isSmall}
-          currentMonth={currentMonth}
-          currentYear={currentYear}
-          handleMonthChange={handleMonthChange}
-          calendarDates={calendarDates}
-          selectedDate={selectedDate}
-          setSelectedDate={handleDateClick}
-          isHoliday={(day) => isHoliday(day, currentMonth, currentYear)}
-          dummyHolidays={holidays}
-          subscriptionStart={subscriptionStart}
-          subscriptionEnd={subscriptionEnd}
-        />
-      )}
+     {isSmall && (
+       <LeftPanel
+         isSmall={isSmall}
+         currentYear={currentYear}
+         currentMonth={currentMonth}
+         activeChild={activeChild}
+         setActiveChild={setActiveChild}
+         dummyChildren={children}
+         menuSelections={menuSelections}
+         subscriptionStart={subscriptionStart}
+         subscriptionEnd={subscriptionEnd}
+         onEditClick={handleEditClick}
+         onMenuDataChange={handleMenuDataChange}
+       />
+     )}
 
-      {isSmall && (
-        <LeftPanel
-          isSmall={isSmall}
-          currentYear={currentYear}
-          currentMonth={currentMonth}
-          activeChild={activeChild}
-          setActiveChild={setActiveChild}
-          dummyChildren={children}
-          menuSelections={menuSelections}
-          subscriptionStart={subscriptionStart}
-          subscriptionEnd={subscriptionEnd}
-          onEditClick={handleEditClick}
-          onMenuDataChange={handleMenuDataChange}
-        />
-      )}
+     {!isSmall && (
+       <>
+         <LeftPanel
+           isSmall={isSmall}
+           currentYear={currentYear}
+           currentMonth={currentMonth}
+           activeChild={activeChild}
+           setActiveChild={setActiveChild}
+           dummyChildren={children}
+           menuSelections={menuSelections}
+           subscriptionStart={subscriptionStart}
+           subscriptionEnd={subscriptionEnd}
+           onEditClick={handleEditClick}
+           onMenuDataChange={handleMenuDataChange}
+           sx={{ width: "29%" }}
+         />
 
-      {!isSmall && (
-        <>
-          <LeftPanel
-            isSmall={isSmall}
-            currentYear={currentYear}
-            currentMonth={currentMonth}
-            activeChild={activeChild}
-            setActiveChild={setActiveChild}
-            dummyChildren={children}
-            menuSelections={menuSelections}
-            subscriptionStart={subscriptionStart}
-            subscriptionEnd={subscriptionEnd}
-            onEditClick={handleEditClick}
-            onMenuDataChange={handleMenuDataChange}
-            sx={{ width: "29%" }}
-          />
+         <CenterPanel
+           isSmall={isSmall}
+           currentMonth={currentMonth}
+           currentYear={currentYear}
+           handleMonthChange={handleMonthChange}
+           calendarDates={calendarDates}
+           selectedDate={selectedDate}
+           setSelectedDate={handleDateClick}
+           isHoliday={(day) => isHoliday(day, currentMonth, currentYear)}
+           dummyHolidays={holidays}
+           subscriptionStart={subscriptionStart}
+           subscriptionEnd={subscriptionEnd}
+           sx={{ width: "44%" }}
+         />
 
-          <CenterPanel
-            isSmall={isSmall}
-            currentMonth={currentMonth}
-            currentYear={currentYear}
-            handleMonthChange={handleMonthChange}
-            calendarDates={calendarDates}
-            selectedDate={selectedDate}
-            setSelectedDate={handleDateClick}
-            isHoliday={(day) => isHoliday(day, currentMonth, currentYear)}
-            dummyHolidays={holidays}
-            subscriptionStart={subscriptionStart}
-            subscriptionEnd={subscriptionEnd}
-            sx={{ width: "44%" }}
-          />
+         <RightPanel
+           isSmall={isSmall}
+           selectedDate={selectedDate}
+           getDayName={getDayName}
+           isHoliday={isHoliday}
+           dummyChildren={children}
+           menuSelections={menuSelections}
+           handleMenuChange={handleMenuChange}
+           dummyMenus={menus}
+           formatDate={formatDate}
+           editMode={editMode}
+           setEditMode={setEditMode}
+           sx={{ width: "29%" }}
+           applyMealPlan={applyMealPlan} // Pass the function
+           setMealPlanDialog={setMealPlanDialog}
+           activeChild={activeChild} // Add this
+           setActiveChild={setActiveChild}
+           onSave={handleSave}
+           saveSelectedMeals={saveSelectedMeals}
+         />
+       </>
+     )}
 
-          <RightPanel
-            isSmall={isSmall}
-            selectedDate={selectedDate}
-            getDayName={getDayName}
-            isHoliday={isHoliday}
-            dummyChildren={children}
-            menuSelections={menuSelections}
-            handleMenuChange={handleMenuChange}
-            dummyMenus={menus}
-            formatDate={formatDate}
-            editMode={editMode}
-            setEditMode={setEditMode}
-            sx={{ width: "29%" }}
-            applyMealPlan={applyMealPlan} // Pass the function
-            setMealPlanDialog={setMealPlanDialog}
-            activeChild={activeChild} // Add this
-            setActiveChild={setActiveChild}
-            onSave={handleSave}
-          />
-        </>
-      )}
+     <Dialog
+       open={openDialog}
+       onClose={handleDialogClose}
+       fullWidth
+       maxWidth="sm"
+     >
+       <RightPanel
+         isSmall={isSmall}
+         selectedDate={selectedDate}
+         getDayName={getDayName}
+         isHoliday={isHoliday}
+         dummyChildren={children}
+         menuSelections={menuSelections}
+         handleMenuChange={handleMenuChange}
+         dummyMenus={menus}
+         formatDate={formatDate}
+         onClose={handleDialogClose}
+         editMode={editMode}
+         setEditMode={setEditMode}
+         applyMealPlan={applyMealPlan} // Pass the function
+         setMealPlanDialog={setMealPlanDialog}
+         activeChild={activeChild} // Add this
+         setActiveChild={setActiveChild}
+         onSave={handleSave}
+         saveSelectedMeals={saveSelectedMeals}
+       />
+     </Dialog>
 
-      <Dialog
-        open={openDialog}
-        onClose={handleDialogClose}
-        fullWidth
-        maxWidth="sm"
-      >
-        <RightPanel
-          isSmall={isSmall}
-          selectedDate={selectedDate}
-          getDayName={getDayName}
-          isHoliday={isHoliday}
-          dummyChildren={children}
-          menuSelections={menuSelections}
-          handleMenuChange={handleMenuChange}
-          dummyMenus={menus}
-          formatDate={formatDate}
-          onClose={handleDialogClose}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          applyMealPlan={applyMealPlan} // Pass the function
-          setMealPlanDialog={setMealPlanDialog}
-          activeChild={activeChild} // Add this
-          setActiveChild={setActiveChild}
-          onSave={handleSave}
-        />
-      </Dialog>
-
-      <MealPlanDialog
-        open={mealPlanDialog.open}
-        onClose={() => setMealPlanDialog({ ...mealPlanDialog, open: false })}
-        startDate={mealPlanDialog.startDate}
-        planId={mealPlanDialog.plan} // Pass the selected plan ID
-      />
-    </Box>
-  );
+     <MealPlanDialog
+       open={mealPlanDialog.open}
+       onClose={() => setMealPlanDialog({ ...mealPlanDialog, open: false })}
+       startDate={mealPlanDialog.startDate}
+       planId={mealPlanDialog.plan} // Pass the selected plan ID
+     />
+   </Box>
+ );
 };
 
 export default MenuCalendar;
