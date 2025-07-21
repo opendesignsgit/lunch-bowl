@@ -101,53 +101,53 @@ const calculatePlans = (holidays, childCount = 1) => {
   // Different discounts based on number of children
   const discounts =
     childCount >= 2
-      ? { 30: 0.05, 90: 0.15, 150: 0.2 } // 5% for 30 days, 15% for 90 days, 20% for 150 days when 2+ children
-      : { 30: 0, 90: 0.05, 150: 0.1 }; // Original discounts for single child
+      ? { 22: 0.05, 66: 0.15, 132: 0.2 } // 5% for 22 days, 15% for 66 days, 20% for 132 days when 2+ children
+      : { 22: 0, 66: 0.05, 132: 0.1 }; // Original discounts for single child
 
   const plans = [
     {
       id: 1,
-      label: `30 Working Days - Rs. ${Math.round(
-        30 * BASE_PRICE_PER_DAY * (1 - discounts[30]) * childCount
+      label: `22 Working Days - Rs. ${Math.round(
+        22 * BASE_PRICE_PER_DAY * (1 - discounts[22]) * childCount
       ).toLocaleString("en-IN")}${
-        discounts[30] > 0 ? ` (${discounts[30] * 100}% OFF)` : ""
+        discounts[22] > 0 ? ` (${discounts[22] * 100}% OFF)` : ""
       }`,
-      workingDays: 30,
+      workingDays: 22,
       price: Math.round(
-        30 * BASE_PRICE_PER_DAY * (1 - discounts[30]) * childCount
+        22 * BASE_PRICE_PER_DAY * (1 - discounts[22]) * childCount
       ),
-      discount: discounts[30],
+      discount: discounts[22],
       isOneMonth: true,
       startDate,
-      endDate: calculateEndDateByWorkingDays(startDate, 30, holidays),
+      endDate: calculateEndDateByWorkingDays(startDate, 22, holidays),
     },
     {
       id: 3,
-      label: `90 Working Days - Rs. ${Math.round(
-        90 * BASE_PRICE_PER_DAY * (1 - discounts[90]) * childCount
-      ).toLocaleString("en-IN")} (${discounts[90] * 100}% OFF)`,
-      workingDays: 90,
+      label: `66 Working Days - Rs. ${Math.round(
+        66 * BASE_PRICE_PER_DAY * (1 - discounts[66]) * childCount
+      ).toLocaleString("en-IN")} (${discounts[66] * 100}% OFF)`,
+      workingDays: 66,
       price: Math.round(
-        90 * BASE_PRICE_PER_DAY * (1 - discounts[90]) * childCount
+        66 * BASE_PRICE_PER_DAY * (1 - discounts[66]) * childCount
       ),
-      discount: discounts[90],
+      discount: discounts[66],
       isOneMonth: false,
       startDate,
-      endDate: calculateEndDateByWorkingDays(startDate, 90, holidays),
+      endDate: calculateEndDateByWorkingDays(startDate, 66, holidays),
     },
     {
       id: 6,
-      label: `150 Working Days - Rs. ${Math.round(
-        150 * BASE_PRICE_PER_DAY * (1 - discounts[150]) * childCount
-      ).toLocaleString("en-IN")} (${discounts[150] * 100}% OFF)`,
-      workingDays: 150,
+      label: `132 Working Days - Rs. ${Math.round(
+        132 * BASE_PRICE_PER_DAY * (1 - discounts[132]) * childCount
+      ).toLocaleString("en-IN")} (${discounts[132] * 100}% OFF)`,
+      workingDays: 132,
       price: Math.round(
-        150 * BASE_PRICE_PER_DAY * (1 - discounts[150]) * childCount
+        132 * BASE_PRICE_PER_DAY * (1 - discounts[132]) * childCount
       ),
-      discount: discounts[150],
+      discount: discounts[132],
       isOneMonth: false,
       startDate,
-      endDate: calculateEndDateByWorkingDays(startDate, 150, holidays),
+      endDate: calculateEndDateByWorkingDays(startDate, 132, holidays),
     },
   ];
   return plans;
@@ -728,19 +728,19 @@ const OffersSection = ({ numberOfChildren = 1 }) => (
         <>
           <li>
             <Typography fontSize={14}>
-              Save <strong>5%</strong> on the 30 Working Days Plan (for 2+
+              Save <strong>5%</strong> on the 22 Working Days Plan (for 2+
               children).
             </Typography>
           </li>
           <li>
             <Typography fontSize={14}>
-              Save <strong>15%</strong> on the 90 Working Days Plan (for 2+
+              Save <strong>15%</strong> on the 66 Working Days Plan (for 2+
               children).
             </Typography>
           </li>
           <li>
             <Typography fontSize={14}>
-              Save <strong>20%</strong> on the 150 Working Days Plan (for 2+
+              Save <strong>20%</strong> on the 132 Working Days Plan (for 2+
               children).
             </Typography>
           </li>
@@ -749,12 +749,12 @@ const OffersSection = ({ numberOfChildren = 1 }) => (
         <>
           <li>
             <Typography fontSize={14}>
-              Save <strong>5%</strong> on the 90 Working Days Plan.
+              Save <strong>5%</strong> on the 66 Working Days Plan.
             </Typography>
           </li>
           <li>
             <Typography fontSize={14}>
-              Save <strong>10%</strong> on the 150 Working Days Plan.
+              Save <strong>10%</strong> on the 132 Working Days Plan.
             </Typography>
           </li>
         </>
