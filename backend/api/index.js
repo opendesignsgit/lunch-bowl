@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("./../jobs/renewalReminder");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
