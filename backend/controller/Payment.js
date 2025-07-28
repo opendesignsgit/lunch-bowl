@@ -4,6 +4,7 @@ const Form = require("../models/Form");
 const UserPayment = require("../models/Payment");
 const fs = require("fs");
 const path = require("path");
+const nodemailer = require("nodemailer");
 
 const workingKey = "2A561B005709D8B4BAF69D049B23546B"; // Replace with ENV in production
 
@@ -103,6 +104,53 @@ exports.ccavenueResponse = async (req, res) => {
           },
           { new: true }
         );
+
+        // Send Registration + Payment Success Mail
+        if (updatedForm) {
+          // Extract details for mail
+          const parentName = `${updatedForm.parentDetails.fatherFirstName} ${updatedForm.parentDetails.fatherLastName}`;
+          const amount = updatedForm.subscriptionPlan.price;
+          const startDate = updatedForm.subscriptionPlan.startDate
+            ? new Date(
+                updatedForm.subscriptionPlan.startDate
+              ).toLocaleDateString("en-IN")
+            : "";
+          const schoolName = updatedForm.children?.[0]?.school || "";
+          const childName = updatedForm.children?.[0]
+            ? `${updatedForm.children[0].childFirstName} ${updatedForm.children[0].childLastName}`
+            : "";
+          const email = updatedForm.parentDetails.email;
+
+          const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS,
+            },
+          });
+
+          const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Registration & Payment Successful – Welcome Aboard!",
+            html: `
+              <p>Hi ${parentName},</p>
+              <p>Your Lunch Bowl registration is complete, and we've received your payment of ₹${amount}.</p>
+              <p>🎒 Meal service starts on: ${startDate}</p>
+              <p>📍 School: ${schoolName}</p>
+              <p>👦 Child: ${childName}</p>
+              <p>We’re thrilled to be part of your child’s lunch journey!</p>
+              <p>For any help, reach out to <a href="mailto:support@lunchbowl.in">support@lunchbowl.in</a></p>
+              <p>– Earth Tech Concepts Pvt Ltd</p>
+            `,
+          };
+
+          transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              console.error("Payment Success Mail Error:", err);
+            }
+          });
+        }
 
         return res.redirect("https://lunchbowl.co.in/payment/success");
       } else {
