@@ -31,7 +31,7 @@ const useRegistration = () => {
           _id,
         });
         return res;
-      }else if (path == "get-customer-form") {
+      } else if (path == "get-customer-form") {
         const res = await CustomerServices.getCustomerFormData(_id);
         return res;
       } else if (path == "get-Menu-Calendar") {
@@ -49,6 +49,16 @@ const useRegistration = () => {
           _id,
           path,
         });
+        return res;
+      } else if (path == "delete-child-menu") {
+        const res = await CustomerServices.deleteChildMenu({
+          _id,
+          path,
+          data,
+        });
+        return res;
+      } else if (path === "get-deleted-meals") {
+        const res = await CustomerServices.getDeletedMenus({ userId: _id });
         return res;
       } else if (path == "Step-Check") {
         const res = await CustomerServices.checkStep({

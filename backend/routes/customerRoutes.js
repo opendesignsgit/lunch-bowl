@@ -25,11 +25,13 @@ const {
   getMenuCalendarDate,
   saveMealPlans,
   getSavedMeals,
+  deleteChildMenu,
   stepCheck,
   accountDetails,
   verifyCCAvenuePayment,
   handleCCAvenueResponse,
   getFormData, // Add this new controller method
+  getDeletedMeals,
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -113,6 +115,10 @@ router.post("/save-Menu-Calendar", saveMealPlans);
 
 // Add to your routes
 router.post("/get-saved-meals", getSavedMeals);
+
+router.post("/delete-child-menu", deleteChildMenu);
+
+router.post("/deleted-menus", getDeletedMeals);
 
 router.post("/Step-Check", stepCheck);
 

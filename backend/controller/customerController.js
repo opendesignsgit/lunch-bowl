@@ -1,6 +1,7 @@
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const DeletedMeal = require("../models/DeletedMeal");
 const Customer = require("../models/Customer");
 const UserMeal = require("../models/UserMeal");
 const dayjs = require("dayjs");
@@ -722,7 +723,7 @@ const createCustomer = async ({ firstName, lastName, mobile, email }) => {
 const loginCustomer = async (mobile) => {
   try {
     const customer = await Customer.findOne({ phone: mobile });
-    
+
     if (customer) {
       const token = signInToken(customer);
 
@@ -1129,6 +1130,100 @@ const getSavedMeals = async (req, res) => {
   }
 };
 
+const deleteChildMenu = async (req, res) => {
+  const { userId, childId, childName, date, menu } = req.body.data;
+
+  // Defensive checks
+  if (!userId || !childId || !date) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing required fields." });
+  }
+
+  try {
+    // 1. Add 200 points to user
+    const customer = await Customer.findByIdAndUpdate(
+      userId,
+      { $inc: { walletPoints: 200 } },
+      { new: true }
+    );
+
+    // 2. Find or create DeletedMeal record
+    let deletedMealRecord = await DeletedMeal.findOne({ userId });
+    if (!deletedMealRecord) {
+      deletedMealRecord = new DeletedMeal({ userId, deletedMenus: [] });
+    }
+    // Prevent duplicates
+    const exists = deletedMealRecord.deletedMenus.some(
+      (item) => item.childId.toString() === childId && item.date === date
+    );
+    if (!exists) {
+      deletedMealRecord.deletedMenus.push({ childId, date, childName });
+    }
+    await deletedMealRecord.save();
+
+    // 3. Remove the menu from UserMeal
+    await UserMeal.updateOne(
+      { userId, "children.childId": childId },
+      {
+        $pull: {
+          "children.$.meals": { mealDate: new Date(date), mealName: menu },
+        },
+      }
+    );
+    // NOTE: You may need to match mealDate as "YYYY-MM-DD", adjust as needed
+
+    return res.status(200).json({
+      success: true,
+      message: "Menu deleted, points credited and record logged.",
+      walletPoints: customer.walletPoints,
+    });
+  } catch (error) {
+    console.error("Error in deleteChildMenu:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+const getDeletedMeals = async (req, res) => {
+  try {
+    // For POST, get userId in req.body.userId
+    // For GET, get userId from req.query.userId
+    console.log(
+      "====================================",
+      "getDeletedMeals request"
+    );
+
+    const userId = req.body.userId || req.query.userId;
+
+    console.log("====================================");
+    console.log("getDeletedMeals userId:", userId);
+    console.log("====================================");
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "UserId required" });
+    }
+    const record = await DeletedMeal.findOne({ userId });
+    if (!record) {
+      return res.json({ success: true, data: [] });
+    }
+    // Strip Mongo _id and only send array of { childId, date }
+    const result = record.deletedMenus.map((item) => ({
+      childId:
+        typeof item.childId === "object"
+          ? item.childId.toString()
+          : item.childId,
+      date: item.date,
+    }));
+    return res.json({ success: true, data: result });
+  } catch (err) {
+    console.error("getDeletedMeals error", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 const accountDetails = async (req, res) => {
   try {
     const { userId, updateField, updateValue } = req.body;
@@ -1247,4 +1342,6 @@ module.exports = {
   stepCheck,
   accountDetails,
   getFormData,
+  deleteChildMenu,
+  getDeletedMeals,
 };

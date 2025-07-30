@@ -78,6 +78,13 @@ const CustomerServices = {
   getSavedMeals: async (body) => {
     return requests.post("/customer/get-saved-meals", body);
   },
+  deleteChildMenu: async (body) => {
+    return requests.post("/customer/delete-child-menu", body);
+  },
+  getDeletedMenus: async (body) => {
+    // expecting { userId }
+    return requests.post("/customer/deleted-menus", body);
+  },
   getCustomerFormData: async (id) => {
     return requests.get(`/customer/form/${id}`);
   },

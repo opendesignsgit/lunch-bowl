@@ -18,6 +18,12 @@ import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
 import HolidayPayment from "./HolidayPayment";
 import mealPlanData from "../../jsonHelper/meal_plan.json"; // Adjust the path if needed
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useTheme } from "@mui/material/styles";
 
 const mealPlanArray = mealPlanData.meal_plan;
 
@@ -33,6 +39,9 @@ const RightPanel = ({
   onClose,
   editMode,
   setEditMode,
+  submitHandler,
+  userId,
+  blockedMenus,
   sx,
   setMealPlanDialog,
   applyMealPlan,
@@ -48,6 +57,8 @@ const RightPanel = ({
   const [dialogOpen2, setDialogOpen2] = useState(false);
   const [holidayPaymentOpen, setHolidayPaymentOpen] = useState(false);
   const [holidayPaymentData, setHolidayPaymentData] = useState([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
@@ -59,6 +70,43 @@ const RightPanel = ({
     if (!mealPlanArray || mealPlanArray.length === 0) return [];
     const menuIndex = (selectedDate - 1) % mealPlanArray.length;
     return mealPlanArray[menuIndex]?.meals || [];
+  };
+
+  const isChildDateBlocked = (childId, formattedDate) => {
+    return blockedMenus?.some(
+      (bm) => bm.childId === childId && bm.date === formattedDate
+    );
+  };
+
+  const handleDeleteClick = (child, date, dish) => {
+    setDeleteTarget({ child, date, dish });
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    const { child, date, dish } = deleteTarget;
+
+    // Remove from backend
+    try {
+      await submitHandler({
+        path: "delete-child-menu",
+        data: {
+          userId, // <-- Send userId
+          childId: child.id,
+          childName: child.name,
+          date,
+          menu: dish,
+        },
+      });
+      // Remove from local state
+      handleMenuChange(child.id, ""); // Clear the menu for this child/date
+    } catch (err) {
+      // Optionally show error
+      console.error("Failed to delete menu:", err);
+    }
+    setDeleteDialogOpen(false);
+    setDeleteTarget(null);
   };
 
   const mealPlans = [
@@ -279,75 +327,131 @@ const RightPanel = ({
                       </Box>
                     </Box>
                   ))
-                : dummyChildren.map((child, childIndex) => (
-                    <Box key={child.id} className="childmlist">
-                      <Typography className="menuddtitle">
-                        {(child.name || "").toUpperCase()}
-                      </Typography>
+                : dummyChildren.map((child, childIndex) => {
+                    const formattedDate = formatDate(selectedDate);
+                    const blocked = isChildDateBlocked(child.id, formattedDate);
+                    // Dish from DB (saved)
+                    const savedDish =
+                      menuSelections[formattedDate]?.[child.id] || "";
+                    const dish = savedDish;
+                    return (
                       <Box
-                        className="menuddlistbox"
-                        bgcolor="#fff"
-                        borderRadius={2}
-                        px={1}
-                        py={0.5}
+                        key={child.id}
+                        className="childmlist"
+                        display="flex"
+                        alignItems="center"
+                        sx={
+                          blocked
+                            ? {
+                                opacity: 0.6,
+                                pointerEvents: "none",
+                                bgcolor: "#ececec",
+                              }
+                            : {}
+                        }
                       >
-                        <Select
-                          className="menuddlist"
-                          value={
-                            menuSelections[formatDate(selectedDate)]?.[
-                              child.id
-                            ] || ""
-                          }
-                          onChange={(e) => {
-                            childIndex === 0
-                              ? handleFirstChildMenuChange(
-                                  child.id,
-                                  e.target.value
-                                )
-                              : handleMenuSelectionChange(
-                                  child.id,
-                                  e.target.value
-                                );
-                            setActiveChild(childIndex);
-                          }}
-                          fullWidth
-                          variant="standard"
-                          disableUnderline
-                          MenuProps={{
-                            PaperProps: {
-                              style: { maxHeight: 48 * 4.5 },
-                            },
-                          }}
-                        >
-                          <MenuItem value="">Select Dish</MenuItem>
-                          {getDayMenu(selectedDate).map((menu, i) => (
-                            <MenuItem key={i} value={menu}>
-                              {menu}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Box>
-                      {childIndex === 0 && (
-                        <Box sx={{ mt: 1 }}>
-                          <FormControlLabel
-                            className="cbapplysbtn"
-                            control={
-                              <Checkbox
-                                checked={applyToAll}
-                                onChange={handleApplyToAllChange}
-                                sx={{ color: "#fff" }}
-                              />
-                            }
-                            label={
-                              <Typography fontSize="0.8rem" color="#fff">
-                                Apply the same menu for all children
+                        <Box flex={1}>
+                          <Typography className="menuddtitle">
+                            {(child.name || "").toUpperCase()}
+                          </Typography>
+                          <Box
+                            className="menuddlistbox"
+                            bgcolor="#fff"
+                            borderRadius={2}
+                            px={1}
+                            py={0.5}
+                            display="flex"
+                            alignItems="center"
+                          >
+                            <Select
+                              className="menuddlist"
+                              value={dish}
+                              onChange={(e) => {
+                                if (!blocked) {
+                                  // your existing logic here
+                                  childIndex === 0
+                                    ? handleFirstChildMenuChange(
+                                        child.id,
+                                        e.target.value
+                                      )
+                                    : handleMenuSelectionChange(
+                                        child.id,
+                                        e.target.value
+                                      );
+                                  setActiveChild(childIndex);
+                                }
+                              }}
+                              fullWidth
+                              variant="standard"
+                              disableUnderline
+                              disabled={blocked} // <<<< BLOCK IT!
+                              sx={
+                                blocked
+                                  ? {
+                                      background: "#eee",
+                                      pointerEvents: "none",
+                                    }
+                                  : {}
+                              }
+                            >
+                              <MenuItem value="">Select Dish</MenuItem>
+                              {getDayMenu(selectedDate).map((menu, i) => (
+                                <MenuItem key={i} value={menu}>
+                                  {menu}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {blocked && (
+                              <Typography
+                                color="error"
+                                fontSize="0.75rem"
+                                ml={1}
+                              >
+                                You deleted the menu for this date. Selection
+                                disabled.
                               </Typography>
-                            }
-                          />
+                            )}
+                            {/* Show delete button ONLY if dish is present in menuSelections (i.e., saved in DB) */}
+                            {savedDish && (
+                              <IconButton
+                                aria-label="delete"
+                                size="small"
+                                sx={{ ml: 1, color: "#e53935" }}
+                                onClick={() =>
+                                  handleDeleteClick(
+                                    child,
+                                    formattedDate,
+                                    savedDish
+                                  )
+                                }
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            )}
+                          </Box>
+                          {childIndex === 0 && (
+                            <Box sx={{ mt: 1 }}>
+                              <FormControlLabel
+                                className="cbapplysbtn"
+                                control={
+                                  <Checkbox
+                                    checked={applyToAll}
+                                    onChange={handleApplyToAllChange}
+                                    sx={{ color: "#fff" }}
+                                  />
+                                }
+                                label={
+                                  <Typography fontSize="0.8rem" color="#fff">
+                                    Apply the same menu for all children
+                                  </Typography>
+                                }
+                              />
+                            </Box>
+                          )}
                         </Box>
-                      )}
-                    </Box>
-                  ))}
+                      </Box>
+                    );
+                  })}
             </div>
 
             <div className="childbtnsbox">
@@ -391,6 +495,34 @@ const RightPanel = ({
           </div>
         </>
       )}
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Delete Menu</DialogTitle>
+        <DialogContent>
+          {deleteTarget && (
+            <Typography>
+              Are you sure you want to delete the menu for{" "}
+              <b>{deleteTarget.child.name}</b> on <b>{deleteTarget.date}</b> (
+              <b>{deleteTarget.dish}</b>)?
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <MealPlanDialog
         open={dialogOpen1}

@@ -85,6 +85,10 @@ const customerSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    walletPoints: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
