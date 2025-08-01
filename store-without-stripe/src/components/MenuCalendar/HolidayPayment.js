@@ -9,8 +9,18 @@ import {
   LinearProgress,
 } from "@mui/material";
 import CryptoJS from "crypto-js";
+import { useSession } from "next-auth/react";
 
-const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSuccess }) => {
+const HolidayPayment = ({
+  open,
+  onClose,
+  selectedDate,
+  childrenData = [],
+  onSuccess,
+}) => {
+  const { data: session } = useSession();
+  const _id = session?.user?.id;
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -49,6 +59,11 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
   };
 
   const initiatePayment = () => {
+    if (!_id) {
+      setError("User not logged in. Please login to continue.");
+      return;
+    }
+
     try {
       setLoading(true);
       setError("");
@@ -56,8 +71,7 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
       const paymentData = {
         merchant_id: ccavenueConfig.merchant_id,
         order_id: orderId,
-        //amount: totalAmount.toFixed(2),
-        amount: 1,
+        amount: 1, // or totalAmount.toFixed(2)
         currency: ccavenueConfig.currency,
         redirect_url: ccavenueConfig.redirect_url,
         cancel_url: ccavenueConfig.cancel_url,
@@ -70,9 +84,10 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
         billing_state: "TN",
         billing_zip: "600001",
         billing_country: "India",
-        merchant_param1: selectedDate,
-        merchant_param2: JSON.stringify(childrenData),
-        merchant_param3: "HOLIDAY_PAYMENT",
+        merchant_param1: _id, // Corrected here
+        merchant_param2: selectedDate,
+        merchant_param3: JSON.stringify(childrenData),
+        merchant_param4: "HOLIDAY_PAYMENT",
       };
 
       const plainText = Object.entries(paymentData)
@@ -100,10 +115,6 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
 
       document.body.appendChild(form);
       form.submit();
-
-      if (typeof onSuccess === "function") {
-        onSuccess();
-      }
     } catch (err) {
       console.error("Payment error:", err);
       setError("Payment failed. Please try again.");
@@ -118,8 +129,8 @@ const HolidayPayment = ({ open, onClose, selectedDate, childrenData = [], onSucc
       <DialogContent dividers>
         {loading && <LinearProgress sx={{ mb: 2 }} />}
         <Typography gutterBottom>
-          You're booking <b>{childrenData.length}</b> meal{childrenData.length > 1 ? "s" : ""} for{" "}
-          <b>{selectedDate}</b>.
+          You're booking <b>{childrenData.length}</b> meal
+          {childrenData.length > 1 ? "s" : ""} for <b>{selectedDate}</b>.
         </Typography>
         <Typography fontWeight="bold" sx={{ mb: 1 }}>
           Total: ₹{totalAmount}

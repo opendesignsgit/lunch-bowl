@@ -1,20 +1,21 @@
 const qs = require("querystring");
 const ccav = require("../utils/ccavutil");
+const mongoose = require("mongoose"); // Add this import for ObjectId validation
 const Form = require("../models/Form");
 const UserPayment = require("../models/Payment");
-const fs = require("fs");
-const path = require("path");
 const nodemailer = require("nodemailer");
 
-const workingKey = "2A561B005709D8B4BAF69D049B23546B"; // Replace with ENV in production
+const workingKey =
+  process.env.CCAV_WORKING_KEY || "2A561B005709D8B4BAF69D049B23546B"; // Use env vars in production
 
-// Helper function to process payment response
+// Helper function to process payment response and save payment data
 async function processPaymentResponse(responseData, paymentType) {
   const {
     order_id,
     tracking_id,
     order_status,
     merchant_param1,
+    merchant_param2,
     amount,
     payment_mode,
     card_name,
@@ -26,10 +27,16 @@ async function processPaymentResponse(responseData, paymentType) {
   } = responseData;
 
   if (!merchant_param1 || !order_id) {
-    throw new Error("Invalid payment response: missing parameters");
+    throw new Error(
+      "Invalid payment response: missing merchant_param1 (user) or order_id"
+    );
   }
 
-  // Create payment transaction object
+  if (!mongoose.Types.ObjectId.isValid(merchant_param1)) {
+    throw new Error(`Invalid user ID (merchant_param1): ${merchant_param1}`);
+  }
+
+  // Build payment transaction object
   const paymentTransaction = {
     order_id,
     tracking_id,
@@ -44,11 +51,15 @@ async function processPaymentResponse(responseData, paymentType) {
     billing_email,
     payment_type: paymentType,
     merchant_param1,
+    // Include holidayDate if holiday payment
+    ...(paymentType === "holiday" && merchant_param2
+      ? { holidayDate: merchant_param2 }
+      : {}),
     ...responseData,
   };
 
   // Update or create user payment record
-  await UserPayment.findOneAndUpdate(
+  const updatedPayment = await UserPayment.findOneAndUpdate(
     { user: merchant_param1 },
     {
       $push: { payments: paymentTransaction },
@@ -65,6 +76,7 @@ async function processPaymentResponse(responseData, paymentType) {
   return { order_status, merchant_param1, order_id, tracking_id };
 }
 
+// Subscription Payment Response Handler
 exports.ccavenueResponse = async (req, res) => {
   let encResponse = "";
   req.on("data", (data) => {
@@ -80,14 +92,23 @@ exports.ccavenueResponse = async (req, res) => {
         return res.status(400).send("Missing encrypted response");
       }
 
-      // Decrypt response
       const decrypted = ccav.decrypt(encrypted, workingKey);
       const responseData = qs.parse(decrypted);
+
+      console.log("Subscription payment decrypted response:", responseData);
 
       const { order_status, merchant_param1, order_id, tracking_id } =
         await processPaymentResponse(responseData, "subscription");
 
       if (order_status === "Success") {
+        if (!mongoose.Types.ObjectId.isValid(merchant_param1)) {
+          console.error(
+            "Invalid user ID in subscription payment handler:",
+            merchant_param1
+          );
+          return res.status(400).send("Invalid user ID");
+        }
+
         const updatedForm = await Form.findOneAndUpdate(
           { user: merchant_param1 },
           {
@@ -104,6 +125,8 @@ exports.ccavenueResponse = async (req, res) => {
           },
           { new: true }
         );
+
+        console.log("Subscription payment updated form:", updatedForm);
 
         // Send Registration + Payment Success Mail
         if (updatedForm) {
@@ -157,12 +180,13 @@ exports.ccavenueResponse = async (req, res) => {
         return res.redirect("https://lunchbowl.co.in/payment/failed");
       }
     } catch (error) {
-      console.error("CCAvenue response error:", error);
+      console.error("CCAvenue subscription response error:", error);
       res.status(500).send("Internal Server Error");
     }
   });
 };
 
+// Holiday Payment Response Handler
 exports.holiydayPayment = async (req, res) => {
   let encResponse = "";
   req.on("data", (data) => {
@@ -178,19 +202,33 @@ exports.holiydayPayment = async (req, res) => {
         return res.status(400).send("Missing encrypted response");
       }
 
-      // Decrypt response
       const decrypted = ccav.decrypt(encrypted, workingKey);
       const responseData = qs.parse(decrypted);
 
-      const { order_status } = await processPaymentResponse(
-        responseData,
-        "holiday"
-      );
+      console.log("Holiday payment decrypted response:", responseData);
+
+      const {
+        order_status,
+        merchant_param1,
+        merchant_param2: holidayDate,
+      } = responseData;
+
+      if (!merchant_param1) {
+        return res.status(400).send("Missing user ID in payment response");
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(merchant_param1)) {
+        return res.status(400).send("Invalid user ID in payment response");
+      }
+
+      // Pass the responseData to processPaymentResponse so it can record payments properly,
+      // including holidayDate inside paymentTransaction
+      await processPaymentResponse(responseData, "holiday");
 
       if (order_status === "Success") {
-        return res.send("success");
+        return res.redirect("https://lunchbowl.co.in/payment/success"); // frontend route
       } else {
-        return res.send("failed");
+        return res.redirect("https://lunchbowl.co.in/payment/failed"); // frontend route
       }
     } catch (error) {
       console.error("CCAvenue holiday payment error:", error);

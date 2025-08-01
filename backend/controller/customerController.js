@@ -1040,9 +1040,31 @@ const saveMealPlans = async (req, res) => {
     });
 
     if (existingPlan) {
-      // Update existing plan - implement your merge logic here
-      // For now, we'll just replace all children's meals
-      existingPlan.children = processedChildren;
+      for (const newChild of processedChildren) {
+        const childIndex = existingPlan.children.findIndex(
+          (c) => c.childId.toString() === newChild.childId.toString()
+        );
+        if (childIndex >= 0) {
+          // Merge meals for existing child
+          for (const newMeal of newChild.meals) {
+            const mealIndex = existingPlan.children[childIndex].meals.findIndex(
+              (m) =>
+                new Date(m.mealDate).toISOString() ===
+                new Date(newMeal.mealDate).toISOString()
+            );
+            if (mealIndex >= 0) {
+              // Update existing meal for the date
+              existingPlan.children[childIndex].meals[mealIndex] = newMeal;
+            } else {
+              // Add new meal for the date
+              existingPlan.children[childIndex].meals.push(newMeal);
+            }
+          }
+        } else {
+          // Add new child with meals if not present
+          existingPlan.children.push(newChild);
+        }
+      }
       await existingPlan.save();
 
       return res.status(200).json({
