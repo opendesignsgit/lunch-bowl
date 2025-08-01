@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const Customer = require("../models/Customer");
 const UserMeal = require("../models/UserMeal");
 const dayjs = require("dayjs");
-
+const nodemailer = require("nodemailer");
 const { signInToken, tokenForVerify } = require("../config/auth");
 const { sendEmail } = require("../lib/email-sender/sender");
 const {
@@ -651,6 +651,39 @@ const verifyOtp = async (req, res) => {
         mobile,
         email,
       });
+
+      // Send Sign-Up Completion Mail
+      if (email) {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
+
+        const mailOptions = {
+          from: process.env.EMAIL_USER,
+          to: email,
+          subject: "Welcome to Lunch Bowl – You're All Set!",
+          html: `
+            <p>Hi ${firstName} ${lastName},</p>
+            <p>Your Lunch Bowl account has been successfully created. You can now explore wholesome meals for your child delivered right to their school.</p>
+            <p>🎉 Start by selecting your preferred meals:</p>
+            <p>🔗 <a href="https://lunchbowl.co.in">lunchbowl.co.in</a></p>
+            <p>We’re happy to have you with us!</p>
+            <p>– Team Lunch Bowl</p>
+          `,
+        };
+
+        // Send email (do not block response if fails)
+        transporter.sendMail(mailOptions, (err, info) => {
+          if (err) {
+            console.error("Sign-Up Completion Mail Error:", err);
+          }
+        });
+      }
+
       return res.status(200).json(result);
     } else {
       const result = await loginCustomer(mobile);
