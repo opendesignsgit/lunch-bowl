@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
 import HolidayPayment from "./HolidayPayment";
 import mealPlanData from "../../jsonHelper/meal_plan.json"; // Adjust the path if needed
+import { useSession } from "next-auth/react";
 
 const mealPlanArray = mealPlanData.meal_plan;
 
@@ -41,6 +42,8 @@ const RightPanel = ({
   onSave,
   saveSelectedMeals,
 }) => {
+  const { data: session } = useSession();
+
   const [useMealPlan, setUseMealPlan] = useState(false);
   const [selectedPlans, setSelectedPlans] = useState({});
   const [applyToAll, setApplyToAll] = useState(false);
@@ -371,13 +374,29 @@ const RightPanel = ({
                       const formattedDate = formatDate(selectedDate);
                       const data = dummyChildren
                         .map((child) => ({
+                          userId: session?.user?.id,
                           childId: child.id,
-                          dish:
+                          mealDate: formattedDate,
+                          mealName:
                             menuSelections[formattedDate]?.[child.id] || null,
                         }))
-                        .filter((item) => !!item.dish);
+                        .filter((item) => !!item.mealName); // Only those with a selected dish
 
-                      setHolidayPaymentData(data);
+                      setHolidayPaymentData(
+                        data.map(({ childId, mealName }) => ({
+                          childId,
+                          dish: mealName,
+                        }))
+                      );
+
+                      // SAVE ALL PAID CHILDREN MEAL INFO AS ARRAY
+                      if (data.length > 0) {
+                        localStorage.setItem(
+                          "paidHolidayMeal",
+                          JSON.stringify(data)
+                        );
+                      }
+
                       setHolidayPaymentOpen(true);
                     } else if (typeof saveSelectedMeals === "function") {
                       saveSelectedMeals();
@@ -394,27 +413,23 @@ const RightPanel = ({
 
       <MealPlanDialog
         open={dialogOpen1}
-        onClose={handleCloseDialog1}
+        onClose={() => setDialogOpen1(false)}
         planId={1}
         startDate={formatDate(selectedDate)}
       />
       <MealPlanDialog
         open={dialogOpen2}
-        onClose={handleCloseDialog2}
+        onClose={() => setDialogOpen2(false)}
         planId={2}
         startDate={formatDate(selectedDate)}
       />
 
-      {/* Holiday Payment Dialog */}
       <HolidayPayment
         open={holidayPaymentOpen}
         onClose={() => setHolidayPaymentOpen(false)}
         selectedDate={formatDate(selectedDate)}
-        childrenData={holidayPaymentData} // <-- array of { childId, dish }
-        onSuccess={() => {
-          setHolidayPaymentOpen(false);
-          saveSelectedMeals(); // Save after successful payment
-        }}
+        childrenData={holidayPaymentData} // array of { childId, dish }
+        // onSuccess callback removed as payment success is detected on redirect!
       />
     </Box>
   );

@@ -178,9 +178,9 @@ exports.holiydayPayment = async (req, res) => {
       await processPaymentResponse(responseData, "holiday");
 
       if (order_status === "Success") {
-        return res.send("success");
+        return res.redirect("https://lunchbowl.co.in/payment/success"); // frontend route
       } else {
-        return res.send("failed");
+        return res.redirect("https://lunchbowl.co.in/payment/failed"); // frontend route
       }
     } catch (error) {
       console.error("CCAvenue holiday payment error:", error);

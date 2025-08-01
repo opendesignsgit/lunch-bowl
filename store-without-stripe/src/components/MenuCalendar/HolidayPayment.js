@@ -115,10 +115,6 @@ const HolidayPayment = ({
 
       document.body.appendChild(form);
       form.submit();
-
-      if (typeof onSuccess === "function") {
-        onSuccess();
-      }
     } catch (err) {
       console.error("Payment error:", err);
       setError("Payment failed. Please try again.");
