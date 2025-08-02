@@ -1,0 +1,39 @@
+[
+  {
+    "user": "000000000000000000000001",
+    "parentDetails": {
+      "fatherFirstName": "Ravi",
+      "fatherLastName": "Kumar",
+      "motherFirstName": "Meena",
+      "motherLastName": "Kumar",
+      "mobile": "9876543210",
+      "email": "ravi@example.com",
+      "address": "123 Street",
+      "pincode": "600001",
+      "city": "Chennai",
+      "state": "TN",
+      "country": "India"
+    },
+    "children": [
+      {
+        "childFirstName": "Kavin",
+        "childLastName": "Ravi",
+        "dob": "2015-06-01T00:00:00.000Z",
+        "lunchTime": "12:30",
+        "school": "ABC School",
+        "location": "City Center",
+        "childClass": "5",
+        "section": "A"
+      }
+    ],
+    "subscriptionPlan": {
+      "planId": "plan_basic",
+      "startDate": "2025-01-01T00:00:00.000Z",
+      "endDate": "2025-06-30T00:00:00.000Z",
+      "workingDays": 120,
+      "price": 2500
+    },
+    "paymentStatus": "Paid",
+    "subscriptionCount": 1
+  }
+]

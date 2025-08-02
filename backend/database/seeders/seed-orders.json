@@ -1,0 +1,11 @@
+[
+  {
+    "user": "000000000000000000000001",
+    "subTotal": 500,
+    "shippingCost": 50,
+    "discount": 0,
+    "total": 550,
+    "paymentMethod": "Online",
+    "status": "Pending"
+  }
+]

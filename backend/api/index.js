@@ -25,11 +25,21 @@ const currencyRoutes = require("../routes/currencyRoutes");
 const languageRoutes = require("../routes/languageRoutes");
 const notificationRoutes = require("../routes/notificationRoutes");
 const { isAuth, isAdmin } = require("../config/auth");
+const dashboardRoutes = require("../routes/mobileRoute/dashboard.route");
+const mobilDashboardRoutes = require("../routes/mobileRoute/customerHomeRoutes");
+
+
+
+
+
+
+
+
+
 const {
   getGlobalSetting,
   getStoreCustomizationSetting,
 } = require("../lib/notification/setting");
-
 connectDB();
 const app = express();
 
@@ -72,6 +82,10 @@ app.use("/api/ccavenue/", ccavenueRoutes);
 //if you not use admin dashboard then these two route will not needed.
 app.use("/api/admin/", adminRoutes);
 app.use("/api/orders/", orderRoutes);
+
+// ################MOBILE ADMIMIN PANEL ROUTES #########################
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/customer-home", mobilDashboardRoutes);
 
 // Use express's default error handling middleware
 app.use((err, req, res, next) => {

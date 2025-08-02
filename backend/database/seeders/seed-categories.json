@@ -1,0 +1,12 @@
+[
+  {
+    "name": {
+      "en": "Food"
+    },
+    "description": {
+      "en": "Food items"
+    },
+    "slug": "food",
+    "status": "show"
+  }
+]

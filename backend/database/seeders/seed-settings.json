@@ -1,0 +1,9 @@
+[
+  {
+    "name": "site_config",
+    "setting": {
+      "maintenance": false,
+      "version": "1.0.0"
+    }
+  }
+]

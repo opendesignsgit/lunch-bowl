@@ -1,0 +1,17 @@
+[
+  {
+    "primaryDishTitle": "Paneer Butter Masala",
+    "shortDescription": "Creamy North Indian dish",
+    "description": "Paneer in buttery tomato sauce",
+    "image": "paneer.jpg",
+    "cuisine": "Indian",
+    "status": "active",
+    "ingredients": [
+      "Paneer",
+      "Tomato"
+    ],
+    "nutritionValues": [
+      "200 kcal"
+    ]
+  }
+]

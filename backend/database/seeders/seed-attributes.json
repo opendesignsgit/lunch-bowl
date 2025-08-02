@@ -1,0 +1,21 @@
+[
+  {
+    "title": {
+      "en": "Size"
+    },
+    "name": {
+      "en": "size"
+    },
+    "variants": [
+      {
+        "name": {
+          "en": "Large"
+        },
+        "status": "show"
+      }
+    ],
+    "option": "Dropdown",
+    "type": "attribute",
+    "status": "show"
+  }
+]

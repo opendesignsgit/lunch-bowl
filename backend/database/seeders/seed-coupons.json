@@ -1,0 +1,11 @@
+[
+  {
+    "title": {
+      "en": "Summer Sale"
+    },
+    "couponCode": "SUMMER20",
+    "endTime": "2025-12-31T00:00:00.000Z",
+    "minimumAmount": 100,
+    "status": "show"
+  }
+]

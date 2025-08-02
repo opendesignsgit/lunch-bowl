@@ -1,0 +1,16 @@
+[
+  {
+    "name": {
+      "en": "John Doe"
+    },
+    "email": "admin@example.com",
+    "password": "$2a$10$hashedpassword12345678",
+    "role": "Admin",
+    "status": "Active",
+    "access_list": [
+      "dashboard",
+      "users"
+    ],
+    "joiningData": "2024-05-10T00:00:00.000Z"
+  }
+]

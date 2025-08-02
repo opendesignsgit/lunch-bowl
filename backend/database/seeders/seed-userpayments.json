@@ -1,0 +1,14 @@
+[
+  {
+    "user": "000000000000000000000001",
+    "payments": [
+      {
+        "order_id": "ORD123",
+        "amount": 550,
+        "order_status": "Success",
+        "billing_name": "Arjun",
+        "billing_email": "arjun@example.com"
+      }
+    ]
+  }
+]
