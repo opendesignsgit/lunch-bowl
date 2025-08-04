@@ -175,7 +175,7 @@ exports.ccavenueResponse = async (req, res) => {
           });
         }
 
-        return res.redirect("https://lunchbowl.co.in/payment/success");
+        return res.redirect("https://lunchbowl.co.in/user/menuCalendarPage");
       } else {
         return res.redirect("https://lunchbowl.co.in/payment/failed");
       }
