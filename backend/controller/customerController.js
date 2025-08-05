@@ -687,7 +687,16 @@ const verifyOtp = async (req, res) => {
       return res.status(200).json(result);
     } else {
       const result = await loginCustomer(mobile);
-      return res.status(200).json(result);
+      if (result && result.success) {
+        return res.status(200).json(result);
+      } else {
+        // If login failed, send appropriate error status and message
+        return res.status(401).json({
+          success: false,
+          message: result?.message || "Login failed",
+          error: result?.error,
+        });
+      }
     }
   } catch (error) {
     console.error("Error verifying OTP:", error);
