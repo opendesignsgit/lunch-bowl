@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -51,12 +51,32 @@ const RightPanel = ({
   const [dialogOpen2, setDialogOpen2] = useState(false);
   const [holidayPaymentOpen, setHolidayPaymentOpen] = useState(false);
   const [holidayPaymentData, setHolidayPaymentData] = useState([]);
+  const [paidHolidayMeals, setPaidHolidayMeals] = useState([]);
 
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
   const isSelectedHoliday = !!holiday;
   const isWithin48Hours = selectedDateObj.diff(dayjs(), "hour") < 48;
   const isSunday = selectedDateObj.day() === 0;
+
+  // Load paid meal data from localStorage for the current selected date
+  useEffect(() => {
+    const storedPaidMeals = localStorage.getItem("paidHolidayMeal");
+    if (storedPaidMeals) {
+      try {
+        const parsed = JSON.parse(storedPaidMeals);
+        // Filter payments specifically for current selected date
+        const filtered = parsed.filter(
+          (item) => item.mealDate === formatDate(selectedDate)
+        );
+        setPaidHolidayMeals(filtered);
+      } catch (e) {
+        setPaidHolidayMeals([]);
+      }
+    } else {
+      setPaidHolidayMeals([]);
+    }
+  }, [selectedDate, formatDate]);
 
   const getDayMenu = (selectedDate) => {
     if (!mealPlanArray || mealPlanArray.length === 0) return [];
@@ -127,6 +147,22 @@ const RightPanel = ({
   const activeChildDish =
     menuSelections[formatDate(selectedDate)]?.[activeChildId] || "";
 
+  // Helper to check if a child has paid for this date
+  const isChildPaid = (childId) => {
+    return paidHolidayMeals.some((item) => item.childId === childId);
+  };
+
+  // Children that have a meal selected for this date
+  const childrenWithSelectedMeals = dummyChildren.filter((child) => {
+    const meal = menuSelections[formatDate(selectedDate)]?.[child.id];
+    return meal && meal !== "";
+  });
+
+  // If any child has selected meal but is NOT paid => show "Pay"
+  const hasUnpaidChild = childrenWithSelectedMeals.some(
+    (child) => !isChildPaid(child.id)
+  );
+
   return (
     <Box
       className="MCRightPanel"
@@ -152,9 +188,7 @@ const RightPanel = ({
           control={
             <Checkbox
               checked={useMealPlan}
-              onChange={(e) =>
-                !isWithin48Hours && setUseMealPlan(e.target.checked)
-              }
+              onChange={(e) => !isWithin48Hours && setUseMealPlan(e.target.checked)}
               sx={{ color: "#fff" }}
               disabled={isWithin48Hours}
             />
@@ -297,9 +331,8 @@ const RightPanel = ({
                         <Select
                           className="menuddlist"
                           value={
-                            menuSelections[formatDate(selectedDate)]?.[
-                              child.id
-                            ] || ""
+                            menuSelections[formatDate(selectedDate)]?.[child.id] ||
+                            ""
                           }
                           onChange={(e) => {
                             childIndex === 0
@@ -370,8 +403,10 @@ const RightPanel = ({
                   variant="outlined"
                   className="paysavebtn"
                   onClick={() => {
-                    if (isSelectedHoliday) {
+                    if (isSelectedHoliday && hasUnpaidChild) {
                       const formattedDate = formatDate(selectedDate);
+
+                      // Prepare payment data only for unpaid children with selected meals
                       const data = dummyChildren
                         .map((child) => ({
                           userId: session?.user?.id,
@@ -380,7 +415,7 @@ const RightPanel = ({
                           mealName:
                             menuSelections[formattedDate]?.[child.id] || null,
                         }))
-                        .filter((item) => !!item.mealName); // Only those with a selected dish
+                        .filter((item) => !!item.mealName && !isChildPaid(item.childId));
 
                       setHolidayPaymentData(
                         data.map(({ childId, mealName }) => ({
@@ -389,11 +424,23 @@ const RightPanel = ({
                         }))
                       );
 
-                      // SAVE ALL PAID CHILDREN MEAL INFO AS ARRAY
                       if (data.length > 0) {
+                        // Save paid meal info to localStorage
+                        const existingStored = localStorage.getItem("paidHolidayMeal");
+                        let existing = [];
+                        if (existingStored) {
+                          try {
+                            existing = JSON.parse(existingStored);
+                          } catch {
+                            existing = [];
+                          }
+                        }
+
+                        // Append new paid data (you might want to update this based on real payment success)
+                        const updatedPaidMeals = [...existing, ...data];
                         localStorage.setItem(
                           "paidHolidayMeal",
-                          JSON.stringify(data)
+                          JSON.stringify(updatedPaidMeals)
                         );
                       }
 
@@ -403,7 +450,7 @@ const RightPanel = ({
                     }
                   }}
                 >
-                  <span>{isSelectedHoliday ? "Pay" : "Save"}</span>
+                  <span>{isSelectedHoliday && hasUnpaidChild ? "Pay" : "Save"}</span>
                 </Button>
               </Box>
             </div>
@@ -429,7 +476,6 @@ const RightPanel = ({
         onClose={() => setHolidayPaymentOpen(false)}
         selectedDate={formatDate(selectedDate)}
         childrenData={holidayPaymentData} // array of { childId, dish }
-        // onSuccess callback removed as payment success is detected on redirect!
       />
     </Box>
   );
