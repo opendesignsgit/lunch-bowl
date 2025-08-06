@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from "next/image";
 import {
   HiUsers,
   HiUserGroup,
@@ -8,6 +9,9 @@ import {
 } from "react-icons/hi";
 import { useSession } from "next-auth/react";
 import AccountServices from "@services/AccountServices";
+import Breadcrumbs from "@layout/Breadcrumbs";
+import abbanicon1 from "../../../public/about/icons/herosec/pink-rounded-lines.svg";
+import abbanicon2 from "../../../public/about/icons/herosec/pink-smileflower.svg";
 import { Button } from "@mui/material";
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
@@ -111,7 +115,39 @@ const UserDashboard = () => {
     <div className="steppage">
       <Mainheader title="Dashboard" description="User Dashboard" />
 
-      <div className="pagebody">
+      <div className="Dashboardbody">
+        <section className="pagebansec aboutbanersec relative">
+          <div className="container mx-auto relative h-full">
+            <div className="pageinconter relative h-full w-full flex items-center">
+              <div className="hworkTitle combtntb comtilte">
+                <h1 className="flex flex-col textFF6514">
+                  {" "}
+                  <span className="block firstspan">The Story Behind</span>{" "}
+                  <span className="block">Every Bite</span>{" "}
+                </h1>
+                <p className="">
+                  As food is an emotion, there will be a story <br />
+                  behind every recipe. Let’s explore!
+                </p>
+                <Breadcrumbs />
+              </div>
+            </div>
+            <div className="abbanIconss">
+              <div className="abbanicn iconone absolute">
+                <Image
+                  src={abbanicon1}
+                  priority
+                  alt="Icon"
+                  className="iconrotates"
+                />
+              </div>
+              <div className="abbanicn icontwo absolute">
+                <Image src={abbanicon2} priority alt="Icon" />
+              </div>
+            </div>
+          </div>
+        </section>
+
         {showRenewalForm ? (
           <div className="container mx-auto px-4 py-8">
             <div className="flex items-center mb-6">
@@ -147,143 +183,144 @@ const UserDashboard = () => {
             </div>
           </div>
         ) : (
-          <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Welcome, {dashboardData.parentName}
-            </h1>
-            <p className="text-gray-600 mb-8">Here's your account overview</p>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {/* Total Subscriptions Card */}
-              <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Total Subscriptions
-                    </p>
-                    <p className="text-2xl font-semibold text-gray-800">
-                      {dashboardData.subscriptionCount}
-                    </p>
+            <div className='DashboardSecss secpaddblock'>
+              <div className="container mx-auto ">
+                <div className='comtilte mb-[5vh]'>
+                  <h3 className='textFF6514'>Welcome, {dashboardData.parentName}</h3>
+                  <p>Here's your account overview</p>
+                </div>
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  {/* Total Subscriptions Card */}
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Total Subscriptions
+                        </p>
+                        <p className="text-2xl font-semibold text-gray-800">
+                          {dashboardData.subscriptionCount}
+                        </p>
+                      </div>
+                      <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <HiUsers className="w-6 h-6" />
+                      </div>
+                    </div>
+                    <div className="mt-4 text-sm text-gray-500">
+                      <span>
+                        Current plan:{" "}
+                        {dashboardData.subscriptionCount > 0 ? "Active" : "None"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-                    <HiUsers className="w-6 h-6" />
+
+                  {/* Renew Subscription Button (forced to show for testing) */}
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500 flex flex-col items-start ">
+                    <div className="text-center mb-4">
+                      <p className="text-sm font-medium text-gray-500 mb-1">
+                        Your subscription has expired
+                      </p>
+                      <p className="text-lg font-semibold text-gray-800">
+                        Renew to continue
+                      </p>
+                    </div>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                      onClick={() => setShowRenewalForm(true)}
+                    >
+                      Renew Subscription
+                    </Button>
+                  </div>
+
+                  {/* Children Card */}
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Registered Children
+                        </p>
+                        <p className="text-2xl font-semibold text-gray-800">
+                          {dashboardData.childrenCount}
+                        </p>
+                      </div>
+                      <div className="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <HiUserAdd className="w-6 h-6" />
+                      </div>
+                    </div>
+                    <div className="mt-4 text-sm text-gray-500">
+                      <span>Most recent additions</span>
+                    </div>
                   </div>
                 </div>
-                <div className="mt-4 text-sm text-gray-500">
-                  <span>
-                    Current plan:{" "}
-                    {dashboardData.subscriptionCount > 0 ? "Active" : "None"}
-                  </span>
-                </div>
-              </div>
 
-              {/* Renew Subscription Button (forced to show for testing) */}
-              <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500 flex flex-col items-center justify-center">
-                <div className="text-center mb-4">
-                  <p className="text-sm font-medium text-gray-500 mb-1">
-                    Your subscription has expired
-                  </p>
-                  <p className="text-lg font-semibold text-gray-800">
-                    Renew to continue
-                  </p>
-                </div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className="bg-orange-500 hover:bg-orange-600 text-white"
-                  onClick={() => setShowRenewalForm(true)}
-                >
-                  Renew Subscription
-                </Button>
-              </div>
-
-              {/* Children Card */}
-              <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Registered Children
-                    </p>
-                    <p className="text-2xl font-semibold text-gray-800">
-                      {dashboardData.childrenCount}
-                    </p>
+                {/* Children Table */}
+                <div className="bg-white rounded-lg shadow overflow-hidden mb-8">
+                  <div className="px-6 py-4 border-b border-gray-200">
+                    <h2 className="text-lg font-semibold text-gray-800">
+                      Your Children ({dashboardData.childrenCount})
+                    </h2>
                   </div>
-                  <div className="p-3 rounded-full bg-purple-100 text-purple-600">
-                    <HiUserAdd className="w-6 h-6" />
-                  </div>
-                </div>
-                <div className="mt-4 text-sm text-gray-500">
-                  <span>Most recent additions</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Children Table */}
-            <div className="bg-white rounded-lg shadow overflow-hidden mb-8">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-800">
-                  Your Children ({dashboardData.childrenCount})
-                </h2>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        School
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Class
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Lunch Time
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {dashboardData.recentChildren.map((child, index) => (
-                      <tr key={index} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <HiUserCircle className="h-10 w-10 text-gray-400" />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
-                                {child.childFirstName} {child.childLastName}
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Name
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            School
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Class
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Lunch Time
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {dashboardData.recentChildren.map((child, index) => (
+                          <tr key={index} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="flex-shrink-0 h-10 w-10">
+                                  <HiUserCircle className="h-10 w-10 text-gray-400" />
+                                </div>
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {child.childFirstName} {child.childLastName}
+                                  </div>
+                                  <div className="text-sm text-gray-500">
+                                    {formatDate(child.dob)}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {child.school}
                               </div>
                               <div className="text-sm text-gray-500">
-                                {formatDate(child.dob)}
+                                {child.location}
                               </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {child.school}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {child.location}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {child.childClass} - {child.section}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {child.lunchTime}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {child.childClass} - {child.section}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {child.lunchTime}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
               </div>
             </div>
           </div>

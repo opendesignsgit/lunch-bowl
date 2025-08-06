@@ -33,7 +33,7 @@ const Mainheader = ({ title, description, children }) => {
       const pageWidth = window.innerWidth;
       const body = document.body;
 
-      if (pageWidth > 801) {
+      if (pageWidth > 701) {
         const scrollUp = "scroll-up";
         const scrollDown = "scroll-down";
         const scrollanimi = "sscroll-animi";
@@ -126,56 +126,20 @@ const Mainheader = ({ title, description, children }) => {
                     <span>Menu</span>
                   </button>
                   {showUserMenu && (
-                    <ul
-                      style={{
-                        position: "absolute",
-                        top: "100%",
-                        right: 0,
-                        background: "#fff",
-                        border: "1px solid #ddd",
-                        padding: "10px",
-                        zIndex: 999,
-                      }}
-                    >
-                      <li style={{ padding: "5px 10px" }}>
-                        <button
-                          onClick={() => router.push("user/userDashBoard")}
-                          style={{
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                            width: "100%",
-                            textAlign: "left",
-                          }}
-                        >
+
+                    <ul className="submenuul">
+                      <li>
+                        <button onClick={() => router.push("user/userDashBoard")}  >
                           Dashboard
                         </button>
                       </li>
-                      <li style={{ padding: "5px 10px" }}>
-                        <button
-                          onClick={() => router.push("user/my-account")}
-                          style={{
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                            width: "100%",
-                            textAlign: "left",
-                          }}
-                        >
+                      <li>
+                        <button onClick={() => router.push("user/my-account")} >
                           My Account
                         </button>
                       </li>
-                      <li style={{ padding: "5px 10px" }}>
-                        <button
-                          onClick={() => setShowLogoutConfirm(true)}
-                          style={{
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                            width: "100%",
-                            textAlign: "left",
-                          }}
-                        >
+                      <li>
+                        <button onClick={() => setShowLogoutConfirm(true)} >
                           Log Out
                         </button>
                       </li>
