@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import Image from "next/image";
+import Proimgbiriyani from "../../../public/home/biriyani-img.png";
 import Proimgtwobiriyani from "../../../public/home/biriyani-img-two.png";
 import logtrialicon from "../../../public/logtrial-icon.svg";
 import ProdetilProps from "@components/product/ProdetilProps";
-import productsData from "../../jsonHelper/products.json";
-import biriyaniImg from "../../../public/menu/biriyani-img.png";
+import ProductServices from "../../services/ProductServices";
+import useAsync from "../../hooks/useAsync";
+import config from "./config"; // Assuming config.js is in the same directory
 
 const HomeProductCard = ({ limit }) => {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedCuisine, setSelectedCuisine] = useState("");
 
-  // Use data from JSON file
-  const products = productsData.products || [];
+  const {
+    data: products = [], // Initialize as empty array if undefined
+    loading,
+    error,
+    reload,
+  } = useAsync(ProductServices.getAllMenuDishes);
 
   const handleOpenDialog = (product) => {
     setSelectedProduct(product);
@@ -23,13 +28,16 @@ const HomeProductCard = ({ limit }) => {
     setOpen(false);
   };
 
+  // State for the selected cuisine filter
+  const [selectedCuisine, setSelectedCuisine] = useState("");
+
   // Get unique cuisines from product data (only active products)
   const cuisines = [
     ...new Set(
       products
         .filter((product) => product?.status === "active")
         .map((item) => item?.cuisine)
-        .filter(Boolean)
+        .filter(Boolean) // Remove any undefined/null values
     ),
   ];
 
@@ -43,6 +51,14 @@ const HomeProductCard = ({ limit }) => {
   const displayedProducts = limit
     ? filteredProducts.slice(0, limit)
     : filteredProducts;
+
+  if (loading) {
+    return <div>Loading products...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading products: {error.message}</div>;
+  }
 
   if (!products.length) {
     return <div>No products available</div>;
@@ -61,6 +77,7 @@ const HomeProductCard = ({ limit }) => {
               All
             </button>
           </li>
+          {/* Dynamically generate filter buttons */}
           {cuisines.map((cuisine, index) => (
             <li
               key={index}
@@ -78,6 +95,7 @@ const HomeProductCard = ({ limit }) => {
       </div>
 
       <div className="flex flex-row max-md:flex-col-reverse flex-wrap">
+        {/* Render filtered products */}
         {displayedProducts.map((item, index) => (
           <div
             key={item._id || index}
@@ -85,7 +103,44 @@ const HomeProductCard = ({ limit }) => {
             onClick={() => handleOpenDialog(item)}
           >
             <div className="proboxfront px-[2vw] py-[5vh] bg-FFF4D7 relative z-50 group-hover:z-0">
-              {/* Animation text sections remain the same */}
+              <div className="fontanimi pointer-events-none">
+                <div className="animitext animiOne">
+                  <div className="animitext animiOne">
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                  </div>
+                  <div className="animitext animiTwo">
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                  </div>
+                </div>
+                <div className="animitext animiTwo">
+                  <div className="animitext animiOne">
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                  </div>
+                  <div className="animitext animiTwo">
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                  </div>
+                </div>
+              </div>
               <div className="profbboxs">
                 <div className="textcenter proboxtitle mb-[3vh]">
                   <h5>{item.primaryDishTitle}</h5>
@@ -96,7 +151,19 @@ const HomeProductCard = ({ limit }) => {
                   <Image
                     className="w-full h-auto"
                     priority
-                    src={biriyaniImg}
+                    unoptimized
+                    crossorigin="anonymous"
+                    src={
+                      item.image
+                        ? item.image.startsWith("http")
+                          ? item.image
+                          : `${config.BASE_URL}${
+                              item.image.startsWith("/")
+                                ? item.image
+                                : `/${item.image}`
+                            }`
+                        : Proimgtwobiriyani
+                    }
                     alt={`${item.primaryDishTitle} ${item.subDishTitle}`}
                     width={500}
                     height={500}
@@ -114,21 +181,70 @@ const HomeProductCard = ({ limit }) => {
                   alt="Logo Icon"
                 />
               </div>
-              {/* Animation text sections remain the same */}
+              <div className="fontanimi pointer-events-none">
+                <div className="animitext animiOne">
+                  <div className="animitext animiOne">
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                  </div>
+                  <div className="animitext animiTwo">
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                  </div>
+                </div>
+                <div className="animitext animiTwo">
+                  <div className="animitext animiOne">
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                    <span>
+                      {item.primaryDishTitle} {item.subDishTitle}
+                    </span>
+                  </div>
+                  <div className="animitext animiTwo">
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                    <span>
+                      {item.subDishTitle} {item.primaryDishTitle}
+                    </span>
+                  </div>
+                </div>
+              </div>
               <div className="profbboxs relative h-full flex flex-col">
                 <div className="proImage px-[2vw] h-full flex items-center">
                   <Image
                     className="w-full h-auto"
+                    crossorigin="anonymous"
                     priority
-                    src={Proimgtwobiriyani}
-                    alt={`${item.primaryDishTitle} ${item.subDishTitle}`}
+                    unoptimized
+                    src={
+                      item.image
+                        ? item.image.startsWith("http")
+                          ? item.image
+                          : `${config.BASE_URL}${
+                              item.image.startsWith("/")
+                                ? item.image
+                                : `/${item.image}`
+                            }`
+                        : Proimgtwobiriyani
+                    }
+                    alt={`${item.primaryDishTitle || ""} ${
+                      item.subDishTitle || ""
+                    }`.trim()}
                     width={500}
                     height={500}
                   />
                 </div>
-                <div className="nutritionboxs mt-[auto] flex flex-wrap">
-                  {/* Nutrition items remain the same */}
-                </div>
+                
               </div>
             </div>
           </div>
