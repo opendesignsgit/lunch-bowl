@@ -163,12 +163,71 @@
     width: 35px;
   }
 
-.hbanIconss .iconfive {
-  width: 38px;
+  .hbanIconss .iconfive {
+    width: 38px;
+  }
+
+  .hbanIconss .iconsix {
+    width: 50px;
+  }
+
 }
 
-.hbanIconss .iconsix {
-  width: 50px;
+@media screen and (max-width:1100px) {
+  .hbanIconss .iconsix {width: 30px;}
+  .hbanIconss .iconone {width: 28px;}
+  .hteamIconss .iconsix{-webkit-transform: translateX(-65%);-ms-transform: translateX(-65%);transform: translateX(-65%);}
+  .hfformIconss .iconthree,.hfformIconss .iconsix{width: 60px;}
+  .hteamIconss .iconthree{-webkit-transform: translateX(90%);-ms-transform: translateX(90%);transform: translateX(90%);}
+  .ateamIconss .icontwo,.ateamIconss .iconthree,.ateamIconss .iconfive,.ateamIconss .iconsix, .ateamIconss .iconseven{width: 50px;}
+  .ateamIconss .iconone{width: 50px;top: 4%;}
+  .ateamIconss .iconeight{width: 75px;}
+  .menulIconss .icontwo, .menulIconss .iconone{width: 50px;}
 }
+
+@media screen and (max-width:1000px){
+
+  .hbanIconss,.hintroIconss,.hteamIconss .iconthree,.hteamIconss .iconfour,.hteamIconss .iconfive,.hteamIconss .iconsix,.hDoctIconss,.ateamIconss {/*display: none;*/}
+  .hteamIconss .iconone {left: 11%;top: 8%;width: 75px;}
+  .hteamIconss .icontwo {top: 12%;right: 9%;width: 55px;}
+  .hfformIconss .iconthree, .hfformIconss .iconsix {width: 40px;}
+  .hfformIconss .icontwo{width: 30px;}
+  .hfformIconss .iconfour {bottom: -6%;right: 35%;width: 35px;}
+  .hfformIconss .iconfive {bottom: 7%;left: 27%;width: 40px;}
+  .ateamIconss{display: none;}
+  
+}
+
+@media screen and (max-width:650px){
+  .hlfoutIconss .iconone{display: none;}
+  .hbanIconss .iconone{left: 30px;}
+  .hbanIconss .iconfour{right: 30px;}
+  .hbanIconss .iconfive {right: 13%;}
+  .hbanIconss .iconsix {bottom: 10%;left: 10%;}
+  .hintroIconss .iconone,.hintroIconss .icontwo,.hintroIconss .iconthree,.hintroIconss .iconfour{width: 40px;}
+  .hintroIconss .iconthree {left: 37px;bottom: 46%;}
+  .hteamIconss .iconthree,.hteamIconss .iconfour{display: none;}
+  .hteamIconss .iconsix {transform: translateX(0%);left: auto;right: 0;top: 24%;width: 60px;}
+  .hteamIconss .iconone {left: 1%;top: 21%;width: 75px;transform: rotate(296deg);}
+  .hteamIconss .icontwo {top: auto;bottom: 14%;right: 0%;width: 55px;}
+  .hteamIconss .iconfive{width: 45px;bottom: 10%;left: 6px;}
+  .hDoctIconss .iconone {top: -6%;right: 35%;width: 14px;}
+  .hDoctIconss .icontwo {top: 0;right: 0;transform: translate(0%, -50%);width: 45px;}
+  .hDoctIconss .iconthree {bottom: 13%;right: 6%;width: 18px;}
+  .hDoctIconss .iconfour {bottom: -9%;left: 33%;width: 22px;}
+  .hDoctIconss .iconfive {top: 92%;left: 0;transform: translateX(-0%);   width: 50px;}
+  .hDoctIconss .iconsix {top: 15%;left: 2%;width: 20px;}
+  .hfformIconss .iconone {top: -2%;right: 27%;width: 40px;}
+  .hfformIconss .icontwo {width: 25px;right: 6%;}
+  .hfformIconss .iconthree{width: 32px;bottom: 17%;right: 6%;}
+  .hfformIconss .iconfour {bottom: -2%;right: 30%;width: 28px;}
+  .hfformIconss .iconfive {bottom: 11%;left: 13%;width: 33px;}
+  .hfformIconss .iconsix {width: 30px;top: 55%;left: 3%;}
+  .hfformIconss .iconseven {top: 1%;left: 9%;width: 55px;}
+
+  .abbanIconss .iconone {top: 62%;right: 0%;}
+  .abbanIconss .icontwo {top: auto;right: auto;bottom: 45%;}
+  .menulIconss .iconone {top: 55%;right: -4%;}
+  .menulIconss .icontwo {top: 46%;right: 80%;}
 
 }

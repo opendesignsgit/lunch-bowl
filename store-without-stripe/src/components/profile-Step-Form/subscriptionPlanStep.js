@@ -285,9 +285,9 @@ const SubscriptionPlanStep = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box display="flex" flexDirection={{ xs: "column", md: "row" }} gap={4}>
+      <Box className="subplnBoxss" display="flex" flexDirection={{ xs: "column", md: "row" }} gap={4}>
         {/* Left Illustration */}
-        <Box
+        <Box className="spboximg"
           sx={{
             width: { xs: "100%", md: "45%" },
             backgroundImage: `url("/profileStepImages/stepThree.png")`,
@@ -299,7 +299,7 @@ const SubscriptionPlanStep = ({
         />
 
         {/* Right Form Section */}
-        <Box sx={{ width: { xs: "100%", md: "55%" } }}>
+        <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
           <div className="steptitles">
             <Typography variant="h6" fontWeight="bold">
               SUBSCRIPTION PLAN:
@@ -516,7 +516,7 @@ const SubscriptionPlanStep = ({
               </Box>
             )}
 
-            {/* Offers section */}
+            {/* Offers section --->*/}
             <OffersSection numberOfChildren={numberOfChildren} />
 
             <Typography mt={2} fontSize={12}>

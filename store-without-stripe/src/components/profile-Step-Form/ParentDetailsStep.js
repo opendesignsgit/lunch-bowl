@@ -90,7 +90,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
   };
 
   return (
-    <Box
+    <Box className="subplnBoxss"
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       sx={{
@@ -100,7 +100,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
       }}
     >
       {/* Image */}
-      <Box
+      <Box className="spboximg"
         sx={{
           width: { xs: "100%", md: "45%" },
           backgroundImage: `url(${stepOne.src})`,
@@ -112,7 +112,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
       />
 
       {/* Form Fields */}
-      <Box sx={{ width: { xs: "100%", md: "55%" } }}>
+      <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
         <div className="steptitles">
           <Typography variant="h5">PARENT'S DETAILS:</Typography>
         </div>

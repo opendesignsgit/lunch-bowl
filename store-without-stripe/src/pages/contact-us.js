@@ -146,7 +146,7 @@ const ContactUs = () => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <div className="addsboxss adboxone">
+                  <div className="addsboxss adboxtwo">
                     <div className="addsIcon">
                       <Image src={mailicon} alt="" />
                     </div>
@@ -160,7 +160,7 @@ const ContactUs = () => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <div className="addsboxss adboxone">
+                  <div className="addsboxss adboxthree">
                     <div className="addsIcon">
                       <Image src={locaticon} alt="" />
                     </div>

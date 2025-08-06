@@ -20,23 +20,46 @@ const Htoworkslider = () => {
   return (
     <>
         <div className="slider-container">
-            <Slider asNavFor={nav1} ref={slider => (sliderRef2 = slider)} slidesToShow={6} swipeToSlide={false} focusOnSelect={true} draggable={false} swipe={false} arrows={false} infinite={false}  className='sliderRef2 mb-[8vh]'>
-                <div>
-                    <h3><span>Step 01</span></h3>
-                </div>
-                <div>
-                    <h3><span>Step 02</span></h3>
-                </div>
-                <div>
-                    <h3><span>Step 03</span></h3>
-                </div>
-                <div>
-                    <h3><span>Step 04</span></h3>
-                </div>
-            </Slider>
+              <Slider
+                  asNavFor={nav1}
+                  ref={slider => (sliderRef2 = slider)}
+                  slidesToShow={4}
+                  swipeToSlide={false}
+                  focusOnSelect={true}
+                  draggable={false}
+                  swipe={false}
+                  arrows={false}
+                  infinite={false}
+                  className="sliderRef2 mb-[8vh]"
+                  responsive={[
+                      {
+                          breakpoint: 650, // Mobile devices
+                          settings: {
+                              slidesToShow: 1,
+                              swipeToSlide: false,
+                              draggable: false,
+                              swipe: false,
+                              infinite: true,
+                          },
+                      },
+                  ]}
+              >
+                  <div>
+                      <h3><span>Step 01</span></h3>
+                  </div>
+                  <div>
+                      <h3><span>Step 02</span></h3>
+                  </div>
+                  <div>
+                      <h3><span>Step 03</span></h3>
+                  </div>
+                  <div>
+                      <h3><span>Step 04</span></h3>
+                  </div>
+              </Slider>
             <Slider asNavFor={nav2} ref={slider => (sliderRef1 = slider)} swipeToSlide={true} arrows={true} infinite={true} className='sliderRef1'>
                 <div>
-                    <div className='flex rfbox items-center'>
+                      <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
                             <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
                         </div>       

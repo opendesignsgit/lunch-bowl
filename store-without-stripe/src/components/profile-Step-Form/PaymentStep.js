@@ -154,17 +154,18 @@ const PaymentStep = ({ prevStep, _id }) => {
         Complete Payment
       </Typography>
       <Typography sx={{ mb: 4 }}>Secure payment via CCAvenue</Typography>
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
-        <Button variant="outlined" onClick={prevStep}>
-          Back
+      <Box className="subbtnrow" sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
+        <Button className="backbtn" variant="outlined" onClick={prevStep}>
+          <span className="nextspan">Back</span>
         </Button>
-        <Button
+        <Button 
+          className="nextbtn Proceedbtn widthautobtn"
           variant="contained"
           onClick={initiatePayment}
           disabled={loading}
           sx={{ bgcolor: "#FF6A00", "&:hover": { bgcolor: "#E55C00" } }}
         >
-          Proceed to Payment
+          <span className="nextspan">Proceed to Payment</span>
         </Button>
       </Box>
     </Box>

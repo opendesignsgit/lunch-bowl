@@ -9,8 +9,31 @@ const Hoteamsslide = () => {
         infinite: true,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 1
-      };
+        slidesToScroll: 1,
+        responsive: [
+            {
+                breakpoint: 1024, // Tablet and below
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                },
+            },
+            {
+                breakpoint: 800, // Tablet and below
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                },
+            },
+            {
+                breakpoint: 650, // Mobile devices
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
+    };
   return (
     <>
         <div className="slider-container">
