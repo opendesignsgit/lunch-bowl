@@ -119,7 +119,7 @@ const Home = () => {
                               <div className='hbicn icontwo absolute'><Image src={banicon2} priority alt='Icon' className='iconrotates' /></div>
                               <div className='hbicn iconthree absolute'><Image src={banicon3} priority alt='Icon' className='iconrubberband' /></div>
                               <div className='hbicn iconfour absolute'><Image src={banicon4} priority alt='Icon' className='iconrotates' /></div>
-                              <div className='hbicn iconfive absolute'><Image src={banicon5} priority alt='Icon' /></div>
+                <div className='hbicn iconfive absolute'><Image src={banicon5} priority alt='Icon' className='iconrotates' /></div>
                               <div className='hbicn iconsix absolute'><Image src={banicon6} priority alt='Icon' className='iconrotates' /></div>
                           </div>
                     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
+import Image from "next/image";
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
 import Accordion from '@components/faq/Accordion';
@@ -8,6 +9,14 @@ import ChildDetailsStep from "@components/profile-Step-Form/childDetailsStep";
 import SubscriptionPlanStep from "@components/profile-Step-Form/subscriptionPlanStep";
 import PaymentStep from "@components/profile-Step-Form/PaymentStep";
 import { useSession } from "next-auth/react";
+import abbanicon1 from "../../../public/enterrequireddetails/redroundedandlines.svg";
+import abbanicon2 from "../../../public/enterrequireddetails/yellowroundedflower.svg";
+import abbanicon3 from "../../../public/enterrequireddetails/redlittleheart.svg";
+import abbanicon4 from "../../../public/enterrequireddetails/lighergreenarrow.svg";
+import abbanicon5 from "../../../public/enterrequireddetails/violetyellow-star.svg";
+import abbanicon6 from "../../../public/enterrequireddetails/redtriangle.svg";
+import abbanicon7 from "../../../public/enterrequireddetails/redlittleflower.svg";
+import abbanicon8 from "../../../public/enterrequireddetails/layerflower.svg";
 
 
 const StepHeader = ({ step }) => {
@@ -182,16 +191,43 @@ const MultiStepForm = () => {
          <section className="pagebansec setpbanersec relative">
            <div className="container mx-auto relative h-full">
              <div className="pageinconter relative h-full w-full flex items-center justify-center text-center">
-               <div className="hworkTitle combtntb comtilte">
+               <div className="hworkTitle combtntb comtilte relative">
                  <h1 className="flex flex-row textFF6514">
                    {" "}
-                   <span className="block">Enter Required </span>{" "}
-                   <span className="block firstspan ml-2">Details</span>
+                   <span className="block firstspan">Enter Required </span>{" "}
+                   <span className="block ml-2">Details</span>
                  </h1>
                  <p className="">
                    We have got you covered. Let us cover you by filling in the
                    details below.
                  </p>
+
+                 <div className="psfbanIconss">
+                   <div className="psfbanicn iconone absolute">
+                     <Image src={abbanicon1} priority alt="Icon" className="iconrotates" />
+                   </div>
+                   <div className="psfbanicn icontwo absolute">
+                     <Image src={abbanicon2} priority alt="Icon" className="iconrotates" />
+                   </div>
+                   <div className="psfbanicn iconthree absolute">
+                     <Image src={abbanicon3} priority alt="Icon" className="iconrubberband" />
+                   </div>
+                   <div className="psfbanicn iconfour absolute">
+                     <Image src={abbanicon4} priority alt="Icon" />
+                   </div>
+                   <div className="psfbanicn iconfive absolute">
+                     <Image src={abbanicon5} priority alt="Icon" />
+                   </div>
+                   <div className="psfbanicn iconsix absolute">
+                     <Image src={abbanicon6} priority alt="Icon" className="iconrotates" />
+                   </div>
+                   <div className="psfbanicn iconseven absolute">
+                     <Image src={abbanicon7} priority alt="Icon" className="iconrotates" />
+                   </div>
+                   <div className="psfbanicn iconeight absolute">
+                     <Image src={abbanicon8} priority alt="Icon" className="iconrotates" />
+                   </div>
+                 </div>
                </div>
              </div>
            </div>

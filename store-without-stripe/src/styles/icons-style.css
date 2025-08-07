@@ -173,6 +173,20 @@
 
 }
 
+.psfbanIconss .psfbanicn{aspect-ratio: 1;pointer-events: none;}
+.psfbanIconss .psfbanicn img{width: 100%;height: 100%;}
+
+.psfbanIconss .iconone{top: -72%;left: 0%;}
+.psfbanIconss .icontwo{top: -90%;left: 33%;}
+.psfbanIconss .iconthree{top: -69%;right: 26%;
+}
+.psfbanIconss .iconfour{top: 4%;right: -15%;}
+.psfbanIconss .iconfive{bottom: -44%;right: 1%;}
+.psfbanIconss .iconsix{bottom: -46%;right: 36%;}
+.psfbanIconss .iconseven{bottom: -50%;left: 25%;}
+.psfbanIconss .iconeight{bottom: -20%;left: -12%;}
+
+
 @media screen and (max-width:1100px) {
   .hbanIconss .iconsix {width: 30px;}
   .hbanIconss .iconone {width: 28px;}
@@ -229,5 +243,13 @@
   .abbanIconss .icontwo {top: auto;right: auto;bottom: 45%;}
   .menulIconss .iconone {top: 55%;right: -4%;}
   .menulIconss .icontwo {top: 46%;right: 80%;}
+  .psfbanIconss .iconone {top: 0;left: -10%;}
+  .psfbanIconss .icontwo {top: -55px;left: 33%;}
+  .psfbanIconss .iconthree {top: -27%;right: 26%;}
+  .psfbanIconss .iconfour {top: 4%;right: -15%;width: 70px;}
+  .psfbanIconss .iconfive {bottom: -28%;right: 1%;}
+  .psfbanIconss .iconsix {bottom: -31%;right: 36%;}
+  .psfbanIconss .iconseven {bottom: -31%;left: 25%;}
+  .psfbanIconss .iconeight {bottom: -8%;left: -12%;}
 
 }
