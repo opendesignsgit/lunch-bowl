@@ -487,6 +487,7 @@ const MenuCalendar = () => {
        onClose={handleDialogClose}
        fullWidth
        maxWidth="sm"
+       className="popmenuselt"
      >
        <RightPanel
          isSmall={isSmall}
