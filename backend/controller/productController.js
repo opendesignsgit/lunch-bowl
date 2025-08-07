@@ -187,40 +187,30 @@ const getAllMenuDishes = async (req, res) => {
 
 const addDish = async (req, res) => {
   try {
-    // Validate required fields
-    if (!req.body.ingredients || !req.body.nutritionValues) {
+    // Validate required fields including nutritionValues (no ingredients check)
+    if (!req.body.nutritionValues) {
       return res.status(400).json({
-        error: "Ingredients and nutrition values are required",
+        error: "Nutrition values are required",
       });
     }
-
     // Main image required
     if (!req.files || !req.files.image) {
       return res.status(400).json({ error: "No main image uploaded" });
     }
 
-    // Process ingredients and nutrition values from stringified arrays
-    let ingredients = req.body.ingredients;
     let nutritionValues = req.body.nutritionValues;
-
-    // If they come as stringified arrays, parse them
-    if (typeof ingredients === "string") {
-      ingredients = JSON.parse(ingredients);
-    }
     if (typeof nutritionValues === "string") {
       nutritionValues = JSON.parse(nutritionValues);
     }
 
-    // dishImage2 is optional
-    let imagePath = `/uploads/${req.files.image[0].filename}`;
-    let dishImage2Path =
+    const imagePath = `/uploads/${req.files.image[0].filename}`;
+    const dishImage2Path =
       req.files.dishImage2 && req.files.dishImage2[0]
         ? `/uploads/${req.files.dishImage2[0].filename}`
         : null;
 
     const newDish = new Dish({
       ...req.body,
-      ingredients,
       nutritionValues,
       image: imagePath,
       dishImage2: dishImage2Path,
@@ -228,11 +218,8 @@ const addDish = async (req, res) => {
 
     await newDish.save();
 
-    // Return response with full image URLs
     const responseDish = newDish.toObject();
-    responseDish.image = `${req.protocol}://${req.get("host")}${
-      responseDish.image
-    }`;
+    responseDish.image = `${req.protocol}://${req.get("host")}${responseDish.image}`;
     responseDish.dishImage2 = responseDish.dishImage2
       ? `${req.protocol}://${req.get("host")}${responseDish.dishImage2}`
       : null;
@@ -247,18 +234,13 @@ const addDish = async (req, res) => {
   }
 };
 
+
 const updateDish = async (req, res) => {
   try {
     const { id } = req.params;
     let updateData = { ...req.body };
 
-    // Process ingredients and nutrition values if provided
-    if (req.body.ingredients) {
-      updateData.ingredients =
-        typeof req.body.ingredients === "string"
-          ? JSON.parse(req.body.ingredients)
-          : req.body.ingredients;
-    }
+    // Process nutritionValues if provided
     if (req.body.nutritionValues) {
       updateData.nutritionValues =
         typeof req.body.nutritionValues === "string"
@@ -266,13 +248,12 @@ const updateDish = async (req, res) => {
           : req.body.nutritionValues;
     }
 
-    // If new images were uploaded
+    // Handle new images uploaded and remove old images from disk
     if (req.files) {
-      // Main image
+      const oldDish = await Dish.findById(id);
+
       if (req.files.image && req.files.image[0]) {
         updateData.image = `/uploads/${req.files.image[0].filename}`;
-        // Delete old main image
-        const oldDish = await Dish.findById(id);
         if (oldDish && oldDish.image) {
           const oldImagePath = path.join(__dirname, "../..", oldDish.image);
           if (fs.existsSync(oldImagePath)) {
@@ -280,17 +261,11 @@ const updateDish = async (req, res) => {
           }
         }
       }
-      // dishImage2
+
       if (req.files.dishImage2 && req.files.dishImage2[0]) {
         updateData.dishImage2 = `/uploads/${req.files.dishImage2[0].filename}`;
-        // Delete old dishImage2 if it exists
-        const oldDish = await Dish.findById(id);
         if (oldDish && oldDish.dishImage2) {
-          const oldImage2Path = path.join(
-            __dirname,
-            "../..",
-            oldDish.dishImage2
-          );
+          const oldImage2Path = path.join(__dirname, "../..", oldDish.dishImage2);
           if (fs.existsSync(oldImage2Path)) {
             fs.unlinkSync(oldImage2Path);
           }
@@ -309,9 +284,7 @@ const updateDish = async (req, res) => {
 
     // Return response with full image URLs
     const responseDish = updatedDish.toObject();
-    responseDish.image = `${req.protocol}://${req.get("host")}${
-      updatedDish.image
-    }`;
+    responseDish.image = `${req.protocol}://${req.get("host")}${updatedDish.image}`;
     responseDish.dishImage2 = updatedDish.dishImage2
       ? `${req.protocol}://${req.get("host")}${updatedDish.dishImage2}`
       : null;
