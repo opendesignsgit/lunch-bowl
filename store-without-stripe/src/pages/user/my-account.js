@@ -167,7 +167,7 @@ const MyAccount = () => {
     <div className="steppage">
       <Mainheader title="My Account" description="User Account Details" />
       <div className="pagebody">
-        <section className="pagebansec setpbanersec relative">
+        <section className="pagebansec MyAccbanersec relative">
           <div className="container mx-auto relative h-full">
             <div className="pageinconter relative h-full w-full flex items-center justify-center text-center">
               <div className="hworkTitle combtntb comtilte">
@@ -180,189 +180,139 @@ const MyAccount = () => {
             </div>
           </div>
         </section>
-        <Box
-          className="SetpContainer"
-          sx={{
-            bgcolor: "white",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            px: 2,
-            paddingTop: 12,
-            paddingBottom: 15,
-          }}
-        >
-          <Box
-            className="DetlsSepBox"
-            sx={{ width: "100%", maxWidth: "800px" }}
-          >
+        <section className="myaccContainer secpaddblock">
+          <Box className="container mx-auto relative">
             <StepHeader label="ACCOUNT DETAILS" />
             {loading ? (
               <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
                 <CircularProgress />
               </Box>
             ) : userDetails ? (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  Parent Details
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Typography>
-                  <b>Father's Name:</b>{" "}
-                  {userDetails.parentDetails?.fatherFirstName}{" "}
-                  {userDetails.parentDetails?.fatherLastName}
-                </Typography>
-                <Typography>
-                  <b>Mother's Name:</b>{" "}
-                  {userDetails.parentDetails?.motherFirstName}{" "}
-                  {userDetails.parentDetails?.motherLastName}
-                </Typography>
-                <Typography>
-                  <b>Email:</b>{" "}
-                  {editField === "email" ? (
-                    <>
-                      <TextField
-                        size="small"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        sx={{ mr: 1 }}
-                      />
-                      <IconButton
-                        onClick={() => handleSave("email")}
-                        color="primary"
-                        disabled={saving}
-                        size="small"
-                      >
-                        <SaveIcon fontSize="inherit" />
-                      </IconButton>
-                    </>
-                  ) : (
-                    <>
-                      {userDetails.parentDetails?.email}
-                      <IconButton
-                        onClick={() => handleEdit("email")}
-                        size="small"
-                        sx={{ ml: 1 }}
-                      >
-                        <EditIcon fontSize="inherit" />
-                      </IconButton>
-                    </>
-                  )}
-                </Typography>
-                <Typography>
-                  <b>Mobile:</b>{" "}
-                  {editField === "mobile" ? (
-                    <>
-                      <TextField
-                        size="small"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        sx={{ mr: 1 }}
-                      />
-                      <IconButton
-                        onClick={() => handleSave("mobile")}
-                        color="primary"
-                        disabled={saving}
-                        size="small"
-                      >
-                        <SaveIcon fontSize="inherit" />
-                      </IconButton>
-                    </>
-                  ) : (
-                    <>
-                      {userDetails.parentDetails?.mobile}
-                      <IconButton
-                        onClick={() => handleEdit("mobile")}
-                        size="small"
-                        sx={{ ml: 1 }}
-                      >
-                        <EditIcon fontSize="inherit" />
-                      </IconButton>
-                    </>
-                  )}
-                </Typography>
-                <Typography>
-                  <b>Address:</b> {userDetails.parentDetails?.address}
-                </Typography>
+                <Box className="myaccboxitems">
+                  <Box className="myaccboxlist boxone">
+                    <h4> Parent Details </h4>
+                    <ul>
+                      <li> <b>Father's Name:</b>{" "} <p>{userDetails.parentDetails?.fatherFirstName}{" "}{userDetails.parentDetails?.fatherLastName}</p></li>
+                      <li> <b>Mother's Name:</b>{" "} <p>{userDetails.parentDetails?.fatherFirstName}{" "}{userDetails.parentDetails?.fatherLastName}</p></li>
+                      <li className="editli"> <b>Email:</b>{" "} {editField === "email" ? (
+                        <p>
+                          <TextField
+                            size="small"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            sx={{ mr: 1 }}
+                          />
+                          <IconButton
+                            onClick={() => handleSave("email")}
+                            color="primary"
+                            disabled={saving}
+                            size="small"
+                          >
+                            <SaveIcon fontSize="inherit" />
+                          </IconButton>
+                        </p>
+                      ) : (
+                          <p>
+                            {userDetails.parentDetails?.email}
+                            <IconButton
+                              onClick={() => handleEdit("email")}
+                              size="small"
+                              sx={{ ml: 1 }}
+                            >
+                              <EditIcon fontSize="inherit" />
+                            </IconButton>
+                        </p>
+                      )}</li>
+                      <li className="editli"><b>Mobile:</b>{" "}  {editField === "mobile" ? (
+                        <p>
+                          <TextField
+                            size="small"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            sx={{ mr: 1 }}
+                          />
+                          <IconButton
+                            onClick={() => handleSave("mobile")}
+                            color="primary"
+                            disabled={saving}
+                            size="small"
+                          >
+                            <SaveIcon fontSize="inherit" />
+                          </IconButton>
+                        </p>
+                      ) : (
+                          <p>
+                            {userDetails.parentDetails?.mobile}
+                            <IconButton
+                              onClick={() => handleEdit("mobile")}
+                              size="small"
+                              sx={{ ml: 1 }}
+                            >
+                              <EditIcon fontSize="inherit" />
+                            </IconButton>
+                        </p>
+                      )}</li>
+                      <li><b>Address:</b> <p>{userDetails.parentDetails?.address}</p></li>
+                    </ul>
 
-                <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
-                  Children
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                {userDetails.children && userDetails.children.length > 0 ? (
-                  userDetails.children.map((child, idx) => (
-                    <Box key={child._id || idx} sx={{ mb: 2, pl: 2 }}>
-                      <Typography>
-                        <b>Name:</b> {child.childFirstName}{" "}
-                        {child.childLastName}
-                      </Typography>
-                      <Typography>
-                        <b>Date of Birth:</b> {formatDate(child.dob)}
-                      </Typography>
-                      <Typography>
-                        <b>School:</b> {child.school}
-                      </Typography>
-                      <Typography>
-                        <b>Class:</b> {child.childClass}
-                      </Typography>
-                      <Typography>
-                        <b>Section:</b> {child.section}
-                      </Typography>
-                      <Typography>
-                        <b>Lunch Time:</b> {child.lunchTime}
-                      </Typography>
-                      <Typography>
-                        <b>Location:</b> {child.location}
-                      </Typography>
-                      <Typography>
-                        <b>Allergies:</b> {child.allergies || "None"}
-                      </Typography>
-                    </Box>
-                  ))
-                ) : (
-                  <Typography>No children details available.</Typography>
-                )}
+                  </Box>
+                  <Box className="myaccboxlist boxtwo">
+                    <h4>Children</h4>
 
-                <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
-                  Subscription
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                {userDetails.subscriptionPlan ? (
-                  <Box>
+                    {userDetails.children && userDetails.children.length > 0 ? (
+                      userDetails.children.map((child, idx) => (
+                        <ul key={child._id || idx} sx={{ mb: 2, pl: 2 }}>
+                          <li><b>Name:</b> {child.childFirstName}{" "} {child.childLastName}</li>
+                          <li><b>Date of Birth:</b> {formatDate(child.dob)}</li>
+                          <li><b>School:</b> {child.school}</li>
+                          <li><b>Class:</b> {child.childClass}</li>
+                          <li><b>Section:</b> {child.section}</li>
+                          <li><b>Lunch Time:</b> {child.lunchTime}</li>
+                          <li><b>Location:</b> {child.location}</li>
+                          <li><b>Allergies:</b> {child.allergies || "None"}</li>
+                        </ul>
+                      ))
+                    ) : (
+                      <h6>No children details available.</h6>
+                    )}
+                  </Box>
+                  <Box className="myaccboxlist boxthree">
+
+
+                    <h4> Subscription </h4>
+                    {userDetails.subscriptionPlan ? (
+                      <ul>
+                        <li> <b>Plan ID:</b> {userDetails.subscriptionPlan.planId} </li>
+                        <li>  <b>Start Date:</b>{" "}  {formatDate(userDetails.subscriptionPlan.startDate)}  </li>
+                        <li>  <b>End Date:</b>{" "} {formatDate(userDetails.subscriptionPlan.endDate)} </li>
+                        <li> <b>Working Days:</b>{" "} {userDetails.subscriptionPlan.workingDays} </li>
+                        <li> <b>Price:</b> ₹{userDetails.subscriptionPlan.price}  </li>
+                      </ul>
+                    ) : (
+                      <Typography>No subscription found.</Typography>
+                    )}
+
+                  </Box>
+                  <Box className="myaccboxlist boxfour">
                     <Typography>
-                      <b>Plan ID:</b> {userDetails.subscriptionPlan.planId}
-                    </Typography>
-                    <Typography>
-                      <b>Start Date:</b>{" "}
-                      {formatDate(userDetails.subscriptionPlan.startDate)}
-                    </Typography>
-                    <Typography>
-                      <b>End Date:</b>{" "}
-                      {formatDate(userDetails.subscriptionPlan.endDate)}
-                    </Typography>
-                    <Typography>
-                      <b>Working Days:</b>{" "}
-                      {userDetails.subscriptionPlan.workingDays}
-                    </Typography>
-                    <Typography>
-                      <b>Price:</b> ₹{userDetails.subscriptionPlan.price}
+                      <b>Payment Status:</b>{" "}
+                      {userDetails.paymentStatus ? "Paid" : "Not Paid"}
                     </Typography>
                   </Box>
-                ) : (
-                  <Typography>No subscription found.</Typography>
-                )}
-                <Typography>
-                  <b>Payment Status:</b>{" "}
-                  {userDetails.paymentStatus ? "Paid" : "Not Paid"}
-                </Typography>
               </Box>
             ) : (
-              <Typography color="error" sx={{ mt: 4 }}>
-                Could not fetch user details. Please try again later.
-              </Typography>
+                  <Box className="notfetchbox">
+                    <h4>
+                      Could not fetch user details. Please try again later.
+                    </h4>
+                  </Box>
             )}
           </Box>
-        </Box>
+        </section>
+
+
+
+
         <section className="HfaqSec senddesfaq relative bg-4AB138 flex">
           <div className="Hfaqinrow w-full relative py-[12vh]">
             <div className="container mx-auto">

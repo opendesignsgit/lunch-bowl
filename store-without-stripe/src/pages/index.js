@@ -174,7 +174,7 @@ const Home = () => {
                     <div className='hProList'>
                         <HomeProductCard limit={6}/>
                     </div>
-                    <div className='hProListTitle combtntb comtilte textcenter mt-[5vh]'>                    
+            <div className='hProListTitle HProlistbtb combtntb comtilte textcenter mt-[5vh]'>                    
                         <p className="parabtn flex"><Link href="/Menulist" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
 

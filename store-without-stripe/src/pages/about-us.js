@@ -452,8 +452,8 @@ const AboutUs = () => {
         </section>
         <section className="HmvisionSec relative bg-FF6514 flex ">
           <div className="container mx-auto">
-            <div className="flex items-center">
-              <div className="flex-none w-[60%] visimgcol">
+            <div className="Hmvisioninrow flex items-center">
+              <div className="HmvisionCol ColLeft flex-none w-[60%] visimgcol">
                 <Image
                   className="w-full h-auto"
                   priority
@@ -461,7 +461,7 @@ const AboutUs = () => {
                   alt="logo"
                 />
               </div>
-              <div className="flex-none w-[40%]">
+              <div className="HmvisionCol ColRight flex-none w-[40%]">
                 <div className="hintroLeft combtntb comtilte ">
                   <h4 className="text-white">The vision Behind</h4>
                   <h3 className="flex flex-col text-white">

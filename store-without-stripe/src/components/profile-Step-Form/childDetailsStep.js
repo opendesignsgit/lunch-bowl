@@ -224,7 +224,7 @@ const ChildDetailsStep = ({
     : [];
 
   return (
-    <Box
+    <Box className="subplnBoxss"
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       sx={{
@@ -234,7 +234,7 @@ const ChildDetailsStep = ({
       }}
     >
       {/* Image Side */}
-      <Box
+      <Box className="spboximg"
         sx={{
           width: { xs: "100%", md: "45%" },
           backgroundImage: `url(${stepTwo.src})`,
@@ -246,7 +246,7 @@ const ChildDetailsStep = ({
       />
 
       {/* Form Side */}
-      <Box sx={{ width: { xs: "100%", md: "55%" } }}>
+      <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
         <div className="steptitles">
           <Typography variant="h5">CHILD DETAILS :</Typography>
 
