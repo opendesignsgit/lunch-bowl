@@ -168,6 +168,7 @@ const RightPanel = ({
       <div className="fixdatesboxs">
         <h2>{String(selectedDate).padStart(2, "0")}</h2>
         <h4>{getDayName(selectedDate).toUpperCase()}</h4>
+        <h5>SELECT YOUR CHILD'S MENU</h5>
       </div>
 
       {isWithin48Hours ? (
@@ -197,19 +198,12 @@ const RightPanel = ({
         >
           <Typography fontWeight="bold" fontSize="0.9rem">
             The Lunch Bowl is closed on Sundays.
-          </Typography>
-        </Box>
-      ) : (
-        <>
-          <div className="childlistbox">
-            <div className="childinputbox">
-              <Typography
-                fontWeight="bold"
-                textAlign="center"
-                className="sycmenu"
-              >
-                SELECT YOUR CHILD'S MENU
-              </Typography>
+            </Typography>
+          </Box>
+        ) : (
+          <>
+            <div className="childlistbox">
+              <div className="childinputbox">
               {useMealPlan
                 ? dummyChildren.map((child, childIndex) => (
                     <Box key={child.id} className="childmlist">

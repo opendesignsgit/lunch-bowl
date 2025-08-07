@@ -655,6 +655,7 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .fixdatesboxs{text-align: center;margin-block:0 1vw;}
 .fixdatesboxs h2{font-size: 8vw;line-height: 1;letter-spacing: -2px;font-weight: 500;}
 .fixdatesboxs h4{font-size: 1.2vw;line-height: 1;}
+.fixdatesboxs h5{font-size: 1vw;line-height: 1;font-family: 'Baloo';}
 .MCcalendy p.sycmenu{font-family: 'Baloo';font-weight: 200;margin-bottom: 1vh;}
 .childlistbox{height: 100%;padding: 15px;border: 1px solid rgb(255 255 255 / 24%);  border-radius: 10px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;}
 .childmlist {margin-bottom: 10px;}
@@ -1068,10 +1069,10 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .pagebansec .hworkTitle {width: 100%;text-align: center;}
   .pagebansec h1{font-size: 40px;}
   .pagebansec .breadcrumbs ol {justify-content: center;}
-  .pagebansec, .pagebansec.setpbanersec {height: 63vh;padding-inline: 30px;}
+  .pagebansec{height: 63vh;padding-inline: 30px;}
   .pagebansec .pageinconter{padding-bottom: 70%;}
-  .pagebansec.MyAccbanersec {height: 300px;}
-  .pagebansec.MyAccbanersec .pageinconter{padding-bottom: 0%;}
+  .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 300px;}
+  .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter{padding-bottom: 0%;}
   .aboutbanersec .pageinconter::after,.MenusLbanersec .pageinconter::after{width: 90%;}
   .contusbanersec .pageinconter::after{width: 60%;right:15%;}
   .MenusLbanersec .pageinconter::after{}
@@ -1109,4 +1110,34 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .HfaqSec.senddesfaq::before{height: 27px;}
   .SetpTabli p:before{left: -1px;}
   .SetpTabli p:after{left: calc(100% - 1px);}
+  .SetpTabul .SetpTabli{border-radius: 50%;overflow: hidden;}
+  .SetpTabul .SetpTabli p{font-size: 0;padding-inline: 0;}
+  .SetpTabul .SetpTabli p:before{position: relative;display: flex;font-size: 20px;border: none;left: 0;width: 40px;aspect-ratio: 1;align-items: center;justify-content: center;opacity: 1;}
+  .SetpTabul .SetpTabli:nth-child(1) p:before{content:'1';}
+  .SetpTabul .SetpTabli:nth-child(2) p:before{content:'2';}
+  .SetpTabul .SetpTabli:nth-child(3) p:before{content:'3';}
+  .SetpTabul .SetpTabli:nth-child(4) p:before{content:'4';}
+  .SetpTabli p:after{opacity: 0!important;}
+  .DetlsSepBox .steptitles h6{font-size: 30px;}
+  .MCcalendy {border: 0px solid #EAEAEC;}
+  .MCcalendy .MCMainPanel, .MCcalendy .MCLeftPanel {min-height: auto;box-shadow: none;}
+  .MCcalendy .MCLeftPanel{border: 0px solid #EAEAEC;height: auto;}
+  .popmenuselt {}
+  .popmenuselt .MuiDialog-container{}
+  .popmenuselt .MuiDialog-container .MuiPaper-root{margin: 0;width: 100%;height: 100%;max-height: 100%;}
+  .popmenuselt .MCRightPanel {padding:20px;position: relative;height: 100%;}
+  .popmenuselt .MCRightPanel>.MuiBox-root{margin-bottom: 10px;}
+  .popmenuselt .MCRightPanel>.MuiBox-root button{padding: 5px;border: 1px solid #ffffff;border-radius: 0;}
+  .popmenuselt .MCRightPanel>.MuiBox-root button svg{}
+  .fixdatesboxs h2 {font-size: 100px;}
+  .fixdatesboxs h4 {font-size: 26px;margin-top: 10px;}
+  .fixdatesboxs h5 {font-size: 20px;margin-block: 20px 0;}
+  .fixcheckboxs{margin-bottom: 10px;}
+  .fixdatesboxs{margin-block: 0 14px;}
+  .childlistbox{}
+  .childlistbox>.childinputbox>p{text-align: left;margin-bottom: 10px;font-size: 14px;}
+  .childlistbox .childbtnsbox{}
+  .fixcheckboxs label>p {font-size: 14px;font-weight: 600;letter-spacing: 0;}
+  
+
 }
