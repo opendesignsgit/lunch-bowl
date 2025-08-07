@@ -2,18 +2,20 @@ import React, { useState, useEffect } from "react";
 import Popup from "./Popup";
 import ProductServices from "@/services/ProductServices";
 import { FiPlus, FiX } from "react-icons/fi";
+import config from "@/config";
 
 const initialState = {
   primaryDishTitle: "",
-  subDishTitle: "",
+  // subDishTitle removed
   shortDescription: "",
   description: "",
+   Idescription: "",
   cuisine: "",
   image: null,
   dishImage2: null,
   status: "active",
-  ingredients: [""], // First one is mandatory
-  nutritionValues: [""], // First one is mandatory
+  // ingredients removed
+  nutritionValues: [""], // Array of strings instead of JSON (kept same as before)
 };
 
 const AddDishPopup = ({
@@ -29,7 +31,6 @@ const AddDishPopup = ({
   const [imagePreview, setImagePreview] = useState("");
   const [dishImage2Preview, setDishImage2Preview] = useState("");
 
-  // Styling classes
   const inputClasses =
     "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white";
   const textareaClasses = `${inputClasses} min-h-[100px]`;
@@ -44,15 +45,14 @@ const AddDishPopup = ({
     if (productData) {
       setForm({
         primaryDishTitle: productData.primaryDishTitle || "",
-        subDishTitle: productData.subDishTitle || "",
+        // subDishTitle removed
         shortDescription: productData.shortDescription || "",
         description: productData.description || "",
         cuisine: productData.cuisine || "",
         image: productData.image || null,
         dishImage2: productData.dishImage2 || null,
         status: productData.status || "active",
-        ingredients:
-          productData.ingredients?.length > 0 ? productData.ingredients : [""],
+         Idescription: productData.Idescription || "", 
         nutritionValues:
           productData.nutritionValues?.length > 0
             ? productData.nutritionValues
@@ -63,7 +63,7 @@ const AddDishPopup = ({
         const imageUrl = productData.image.startsWith("http")
           ? productData.image
           : productData.image.startsWith("/")
-          ? `http://localhost:5055${productData.image}`
+          ? `${config.BASE_URL}${productData.image}`
           : productData.image;
         setImagePreview(imageUrl);
       }
@@ -72,7 +72,7 @@ const AddDishPopup = ({
         const imageUrl2 = productData.dishImage2.startsWith("http")
           ? productData.dishImage2
           : productData.dishImage2.startsWith("/")
-          ? `http://localhost:5055${productData.dishImage2}`
+          ? `${config.BASE_URL}${productData.dishImage2}`
           : productData.dishImage2;
         setDishImage2Preview(imageUrl2);
       }
@@ -101,7 +101,6 @@ const AddDishPopup = ({
   };
 
   const removeArrayField = (field, index) => {
-    // Don't allow removing the first (mandatory) field
     if (index === 0) return;
 
     setForm((prev) => ({
@@ -124,7 +123,8 @@ const AddDishPopup = ({
     e.preventDefault();
 
     // Validate mandatory fields
-    if (!form.ingredients[0] || !form.nutritionValues[0]) {
+    // Ingredients removed from validation
+    if (!form.nutritionValues[0]) {
       setError("Please fill in all mandatory fields");
       return;
     }
@@ -135,23 +135,19 @@ const AddDishPopup = ({
     try {
       const formData = new FormData();
 
-      // Append all form fields
       formData.append("primaryDishTitle", form.primaryDishTitle);
-      formData.append("subDishTitle", form.subDishTitle);
+      // subDishTitle removed
       formData.append("shortDescription", form.shortDescription);
       formData.append("description", form.description);
       formData.append("cuisine", form.cuisine);
       formData.append("status", form.status);
-
-      // Append array fields
-      form.ingredients.forEach((ing, i) =>
-        formData.append(`ingredients[${i}]`, ing)
-      );
+      formData.append("Idescription", form.Idescription); 
+      // Ingredients removed from append
+      // Append nutritionValues as array fields
       form.nutritionValues.forEach((nut, i) =>
         formData.append(`nutritionValues[${i}]`, nut)
       );
 
-      // Image handling
       if (form.image instanceof File) {
         formData.append("image", form.image);
       } else if (isEditing && form.image) {
@@ -238,35 +234,19 @@ const AddDishPopup = ({
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="primaryDishTitle" className={labelClasses}>
-              Primary Dish Title *
-            </label>
-            <input
-              id="primaryDishTitle"
-              name="primaryDishTitle"
-              value={form.primaryDishTitle}
-              onChange={handleChange}
-              placeholder="e.g., Spaghetti Carbonara"
-              className={inputClasses}
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="subDishTitle" className={labelClasses}>
-              Sub Dish Title
-            </label>
-            <input
-              id="subDishTitle"
-              name="subDishTitle"
-              value={form.subDishTitle}
-              onChange={handleChange}
-              placeholder="e.g., With Extra Cheese"
-              className={inputClasses}
-            />
-          </div>
+        <div>
+          <label htmlFor="primaryDishTitle" className={labelClasses}>
+            Primary Dish Title *
+          </label>
+          <input
+            id="primaryDishTitle"
+            name="primaryDishTitle"
+            value={form.primaryDishTitle}
+            onChange={handleChange}
+            placeholder="e.g., Spaghetti Carbonara"
+            className={inputClasses}
+            required
+          />
         </div>
 
         <div>
@@ -300,13 +280,22 @@ const AddDishPopup = ({
           />
         </div>
 
-        {/* Ingredients Field */}
-        {renderArrayField(
-          "ingredients",
-          "Ingredients",
-          "Enter an ingredient (e.g., 1 cup flour)"
-        )}
+        <div>
+        <label htmlFor="Idescription" className={labelClasses}>
+          Idescription *
+        </label>
+        <input
+          id="Idescription"
+          name="Idescription"
+          value={form.Idescription}
+          onChange={handleChange}
+          placeholder="Enter Idescription"
+          className={inputClasses}
+          required
+        />
+      </div>
 
+        {/* Removed Ingredients field */}
         {/* Nutrition Values Field */}
         {renderArrayField(
           "nutritionValues",
