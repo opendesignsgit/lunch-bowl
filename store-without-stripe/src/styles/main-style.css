@@ -1142,6 +1142,11 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .childlistbox>.childinputbox>p{text-align: left;margin-bottom: 10px;font-size: 14px;}
   .childlistbox .childbtnsbox{}
   .fixcheckboxs label>p {font-size: 14px;font-weight: 600;letter-spacing: 0;}
-  
+  .propetilpopus .popClose{z-index: 999;}
+  .propetPopBox {flex-wrap: wrap;height: 90vh;overflow-y: auto;}
+  .propetPopBox .popbimg {width: 100%;}
+  .propetPopBox .popbcont {width: 100%;}
+
+  .popbcont h3{font-size: 22px;letter-spacing: 0;}
 
 }
