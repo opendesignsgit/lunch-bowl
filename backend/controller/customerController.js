@@ -14,6 +14,8 @@ const {
   forgetPasswordEmailBody,
 } = require("../lib/email-sender/templates/forget-password");
 const { sendVerificationCode } = require("../lib/phone-verification/sender");
+const { sendSMS } = require("../lib/sms-sender/smsService");
+const SmsLog = require("../models/SmsLog");
 const Otp = require("../models/Otp");
 const Form = require("../models/Form");
 const mongoose = require("mongoose");
@@ -145,6 +147,34 @@ const registerCustomer = async (req, res) => {
             });
 
             await newUser.save();
+            
+            // Send signup confirmation SMS if phone number is available
+            if (newUser.phone) {
+              try {
+                const smsResult = await sendSMS(newUser.phone, 'SIGNUP_CONFIRMATION', [newUser.name]);
+                
+                // Log SMS
+                const smsLog = new SmsLog({
+                  mobile: newUser.phone,
+                  messageType: 'SIGNUP_CONFIRMATION',
+                  message: smsResult.message || '',
+                  templateId: smsResult.templateId || '',
+                  messageId: smsResult.messageId || '',
+                  status: smsResult.success ? 'sent' : 'failed',
+                  error: smsResult.error || undefined,
+                  customerId: newUser._id,
+                  variables: [newUser.name],
+                  sentAt: new Date()
+                });
+                
+                await smsLog.save();
+                console.log('Signup confirmation SMS sent to:', newUser.phone);
+              } catch (smsError) {
+                console.error('Error sending signup confirmation SMS:', smsError);
+                // Don't fail registration if SMS fails
+              }
+            }
+            
             const token = signInToken(newUser);
             res.send({
               token,
@@ -582,11 +612,11 @@ const sendOtp = async (req, res) => {
     if (!mobile)
       return res.status(400).json({ message: "Mobile number is required" });
 
-    // Generate a -digit OTP
+    // Generate a 4-digit OTP
     const generateOtp = () =>
       Math.floor(1000 + Math.random() * 9000).toString();
     const otp = generateOtp();
-    const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes expiry
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
 
     // Remove any existing OTPs for this mobile number
     await Otp.deleteMany({ mobile });
@@ -594,9 +624,45 @@ const sendOtp = async (req, res) => {
     // Save the new OTP
     await Otp.create({ mobile, otp, expiresAt });
 
-    // In production: send OTP via SMS service (e.g., Twilio)
-
-    res.status(200).json({ message: "OTP sent successfully", otp, expiresAt }); // remove `otp` in production
+    // Send OTP via SMS service
+    try {
+      const smsResult = await sendSMS(mobile, 'OTP', [otp]);
+      
+      // Log SMS
+      const smsLog = new SmsLog({
+        mobile: mobile,
+        messageType: 'OTP',
+        message: smsResult.message || '',
+        templateId: smsResult.templateId || '',
+        messageId: smsResult.messageId || '',
+        status: smsResult.success ? 'sent' : 'failed',
+        error: smsResult.error || undefined,
+        variables: [otp],
+        sentAt: new Date()
+      });
+      
+      await smsLog.save();
+      
+      if (smsResult.success) {
+        return res.status(200).json({ 
+          message: "OTP sent successfully via SMS",
+          smsLogId: smsLog._id,
+          expiresAt
+        });
+      } else {
+        console.error('Failed to send OTP SMS:', smsResult.error);
+        return res.status(500).json({ 
+          message: "Failed to send OTP. Please try again.",
+          error: smsResult.error
+        });
+      }
+    } catch (smsError) {
+      console.error('Error sending OTP SMS:', smsError);
+      return res.status(500).json({ 
+        message: "Failed to send OTP. Please try again.",
+        error: smsError.message
+      });
+    }
   } catch (error) {
     console.error("Error sending OTP:", error);
     res.status(500).json({ message: "Internal server error" });

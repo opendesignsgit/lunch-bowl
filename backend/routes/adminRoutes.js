@@ -14,6 +14,7 @@ const {
   sendSchoolEnquiryMail,
 } = require("../controller/adminController");
 const { passwordVerificationLimit } = require("../lib/email-sender/sender");
+const { sendTrialFeedbackSMS, getTrialCustomers } = require("../utils/trialSmsUtils");
 
 //register a staff
 router.post("/register", registerAdmin);
@@ -28,6 +29,10 @@ router.put("/forget-password", passwordVerificationLimit, forgetPassword);
 router.put("/reset-password", resetPassword);
 
 router.post("/school-enquiry", sendSchoolEnquiryMail);
+
+// SMS utilities for trial customers
+router.post("/send-trial-feedback-sms", sendTrialFeedbackSMS);
+router.get("/trial-customers", getTrialCustomers);
 
 //add a staff
 router.post("/add", addStaff);
