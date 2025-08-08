@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Slider from "react-slick";
 import { Dialog, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Proimgtwobiriyani from "../../../public/home/biriyani-img-two.png";
+import config from "./config";
 
 const ProdetilProps = ({ open, onClose, product }) => {
+
+  useEffect(() => {
+    console.log("product changed:", product);
+  }, [product]);
   const settings = {
     dots: false,
     infinite: true,
@@ -16,7 +21,7 @@ const ProdetilProps = ({ open, onClose, product }) => {
     autoplaySpeed: 2000,
     fade: true,
   };
-
+  console.log("product------->", product)
   return (
     <Dialog
       open={open}
@@ -48,7 +53,7 @@ const ProdetilProps = ({ open, onClose, product }) => {
           <div className="slider-container flex items-center">
             <Slider {...settings} className="Prodeilsliders">
               <div>
-                <div className="flex-1 teamboximg rounded-full overflow-hidden">
+                <div className="flex-1 teamboximg overflow-hidden">
                   <Image
                     className="w-full h-auto m-auto"
                     priority
@@ -58,7 +63,7 @@ const ProdetilProps = ({ open, onClose, product }) => {
                       product.image
                         ? product.image.startsWith("http")
                           ? product.image
-                          : `http://localhost:5055${
+                          : `${config.BASE_URL}${
                               product.image.startsWith("/")
                                 ? product.image
                                 : `/${product.image}`
@@ -72,7 +77,7 @@ const ProdetilProps = ({ open, onClose, product }) => {
                 </div>
               </div>
               <div>
-                <div className="flex-1 teamboximg rounded-full overflow-hidden">
+                <div className="flex-1 teamboximg  overflow-hidden">
                   <Image
                     className="w-full h-auto m-auto"
                     priority
@@ -82,7 +87,7 @@ const ProdetilProps = ({ open, onClose, product }) => {
                       product.image
                         ? product.image.startsWith("http")
                           ? product.image
-                          : `http://localhost:5055${
+                          : `${config.BASE_URL}${
                               product.image.startsWith("/")
                                 ? product.image
                                 : `/${product.image}`
@@ -102,47 +107,60 @@ const ProdetilProps = ({ open, onClose, product }) => {
         {/* Right Side: Product Details */}
         <div className="popbcont w-[55%] p-[3.5vw]">
           {/* Cuisine Type */}
-          <div className="mb-[2vh]">
+          {/*<div className="mb-[2vh]">
             <span className="text-sm font-medium text-gray-500">Cuisine:</span>
             <span className="ml-2 text-sm font-semibold">
               {product?.cuisine || "Not specified"}
             </span>
-          </div>
+          </div>*/}
 
           {/* Main Title and Subtitle */}
-          <div className="mb-[2vh]">
-            <h1 className="text-3xl font-bold">
+          <div className="popbcontbox mb-[2vh]">
+            <h3 className="text-3xl font-bold">
               {product?.primaryDishTitle || "Dish Title"}
-            </h1>
-            <h2 className="text-2xl text-gray-600">
+            </h3>
+            {/*<h2 className="text-2xl text-gray-600">
               with {product?.subDishTitle || "Sub Dish"}
-            </h2>
+            </h2>*/}
           </div>
 
           {/* Short Description */}
-          <div className="mb-[4vh]">
-            <p className="text-lg italic text-gray-700">
-              {product?.shortDescription || "Short description not available"}
+          <div className="popbcontbox mb-[4vh]">
+            <p className="text-lg text-gray-700">
+              {product?.description || "Short description not available"}
             </p>
           </div>
 
           {/* Full Description */}
-          <div className="mb-[4vh]">
-            <h3 className="text-xl font-semibold mb-2">About This Dish</h3>
+          <div className="popbcontbox mb-[4vh]">
+            <h3 className="text-xl font-semibold mb-2">Ingredients</h3>
             <p className="text-gray-700">
-              {product?.description || "Detailed description not available"}
+              {product?.Idescription || "Detailed description not available"}
             </p>
           </div>
 
           {/* Ingredients (You can make this dynamic if your data includes it) */}
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Key Ingredients</h3>
-            <ul className="list-disc pl-5 text-gray-700">
-              <li>Fresh {product?.primaryDishTitle || "main ingredient"}</li>
-              <li>Organic {product?.subDishTitle || "side ingredient"}</li>
-              <li>Special blend of spices</li>
-              <li>Fresh herbs</li>
+          <div className="popbcontbox">
+            <h3 className="text-xl font-semibold mb-2">Nutrition Value</h3>
+            {/*<ul className="list-disc pl-5 text-gray-700">
+              <li>{product?.nutritionValues[0] || "main ingredient"}</li>
+              <li>{product?.nutritionValues[1] || "side ingredient"}</li>
+              <li></li>
+              <li></li>
+            </ul>*/}
+            <ul className="list-disc text-gray-700">
+              {Array.isArray(product?.nutritionValues) && product.nutritionValues.length > 0 ? (
+                product.nutritionValues.map((value, idx) => (
+                  <li key={idx}>{value}</li>
+                ))
+              ) : (
+                <>
+                  <li>main ingredient</li>
+                  <li>side ingredient</li>
+                </>
+              )}
             </ul>
+
           </div>
         </div>
       </div>
