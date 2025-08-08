@@ -27,7 +27,7 @@ const notificationRoutes = require("../routes/notificationRoutes");
 const { isAuth, isAdmin } = require("../config/auth");
 const dashboardRoutes = require("../routes/mobileRoute/dashboard.route");
 const mobilDashboardRoutes = require("../routes/mobileRoute/customerHomeRoutes");
-
+const mobilenotifications = require("../routes/mobileRoute/notificationRoutes")
 
 
 
@@ -86,6 +86,7 @@ app.use("/api/orders/", orderRoutes);
 // ################MOBILE ADMIMIN PANEL ROUTES #########################
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/customer-home", mobilDashboardRoutes);
+app.use('/api/notifications', mobilenotifications);
 
 // Use express's default error handling middleware
 app.use((err, req, res, next) => {
