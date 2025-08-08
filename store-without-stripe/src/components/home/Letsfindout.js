@@ -2,44 +2,20 @@ import React from "react";
 import { useState } from "react";
 import SchoolServiceForm from "@components/home/SchoolServiceForm";
 import SignUpPopup from "@components/logInSignUp/SignUpPopup";
+import CategoryServices from "../../services/CategoryServices";
+import useAsync from "../../hooks/useAsync";
 
 const Letsfindout = () => {
   const [schoolName, setSchoolName] = useState("");
   const [selectedSchool, setSelectedSchool] = useState("");
   const [showSchoolForm, setShowSchoolForm] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
-
-  // Hardcoded Chennai schools data
-  const schools = [
-    { _id: "1", name: "Chennai Public School", location: "Anna Nagar, 600040" },
-    {
-      _id: "2",
-      name: "PS Senior Secondary School",
-      location: "Mylapore, 600004",
-    },
-    {
-      _id: "3",
-      name: "DAV Boys Senior Secondary School",
-      location: "Gopalapuram, 600086",
-    },
-    {
-      _id: "4",
-      name: "Padma Seshadri Bala Bhavan",
-      location: "KK Nagar, 600078",
-    },
-    { _id: "5", name: "Chettinad Vidyashram", location: "RA Puram, 600028" },
-    { _id: "6", name: "Bala Vidya Mandir", location: "Adyar, 600020" },
-    {
-      _id: "7",
-      name: "SBOA School & Junior College",
-      location: "Anna Nagar, 600040",
-    },
-    {
-      _id: "8",
-      name: "Vidya Mandir Senior Secondary School",
-      location: "Mylapore, 600004",
-    },
-  ];
+  const {
+    data: schools,
+    loading,
+    error,
+    reload,
+  } = useAsync(CategoryServices.getAllSchools);
 
   const handleInputChange = (e) => {
     setSchoolName(e.target.value);
@@ -63,7 +39,20 @@ const Letsfindout = () => {
     setShowSchoolForm(true);
   };
 
+  // Null check for schools data
   const renderSchoolOptions = () => {
+    if (loading) {
+      return <option>Loading schools...</option>;
+    }
+
+    if (error) {
+      return <option>Error loading schools</option>;
+    }
+
+    if (!schools || schools.length === 0) {
+      return <option>No schools available</option>;
+    }
+
     return schools.map((school) => (
       <option key={school._id} value={school.name}>
         {school.name} - {school.location}
