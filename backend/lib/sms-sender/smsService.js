@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+require("dotenv").config();
 // SMS Templates with DLT Template IDs
 const SMS_TEMPLATES = {
   OTP: {

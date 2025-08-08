@@ -627,6 +627,7 @@ const sendOtp = async (req, res) => {
     // Send OTP via SMS service
     try {
       const smsResult = await sendSMS(mobile, 'OTP', [otp]);
+      console.log('OTP SMS Result:', smsResult);
       
       // Log SMS
       const smsLog = new SmsLog({
@@ -647,6 +648,7 @@ const sendOtp = async (req, res) => {
         return res.status(200).json({ 
           message: "OTP sent successfully via SMS",
           smsLogId: smsLog._id,
+          smsResult: smsResult,
           expiresAt
         });
       } else {
@@ -727,6 +729,8 @@ const verifyOtp = async (req, res) => {
             pass: process.env.EMAIL_PASS,
           },
         });
+
+
 
         const mailOptions = {
           from: process.env.EMAIL_USER,

@@ -4,7 +4,7 @@ const { sendSMS, SMS_TEMPLATES } = require('./lib/sms-sender/smsService');
 async function demoSMSIntegration() {
   console.log('=== SMS Integration Demo ===\n');
   
-  const testMobile = '919123456789';
+  const testMobile = '918438411452';
   
   // Test all SMS types
   const tests = [
