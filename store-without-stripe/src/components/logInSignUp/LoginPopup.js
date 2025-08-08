@@ -377,7 +377,7 @@ const LoginPopup = ({ open, onClose }) => {
             {/* Divider */}
             {!otpSent && (
               <>
-                <Divider
+                {/* <Divider
                   className="ordivider"
                   sx={{ my: 3, position: "relative", paddingY: "20px" }}
                 >
@@ -397,10 +397,10 @@ const LoginPopup = ({ open, onClose }) => {
                   >
                     OR
                   </Typography>
-                </Divider>
+                </Divider> */}
 
                 {/* Social Login Buttons */}
-                <Box className="wsmideabtn">
+                {/* <Box className="wsmideabtn">
                   <ul className="flex gap-2">
                     <li className="flex-1">
                       <Button
@@ -427,7 +427,7 @@ const LoginPopup = ({ open, onClose }) => {
                       </Button>
                     </li>
                   </ul>
-                </Box>
+                </Box> */}
               </>
             )}
           </Box>
