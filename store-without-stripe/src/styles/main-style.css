@@ -689,12 +689,16 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 
 .popbcont h3{font-size: 1.1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 10px;}
 .popbcont p{font-size: 16px;}
-.popbcont ul li{background: rgb(255 101 20 / 12%);padding: 5px 10px;font-size: 14px;color: #FF6514;letter-spacing: 0;border-radius: 5px;}
+.popbcont ul{list-style: none;margin-inline: -5px;display: flex;flex-wrap: wrap;}
+.popbcont ul li{background: rgb(255 101 20 / 12%);padding: 5px 10px;font-size: 14px;color: #FF6514;letter-spacing: 0;border-radius: 5px;margin: 5px;}
 .propetilpopus .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;}
 .propetilpopus .MuiPaper-root{border-radius: 8px;}
 .propetilpopus .slider-container{position: relative;height: 100%;}
 .propetilpopus .Prodeilsliders {position: relative;width: 100%;}
-
+.propetilpopus .Prodeilsliders .slick-arrow {}
+.propetilpopus .Prodeilsliders .slick-arrow:before{opacity: 0;visibility: hidden;}
+.propetilpopus .Prodeilsliders .slick-prev {background: url(/slidess-arrow-left.svg) no-repeat center center;background-size: 100%;}
+.propetilpopus .Prodeilsliders .slick-next {background: url(/slidess-arrow-right.svg) no-repeat center center;background-size: 100%;}
 .compopups .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;}
 .popvideodialog .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;background: #ffffff;opacity: 0.6;}
 .popvideodialog .popClose:hover{background: #ffffff;opacity: 1;}
