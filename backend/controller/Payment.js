@@ -177,7 +177,7 @@ exports.ccavenueResponse = async (req, res) => {
           });
 
           // Send Payment Confirmation SMS
-          const parentPhone = updatedForm.parentDetails?.fatherMobile || updatedForm.parentDetails?.motherMobile;
+          const parentPhone = updatedForm.parentDetails.mobile;
           if (parentPhone) {
             try {
               const smsResult = await sendSMS(parentPhone, 'PAYMENT_CONFIRMATION', [amount]);
