@@ -83,13 +83,31 @@ const sendSMS = async (mobile, messageType, variables = []) => {
 
   } catch (error) {
     console.error('Error sending SMS:', error.message);
+    
+    // Get template safely for error response
+    const template = SMS_TEMPLATES[messageType];
+    let fallbackMessage = 'SMS failed to send';
+    let fallbackTemplateId = 'unknown';
+    
+    if (template) {
+      fallbackTemplateId = template.templateId;
+      try {
+        fallbackMessage = template.template;
+        variables.forEach((variable, index) => {
+          fallbackMessage = fallbackMessage.replace('{#var#}', variable);
+        });
+      } catch (msgError) {
+        fallbackMessage = `SMS ${messageType} failed to send`;
+      }
+    }
+    
     return {
       success: false,
       error: error.message,
       mobile: mobile,
       messageType: messageType,
-      message: message || 'SMS failed to send',
-      templateId: template ? template.templateId : 'unknown',
+      message: fallbackMessage,
+      templateId: fallbackTemplateId,
       sentAt: new Date()
     };
   }

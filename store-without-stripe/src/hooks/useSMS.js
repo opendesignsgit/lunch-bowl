@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import SmsServices from "@/services/SmsServices";
+import SmsServices from "../services/SmsServices";
 
 const useSMS = () => {
   const [isSending, setIsSending] = useState(false);

@@ -25,6 +25,7 @@ const currencyRoutes = require("../routes/currencyRoutes");
 const languageRoutes = require("../routes/languageRoutes");
 const notificationRoutes = require("../routes/notificationRoutes");
 const smsRoutes = require("../routes/smsRoutes");
+const { testSMSNotification } = require("../controller/testSmsController");
 const { isAuth, isAdmin } = require("../config/auth");
 const {
   getGlobalSetting,
@@ -70,6 +71,9 @@ app.use("/api/language/", languageRoutes);
 app.use("/api/notification/", isAuth, notificationRoutes);
 app.use("/api/sms/", smsRoutes);
 app.use("/api/ccavenue/", ccavenueRoutes);
+
+// Test SMS endpoint without database dependency
+app.post("/api/test-sms", testSMSNotification);
 
 //if you not use admin dashboard then these two route will not needed.
 app.use("/api/admin/", adminRoutes);
