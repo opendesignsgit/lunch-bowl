@@ -16,6 +16,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import SignUpImage from "../../../public/LogInSignUp/signuppopimg.jpg";
 import FreeTrialPopup from "../../components/home/FreeTrialPopup";
 import useLoginSubmit from "@hooks/useLoginSubmit";
+import useSMS from "@hooks/useSMS";
 
 
 const SignUpPopup = ({ open, onClose }) => {
@@ -40,8 +41,8 @@ const SignUpPopup = ({ open, onClose }) => {
   });
   const otpRefs = useRef([]);
   const [freeTrialPopup, setFreeTrialPopup] = useState(false);
-  const { submitHandler, loading } =
-      useLoginSubmit();
+  const { submitHandler, loading } = useLoginSubmit();
+  const { sendOTPSMS, sendSignupConfirmationSMS, isSending: isSendingSMS } = useSMS();
   
 
   useEffect(() => {
@@ -120,15 +121,29 @@ const SignUpPopup = ({ open, onClose }) => {
             console.log("Full Response:", res); // Ensure the response is an object
            
             console.log('====================================');
-            setOtp(res.otp)
-
-            // generateOtp();
-             setOtpSent(true);
+            
+            // Also send SMS if SMS service is enabled
+            if (process.env.NEXT_PUBLIC_SMS_ENABLED === 'true' && res.otp) {
+                try {
+                    await sendOTPSMS(form.mobile, res.otp);
+                    console.log('OTP SMS sent successfully');
+                } catch (smsError) {
+                    console.warn('SMS sending failed, but continuing with OTP flow:', smsError);
+                    // Don't fail the OTP flow if SMS fails
+                }
+            }
+            
+            setOtp(res.otp);
+            setOtpSent(true);
+            setTimer(120);
+            setResendEnabled(false);
+            setMessage(null);
         } catch (error) {
             console.error("Error sending OTP:", error);
+            setMessage({ type: "error", text: "Failed to send OTP. Please try again." });
         }
     }
-};
+  };
 
 
   const handleResendOtp = () => {
@@ -147,11 +162,29 @@ const SignUpPopup = ({ open, onClose }) => {
       setErrors({ ...errors, otp: "Please enter a valid 4-digit OTP" });
       return;
     }else{
-      const res = await submitHandler({otp:userOtp, phone: form.mobile, path : "signUp-otp", email: form.email, firstName: form.firstName, lastName:form.lastName})
+      const res = await submitHandler({otp:userOtp, phone: form.mobile, path : "signUp-otp", email: form.email, firstName: form.firstName, lastName:form.lastName});
       console.log('====================================');
       console.log("verifyOtp---->", res);
       console.log('====================================');
+      
+      // Send signup confirmation SMS if verification is successful
+      if (res && res.success !== false && process.env.NEXT_PUBLIC_SMS_ENABLED === 'true') {
+        try {
+          const customerName = `${form.firstName} ${form.lastName}`;
+          await sendSignupConfirmationSMS(form.mobile, customerName, res._id || res.customerId);
+          console.log('Signup confirmation SMS sent successfully');
+        } catch (smsError) {
+          console.warn('Signup confirmation SMS failed:', smsError);
+          // Don't fail the signup process if SMS fails
+        }
+      }
+      
+      // Continue with existing flow
+      setMessage({ type: "success", text: "Registration successful!" });
+      setFreeTrialPopup(true);
+      onClose();
     }
+  };
 
     // if (userOtp === otp) {
     //   setMessage({ type: "success", text: "OTP verified successfully!" });
@@ -318,6 +351,7 @@ const SignUpPopup = ({ open, onClose }) => {
                   "&:hover": { backgroundColor: "#e85f00" },
                 }}
                 onClick={handleVerifyOtp}
+                disabled={loading || isSendingSMS}
               >
                 {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
               </Button>
@@ -433,6 +467,7 @@ const SignUpPopup = ({ open, onClose }) => {
                   "&:hover": { backgroundColor: "#e85f00" },
                 }}
                 onClick={handleSendOtp}
+                disabled={loading || isSendingSMS}
               >
                 <span>Send One Time Password</span>
               </Button>
