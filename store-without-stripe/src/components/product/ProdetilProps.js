@@ -14,11 +14,11 @@ const ProdetilProps = ({ open, onClose, product }) => {
   const settings = {
     dots: false,
     infinite: true,
-    speed: 500,
+    speed: 800,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 6000,
     fade: true,
   };
   console.log("product------->", product)
@@ -60,13 +60,13 @@ const ProdetilProps = ({ open, onClose, product }) => {
                     unoptimized
                     crossorigin="anonymous"
                     src={
-                      product.image
-                        ? product.image.startsWith("http")
-                          ? product.image
+                      product.dishImage2
+                        ? product.dishImage2.startsWith("http")
+                          ? product.dishImage2
                           : `${config.BASE_URL}${
-                              product.image.startsWith("/")
-                                ? product.image
-                                : `/${product.image}`
+                          product.dishImage2.startsWith("/")
+                            ? product.dishImage2
+                            : `/${product.dishImage2}`
                             }`
                         : Proimgtwobiriyani
                     }
