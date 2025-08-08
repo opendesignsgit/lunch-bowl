@@ -13,6 +13,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import LogoutConfirmationPopup from "../../components/logInSignUp/LogoutConfirmationPopup";
 import { signOut } from "next-auth/react";
+import useRegistration from "@hooks/useRegistration";
+
 
 const Mainheader = ({ title, description, children }) => {
   const { data: session, status } = useSession();
@@ -24,9 +26,41 @@ const Mainheader = ({ title, description, children }) => {
   const [showMyAccount, setShowMyAccount] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [shadow, setShow] = React.useState();
+  const { submitHandler, loading, error } = useRegistration();
+  const [stepCheck, setStepCheck] = useState(null);
+
 
   const userId = session?.user?.id;
   const freeTrial = session?.user?.freeTrial;
+
+  useEffect(() => {
+    const fetchDataAndRoute = async () => {
+      try {
+        if (!session?.user?.id) {
+          throw new Error("User ID not available");
+        }
+
+        const result = await submitHandler({
+          path: 'Step-Check', // Adjust the path as needed
+          _id: session?.user?.id, // Using the user ID from session
+        });
+
+        setStepCheck(result?.data);
+
+        console.log("====================================");
+        console.log("Step Check Result:", result.data);
+        console.log("====================================");
+      } catch (error) {
+        console.error("Error:", error);
+        // router.push('/error');
+      }
+    };
+
+    if (status === "authenticated") {
+      fetchDataAndRoute();
+    }
+  }, [session?.user?.id, status]);
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -107,7 +141,7 @@ const Mainheader = ({ title, description, children }) => {
                   </button>
                 </li>
               )}
-              {!freeTrial && (
+              {!freeTrial  && (
                 <li className="trialbtn">
                   <button
                     onClick={() =>
@@ -121,32 +155,56 @@ const Mainheader = ({ title, description, children }) => {
 
               {/* Only show user menu if user is logged in */}
               {session && (
-                <li className="userMenuBtn" style={{ position: "relative" }}>
-                  <button onClick={() => setShowUserMenu((prev) => !prev)}>
-                    <span>Menu</span>
-                  </button>
-                  {showUserMenu && (
-
-                    <ul className="submenuul">
-                      <li>
-                        <button onClick={() => router.push("user/userDashBoard")}  >
-                          Dashboard
-                        </button>
-                      </li>
-                      <li>
-                        <button onClick={() => router.push("user/my-account")} >
-                          My Account
-                        </button>
-                      </li>
-                      <li>
-                        <button onClick={() => setShowLogoutConfirm(true)} >
-                          Log Out
-                        </button>
-                      </li>
-                    </ul>
-                  )}
-                </li>
+                stepCheck === 4 ? (
+                  // StepCheck === 4 → Full My Account menu
+                  <li className="userMenuBtn" style={{ position: "relative" }}>
+                    <button onClick={() => setShowUserMenu((prev) => !prev)}>
+                      <span>My Account</span>
+                    </button>
+                    {showUserMenu && (
+                      <ul className="submenuul">
+                        <li>
+                          <button onClick={() => router.push("user/userDashBoard")}>
+                            Dashboard
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => router.push("user/menuCalendarPage")}>
+                            Menu Calendar
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => router.push("user/my-account")}>
+                            My Profile
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => setShowLogoutConfirm(true)}>
+                            Log Out
+                          </button>
+                        </li>
+                      </ul>
+                    )}
+                  </li>
+                ) : (
+                  // StepCheck !== 4 → Show only username + logout
+                  <li className="userMenuBtn" style={{ position: "relative" }}>
+                    <button onClick={() => setShowUserMenu((prev) => !prev)}>
+                      <span>{session.user?.name || "User"}</span>
+                    </button>
+                    {showUserMenu && (
+                      <ul className="submenuul">
+                        <li>
+                          <button onClick={() => setShowLogoutConfirm(true)}>
+                            Log Out
+                          </button>
+                        </li>
+                      </ul>
+                    )}
+                  </li>
+                )
               )}
+
             </ul>
             <div className="hmenubox" onClick={() => setShow(true)}>
               <h6>Menu</h6>

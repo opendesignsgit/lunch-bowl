@@ -438,7 +438,7 @@ const SignUpPopup = ({ open, onClose }) => {
               </Button>
               </div>
               {/* Divider & Social */}
-              <Divider className="ordivider" sx={{ my: 2, position: "relative", paddingY: "15px" }}>
+              {/* <Divider className="ordivider" sx={{ my: 2, position: "relative", paddingY: "15px" }}>
                 <Typography
                   component="span"
                   sx={{
@@ -454,10 +454,10 @@ const SignUpPopup = ({ open, onClose }) => {
                 >
                   OR
                 </Typography>
-              </Divider>
+              </Divider> */}
 
               {/* Social Login Buttons */}
-              <Box className="wsmideabtn">
+              {/* <Box className="wsmideabtn">
                   <ul className="flex gap-2">
                     <li className="flex-1">
                       <Button className="gglebtn"
@@ -481,7 +481,7 @@ const SignUpPopup = ({ open, onClose }) => {
                   </ul>
                   
                   
-                </Box>
+                </Box> */}
             </>
           )}
         </Box>
