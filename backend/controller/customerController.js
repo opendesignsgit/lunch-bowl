@@ -730,6 +730,7 @@ const verifyOtp = async (req, res) => {
           },
         });
 
+        const smsResult = await sendSMS(mobile, 'SIGNUP_CONFIRMATION', [firstName]);
 
 
         const mailOptions = {
