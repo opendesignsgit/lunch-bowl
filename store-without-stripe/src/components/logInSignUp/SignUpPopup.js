@@ -16,6 +16,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import SignUpImage from "../../../public/LogInSignUp/signuppopimg.jpg";
 import FreeTrialPopup from "../../components/home/FreeTrialPopup";
 import useLoginSubmit from "@hooks/useLoginSubmit";
+import useSMS from "@hooks/useSMS";
 
 
 const SignUpPopup = ({ open, onClose }) => {
@@ -40,8 +41,8 @@ const SignUpPopup = ({ open, onClose }) => {
   });
   const otpRefs = useRef([]);
   const [freeTrialPopup, setFreeTrialPopup] = useState(false);
-  const { submitHandler, loading } =
-      useLoginSubmit();
+  const { submitHandler, loading } = useLoginSubmit();
+  const { sendOTPSMS, sendSignupConfirmationSMS, isSending: isSendingSMS } = useSMS();
   
 
   useEffect(() => {
@@ -120,15 +121,24 @@ const SignUpPopup = ({ open, onClose }) => {
             console.log("Full Response:", res); // Ensure the response is an object
            
             console.log('====================================');
-            setOtp(res.otp)
+            setOtp(res.otp);
 
-            // generateOtp();
-             setOtpSent(true);
+            // Send SMS if enabled
+            if (process.env.NEXT_PUBLIC_SMS_ENABLED === 'true' && res.otp) {
+                try {
+                    await sendOTPSMS(form.mobile, res.otp);
+                    console.log('OTP SMS sent successfully');
+                } catch (smsError) {
+                    console.warn('SMS sending failed:', smsError);
+                }
+            }
+
+            setOtpSent(true);
         } catch (error) {
             console.error("Error sending OTP:", error);
         }
     }
-};
+  };
 
 
   const handleResendOtp = () => {
