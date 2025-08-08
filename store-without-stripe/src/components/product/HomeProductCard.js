@@ -178,13 +178,13 @@ const HomeProductCard = ({ limit }) => {
                     unoptimized
                     crossorigin="anonymous"
                     src={
-                      item.image
-                        ? item.image.startsWith("http")
-                          ? item.image
+                      item.dishImage2
+                        ? item.dishImage2.startsWith("http")
+                          ? item.dishImage2
                           : `${config.BASE_URL}${
-                              item.image.startsWith("/")
-                                ? item.image
-                                : `/${item.image}`
+                          item.dishImage2.startsWith("/")
+                            ? item.dishImage2
+                            : `/${item.dishImage2}`
                             }`
                         : Proimgtwobiriyani
                     }

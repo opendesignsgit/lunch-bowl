@@ -4,6 +4,8 @@ const mongoose = require("mongoose"); // Add this import for ObjectId validation
 const Form = require("../models/Form");
 const UserPayment = require("../models/Payment");
 const nodemailer = require("nodemailer");
+const { sendSMS } = require("../lib/sms-sender/smsService");
+const SmsLog = require("../models/SmsLog");
 
 const workingKey =
   process.env.CCAV_WORKING_KEY || "2A561B005709D8B4BAF69D049B23546B"; // Use env vars in production
@@ -173,6 +175,34 @@ exports.ccavenueResponse = async (req, res) => {
               console.error("Payment Success Mail Error:", err);
             }
           });
+
+          // Send Payment Confirmation SMS
+          const parentPhone = updatedForm.parentDetails.mobile;
+          if (parentPhone) {
+            try {
+              const smsResult = await sendSMS(parentPhone, 'PAYMENT_CONFIRMATION', [amount]);
+              
+              // Log SMS
+              const smsLog = new SmsLog({
+                mobile: parentPhone,
+                messageType: 'PAYMENT_CONFIRMATION',
+                message: smsResult.message || '',
+                templateId: smsResult.templateId || '',
+                messageId: smsResult.messageId || '',
+                status: smsResult.success ? 'sent' : 'failed',
+                error: smsResult.error || undefined,
+                customerId: merchant_param1,
+                variables: [amount],
+                sentAt: new Date()
+              });
+              
+              await smsLog.save();
+              console.log('Payment confirmation SMS sent to:', parentPhone);
+            } catch (smsError) {
+              console.error('Error sending payment confirmation SMS:', smsError);
+              // Don't fail payment processing if SMS fails
+            }
+          }
         }
 
         return res.redirect("https://lunchbowl.co.in/user/menuCalendarPage");

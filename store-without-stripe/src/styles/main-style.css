@@ -256,6 +256,7 @@ ul.footmenu li a{color: #FFFFFF; }
 .progroupitem .proboxfront {position: relative;height: 100%;}
 .progroupitem .profbboxs {position: relative;height: 100%;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;}
 .progroupitem .profbboxs .proImage{margin-top: auto;}
+.progroupitem .proboxBack .proImage{padding: 0;}
 .nutritionboxs {}
 .nutritionitems{}
 .nutritionitems h5{}
@@ -699,6 +700,7 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .propetilpopus .Prodeilsliders .slick-arrow:before{opacity: 0;visibility: hidden;}
 .propetilpopus .Prodeilsliders .slick-prev {background: url(/slidess-arrow-left.svg) no-repeat center center;background-size: 100%;}
 .propetilpopus .Prodeilsliders .slick-next {background: url(/slidess-arrow-right.svg) no-repeat center center;background-size: 100%;}
+.propetilpopus .Prodeilsliders .slick-list .slick-track{display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .compopups .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;}
 .popvideodialog .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;background: #ffffff;opacity: 0.6;}
 .popvideodialog .popClose:hover{background: #ffffff;opacity: 1;}
@@ -746,7 +748,7 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 
 .ProdfilterBox ul li::before {  content: '';  position: absolute;  width: 100%;  height: 1px;  left: 0;  bottom: -1px;  background: #FF6514;  opacity: 0;  visibility: hidden;}
 .ProdfilterBox ul li.active::before {  opacity: 1;  visibility: visible;}
-.ProdfilterBox ul li button {  font-family: 'Baloo';  color: #777777;  padding-inline: 30px;  position: relative;  height: 30px;  font-size: 1vw;  width: 100%;  text-transform: uppercase;}
+.ProdfilterBox ul li button {  font-family: 'Baloo';  color: #777777;  padding-inline: 15px;  position: relative;  height: 30px;  font-size: 18px;  width: 100%;  text-transform: uppercase;}
 .ProdfilterBox ul li button::before{content: '';position: absolute;top: 0;left: -1px; border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-left: 15px solid #FFF4D7;}
 .ProdfilterBox ul li button::after{content: '';position: absolute;top: 0;right: -1px; border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-right: 15px solid #FFF4D7;}
 .ProdfilterBox ul li.active button {  background: #FF6514;  color: #ffffff;}
@@ -958,7 +960,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 
 }
 @media screen and (max-width:820px){
-  .HintroSec, .HProlistSec, .HLFOlistSec, .HworktabSec, .HteamSec, .Hfaqinrow, footer.FooterSec, .formsec {padding-inline: 40px;}
+  .HintroSec, .HProlistSec, .HLFOlistSec, .HworktabSec, .HteamSec, .Hfaqinrow, footer.FooterSec, .formsec {padding-inline: 55px;}
   .hintroLeft.comtilte p br{display: none;}
   .faqAccordionitems button{padding-block: 10px;font-size: 15px;padding-inline: 15px;}
   ul.footmenu li {margin-inline: 12px;}
@@ -990,7 +992,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   body {font-size: 15px;letter-spacing: 0;}
   header{background: #FFF4D7;padding: 10px 15px;}
   .logsinul>li>button{background: #000000;color: #ffffff;}
-  .logsinul>li::before{border-color:#000000;}
+  .logsinul>li::before{border-color:#000000;right: -3px;bottom: -3px;}
   .logsinul>li>button::after{filter: invert(1);}
   .HbanSec{flex-wrap: wrap;}
   .hbanLeft {width: 100%;padding-block: 150px 40px;}
@@ -1010,8 +1012,10 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   #HamburgerMegamenu .megamenu-container .mmMenuColR{width: 100%;position: relative;height: 100%; z-index: 9;    background: rgb(255 101 20 / 85%);}
   #HamburgerMegamenu .mmMenuCon ul.HamBSMenu>li>a{font-size: 30px;padding-block: 15px;}
   #HamburgerMegamenu .mmMenuCon ul.HamSMediaul li a{font-size: 12px;}
+  .logsinul li button::after {width: 0;display: none;}
   .HbanSec::before{opacity: 0;visibility: hidden;}
-  .logsinul li button, .combtntb p.parabtn a span {line-height: 40px;}
+  .logsinul li button {line-height: 34px;}
+  .combtntb p.parabtn a span {line-height: 40px;}
   .comtilte h4{font-size: 18px;letter-spacing: 0px;}
   .comtilte h3,.HLFOlistSec .comtilte h3{font-size: 35px;letter-spacing: -1px;}
   .comtilte h2 {font-size: 45px;}
@@ -1073,7 +1077,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .pagebansec .hworkTitle {width: 100%;text-align: center;}
   .pagebansec h1{font-size: 40px;}
   .pagebansec .breadcrumbs ol {justify-content: center;}
-  .pagebansec{height: 63vh;padding-inline: 30px;}
+  .pagebansec{height: 600px;padding-inline: 30px;}
   .pagebansec .pageinconter{padding-bottom: 70%;}
   .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 420px;}
   .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter{padding-bottom: 0%;}
@@ -1146,7 +1150,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .propetPopBox {flex-wrap: wrap;height: 90vh;overflow-y: auto;}
   .propetPopBox .popbimg {width: 100%;}
   .propetPopBox .popbcont {width: 100%;}
-
+  .abtvidosliders img {aspect-ratio: 1 / 1.1;}
   .popbcont h3{font-size: 22px;letter-spacing: 0;}
 
 }
