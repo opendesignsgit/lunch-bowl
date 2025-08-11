@@ -1525,3 +1525,26 @@ p:not(:last-of-type) {
   opacity: 1;
   color: var(--PhoneInputCountrySelectArrow-color--focus);
 } */
+
+
+.incomplete-registration-msg {
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.theme-link {
+  color: var(--theme-primary, #f47f20);
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.theme-link:hover {
+  color: var(--theme-primary-dark, #d96914);
+  text-decoration: none;
+}
+

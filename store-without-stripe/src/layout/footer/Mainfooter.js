@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import ctaimg from "../../../public/ctaimg.png"
 import myLogo from "../../../public/logo/lunchbowl-logo.svg";
-import {FacebookIcon,LinkedinIcon,TwitterIcon,WhatsappIcon,} from "react-share";
+import { FacebookIcon, LinkedinIcon, TwitterIcon, WhatsappIcon } from "react-share";
 import GetinTouch from './GetinTouch';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import useRegistration from "@hooks/useRegistration";
 
 import hldocticon1 from "../../../public/home/icons/footfrom/violet-and-yellow-star.svg";
 import hldocticon2 from "../../../public/home/icons/footfrom/rounded.svg";
@@ -15,17 +18,33 @@ import hldocticon6 from "../../../public/home/icons/footfrom/pinkstar.svg";
 import hldocticon7 from "../../../public/home/icons/footfrom/line-and-pinkround.svg";
 
 const Mainfooter = () => {
-
   const [open, setOpen] = useState(false);
-  
-      const handleOpenDialog = () => {
-        setOpen(true);
-      };
-    
-      const handleCloseDialog = () => {
-        setOpen(false);
-      };
+  const { data: session, status } = useSession();
+  const { submitHandler } = useRegistration();
+  const [stepCheck, setStepCheck] = useState(null);
+  const router = useRouter();
 
+  const handleOpenDialog = () => setOpen(true);
+  const handleCloseDialog = () => setOpen(false);
+
+  // Fetch stepCheck for logged-in users
+  useEffect(() => {
+    const fetchStep = async () => {
+      try {
+        if (!session?.user?.id) return;
+        const result = await submitHandler({
+          path: 'Step-Check',
+          _id: session.user.id
+        });
+        setStepCheck(result?.data);
+      } catch (err) {
+        console.error("Error fetching stepCheck:", err);
+      }
+    };
+    if (status === "authenticated") {
+      fetchStep();
+    }
+  }, [session?.user?.id, status]);
 
   return (
     <>
@@ -124,6 +143,18 @@ const Mainfooter = () => {
                         </ul>    
                     </div>
                 </div>
+                {/* >>> Registration Completion Prompt <<< */}
+            {session && stepCheck !== 4 && (
+              <div className="incomplete-registration-msg mb-[2vh]">
+                If you don’t complete your registration?{" "}
+                <button
+                  onClick={() => router.push("/user/profile-Step-Form")}
+                  className="theme-link"
+                >
+                  please click here
+                </button>
+              </div>
+            )}
             </div>
         </footer>
         
