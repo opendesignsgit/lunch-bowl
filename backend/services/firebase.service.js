@@ -18,6 +18,7 @@ const sendNotification = async (fcmToken, notification) => {
     console.log('✅ Notification sent successfully');
   } catch (error) {
     console.error('❌ Error sending notification:', error);
+    throw error;
   }
 };
 

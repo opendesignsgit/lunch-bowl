@@ -30,12 +30,6 @@ const mobilDashboardRoutes = require("../routes/mobileRoute/customerHomeRoutes")
 const mobilenotifications = require("../routes/mobileRoute/notificationRoutes")
 
 
-
-
-
-
-
-
 const {
   getGlobalSetting,
   getStoreCustomizationSetting,
@@ -87,7 +81,6 @@ app.use("/api/orders/", orderRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/customer-home", mobilDashboardRoutes);
 app.use('/api/notifications', mobilenotifications);
-
 // Use express's default error handling middleware
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
