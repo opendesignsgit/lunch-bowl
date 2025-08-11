@@ -235,12 +235,12 @@ const SignUpPopup = ({ open, onClose }) => {
   return (
     <>
     <Dialog open={open} onClose={() => { onClose(); setOtpSent(false); setForm({ firstName: "", lastName: "", mobile: "", email: "", }); setUserOtp("");  setErrors({ firstName: "", lastName: "", mobile: "", email: "", otp: "", }); }} className="compopups" maxWidth="lg" fullWidth  sx={{'& .MuiDialog-paper': { height: '75vh', }}}>
-      <Box className="flex relative h-full relative overflow-hidden">
+        <Box className="flex relative h-full relative overflow-hidden signboxrow">
         {/* Left Side Image */}
-        <Box className="w-[50%]" sx={{backgroundImage: `url(${SignUpImage.src})`,backgroundSize: "cover",backgroundPosition: "center",}}/>
+          <Box className="w-[50%] signboxcol signbLcol" sx={{ backgroundImage: `url(${SignUpImage.src})`, backgroundSize: "cover", backgroundPosition: "center", }} />
 
         {/* Right Side Form or OTP */}
-        <Box className="w-[50%] p-[2.5vw] self-center signboxcol"
+          <Box className="w-[50%] p-[2.5vw] self-center signboxcol signbRcol"
           sx={{
             bgcolor: "#fff",
           }}
@@ -248,6 +248,7 @@ const SignUpPopup = ({ open, onClose }) => {
 
           <IconButton className="popClose"  onClick={() => { onClose(); setOtpSent(false); setForm({ firstName: "", lastName: "", mobile: "", email: "", }); setUserOtp(""); setErrors({ firstName: "", lastName: "", mobile: "", email: "", otp: "", }); }} sx={{ position: "absolute", top: 16, right: 16 }} >  <CloseIcon /> </IconButton>
 
+            <div className="signupincbox">
           <div  className="poptitles">
           <Typography
             variant="h4"
@@ -352,8 +353,8 @@ const SignUpPopup = ({ open, onClose }) => {
             <>
             <div className="loginfiledss">
               {/* Name Fields */}
-              <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
-                <Box sx={{ flex: 1 }}>
+                      <Box sx={{ display: "flex", gap: 2, mb: 1 }} className="sfrmrow">
+                        <Box sx={{ flex: 1 }} className="sfrmcol sfrmhalfcol">
                   {renderLabel("First Name")}
                   <TextField
                     name="firstName"
@@ -368,7 +369,7 @@ const SignUpPopup = ({ open, onClose }) => {
                     inputProps={{ maxLength: 30 }}
                   />
                 </Box>
-                <Box sx={{ flex: 1 }}>
+                        <Box sx={{ flex: 1 }} className="sfrmcol sfrmhalfcol">
                   {renderLabel("Last Name")}
                   <TextField
                     name="lastName"
@@ -384,8 +385,8 @@ const SignUpPopup = ({ open, onClose }) => {
                   />
                 </Box>
               </Box>
-
-              <Box sx={{ mb: 1 }}>
+                      <div className="sfrmrow">
+                        <Box sx={{ mb: 1 }} className="sfrmcol sfrmfullcol">
                 {renderLabel("Mobile Number")}
                 <TextField
                   name="mobile"
@@ -400,8 +401,9 @@ const SignUpPopup = ({ open, onClose }) => {
                   inputProps={{ maxLength: 10 }}
                 />
               </Box>
-
-              <Box sx={{ mb: 2}}>
+                      </div>
+                      <div className="sfrmrow">
+                        <Box sx={{ mb: 2 }} className="sfrmcol sfrmfullcol">
                 {renderLabel("Email")}
                 <TextField
                   name="email"
@@ -415,6 +417,7 @@ const SignUpPopup = ({ open, onClose }) => {
                   helperText={errors.email}
                 />
               </Box>
+                      </div>
 
               {/* Terms */}
               <Typography variant="body2" sx={{ mb: 1 }} className="para-tcpp">
@@ -484,6 +487,7 @@ const SignUpPopup = ({ open, onClose }) => {
                 </Box>
             </>
           )}
+            </div>
         </Box>
       </Box>
     </Dialog>
