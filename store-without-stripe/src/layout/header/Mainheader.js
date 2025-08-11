@@ -141,7 +141,7 @@ const Mainheader = ({ title, description, children }) => {
                   </button>
                 </li>
               )}
-              {!freeTrial  && (
+              {!freeTrial && (
                 <li className="trialbtn">
                   <button
                     onClick={() =>
@@ -164,28 +164,21 @@ const Mainheader = ({ title, description, children }) => {
                     {showUserMenu && (
                       <ul className="submenuul">
                         <li>
-                          <button onClick={() => router.push("user/userDashBoard")}>
-                            Dashboard
-                          </button>
+                          <Link href="/user/userDashBoard">Dashboard</Link>
                         </li>
                         <li>
-                          <button onClick={() => router.push("user/menuCalendarPage")}>
-                            Menu Calendar
-                          </button>
+                          <Link href="/user/menuCalendarPage">Menu Calendar</Link>
                         </li>
                         <li>
-                          <button onClick={() => router.push("user/my-account")}>
-                            My Profile
-                          </button>
+                          <Link href="/user/my-account">My Profile</Link>
                         </li>
                         <li>
-                          <button onClick={() => setShowLogoutConfirm(true)}>
-                            Log Out
-                          </button>
+                          <button onClick={() => setShowLogoutConfirm(true)}>Log Out</button>
                         </li>
                       </ul>
                     )}
                   </li>
+
                 ) : (
                   // StepCheck !== 4 → Show only username + logout
                   <li className="userMenuBtn" style={{ position: "relative" }}>
