@@ -192,10 +192,9 @@ const LoginPopup = ({ open, onClose }) => {
           },
         }}
       >
-        <Box className="flex relative h-full  relative overflow-hidden">
+        <Box className="flex relative h-full  relative overflow-hidden logboxrow">
           {/* Left Side Image */}
-          <Box
-            className="w-[50%]"
+          <Box className="w-[50%] logboxcol logbLcol"
             sx={{
               backgroundImage: `url(${LogIn.src})`,
               backgroundSize: "cover",
@@ -203,7 +202,7 @@ const LoginPopup = ({ open, onClose }) => {
             }}
           />
           {/* Right Side Form */}
-          <Box className="w-[50%] p-[2.5vw] self-center logboxcol">
+          <Box className="w-[50%] p-[2.5vw] self-center logboxcol logbRcol">
             {/* Close Icon */}
             <IconButton
               className="popClose"
@@ -220,6 +219,7 @@ const LoginPopup = ({ open, onClose }) => {
               <CloseIcon />{" "}
             </IconButton>
 
+            <div className="logincbox">
             {/* Title and Create Account */}
             <Box
               sx={{ textAlign: "left", marginBottom: "24px" }}
@@ -430,6 +430,7 @@ const LoginPopup = ({ open, onClose }) => {
                 </Box> */}
               </>
             )}
+            </div>
           </Box>
         </Box>
       </Dialog>
