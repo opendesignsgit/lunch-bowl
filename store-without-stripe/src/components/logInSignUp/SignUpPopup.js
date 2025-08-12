@@ -432,7 +432,7 @@ const SignUpPopup = ({ open, onClose }) => {
               {/* Terms */}
               <Typography variant="body2" sx={{ mb: 1 }} className="para-tcpp">
                 By creating an account, I accept the{" "}
-                <Link href="/" color="#FF6B00">
+                        <Link href="/terms-and-conditions/" color="#FF6B00">
                   T&C & Privacy Policy
                 </Link >
               </Typography>

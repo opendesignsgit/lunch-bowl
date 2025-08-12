@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import Head from "next/head";
 import Marquee from "react-fast-marquee";
 import Breadcrumbs from "@layout/Breadcrumbs";
@@ -10,10 +11,11 @@ import AboutVideoSlider from "@components/about/AboutVideoSlider";
 import Htoworkslider from '@components/home/Htoworkslider';
 import hintroImgOne from "../../public/home/hintroImg-one.jpg"
 import hintroImgTwo from "../../public/home/hintroImg-two.jpg"
-import ateamimgone from "../../public/about/team/ateamimg-one.jpg"
-import ateamimgtwo from "../../public/about/team/ateamimg-two.jpg"
-import ateamimgthree from "../../public/about/team/ateamimg-three.jpg"
-import ateamimgfour from "../../public/about/team/ateamimg-four.jpg"
+import ArulMadhanImg from "../../public/about/team/ArulMadhanImg.jpg"
+import RavishankarNImg from "../../public/about/team/RavishankarNImg.jpg"
+import SMuruganImg from "../../public/about/team/SMuruganImg.jpg"
+import VijayAntonyImg from "../../public/about/team/VijayAntonyImg.jpg"
+import VijayVImg from "../../public/about/team/VijayVImg.jpg"
 import visionimg from "../../public/about/vision-img.png"
 import img1 from "../../public/about/environ-img1.jpg";
 import img2 from "../../public/about/environ-img2.jpg";
@@ -40,7 +42,22 @@ import ateamicon6 from "../../public/about/icons/meetteam/violetyellow-star.svg"
 import ateamicon7 from "../../public/about/icons/meetteam/pinkroundedlines.svg";
 import ateamicon8 from "../../public/about/icons/meetteam/darkgreen-arrow.svg";
 
+import MuruganPopup from "@components/about/teams/MuruganPopup";
+import ArulMathanThangamPopup from "@components/about/teams/ArulMathanThangamPopup";
+import VijayVellanganniPopup from "@components/about/teams/VijayVellanganniPopup";
+import VijayAntonyPopup from "@components/about/teams/VijayAntonyPopup";
+import RavishankarNPopup from "@components/about/teams/RavishankarNPopup";
+
+
 const AboutUs = () => {
+
+
+  const [openMurugan, setOpenMurugan] = useState(false);
+  const [openArulMathanThangam, setOpenArulMathanThangam] = useState(false);
+  const [openVijayVellanganni, setOpenVijayVellanganni] = useState(false);
+  const [openVijayAntony, setOpenVijayAntony] = useState(false);
+  const [openRavishankarN, setOpenRavishankarN] = useState(false);
+
   return (
     <div className="aboutuspage">
       <Mainheader title="About Us" description="This is About Us page" />
@@ -78,6 +95,99 @@ const AboutUs = () => {
         </section>
         <section className="HintroSec aboutintrosec introbrsec relative bg-white flex py-[12vh]">
           <div className="container mx-auto relative">
+            <div className="flex items-center max-md:flex-col-reverse aboutintroRow flex-wrap">
+              <div className="flex items-center relative aboutintroCol aboutintroTCol">
+                <div className="hintroLeft combtntb comtilte">
+                  <h4>Our Story</h4>
+                  <h3 className="flex flex-col text4AB138">
+                    <span className="block">Why We Created Lunch Bowl</span>
+                  </h3>
+                  <p>Let’s be honest—packing lunch every single day is hard work. Between picky eaters, tight mornings, and the never-ending quest for something that’s both healthy and kid-approved, parents (especially moms) are juggling a lot.</p>
+                  <div className="hintroIntb">
+                    <p><strong>That’s where the idea for Lunch Bowl was born.</strong></p>
+                    <p>We asked ourselves:</p>
+                    <p><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
+                    <p>So, we cooked up a solution.</p>
+                    <p>Lunch Bowl is your lunchtime lifesaver. We deliver fresh, delicious, and nutritious meals straight to your child—hot and ready to enjoy. No last-minute chopping, no repeat sandwich cycles, and no lunchbox guilt.</p>
+                    <p>Here’s what we bring to the table:</p>
+                    <ul className="list-disc pl-5">
+                      <li>Tasty, kid-friendly meals crafted by real nutritionists (and tested by real kids!).</li>
+                      <li>A fun, easy-to-use meal planning app that lets you mix and match based on your child’s tastes.</li>
+                      <li>Fresh deliveries, right before lunchtime—because soggy sandwiches are so last year.</li>
+                      <li>Flexible, affordable plans that make sense for busy families.</li>
+                    </ul>
+                    <p>At Lunch Bowl, we’re here to take one big thing off your plate, while putting something great into your kid’s.</p>
+                    <p>Healthy. Happy. Hassle-free. That’s how we do lunch.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="hbanLeft flex justify-center flex-col aboutintroCol aboutintroRCol">
+                <div className="hintroimgone rounded-[50%] overflow-hidden">
+                  <Image
+                    className="w-full h-auto"
+                    priority
+                    src={hintroImgOne}
+                    alt="logo"
+                  />
+                </div>
+                <div className="hintroimgtwo rounded-[50%] overflow-hidden self-end">
+                  <Image
+                    className="w-full h-auto"
+                    priority
+                    src={hintroImgTwo}
+                    alt="logo"
+                  />
+                </div>
+              </div>
+            </div>
+            {/*<div className="aintroIconss">
+              <div className="aintroicn iconone absolute">
+                <Image
+                  src={hintroicon1}
+                  priority
+                  alt="Icon"
+                  className="iconrotates"
+                />
+              </div>
+              <div className="aintroicn icontwo absolute">
+                <Image src={hintroicon2} priority alt="Icon" />
+              </div>
+              <div className="aintroicn iconthree absolute">
+                <Image src={hintroicon3} priority alt="Icon" />
+              </div>
+              <div className="aintroicn iconfour absolute">
+                <Image
+                  src={hintroicon4}
+                  priority
+                  alt="Icon"
+                  className="iconrotates"
+                />
+              </div>
+              <div className="aintroicn iconfive absolute">
+                <Image
+                  src={hintroicon5}
+                  priority
+                  alt="Icon"
+                  className="iconrubberband"
+                />
+              </div>
+              <div className="aintroicn iconsix absolute">
+                <Image src={hintroicon6} priority alt="Icon" />
+              </div>
+              <div className="aintroicn iconseven absolute">
+                <Image
+                  src={hintroicon7}
+                  priority
+                  alt="Icon"
+                  className="iconrotates"
+                />
+              </div>
+            </div>*/}
+          </div>
+        </section>
+        <section className="HintroSec aboutmissionsec introbrsec relative bg-FFF4D7 flex py-[12vh]">
+          <div className="container mx-auto relative">
             <div className="flex items-center max-md:flex-col-reverse">
               <div className="flex-1 hbanLeft flex justify-center flex-col">
                 <div className="hintroimgone rounded-[50%] overflow-hidden">
@@ -103,14 +213,7 @@ const AboutUs = () => {
                   <h3 className="flex flex-col text4AB138">
                     <span className="block">Lunch Bowl</span>
                   </h3>
-                  <p>
-                    We strive to simplify mealtime for parents by delivering
-                    thoughtfully crafted, nutritionist-approved lunch boxes that
-                    are fresh, flavourful and tailored to children's
-                    preferences. Our commitment to high-quality ingredients,
-                    eco-friendly packaging and timely delivery ensures that
-                    every meal is a blend of convenience, health and happiness.
-                  </p>
+                  <p>We strive to simplify mealtime for parents by delivering thoughtfully crafted, nutritionist- approved lunch boxes that are fresh, flavourful and tailored to children’s preferences. Our commitment to high-quality ingredients, eco-friendly packaging and timely delivery ensures that every meal is a blend of convenience, health and happiness</p>
                 </div>
               </div>
             </div>
@@ -183,227 +286,114 @@ const AboutUs = () => {
               </div>
             </div>
             <div className="flex flex-wrap items-center mteamitembox ">
-              <div className="w-[25%] flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative group">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
                       className="w-full h-auto"
                       priority
-                      src={ateamimgone}
+                      src={SMuruganImg}
                       alt="logo"
                     />
                   </div>
-                  <h3>Chef. Aravind Kumar</h3>
+                  <h3>S. Murugan</h3>
                 </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] personone top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
+                <div className="mteamback">
+                  <h3>S. Murugan</h3>
+                  <p>S. Murugan, our executive chef, is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. </p>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
+                    <button onClick={() => setOpenMurugan(true)}>
+                      <span>Read More</span>
+                    </button>
                   </p>
                 </div>
               </div>
-              <div className="w-[25%] flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative group">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
                       className="w-full h-auto"
                       priority
-                      src={ateamimgtwo}
+                      src={ArulMadhanImg}
                       alt="logo"
                     />
                   </div>
-                  <h3>Chef. Aravind Kumar</h3>
+                  <h3>Arul Mathan Thangam</h3>
                 </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] persontwo top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
+                <div className="mteamback">
+                  <h3>Arul Mathan Thangam</h3>
+                  <p>Arul Mathan Thangam, our Su Chef, is a skilled culinary professional with expertise in food production, customer service, and maintaining quality standards.</p>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
+                    <button onClick={() => setOpenArulMathanThangam(true)}>
+                      <span>Read More</span>
+                    </button>
                   </p>
                 </div>
               </div>
-              <div className="w-[25%] flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative group">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
                       className="w-full h-auto"
                       priority
-                      src={ateamimgthree}
+                      src={VijayVImg}
                       alt="logo"
                     />
                   </div>
-                  <h3>Chef. Aravind Kumar</h3>
+                  <h3>Vijay Vellanganni</h3>
                 </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] personthree top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
+                <div className="mteamback">
+                  <h3>Vijay Vellanganni</h3>
+                  <p>Vijay Vellanganni – our Commis 1,a remarkably talented baker and continental cuisine chef. With a flair for baking, Vijay crafts irresistible cookies, brownies, and an array of continental specialties. </p>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
+                    <button onClick={() => setOpenVijayVellanganni(true)}>
+                      <span>Read More</span>
+                    </button>
                   </p>
                 </div>
               </div>
-              <div className="w-[25%] flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative group">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
                       className="w-full h-auto"
                       priority
-                      src={ateamimgfour}
+                      src={VijayAntonyImg}
                       alt="logo"
                     />
                   </div>
-                  <h3>Chef. Aravind Kumar</h3>
+                  <h3>Vijay Antony</h3>
                 </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] personfour top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
+                <div className="mteamback">
+                  <h3>Vijay Antony</h3>
+                  <p>Vijay Antony, Our Commis 3, holds a diploma in hotel and catering management from Villupuram.</p>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
+                    <button onClick={() => setOpenVijayAntony(true)}>
+                      <span>Read More</span>
+                    </button>
+
                   </p>
                 </div>
               </div>
-              <div className="w-[25%] flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative group">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
                       className="w-full h-auto"
                       priority
-                      src={ateamimgfour}
+                      src={RavishankarNImg}
                       alt="logo"
                     />
                   </div>
-                  <h3>Chef. Aravind Kumar</h3>
+                  <h3>Ravishankar N</h3>
                 </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] personfour top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
+                <div className="mteamback">
+                  <h3>Ravishankar N</h3>
+                  <p>Ravishankar N, Manager Operations: Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
-                  </p>
-                </div>
-              </div>
-              <div className="w-[25%] flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={ateamimgfour}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Chef. Aravind Kumar</h3>
-                </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] personfour top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
-                  </p>
-                </div>
-              </div>
-              <div className="w-[25%] flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={ateamimgfour}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Chef. Aravind Kumar</h3>
-                </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] personfour top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
-                  </p>
-                </div>
-              </div>
-              <div className="w-[25%] flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={ateamimgfour}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Chef. Aravind Kumar</h3>
-                </div>
-                <div className="mteamback absolute w-full h-full flex flex-col justify-center items-center text-center p-[20px] personfour top-full transition-all duration-1000 ease-in-out group-hover:top-0">
-                  <h3>Chef. Aravind Kumar</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Placerat proin eu
-                    amet amet egestas aenean. Nunc dictumst enim eleifend
-                    ullamcorper sed ac neque. Vitae cras nisl varius aliquet
-                    pharetra.Imperdiet bibendum at vestibulum ut eget quam
-                    facilisis.{" "}
-                  </p>
-                  <p>
-                    <Link href="/">
-                      <span>LinkedIn</span>
-                    </Link>
+                    <button onClick={() => setOpenRavishankarN(true)}>
+                      <span>Read More</span>
+                    </button>
                   </p>
                 </div>
               </div>
@@ -468,9 +458,7 @@ const AboutUs = () => {
                     <span className="block">Lunch Bowl</span>
                   </h3>
                   <p className="text-white">
-                    To make healthy eating effortless for children and stress
-                    free for parents, ensuring every child enjoys a nutritious,
-                    delicious and exciting lunch everyday.
+                    To make healthy eating effortless for children and stress free for parents, ensuring every child enjoys a nutritious, delicious and exciting lunch everyday.
                   </p>
                   {/* <p className="text-white">To use vibrant, fresh foods organized in a way that sparks interest and delight in order to create a lunch experience that turns eating into an adventure. </p> */}
                 </div>
@@ -541,6 +529,11 @@ const AboutUs = () => {
         </section>
       </div>
       <Mainfooter />
+      <MuruganPopup open={openMurugan} onClose={() => setOpenMurugan(false)} />
+      <ArulMathanThangamPopup open={openArulMathanThangam} onClose={() => setOpenArulMathanThangam(false)} />
+      <VijayVellanganniPopup open={openVijayVellanganni} onClose={() => setOpenVijayVellanganni(false)} />
+      <VijayAntonyPopup open={openVijayAntony} onClose={() => setOpenVijayAntony(false)} />
+      <RavishankarNPopup open={openRavishankarN} onClose={() => setOpenRavishankarN(false)} />
     </div>
   );
 };
