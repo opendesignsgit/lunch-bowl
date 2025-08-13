@@ -69,11 +69,11 @@ const customerSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
     },
     phone: {
       type: String,
+      unique: true,
       required: false,
     },
     freeTrial: {

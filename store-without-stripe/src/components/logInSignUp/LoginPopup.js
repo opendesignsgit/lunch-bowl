@@ -5,13 +5,10 @@ import {
   Typography,
   TextField,
   Button,
-  Divider,
   IconButton,
   Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import LogIn from "../../../public/LogInSignUp/LogIn.jpg";
 import SignUpPopup from "./SignUpPopup";
 import { useRouter } from "next/router";
@@ -24,55 +21,55 @@ const LoginPopup = ({ open, onClose }) => {
   const [otp, setOtp] = useState("");
   const [userOtp, setUserOtp] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [timer, setTimer] = useState(120);
+  const [timer, setTimer] = useState(0);
   const [resendEnabled, setResendEnabled] = useState(false);
   const [message, setMessage] = useState(null);
-  const [errors, setErrors] = useState({
-    mobileNumber: "",
-    otp: "",
-  });
+  const [errors, setErrors] = useState({ mobileNumber: "", otp: "" });
   const otpRefs = useRef([]);
   const { submitHandler, loading } = useLoginSubmit();
 
+  // Countdown effect
   useEffect(() => {
     let interval;
     if (otpSent && timer > 0) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            setResendEnabled(true);
+            return 0;
+          }
+          return prev - 1;
+        });
       }, 1000);
-    } else if (timer === 0) {
-      clearInterval(interval);
-      setResendEnabled(true);
     }
     return () => clearInterval(interval);
   }, [otpSent, timer]);
 
-  const validateMobileNumber = (number) => {
-    // Basic validation - 10 digits, numbers only
-    const regex = /^[0-9]{10}$/;
-    return regex.test(number);
+  // Utility method to set timer from backend expiresAt
+  const startTimerFromExpiresAt = (expiresAt) => {
+    const expiryDate = new Date(expiresAt);
+    const now = new Date();
+    const diffSeconds = Math.floor((expiryDate - now) / 1000);
+    if (diffSeconds > 0) {
+      setTimer(diffSeconds);
+      setResendEnabled(false);
+      setOtpSent(true);
+    } else {
+      setTimer(0);
+      setResendEnabled(true);
+    }
   };
 
-  const validateOtp = (otp) => {
-    // OTP should be exactly 4 digits
-    return otp.length === 4 && /^\d+$/.test(otp);
-  };
-
-  const generateOtp = () => {
-    const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-    setOtp(generatedOtp);
-    setTimer(120);
-    setResendEnabled(false);
-    setMessage(null);
-    setErrors({ ...errors, mobileNumber: "" });
-  };
+  // Validation helpers
+  const validateMobileNumber = (number) => /^[6-9]\d{9}$/.test(number);
+  const validateOtp = (otp) => otp.length === 4 && /^\d+$/.test(otp);
 
   const handleSendOtp = async () => {
     if (!mobileNumber) {
       setErrors({ ...errors, mobileNumber: "Mobile number is required" });
       return;
     }
-
     if (!validateMobileNumber(mobileNumber)) {
       setErrors({
         ...errors,
@@ -80,23 +77,24 @@ const LoginPopup = ({ open, onClose }) => {
       });
       return;
     }
-
     try {
       const res = await submitHandler({ phone: mobileNumber, path: "logIn" });
-      setOtp(res.otp);
+      console.log("sendOtp res:", res);
 
-      // generateOtp();
-      setOtpSent(true);
+      if (res.success) {
+        setMessage({ type: "success", text: res.message || "OTP sent successfully!" });
+        if (res.otp) setOtp(res.otp);
+        if (res.expiresAt) startTimerFromExpiresAt(res.expiresAt);
+      } else {
+        setMessage({ type: "error", text: res.message || "Failed to send OTP" });
+      }
     } catch (error) {
       console.error("Error sending OTP:", error);
-      setMessage({
-        type: "error",
-        text: "Failed to send OTP. Please try again.",
-      });
+      setMessage({ type: "error", text: "Failed to send OTP. Please try again." });
     }
   };
 
-  const handleResendOtp = () => {
+  const handleResendOtp = async () => {
     if (!validateMobileNumber(mobileNumber)) {
       setErrors({
         ...errors,
@@ -104,51 +102,55 @@ const LoginPopup = ({ open, onClose }) => {
       });
       return;
     }
-    generateOtp();
+    try {
+      const res = await submitHandler({ phone: mobileNumber, path: "logIn" });
+      console.log("resendOtp res:", res);
+
+      if (res.success) {
+        setMessage({ type: "success", text: res.message || "OTP resent successfully!" });
+        if (res.otp) setOtp(res.otp);
+        if (res.expiresAt) startTimerFromExpiresAt(res.expiresAt);
+      } else {
+        setMessage({ type: "error", text: res.message || "Failed to resend OTP" });
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "Failed to resend OTP. Please try again." });
+    }
   };
 
   const handleVerifyOtp = async () => {
     if (!validateOtp(userOtp)) {
       setErrors({ ...errors, otp: "Please enter a valid 4-digit OTP" });
       return;
-    } else {
+    }
+    try {
       const res = await submitHandler({
         otp: userOtp,
         phone: mobileNumber,
         path: "logIn-otp",
       });
-    }
+      console.log("verifyOtp res:", res);
 
-    if (userOtp === otp) {
-      setMessage({ type: "success", text: "OTP is correct!" });
-      setErrors({ ...errors, otp: "" });
-    } else {
-      setMessage({
-        type: "error",
-        text: "OTP is incorrect! Please try again.",
-      });
-      setErrors({ ...errors, otp: "Incorrect OTP" });
+      if (res.success) {
+        setMessage({ type: "success", text: res.message || "OTP verified successfully!" });
+      } else {
+        setMessage({ type: "error", text: res.message || "OTP verification failed" });
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "Error verifying OTP" });
     }
   };
 
-  const handleCloseSignUp = () => {
-    setShowSignUp(false);
-  };
+  const handleCloseSignUp = () => setShowSignUp(false);
 
   const handleOtpChange = (index, value) => {
-    // Only allow numeric input
     if (value && !/^[0-9]$/.test(value)) return;
-
     const otpArray = userOtp.split("");
     otpArray[index] = value;
-    const newOtp = otpArray.join("");
-    setUserOtp(newOtp);
-
-    // Clear error when user starts typing
-    if (errors.otp && newOtp.length > 0) {
+    setUserOtp(otpArray.join(""));
+    if (errors.otp && otpArray.join("").length > 0) {
       setErrors({ ...errors, otp: "" });
     }
-
     if (value.length === 1 && index < otpRefs.current.length - 1) {
       otpRefs.current[index + 1].focus();
     }
@@ -162,16 +164,13 @@ const LoginPopup = ({ open, onClose }) => {
 
   const handleMobileNumberChange = (e) => {
     const value = e.target.value;
-    // Only allow numeric input
     if (value && !/^[0-9]*$/.test(value)) return;
-
     setMobileNumber(value);
-
-    // Clear error when user starts typing
     if (errors.mobileNumber && value.length > 0) {
       setErrors({ ...errors, mobileNumber: "" });
     }
   };
+
   return (
     <>
       <Dialog
@@ -183,27 +182,22 @@ const LoginPopup = ({ open, onClose }) => {
           setMobileNumber("");
           setUserOtp("");
           setErrors({ mobileNumber: "", otp: "" });
+          setMessage(null);
         }}
         maxWidth="lg"
         fullWidth
-        sx={{
-          "& .MuiDialog-paper": {
-            height: "75vh",
-          },
-        }}
+        sx={{ "& .MuiDialog-paper": { height: "75vh" } }}
       >
-        <Box className="flex relative h-full  relative overflow-hidden logboxrow">
-          {/* Left Side Image */}
-          <Box className="w-[50%] logboxcol logbLcol"
+        <Box className="flex relative h-full relative overflow-hidden">
+          <Box
+            className="w-[50%]"
             sx={{
               backgroundImage: `url(${LogIn.src})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           />
-          {/* Right Side Form */}
-          <Box className="w-[50%] p-[2.5vw] self-center logboxcol logbRcol">
-            {/* Close Icon */}
+          <Box className="w-[50%] p-[2.5vw] self-center logboxcol">
             <IconButton
               className="popClose"
               onClick={() => {
@@ -212,26 +206,16 @@ const LoginPopup = ({ open, onClose }) => {
                 setMobileNumber("");
                 setUserOtp("");
                 setErrors({ mobileNumber: "", otp: "" });
+                setMessage(null);
               }}
               sx={{ position: "absolute", top: 16, right: 16 }}
             >
-              {" "}
-              <CloseIcon />{" "}
+              <CloseIcon />
             </IconButton>
 
-            <div className="logincbox">
-            {/* Title and Create Account */}
-            <Box
-              sx={{ textAlign: "left", marginBottom: "24px" }}
-              className="poptitles"
-            >
-              <Typography
-                variant="h4"
-                color="#000"
-                sx={{ textTransform: "uppercase", marginBottom: "4px" }}
-              >
-                {" "}
-                {otpSent ? "Enter OTP" : "Log In"}{" "}
+            <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
+              <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }}>
+                {otpSent ? "Enter OTP" : "Log In"}
               </Typography>
               {!otpSent && (
                 <Typography variant="body2">
@@ -241,7 +225,10 @@ const LoginPopup = ({ open, onClose }) => {
                     color="#FF6B00"
                     fontWeight="500"
                     sx={{ cursor: "pointer" }}
-                    onClick={() => setShowSignUp(true)}
+                    onClick={() => {
+                      onClose();             // Close the LoginPopup
+                      setShowSignUp(true);   // Open the SignUpPopup
+                    }}
                   >
                     Create an Account
                   </Typography>
@@ -252,19 +239,15 @@ const LoginPopup = ({ open, onClose }) => {
                   <Typography variant="body2" mt={1}>
                     We've sent an OTP to your phone number.
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    mb={1}
-                    sx={{ color: "#FF6B00" }}
-                  >
-                    Your OTP: {otp}
-                  </Typography>
+                  {otp && (
+                    <Typography variant="body2" fontWeight="bold" mb={1} sx={{ color: "#FF6B00" }}>
+                      Your OTP: {otp}
+                    </Typography>
+                  )}
                 </>
               )}
             </Box>
 
-            {/* Conditional Form */}
             {otpSent ? (
               <>
                 <div className="sendotpbox">
@@ -307,13 +290,9 @@ const LoginPopup = ({ open, onClose }) => {
                         color: "#fff",
                         "&:hover": { backgroundColor: "#e85f00" },
                       }}
-                      onClick={
-                        resendEnabled ? handleResendOtp : handleVerifyOtp
-                      }
+                      onClick={resendEnabled ? handleResendOtp : handleVerifyOtp}
                     >
-                      {resendEnabled
-                        ? "Resend OTP"
-                        : "Verify One Time Password"}
+                      {resendEnabled ? "Resend OTP" : "Verify One Time Password"}
                     </Button>
                   </div>
                   <Typography
@@ -323,13 +302,8 @@ const LoginPopup = ({ open, onClose }) => {
                   >
                     Edit phone number
                   </Typography>
-
-                  {/* Success/Error Message */}
                   {message && (
-                    <Alert
-                      severity={message.type}
-                      sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}
-                    >
+                    <Alert severity={message.type} sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}>
                       {message.text}
                     </Alert>
                   )}
@@ -350,9 +324,7 @@ const LoginPopup = ({ open, onClose }) => {
                     onChange={handleMobileNumberChange}
                     error={!!errors.mobileNumber}
                     helperText={errors.mobileNumber}
-                    inputProps={{
-                      maxLength: 10,
-                    }}
+                    inputProps={{ maxLength: 10 }}
                     sx={{ mb: 2 }}
                   />
                   <Button
@@ -371,71 +343,20 @@ const LoginPopup = ({ open, onClose }) => {
                     <span>Send One Time Password</span>
                   </Button>
                 </div>
-              </>
-            )}
-
-            {/* Divider */}
-            {!otpSent && (
-              <>
-                {/* <Divider
-                  className="ordivider"
-                  sx={{ my: 3, position: "relative", paddingY: "20px" }}
-                >
-                  <Typography
-                    component="span"
-                    sx={{
-                      position: "absolute",
-                      top: "-14px",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      backgroundColor: "#fff",
-                      px: 1,
-                      fontSize: "14px",
-                      color: "#666",
-                      paddingY: "20px",
-                    }}
+                {message && (
+                  <Alert
+                    severity={message.type}
+                    sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}
                   >
-                    OR
-                  </Typography>
-                </Divider> */}
-
-                {/* Social Login Buttons */}
-                {/* <Box className="wsmideabtn">
-                  <ul className="flex gap-2">
-                    <li className="flex-1">
-                      <Button
-                        className="gglebtn"
-                        startIcon={<GoogleIcon />}
-                        sx={{
-                          backgroundColor: "#34A853",
-                          color: "#fff",
-                        }}
-                      >
-                        <span>Log In with Google</span>
-                      </Button>
-                    </li>
-                    <li className="flex-1">
-                      <Button
-                        className="fbookbtn"
-                        startIcon={<FacebookIcon />}
-                        sx={{
-                          backgroundColor: "#1877F2",
-                          color: "#fff",
-                        }}
-                      >
-                        <span>Log In with Facebook</span>
-                      </Button>
-                    </li>
-                  </ul>
-                </Box> */}
+                    {message.text}
+                  </Alert>
+                )}
               </>
             )}
-            </div>
           </Box>
         </Box>
       </Dialog>
 
-      {/* Sign Up Popup */}
       <SignUpPopup open={showSignUp} onClose={handleCloseSignUp} />
     </>
   );
