@@ -138,7 +138,7 @@ const Mainheader = ({ title, description, children }) => {
               {!session && (
                 <li className="logbtn">
                   <button onClick={() => setOpenLogin(true)}>
-                    <span>Login</span>
+                    <span>Log In</span>
                   </button>
                 </li>
               )}

@@ -87,9 +87,10 @@ const GetinTouch = ({ open, onClose }) => {
           height: 'auto',
         } }}>
         <IconButton className="popClose" onClick={onClose} sx={{ position: "absolute", top: 16, right: 16, zIndex: 99, }} > <CloseIcon />  </IconButton>
-        <Box className='gintPopBox Box flex bg-white relative h-full'>
-          <Box className='w-[50%]' sx={{ backgroundImage: `url(${LogIn.src})`, backgroundSize: "cover", backgroundPosition: "center", }}></Box>
-          <Box className='w-[50%] self-center logboxcol p-[3vw]'>
+        <Box className='gintPopBox gintPopRow Box flex bg-white relative h-full'>
+          <Box className='w-[50%] gintPopCol gintLCol' sx={{ backgroundImage: `url(${LogIn.src})`, backgroundSize: "cover", backgroundPosition: "center", }}></Box>
+          <Box className='w-[50%] gintPopCol gintRCol self-center logboxcol p-[3vw]'>
+            <div className='gintPinRow'>
             <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
               <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} > Enquire Now  </Typography>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, </p>
@@ -151,6 +152,7 @@ const GetinTouch = ({ open, onClose }) => {
   Sign Up
 </Button>
             </form>
+            </div>
           </Box>
         </Box>
       </Dialog>

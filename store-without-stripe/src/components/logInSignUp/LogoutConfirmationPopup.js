@@ -3,12 +3,12 @@ import React from "react";
 const LogoutConfirmationPopup = ({ open, onClose, onConfirm }) => {
   if (!open) return null;
   return (
-    <div className="popup-overlay">
-      <div className="popup-content">
-        <h2>Are you sure you want to log out?</h2>
-        <div className="popup-actions">
-          <button onClick={onConfirm}>Yes</button>
-          <button onClick={onClose}>No</button>
+    <div className="LogoutMpops popup-overlay">
+      <div className="popup-content LogoutMCoont">
+        <h3>Are you sure you want to log out?</h3>
+        <div className="popup-actions LogoutMbtn">
+          <button className="yesbtnm" onClick={onConfirm}><span>Yes</span></button>
+          <button className="nobtnm" onClick={onClose}><span>No</span></button>
         </div>
       </div>
       <style jsx>{`

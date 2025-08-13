@@ -375,43 +375,9 @@ ul.footmenu li a{color: #FFFFFF; }
 .HteamSec .combtntb p.parabtn a span{color: #FF6514;background: #ffffff;}
 .HteamSec .combtntb p.parabtn a::before{border-color: #ffffff;}
 .HteamSec .combtntb p.parabtn a span::after{filter: brightness(0) saturate(100%) invert(49%) sepia(90%) saturate(1395%) hue-rotate(359deg) brightness(105%) contrast(105%);}
-.hNutritionintImg {
-  width: 50%;
-  margin-inline: auto;
-  position: relative;
-}
-
-.hNutritionintImg::before {
-  content: '';
-  position: absolute;
-  width: 50%;
-  height: 21%;
-  top: 0;
-  left: 9%;
-  background: url(/home/icons/hdoctors/greenarch.svg) no-repeat bottom center;
-  background-size: auto 100%;
-  -webkit-transform: translateY(-20%);
-  -ms-transform: translateY(-20%);
-  transform: translateY(-20%);
-  z-index: 9;
-  pointer-events: none;
-}
-
-.hNutritionintImg::after {
-  content: '';
-  position: absolute;
-  width: 45%;
-  height: 20%;
-  bottom: 0;
-  right: 11.5%;
-  background: url(/home/icons/hdoctors/redarch.svg) no-repeat bottom center;
-  background-size: 100%;
-  -webkit-transform: translateY(20%);
-  -ms-transform: translateY(20%);
-  transform: translateY(20%);
-  z-index: 9;
-  pointer-events: none;
-}
+.hNutritionintImg {width: 50%;margin-inline: auto;position: relative;}
+.hNutritionintImg::before {content: '';position: absolute;width: 50%;height: 21%;top: 0;left: 9%;background: url(/home/icons/hdoctors/greenarch.svg) no-repeat bottom center;background-size: auto 100%;-webkit-transform: translateY(-20%);-ms-transform: translateY(-20%);transform: translateY(-20%);z-index: 9;pointer-events: none;}
+.hNutritionintImg::after {content: '';position: absolute;width: 45%;height: 20%;bottom: 0;right: 11.5%;background: url(/home/icons/hdoctors/redarch.svg) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(20%);-ms-transform: translateY(20%);transform: translateY(20%);z-index: 9;pointer-events: none;}
 .hNutritionintImg img{border-radius: 50%;}
 
 .HfaqSec::before{content: '';position: absolute;width: 100%;height: 130px;top: 12px;left: 0;background: url(/faqbeforetopimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);z-index: 9;pointer-events: none;}
@@ -430,27 +396,15 @@ ul.footmenu li a{color: #FFFFFF; }
 .faqAccordionitems .incont{padding-block: 20px;}
 .faqAccordionitems.active .faqbodycont{}
 
-.contuspage .HfaqSec::before {
-  background: url(/contactfaqshape.jpg) no-repeat bottom center;
-  background-size: 100%;
-}
-
-.contuspage .HfaqSec::after {
-  opacity: 0;
-}
-
-.HfaqSec .Hfaqinrow::before {
-  opacity: 0;
-}
+.contuspage .HfaqSec::before {background: url(/contactfaqshape.jpg) no-repeat bottom center;  background-size: 100%;}
+.contuspage .HfaqSec::after {opacity: 0;}
+.HfaqSec .Hfaqinrow::before {opacity: 0;}
 .HfaqSec.senddesfaq::before{background: url(/contus/contfaqbg.png) no-repeat top center; background-size: 100%;height: 65px;}
 .HfaqSec.senddesfaq::after{opacity: 0;}
 .HfaqSec.senddesfaq .Hfaqinrow::before{opacity: 0;}
 
 .pagebansec {height: 55vh;padding-top: 10vh;}
-.pagebansec {
-  background: url(/about/aboutbanbg.jpg) no-repeat bottom center;
-  background-size: cover;
-}
+.pagebansec {background: url(/about/aboutbanbg.jpg) no-repeat bottom center;background-size: cover;}
 .pagebansec h1{font-family: 'Baloo';font-size: 3.2vw;line-height: 1;text-transform: uppercase;}
 .pagebansec h1 span.firstspan{color: #4AB138;}
 .pagebansec p{font-weight: 500;}
@@ -462,32 +416,31 @@ ul.footmenu li a{color: #FFFFFF; }
 .pagebansec .breadcrumbs ol li a:hover{color: #4ab238;}
 .pagebansec .breadcrumbs ol li span{font-weight: 600;}
 .pagebansec::before{content: '';position: absolute;width: 100%;height: 35px;bottom: -1px;left: 0;background: url(/introtopbefrimg.png) repeat-x top center;background-size: 90%;-webkit-transform: translateY(00%);-ms-transform: translateY(00%);transform: translateY(00%);z-index: 9;pointer-events: none;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
-.allpolicypage .pagebansec::before {
-  background: url(/introtopbefrimg-fafafa.png) repeat-x top center;
-  background-size: 90%;
-}
+.allpolicypage .pagebansec::before {background: url(/introtopbefrimg-fafafa.png) repeat-x top center;background-size: 90%;}
 .MenusLbanersec.pagebansec::before{background: url(/introtopbefrimg-fff4d7.png) repeat-x top center;background-size: 90%;}
 .aboutbanersec .pageinconter::after{content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: 0;background: url(/about/about-banimg.png) no-repeat center bottom;background-size: 100%;}
-.contusbanersec .pageinconter::after {
-  content: '';
-  position: absolute;
-  width: 25%;
-  height: 110%;
-  right: 14%;
-  bottom: 0;
-  background: url(/contus/contusbanbg.png) no-repeat center bottom;
-  background-size: 100%;
-}
+.contusbanersec .pageinconter::after {content: '';position: absolute;width: 25%;height: 110%;right: 14%;bottom: 0;background: url(/contus/contusbanbg.png) no-repeat center bottom;background-size: 100%;}
 .MenusLbanersec .pageinconter::after{content: '';position: absolute;width: 45%;height: 110%;right: 0%;bottom: 0;background: url(/MenuListbanimg.png) no-repeat center bottom;background-size: 100%;filter: drop-shadow(2px 4px 6px rgb(51 51 51 / 12%));}
 .pagebansec.setpbanersec { height: 50vh;}
 
-.mteamitembox{border: 1px solid #ffffff;}
-.mteambox {border: 1px solid #ffffff;overflow: hidden;}
-.mteamfront {}
+.aboutintroRow{position: relative;}
+.aboutintroRow .aboutintroTCol{}
+.aboutintroRow .aboutintroLCol{width: 55%;padding-right: 4vw;}
+.aboutintroRow .aboutintroRCol{width: 45%;position: absolute;bottom: 0;right: 0;}
+.aboutintroCol .hintroIntb{width: 50%;}
+.aboutintroCol ul{padding: 0;list-style: none;}
+.aboutintroCol ul li{position: relative;padding-left: 15px;margin-bottom: 10px;}
+.aboutintroCol ul li:before{content: ""; position: absolute;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:6px solid #4AB138;left: 0;top: 8px;}
+
+
+.mteamitembox{border: 0px solid #ffffff;justify-content: center;}
+.mteambox {border: 1px solid #ffffff;overflow: hidden;width: 33.333%;}
+.mteamfront {position: relative;top: 0;}
 .mteamfront h3{background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 1.2vw;text-transform: uppercase;letter-spacing: 0.5px;padding: 6px 10px;}
 .mteamimg{}
 .mteamimg img{}
-.mteamback {z-index: 99;}
+.mteamback {z-index: 99;position: absolute;width: 100%;height: 100%;top: 100%;left: 0;transition: all 0.5s ease-in-out;pointer-events: none;display: flex;flex-direction: column;justify-content: center;align-items: center;background-color: transparent;text-align: center;padding: 2vw;}
+.mteambox:hover .mteamback {top: 0;pointer-events: all;}
 .mteamback.personone{background: url(/about/team/ateamimg-one.jpg) no-repeat top center;background-size: cover;}
 .mteamback.persontwo{background: url(/about/team/ateamimg-two.jpg) no-repeat top center;background-size: cover;}
 .mteamback.personthree{background: url(/about/team/ateamimg-three.jpg) no-repeat top center;background-size: cover;}
@@ -496,11 +449,21 @@ ul.footmenu li a{color: #FFFFFF; }
 .mteamback h3 {position: relative;color: #ffffff;font-family: 'Baloo';font-size: 1.2vw;text-transform: uppercase;letter-spacing: 0.5px;margin-bottom: 15px;}
 .mteamback p {position: relative;color: #ffffff;}
 .mteamback p:last-child {}
-.mteamback p a{display: flex;padding-bottom: 5px;border-bottom: 1px solid #ffffff;line-height: 1;font-family: 'Baloo';}
-.mteamback p a span{}
-.mteamback p a::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 10px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;-webkit-filter: invert(1);filter: invert(1);}
-.mteamback p a:hover::after{top: -3px;right: -3px;}
-.mteamback p a:hover{color: #ffffff;border-color: #ffffff;}
+.mteamback p button{display: flex;padding-bottom: 5px;border-bottom: 1px solid #ffffff;line-height: 1;font-family: 'Baloo';}
+.mteamback p button span{}
+.mteamback p button::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 10px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;-webkit-filter: invert(1);filter: invert(1);}
+.mteamback p button:hover::after{top: -3px;right: -3px;}
+.mteamback p button:hover{color: #ffffff;border-color: #ffffff;}
+.TeamMemberPopSec{padding: 4vw;position: relative;height: 100%;}
+.TeamMemberPopSec h2{position: relative;color: #FF6514;font-family: 'Baloo';font-size: 1.2vw;text-transform: uppercase;letter-spacing: 0.5px;margin-bottom: 15px;}
+
+.TeamMemberPopSec p.paraalink{display: flex;}
+.TeamMemberPopSec p a{display: flex;padding-bottom: 5px;border-bottom: 1px solid #ffffff;line-height: 1;font-family: 'Baloo';}
+.TeamMemberPopSec p a span{}
+.TeamMemberPopSec p a::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 10px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;-webkit-filter: invert(0);filter: invert(0);}
+.TeamMemberPopSec p a:hover::after{top: -3px;right: -3px;}
+.TeamMemberPopSec p a:hover{color: #FF6514;border-color: #FF6514;}
+
 
 .HmvisionSec{}
 .HmvisionSec .visimgcol img{width: 120%;margin-left: 0%;margin-top: 0%;}
@@ -696,15 +659,16 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .propetilpopus .MuiPaper-root{border-radius: 8px;}
 .propetilpopus .slider-container{position: relative;height: 100%;}
 .propetilpopus .Prodeilsliders {position: relative;width: 100%;}
-.propetilpopus .Prodeilsliders .slick-arrow {}
+.propetilpopus .Prodeilsliders .slick-arrow {z-index: 99;}
 .propetilpopus .Prodeilsliders .slick-arrow:before{opacity: 0;visibility: hidden;}
-.propetilpopus .Prodeilsliders .slick-prev {background: url(/slidess-arrow-left.svg) no-repeat center center;background-size: 100%;}
-.propetilpopus .Prodeilsliders .slick-next {background: url(/slidess-arrow-right.svg) no-repeat center center;background-size: 100%;}
+.propetilpopus .Prodeilsliders .slick-prev {background: url(/home/slideArrowPrev.png) no-repeat center center;background-size: 100%;}
+.propetilpopus .Prodeilsliders .slick-next {background: url(/home/slideArrowNext.png) no-repeat center center;background-size: 100%;}
 .propetilpopus .Prodeilsliders .slick-list .slick-track{display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .compopups .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;}
 .popvideodialog .popClose{border: 1px solid #CCCCCC;border-radius: 0;padding: 5px;background: #ffffff;opacity: 0.6;}
 .popvideodialog .popClose:hover{background: #ffffff;opacity: 1;}
 .popvideodialog iframe{position: relative;width: 100%;height: 100%;}
+
 
 .poptitles h4{font-size: 2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 5px;}
 .poptitles p{font-size: 0.9vw;margin: 0 0 10px;}
@@ -723,8 +687,21 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .loginfiledss p.para-tcpp a{color: #FF6514;font-weight: 500;}
 .loginfiledss p.para-tcpp a:hover{text-decoration: underline;}
 
-.ordivider{}
+.LogoutMpops{}
+.LogoutMpops .LogoutMCoont{}
+.LogoutMpops .LogoutMCoont h3{margin-bottom: 20px;font-size: 1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;}
+.LogoutMpops .LogoutMbtn{}
+
+.LogoutMpops .LogoutMbtn button{position: relative;padding: 0;border-radius: 0;background: transparent;font-weight: 100;}
+.LogoutMpops .LogoutMbtn button::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:1px solid #777777;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.LogoutMpops .LogoutMbtn button span{line-height: 50px;padding-inline: 40px;background: #FF6514;color: #ffffff;width: 100%; font-family: 'Baloo';font-size: 18px;position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.LogoutMpops .LogoutMbtn button span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;-webkit-filter: invert(1);filter: invert(1);}
+.LogoutMpops .LogoutMbtn button:hover span{background: #db4b00;}
+
+
+.logboxcol .ordivider, .signboxcol .ordivider{display: none;}
 .ordivider>span>span{padding: 0;position: relative;top: 0;left: 0;-webkit-transform: translate(0);-ms-transform: translate(0);transform: translate(0);width: 2.5vw;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;aspect-ratio: 1;font-family: 'Baloo';color: #000000;font-size: 1vw;border: 1px solid #000000;border-radius: 50%;}
+.logboxcol .wsmideabtn, .signboxcol .wsmideabtn {display: none;}
 .wsmideabtn ul li{position: relative;padding: 0 4px 4px 0;}
 .wsmideabtn ul li::before{content: '';position: absolute;width: 80%;height: 100%;right: 0px;bottom: 0px;border:1px solid #777777;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
 .wsmideabtn button{width: 100%;border-radius: 0;font-family: 'Baloo';padding-block: 10px;}
@@ -812,16 +789,16 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .myaccContainer .notfetchbox h4{text-align: center;}
 
 @media (min-width: 1100px) {
-  .container {max-width: 980px;  }
+  html body .container {max-width: 980px;  }
 }
 @media (min-width: 1400px) {
-  .container {max-width: 1050px;  }
+  html body .container {max-width: 1050px;  }
 }
 @media (min-width: 1460px) {
-  .container {max-width: 1200px;  }
+  html body .container {max-width: 1200px;  }
 }
 @media (min-width: 1620px) {
-  .container {max-width: 1320px;  }
+  html body .container {max-width: 1320px;  }
 }
 
 @media screen and (max-width:1800px) {
@@ -991,6 +968,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .produtDeskView{display: none;}
   body {font-size: 15px;letter-spacing: 0;}
   header{background: #FFF4D7;padding: 10px 15px;}
+  .sscroll-animi header{background: #FFF4D7;padding: 10px 15px;}
   .logsinul>li>button{background: #000000;color: #ffffff;}
   .logsinul>li::before{border-color:#000000;right: -3px;bottom: -3px;}
   .logsinul>li>button::after{filter: invert(1);}
@@ -1086,6 +1064,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .MenusLbanersec .pageinconter::after{}
   .pagebansec::before {height: 18px;bottom: -9px;}
   .mteambox{width:100%;margin-block: 5px;}
+  .mteamitembox {border: 0px solid #ffffff;}
   .HmvisionSec{padding-block: 40px 0;padding-inline: 30px;overflow: hidden;}
   .HmvisionSec .Hmvisioninrow{-webkit-box-orient: vertical;-webkit-box-direction: reverse;-ms-flex-direction: column-reverse;flex-direction: column-reverse;}
   .HmvisionSec .HmvisionCol {width: 100%;}
@@ -1097,7 +1076,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .abtvidosliders ul.slick-dots li.slick-active button{background: #ff6514;}
   .hOEnvirorow .image_wrapper.imgsmlbox {width: 38vw;}
   .hOEnvirorow .image_wrapper {width: 40vw;}
-  .menulistpage .HProlistSec{padding-bottom: 80px;}
+  .menulistpage .HProlistSec{padding-bottom: 80px;overflow-x: hidden;}
   .menulistpage .produtMobView button.slick-arrow{top: 102%;filter: brightness(0);}
   .menulistpage .produtMobView button.slick-prev{left: calc(50% - 10px);transform: translateX(-100%);}
   .menulistpage .produtMobView button.slick-next{right: calc(50% - 10px);transform: translateX(100%)}
@@ -1152,5 +1131,74 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .propetPopBox .popbcont {width: 100%;}
   .abtvidosliders img {aspect-ratio: 1 / 1.1;}
   .popbcont h3{font-size: 22px;letter-spacing: 0;}
+  .mteamback h3{font-size: 20px;letter-spacing: 0;}  
+  .propetilpopus .Prodeilsliders .slick-prev {left: 0;}
+  .propetilpopus .Prodeilsliders .slick-next {right: 0;}
+  .logboxrow{flex-direction: column;}
+  .logboxrow .logbLcol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
+  .logboxrow .logbRcol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 78%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+  .logbRcol .poptitles {margin-bottom: 15px;}
+  .poptitles h4{font-size: 26px;margin-bottom: 0;}
+  .poptitles p {font-size: 12px;}
+  .poptitles p span{font-size: 18px;}
+  .loginfiledss h6{font-size: 14px;letter-spacing: 0;}
+  .loginfiledss input{height: 38px;padding-inline: 18px;font-size: 14px;letter-spacing: 0;}
+  .loginfiledss button.sotpbtn span{line-height: 35px;padding-inline: 15px;font-size: 13px;}
+  .loginfiledss button.sotpbtn span::after{width: 10px;}
+  .signboxrow{flex-direction: column;}
+  .signboxrow .signbLcol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
+  .signboxrow .signbRcol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 78%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+  .nutriBoxRow{flex-direction: column;}
+  .nutriBoxRow .nutriLCol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
+  .nutriBoxRow .nutriRCol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 78%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding-top: 65px;}
+  .gintPopRow {flex-direction: column;}
+  .gintPopRow .gintLCol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
+  .gintPopRow .gintRCol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 78%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding-top: 65px;}
+  .gintPopRow .gintRCol form label{font-size: 14px;transform: translate(10px, 10px);}
+  .gintPopRow .gintRCol form input{font-size: 14px;padding-block: 8px;}
+  .loginfiledss label {font-size: 14px;}
+  .loginfiledss .sfrmrow {flex-direction: column;gap: 0;margin: 0;}
+  .sfrmrow .sfrmcol {width: 100%;margin-bottom: 15px;}
+  .compopups .popClose svg{width: 18px;height: 18px;}
+
+}
+@media screen and (max-width:420px){
+  .HmteamSec {padding-inline: 30px;}
+  .hfformIconss .iconseven {top: 1%;left: 9%;width: 44px;}
+  .hfformIconss .icontwo {width: 20px;right: 6%;top: 8%;}
+  .HctaTitle h4 {font-size: 30px;}
+  .footcopyrow .copycol p{font-size: 12px;}
+  .HctaTitle h3 {font-size: 68px;}
+  .mteamfront h3 {font-size: 16px;line-height: 1;}
+  .comtilte h3, .HLFOlistSec .comtilte h3 {font-size: 28px;letter-spacing: -1px;}
+  .comtilte h2 {font-size: 38px;}
+  .pagebansec h1 {font-size: 34px;}
+  .aboutbanersec .pageinconter::after, .MenusLbanersec .pageinconter::after {width: 100%;}
+  .pagebansec { height: 500px; padding-inline: 25px; }
+  .myLogo {width: 45px;}
+  .hbanLeft {padding-inline: 15px;}
+  .hbanCont p br{display: none;}
+  .HintroSec, .HProlistSec, .HLFOlistSec, .HworktabSec, .HteamSec, .Hfaqinrow, footer.FooterSec, .formsec {padding-inline: 25px;}
+  .HintroSec .hintroRight {padding-inline: 0;}
+  .HintroSec .hbanLeft {padding-inline: 0px;}
+  .produtMobView button.slick-prev {left: 0px;}
+  .produtMobView button.slick-next {right: 0px;}
+  .logsinul li button {line-height: 25px;padding-inline: 12px;font-size: 12px;letter-spacing: 0.3px;}
+  .hmenubox h6{font-size: 13px;margin-bottom: 2px;}
+  .hmenubox { margin-left: 20px;width: 34px;}
+  .hmenubox .hmenuline {height: 8px;}
+  .combtntb p.parabtn a span {font-size: 14px;line-height: 36px;padding-inline: 10px;}
+  .combtntb p.parabtn a span::after{width: 11px;}
+  .produtMobView button.slick-arrow{width: 26px;height: 12px;}
+  .combtntb.textcenter p.parabtn{padding-bottom: 5px;}
+  .combtntb p.parabtn a::before{right: -4px;bottom: -4px;}
+  .inputbox {padding: 5px;border-radius: 5px;}
+  .inputbox button span::after{width: 10px;margin-left: 6px;}
+  .inputbox button::before{right: -2px;bottom: -2px;}
+  .inputbox select, .inputbox input {font-size: 13px;line-height: 36px;padding: 0 2px;}
+  .inputbox button span{padding-inline: 15px;}
+  .inputbox select{margin-right: 0px;}
+  .progroupitem {height: 490px;}
+
 
 }

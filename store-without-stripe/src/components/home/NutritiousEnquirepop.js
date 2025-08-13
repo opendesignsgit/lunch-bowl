@@ -85,16 +85,17 @@ const NutritiousEnquire = ({ open, onClose }) => {
           {" "}
           <CloseIcon />{" "}
         </IconButton>
-        <Box className="nutriPopBox Box flex bg-white relative h-full">
+        <Box className="nutriPopBox nutriBoxRow Box flex bg-white relative h-full">
           <Box
-            className="w-[50%]"
+            className="w-[50%] nutriBoxCol nutriLCol "
             sx={{
               backgroundImage: `url(/LogInSignUp/signuppopimg.jpg)`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           ></Box>
-          <Box className="w-[50%] self-center logboxcol p-[3vw]">
+          <Box className="w-[50%] self-center nutriBoxCol nutriRCol logboxcol p-[3vw]">
+            <div className="nutriinrRow">
             <Box
               sx={{ textAlign: "left", marginBottom: "24px" }}
               className="poptitles"
@@ -177,6 +178,7 @@ const NutritiousEnquire = ({ open, onClose }) => {
                 Sign Up
               </Button>
             </form>
+            </div>
           </Box>
         </Box>
       </Dialog>

@@ -60,15 +60,15 @@ const Home = () => {
     const faqItems = [
         {
           title: "How do you ensure the food is nutritious and safe for my child?",
-          content: "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies."
-        },
-        {
-          title: "What if my child has specific dietary restrictions or allergies?",
-          content: "We take effort to accommodate allergies and provide menus that may be customized. We prevent cross-contamination with strict protocols."
+        content: "Our meals are nutritionist designed, made with fresh, high-quality ingredients, and prepared under strict hygiene standards. We also customise for dietary needs and take extra care to avoid allergens."
         },
         {
           title: "How does the delivery process work, and can I trust it will arrive on time?",
-          content: "For prompt delivery in temperature-controlled trucks, we work with schools. Confirmations will be sent to you, and any delays will be quickly communicated."
+          content: "We deliver meals directly to schools in temperature-controlled vehicles, timed to arrive just before lunchtime. You’ll receive delivery confirmations, and in the rare case of a delay, we’ll notify you right away."
+        },
+        {
+          title: "What if my child has specific dietary restrictions or allergies?",
+          content: "We take effort to accommodate allergies and provide menu options that can be customized. Our team follows careful preparation practices to ensure meals are safe and free from cross-contamination."
         },
         {
           title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
@@ -80,11 +80,11 @@ const Home = () => {
         },
         {
           title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
-          content: "Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
+          content: " Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
         },
         {
           title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls?",
-          content: " We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
+          content: "We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
         },
       ];
 
@@ -259,7 +259,7 @@ const Home = () => {
                           </div>
                     </div>
                     <div className='hNutritionTitle combtntb comtilte textcenter mt-[4vh]'>      
-                        <p className=''>Kickstart your child's wellness with a complimentary session to explore our <br/>yummy and healthy meal options. See how our nutritious food can make a positive difference!</p>      
+              <p className=''>Sujatha Sasikumar is a Registered Dietitian under the Indian Dietetic Association. She has a Master's in Clinical Nutrition and has <br />her own independent clinical practice in Chennai. She is also certified in Sport Specific Nutrition Management, Nutrigenetics, <br />Critical  Care Nutrition and is a Certified Diabetes Educator. She helps people across all age groups modify their eating <br />habits to suit their goals for better health, fitness and performance.</p>      
                           <p className="parabtn flex"><Link href="/" className="emenulink relative" onClick={handlepopOpenDialog}><span className='block flex items-center relative'>Lets Talk</span></Link></p>
                     </div>
                 </div>
