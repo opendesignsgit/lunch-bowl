@@ -188,16 +188,16 @@ const LoginPopup = ({ open, onClose }) => {
         fullWidth
         sx={{ "& .MuiDialog-paper": { height: "75vh" } }}
       >
-        <Box className="flex relative h-full relative overflow-hidden">
+        <Box className="flex relative h-full relative overflow-hidden logboxrow">
           <Box
-            className="w-[50%]"
+            className="w-[50%] logbLcol"
             sx={{
               backgroundImage: `url(${LogIn.src})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           />
-          <Box className="w-[50%] p-[2.5vw] self-center logboxcol">
+          <Box className="w-[50%] p-[2.5vw] self-center logboxcol logbRcol">
             <IconButton
               className="popClose"
               onClick={() => {
@@ -213,6 +213,7 @@ const LoginPopup = ({ open, onClose }) => {
               <CloseIcon />
             </IconButton>
 
+            <div className="logboxInrow">
             <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
               <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }}>
                 {otpSent ? "Enter OTP" : "Log In"}
@@ -353,6 +354,8 @@ const LoginPopup = ({ open, onClose }) => {
                 )}
               </>
             )}
+            </div>
+
           </Box>
         </Box>
       </Dialog>

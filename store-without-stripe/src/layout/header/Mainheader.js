@@ -265,13 +265,10 @@ const Mainheader = ({ title, description, children }) => {
                 </ul>
                 <ul className="HamSMediaul">
                   <li className="nav__item hamnavlink">
-                    <Link href="/">Instagram</Link>
+                    <Link href="https://www.instagram.com/lunch_bowl_?igsh=d3kxM3k3cHJwc2F0" target="_blank">Instagram</Link>
                   </li>
                   <li className="nav__item hamnavlink">
-                    <Link href="/">Facebook</Link>
-                  </li>
-                  <li className="nav__item hamnavlink">
-                    <Link href="/">Linkedin</Link>
+                    <Link href="https://www.facebook.com/share/1CChGD5qf6/" target="_blank">Facebook</Link>
                   </li>
                 </ul>
               </div>
