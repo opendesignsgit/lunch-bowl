@@ -147,12 +147,12 @@ const registerCustomer = async (req, res) => {
             });
 
             await newUser.save();
-            
+
             // Send signup confirmation SMS if phone number is available
             if (newUser.phone) {
               try {
                 const smsResult = await sendSMS(newUser.phone, 'SIGNUP_CONFIRMATION', [newUser.name]);
-                
+
                 // Log SMS
                 const smsLog = new SmsLog({
                   mobile: newUser.phone,
@@ -166,7 +166,7 @@ const registerCustomer = async (req, res) => {
                   variables: [newUser.name],
                   sentAt: new Date()
                 });
-                
+
                 await smsLog.save();
                 console.log('Signup confirmation SMS sent to:', newUser.phone);
               } catch (smsError) {
@@ -174,7 +174,7 @@ const registerCustomer = async (req, res) => {
                 // Don't fail registration if SMS fails
               }
             }
-            
+
             const token = signInToken(newUser);
             res.send({
               token,
@@ -609,60 +609,77 @@ const sendOtp = async (req, res) => {
   try {
     const { mobile, path } = req.body;
 
-    if (!mobile)
+    if (!mobile) {
       return res.status(400).json({ message: "Mobile number is required" });
+    }
 
-    // Generate a 4-digit OTP
-    const generateOtp = () =>
-      Math.floor(1000 + Math.random() * 9000).toString();
-    const otp = generateOtp();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
+    // Only allow signUp or logIn for sending OTP
+    if (!["signUp", "logIn"].includes(path)) {
+      return res.status(400).json({ message: "Invalid path" });
+    }
 
-    // Remove any existing OTPs for this mobile number
+    // Signup flow - number must NOT exist
+    if (path === "signUp") {
+      const existingUser = await Customer.findOne({ phone: mobile });
+      if (existingUser) {
+        return res.status(400).json({ message: "Mobile number already registered" });
+      }
+    }
+
+    // Login flow - number MUST exist
+    if (path === "logIn") {
+      const existingUser = await Customer.findOne({ phone: mobile });
+      if (!existingUser) {
+        return res.status(400).json({ message: "Mobile number is not registered" });
+      }
+    }
+
+    // Generate OTP
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min expiry
+
+    // Remove old OTPs for this mobile
     await Otp.deleteMany({ mobile });
 
-    // Save the new OTP
+    // Save new OTP
     await Otp.create({ mobile, otp, expiresAt });
 
-    // Send OTP via SMS service
     try {
-      const smsResult = await sendSMS(mobile, 'OTP', [otp]);
-      console.log('OTP SMS Result:', smsResult);
-      
-      // Log SMS
+      const smsResult = await sendSMS(mobile, "OTP", [otp]);
+      console.log("OTP SMS Result:", smsResult);
+
       const smsLog = new SmsLog({
-        mobile: mobile,
-        messageType: 'OTP',
-        message: smsResult.message || '',
-        templateId: smsResult.templateId || '',
-        messageId: smsResult.messageId || '',
-        status: smsResult.success ? 'sent' : 'failed',
+        mobile,
+        messageType: "OTP",
+        message: smsResult.message || "",
+        templateId: smsResult.templateId || "",
+        messageId: smsResult.messageId || "",
+        status: smsResult.success ? "sent" : "failed",
         error: smsResult.error || undefined,
         variables: [otp],
-        sentAt: new Date()
+        sentAt: new Date(),
       });
-      
+
       await smsLog.save();
-      
+
       if (smsResult.success) {
-        return res.status(200).json({ 
+        return res.status(200).json({
+          success: true,
           message: "OTP sent successfully via SMS",
-          smsLogId: smsLog._id,
-          smsResult: smsResult,
-          expiresAt
+          smsLogId: smsLog,
+          expiresAt,
         });
       } else {
-        console.error('Failed to send OTP SMS:', smsResult.error);
-        return res.status(500).json({ 
+        return res.status(500).json({
           message: "Failed to send OTP. Please try again.",
-          error: smsResult.error
+          error: smsResult.error,
         });
       }
     } catch (smsError) {
-      console.error('Error sending OTP SMS:', smsError);
-      return res.status(500).json({ 
+      console.error("Error sending OTP SMS:", smsError);
+      return res.status(500).json({
         message: "Failed to send OTP. Please try again.",
-        error: smsError.message
+        error: smsError.message,
       });
     }
   } catch (error) {
@@ -671,56 +688,44 @@ const sendOtp = async (req, res) => {
   }
 };
 
-//verify Otp
+// Verify OTP
 const verifyOtp = async (req, res) => {
   try {
-    const { firstName, lastName, email, mobile, otp, path } = req.body;
+    const { firstName, lastName, email, mobile, otp, path, freeTrialCheck } = req.body;
+
     if (!mobile || !otp) {
-      return res
-        .status(400)
-        .json({ message: "Mobile number and OTP are required" });
+      return res.status(400).json({ message: "Mobile number and OTP are required" });
     }
 
-    // Find the OTP record for the mobile number
-    const existingOtp = await Otp.findOne({ mobile });
+    // Only allow signUp-otp or logIn-otp for verification
+    if (!["signUp-otp", "logIn-otp"].includes(path)) {
+      return res.status(400).json({ message: "Invalid path" });
+    }
 
+    const existingOtp = await Otp.findOne({ mobile });
     if (!existingOtp) {
       return res.status(400).json({ message: "OTP not found or expired" });
     }
 
-    // Check if the OTP is correct
     if (existingOtp.otp !== otp) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
-    // Check if the OTP has expired (optional — TTL should auto-delete it)
     if (existingOtp.expiresAt < new Date()) {
       return res.status(400).json({ message: "OTP has expired" });
     }
 
-    // OTP is valid — delete it from DB (optional cleanup)
-    await Otp.deleteOne({ mobile });
+    await Otp.deleteOne({ mobile }); // cleanup after successful verification
 
-    // Proceed with login/signup or session creation logic here
-
-    if (path == "signUp-otp") {
-      // Check if user already exists
-      const existingUser = await Customer.findOne({
-        $or: [{ email }, { mobile }],
-      });
-      if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
-      }
-
-      // Now call createCustomer and return the response
+    if (path === "signUp-otp") {
       const result = await createCustomer({
         firstName,
         lastName,
         mobile,
         email,
+        freeTrialCheck,
       });
-
-      // Send Sign-Up Completion Mail
+      
       if (email) {
         const transporter = nodemailer.createTransport({
           service: "gmail",
@@ -756,27 +761,29 @@ const verifyOtp = async (req, res) => {
       }
 
       return res.status(200).json(result);
-    } else {
+    }
+
+    if (path === "logIn-otp") {
       const result = await loginCustomer(mobile);
       if (result && result.success) {
         return res.status(200).json(result);
       } else {
-        // If login failed, send appropriate error status and message
         return res.status(401).json({
           success: false,
-          message: result?.message || "Login failed",
-          error: result?.error,
+          message: "Login failed",
         });
       }
     }
+
+    return res.status(400).json({ message: "Invalid path" });
   } catch (error) {
     console.error("Error verifying OTP:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-//create Customer
-const createCustomer = async ({ firstName, lastName, mobile, email }) => {
+// Create Customer
+const createCustomer = async ({ firstName, lastName, mobile, email, freeTrialCheck}) => {
   const newUser = new Customer({
     name: `${firstName} ${lastName}`,
     phone: mobile,
@@ -793,19 +800,18 @@ const createCustomer = async ({ firstName, lastName, mobile, email }) => {
     _id: newUser._id,
     name: newUser.name,
     email: newUser.email,
-    mobile: newUser.mobile,
+    phone: newUser.phone,
     message: "Registration successful!",
+    freeTrialCheck,
   };
 };
 
-//logIn Customer
+// Login Customer
 const loginCustomer = async (mobile) => {
   try {
     const customer = await Customer.findOne({ phone: mobile });
-    
     if (customer) {
       const token = signInToken(customer);
-
       return {
         success: true,
         token,
@@ -816,20 +822,16 @@ const loginCustomer = async (mobile) => {
         freeTrial: customer.freeTrial || false,
         message: "Log in successful!",
       };
-    } else {
-      return {
-        message: "Invalid user or password!",
-        error: "Invalid user or password!",
-      };
     }
+    return { success: false, message: "User not found" };
   } catch (error) {
     console.error("Error during login:", error);
-    return {
-      success: false,
-      message: "Login failed",
-    };
+    return { success: false, message: "Login failed" };
   }
 };
+
+
+
 
 const stepFormRegister = async (req, res) => {
   try {

@@ -22,6 +22,7 @@ const Mainheader = ({ title, description, children }) => {
   const [openLogin, setOpenLogin] = useState(false);
   const [freeTrialPopup, setFreeTrialPopup] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [isFreeTrial, setIsFreeTrial] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyAccount, setShowMyAccount] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -141,12 +142,26 @@ const Mainheader = ({ title, description, children }) => {
                   </button>
                 </li>
               )}
-              {!freeTrial && (
-                <li className="trialbtn">
+              {/* <li className="trialbtn">
                   <button
                     onClick={() =>
-                      session ? setFreeTrialPopup(true) : setShowSignUp(true)
+                     setFreeTrialPopup(true) 
                     }
+                  >
+                    <span>Start Free Trial</span>
+                  </button>
+                </li> */}
+              {(freeTrial === undefined || freeTrial === false) || stepCheck !== 4 && (
+                <li className="trialbtn">
+                  <button
+                    onClick={() => {
+                      if (session) {
+                        router.push("/free-trial");
+                      } else {
+                         setIsFreeTrial(true); 
+                        setShowSignUp(true);
+                      }
+                    }}
                   >
                     <span>Start Free Trial</span>
                   </button>
@@ -273,7 +288,7 @@ const Mainheader = ({ title, description, children }) => {
         open={freeTrialPopup}
         onClose={() => setFreeTrialPopup(false)}
       />
-      <SignUpPopup open={showSignUp} onClose={() => setShowSignUp(false)} />
+      <SignUpPopup open={showSignUp} onClose={() => setShowSignUp(false)} freeTrial={isFreeTrial} />
       <LogoutConfirmationPopup
         open={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}

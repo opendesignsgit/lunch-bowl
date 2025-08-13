@@ -23,7 +23,7 @@ const useLoginSubmit = () => {
 
   // console.log("router", router.pathname === "/auth/signup");
 
-  const submitHandler = async ({ firstName,lastName, email, password, phone,path, otp }) => {
+  const submitHandler = async ({ firstName, lastName, email, password, phone, path, otp, freeTrialCheck }) => {
     setLoading(true);
 
     // console.log("submitHandler", phone);
@@ -44,42 +44,57 @@ const useLoginSubmit = () => {
         notifySuccess(res.message);
         return setLoading(false);
       }
-      if(path == "signUp" || path == "logIn"){
-        // Call the sign-up API which also handles sending the email verification
+      if (path == "signUp" || path == "logIn") {
+        try {
+          const res = await CustomerServices.sendOtp({ mobile: phone, path });
+          console.log("sendOtp response:", res);
+          return res;
+        } catch (error) {
+          console.error("Error sending OTP:", error);
+          notifyError(error?.response?.data?.message || error?.message);
+          setLoading(false);
+          return { success: false, message: error.response?.data?.message || "Failed to send OTP" };
+        }
+      } else if (path == "signUp-otp" || path == "logIn-otp") {
+        try {
+          const res = await CustomerServices.verifyOtp({ firstName, lastName, email, mobile: phone, otp, path, freeTrialCheck })
+          if (res.success) {
+            const targetUrl = res.freeTrialCheck ? "/free-trial" : "/user/DataRoutingPage";
+            const loginResult = await signIn("credentials", {
+              redirect: false,
+              email: res.email, // or whatever your provider expects
+              token: res.token, // pass the JWT token from backend
+              name: res.name, // optionally any other info
+              phone: res.phone, // pass the phone number
+              freeTrial: res.freeTrial, // pass the free trial status
+              _id: res._id,
+              callbackUrl: targetUrl,
+            });
 
-        const res = await CustomerServices.sendOtp({mobile: phone,path})
-        return res
+            console.log("Login result:", loginResult);
 
-      }else if(path == "signUp-otp" || path == "logIn-otp"){
-        const res = await CustomerServices.verifyOtp({firstName,lastName,email,mobile: phone,otp,path})
-        if (res.success) {
-          const loginResult = await signIn("credentials", {
-            redirect: false,
-            email: res.email, // or whatever your provider expects
-            token: res.token, // pass the JWT token from backend
-            name: res.name, // optionally any other info
-            phone: res.phone, // pass the phone number
-            freeTrial: res.freeTrial, // pass the free trial status
-            _id: res._id,
-            callbackUrl: "/user/DataRoutingPage",
-          });
+            if (loginResult?.ok) {
+              console.log("Login result------->:", loginResult);
 
-          console.log("Login result:", loginResult);
-
-          if (loginResult?.ok) {
-            console.log("Login result------->:", loginResult);
-
-            router.push(redirectUrl || "/user/DataRoutingPage");
+              router.push(redirectUrl || targetUrl);
+            } else {
+              notifyError("Login failed");
+            }
           } else {
-            notifyError("Login failed");
+            notifyError(res.message || "OTP verification failed");
           }
-        } else {
-          notifyError(res.message || "OTP verification failed");
+
+          setLoading(false);
+          return res;
+        } catch (error) {
+          console.error("Error in OTP verification:", error);
+          notifyError(error?.response?.data?.message || error?.message);
+          setLoading(false);
+          return { success: false, message: error.response?.data?.message || "Failed to verify OTP" };
+
         }
 
-        setLoading(false);
-        return res;
-      }else if (router.pathname === "/auth/forget-password") {
+      } else if (router.pathname === "/auth/forget-password") {
         // Call the forget password API for reset password
         const res = await CustomerServices.forgetPassword({
           email,
