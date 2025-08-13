@@ -16,15 +16,29 @@ import stepOne from "../../../public/profileStepImages/stepOne.png";
 import useRegistration from "@hooks/useRegistration";
 import pinCodeData from "../../jsonHelper/zipcode.json"; // Import your JSON data
 
+const nameRegex = /^[A-Za-z\s]+$/; // allows only letters and spaces
+
 const schema = yup.object().shape({
-  fatherFirstName: yup.string().required("First name is required"),
-  fatherLastName: yup.string().required("Last name is required"),
-  motherFirstName: yup.string().required("Mother first name is required"),
-  motherLastName: yup.string().required("Mother last name is required"),
+  fatherFirstName: yup
+    .string()
+    .required("First name is required")
+    .matches(nameRegex, "Enter a valid name"),
+  fatherLastName: yup
+    .string()
+    .required("Last name is required")
+    .matches(nameRegex, "Enter a valid name"),
+  motherFirstName: yup
+    .string()
+    .required("Mother first name is required")
+    .matches(nameRegex, "Enter a valid name"),
+  motherLastName: yup
+    .string()
+    .required("Mother last name is required")
+    .matches(nameRegex, "Enter a valid name"),
   mobile: yup
     .string()
     .required("Mobile number is required")
-    .matches(/^[0-9]{10}$/, "Enter a valid 10-digit mobile number"),
+    .matches(/^[6-9]\d{9}$/, "Enter a valid number"),
   email: yup
     .string()
     .email("Enter a valid email")
@@ -307,7 +321,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
                 width: "300px",
                 minWidth: "300px",
                 "& .MuiInputBase-input": {
-                  color: (theme) => theme.palette.text.disabled, // Grey text color
+                  color: "#333"
                 },
               }}
               InputProps={{
@@ -333,7 +347,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
                 width: "300px",
                 minWidth: "300px",
                 "& .MuiInputBase-input": {
-                  color: (theme) => theme.palette.text.disabled, // Grey text color
+                  color: "#333"
                 },
               }}
               InputProps={{
@@ -360,7 +374,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
                 width: "300px",
                 minWidth: "300px",
                 "& .MuiInputBase-input": {
-                  color: (theme) => theme.palette.text.disabled, // Grey text color
+                  color: "#333"
                 },
               }}
               InputProps={{
