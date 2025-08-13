@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ctaimg from "../../../public/ctaimg.png"
 import myLogo from "../../../public/logo/lunchbowl-logo.svg";
-import { FacebookIcon, LinkedinIcon, TwitterIcon, WhatsappIcon } from "react-share";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import GetinTouch from './GetinTouch';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -78,51 +78,32 @@ const Mainfooter = () => {
                         <Image className="w-full" priority src= {myLogo} alt="logo" />
                     </div>
                     <p className='text-white mb-[2vh]'>Fresh, healthy school lunches delivered with care, <br/>making mealtime easy for you.</p>
-                    <ul className='Somediaul flex justify-center mb-[2vh]'>
+            <div className='SomediaBox flex justify-center  mb-[2vh]'>
+              <ul className='Somediaul flex justify-center'>
                         <li className="flex items-center mr-3 transition ease-in-out duration-500">
                         <Link
-                          href='/'
+                    href='https://www.facebook.com/share/1CChGD5qf6/'
                           aria-label="Social Link"
                           rel="noreferrer"
                           target="_blank"
-                          className="block text-center mx-auto text-gray-500 hover:text-white"
+                    className="facebooklink"
                         >
-                          <FacebookIcon size={34} round />
+                    <FaFacebookF />
                         </Link>
-                      </li>
-                      <li className="flex items-center mr-3 transition ease-in-out duration-500"><Link
-                          href='/'
-                          aria-label="Social Link"
-                          rel="noreferrer"
-                          target="_blank"
-                          className="block text-center mx-auto text-gray-500 hover:text-white"
-                        >
-                          <TwitterIcon size={34} round />
-                        </Link></li>
-                        <li className="flex items-center  mr-3 transition ease-in-out duration-500">
+                </li>
+                <li className="flex items-center  mr-3 transition ease-in-out duration-500">
                         <Link
-                          href='/'
+                    href='https://www.instagram.com/lunch_bowl_?igsh=d3kxM3k3cHJwc2F0'
                           aria-label="Social Link"
                           rel="noreferrer"
                           target="_blank"
-                          className="block text-center mx-auto text-gray-500 hover:text-white"
+                    className="instagramlink"
                         >
-                          <LinkedinIcon size={34} round />
+                    <FaInstagram />
                         </Link>
-                      </li>
-                      <li className="flex items-center  mr-3 transition ease-in-out duration-500">
-                        <Link
-                          href='/'
-                          aria-label="Social Link"
-                          rel="noreferrer"
-                          target="_blank"
-                          className="block text-center mx-auto text-gray-500 hover:text-white"
-                        >
-                          <WhatsappIcon size={34} round />
-                        </Link>
-                      </li>
-                        <li><Link href="/" className="relative" ></Link></li>
+                </li>
                     </ul>
+            </div>
                     <ul className='footmenu flex justify-center'>
                         <li><Link href="/" className="relative" ><span className='block flex items-center relative'>Home</span></Link></li>
               <li><Link href="/about-us" className="relative" ><span className='block flex items-center relative'>About Us</span></Link></li>
