@@ -70,7 +70,7 @@ const Htoworkslider = () => {
                     </div>                    
                 </div>
                 <div>
-                    <div className='flex rfbox items-center'>
+                      <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
                             <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
                         </div>       
@@ -81,7 +81,7 @@ const Htoworkslider = () => {
                     </div>   
                 </div>
                 <div>
-                    <div className='flex rfbox items-center'>
+                      <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
                             <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
                         </div>       
@@ -92,7 +92,7 @@ const Htoworkslider = () => {
                     </div>   
                 </div>
                 <div>
-                    <div className='flex rfbox items-center'>
+                      <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
                             <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
                         </div>       

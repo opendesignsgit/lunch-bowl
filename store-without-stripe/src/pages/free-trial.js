@@ -18,6 +18,13 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import config from "@components/product/config";
+import Marquee from "react-fast-marquee";
+import Breadcrumbs from "@layout/Breadcrumbs";
+import Mainheader from '@layout/header/Mainheader';
+import Mainfooter from '@layout/footer/Mainfooter';
+
+import abbanicon1 from "../../public/about/icons/herosec/pink-rounded-lines.svg";
+import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
 
 console.log("Config:", config);
 
@@ -152,210 +159,247 @@ export default function FreeTrialPage() {
   };
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {/* Left Image */}
-      <Box sx={{ flex: 1, display: { xs: "none", md: "block" } }}>
-        <ImageBox>
-          <Image
-            src={"/LogInSignUp/signuppopimg.jpg"}
-            alt="Free Trial"
-            layout="fill"
-            objectFit="cover"
-            quality={100}
-            priority
-          />
-        </ImageBox>
-      </Box>
 
-      {/* Right Form */}
-      <Box
-        sx={{
-          flex: 1,
-          overflowY: "auto",
-          maxHeight: "100vh",
-          p: 4,
-          bgcolor: "white",
-        }}
-      >
-        <FormBox component="form" onSubmit={handleSubmit}>
-          <Typography variant="h4" fontWeight="bold" mb={2}>
-            START YOUR FREE TRIAL
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            Provide the required information in the form to get started
-          </Typography>
+    <div className="freetrilpage">
+      <Mainheader title="Free Trial" description="This is Free Trial page" />
+      <div className="pagebody">
+        <section className="pagebansec freetrilbanersec relative">
+          <div className="container mx-auto relative h-full">
+            <div className="pageinconter relative h-full w-full flex items-center">
+              <div className="hworkTitle combtntb comtilte">
+                <h1 className="flex flex-col textFF6514">
+                  {" "}
+                  <span className="block firstspan">The Story Behind</span>{" "}
+                  <span className="block">Every Bite</span>{" "}
+                </h1>
+                <p className="">
+                  As food is an emotion, there will be a story <br />
+                  behind every recipe. Let’s explore!
+                </p>
+                <Breadcrumbs />
+              </div>
+            </div>
+            <div className="abbanIconss">
+              <div className="abbanicn iconone absolute">
+                <Image
+                  src={abbanicon1}
+                  priority
+                  alt="Icon"
+                  className="iconrotates"
+                />
+              </div>
+              <div className="abbanicn icontwo absolute">
+                <Image src={abbanicon2} priority alt="Icon" />
+              </div>
+            </div>
+          </div>
+        </section>
 
-          {submitted ? (
-            <Box mt={5}>
-              <Typography variant="h6" color="success.main" gutterBottom>
-                Your order will be delivered on time.
-              </Typography>
-              <Typography>
-                Delivery scheduled for:{" "}
-                {formData.date?.format("MMMM D, YYYY")} at {formData.time}
-              </Typography>
-              <Typography mt={1}>Dish: {formData.food}</Typography>
-              <Typography>Address: {formData.address}</Typography>
-              <Button
-                sx={{ mt: 3 }}
-                variant="contained"
-                color="primary"
-                onClick={() => router.push("/user/profile-Step-Form")}
-              >
-                Complete your registration
-              </Button>
-            </Box>
-          ) : (
-            <>
-              {/* Name */}
-              <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
-                FULL NAME*
-              </Typography>
-              <TextField
-                fullWidth
-                value={formData.name}
-                onChange={handleChange("name")}
-                size="small"
-                error={!!errors.name}
-                helperText={errors.name}
-                sx={{ mt: 1 }}
-              />
-
-              {/* Email */}
-              <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
-                EMAIL ADDRESS*
-              </Typography>
-              <TextField
-                fullWidth
-                value={formData.email}
-                onChange={handleChange("email")}
-                size="small"
-                error={!!errors.email}
-                helperText={errors.email}
-                sx={{ mt: 1 }}
-              />
-
-              {/* Date & Time */}
-              <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                SELECT YOUR PREFERRED SLOT FOR DELIVERY*
-              </Typography>
-              <Box display="flex" gap={2} mt={1} flexWrap="wrap">
-                <Box flex={1}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      value={formData.date}
-                      onChange={handleDateChange}
-                      minDate={dayjs()}
-                      shouldDisableDate={shouldDisableDate}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          size: "small",
-                          error: !!errors.date,
-                        },
-                      }}
-                    />
-                  </LocalizationProvider>
-                  {errors.date && (
-                    <FormHelperText error>{errors.date}</FormHelperText>
-                  )}
-                </Box>
-                <TextField
-                  select
-                  fullWidth
-                  value={formData.time}
-                  onChange={handleChange("time")}
-                  size="small"
-                  error={!!errors.time}
-                  helperText={errors.time}
-                >
-                  {timeOptions.map((time) => (
-                    <MenuItem key={time} value={time}>
-                      {time}
-                    </MenuItem>
-                  ))}
-                </TextField>
+        <section className="freetrilsec relative secpaddblock">
+          <div className="container mx-auto relative">
+            <Box className="freetrilRow flex">
+              {/* Left Image */}
+              <Box className="freetrilCol ftLCol">
+                <ImageBox className="ftLImg">
+                  <Image
+                    src={"/LogInSignUp/signuppopimg.jpg"}
+                    alt="Free Trial"
+                    layout="fill"
+                    objectFit="cover"
+                    quality={100}
+                    priority
+                  />
+                </ImageBox>
               </Box>
 
-              {/* Food */}
-              <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                SELECT YOUR PREFERRED FOOD*
-              </Typography>
-              <TextField
-                select
-                fullWidth
-                value={formData.food}
-                onChange={handleChange("food")}
-                size="small"
-                error={!!errors.food}
-                helperText={errors.food}
-                sx={{ mt: 1 }}
-              >
-                <MenuItem value="Paneer Butter Masala">
-                  Paneer Butter Masala
-                </MenuItem>
-                <MenuItem value="Dal Tadka">Dal Tadka</MenuItem>
-                <MenuItem value="Aloo Gobi">Aloo Gobi</MenuItem>
-              </TextField>
+              {/* Right Form */}
+              <Box className="freetrilCol ftRCol">
+                <FormBox component="form" onSubmit={handleSubmit}>
+                  <Typography variant="h4" fontWeight="bold" mb={2}>
+                    START YOUR FREE TRIAL
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    Provide the required information in the form to get started
+                  </Typography>
 
-              {/* Address */}
-              <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                RESIDENTIAL ADDRESS*
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={3}
-                value={formData.address}
-                onChange={handleChange("address")}
-                size="small"
-                error={!!errors.address}
-                helperText={errors.address}
-                placeholder="Enter your delivery address"
-                sx={{ mt: 1 }}
-              />
+                  {submitted ? (
+                    <Box mt={5}>
+                      <Typography variant="h6" color="success.main" gutterBottom>
+                        Your order will be delivered on time.
+                      </Typography>
+                      <Typography>
+                        Delivery scheduled for:{" "}
+                        {formData.date?.format("MMMM D, YYYY")} at {formData.time}
+                      </Typography>
+                      <Typography mt={1}>Dish: {formData.food}</Typography>
+                      <Typography>Address: {formData.address}</Typography>
+                      <Button
+                        sx={{ mt: 3 }}
+                        variant="contained"
+                        color="primary"
+                        onClick={() => router.push("/user/profile-Step-Form")}
+                      >
+                        Complete your registration
+                      </Button>
+                    </Box>
+                  ) : (
+                    <>
+                      {/* Name */}
+                      <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
+                        FULL NAME*
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        value={formData.name}
+                        onChange={handleChange("name")}
+                        size="small"
+                        error={!!errors.name}
+                        helperText={errors.name}
+                        sx={{ mt: 1 }}
+                      />
 
-              {/* Message */}
-              <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                MESSAGE
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={2}
-                value={formData.message}
-                onChange={handleChange("message")}
-                placeholder="Optional message"
-                size="small"
-                sx={{ mt: 1 }}
-              />
+                        {/* Email */}
+                        <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
+                          EMAIL ADDRESS*
+                        </Typography>
+                        <TextField
+                          fullWidth
+                          value={formData.email}
+                          onChange={handleChange("email")}
+                          size="small"
+                          error={!!errors.email}
+                          helperText={errors.email}
+                          sx={{ mt: 1 }}
+                        />
 
-              {errors.submit && (
-                <FormHelperText error>{errors.submit}</FormHelperText>
-              )}
+                        {/* Date & Time */}
+                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                          SELECT YOUR PREFERRED SLOT FOR DELIVERY*
+                        </Typography>
+                        <Box display="flex" gap={2} mt={1} flexWrap="wrap">
+                          <Box flex={1}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                value={formData.date}
+                                onChange={handleDateChange}
+                                minDate={dayjs()}
+                                shouldDisableDate={shouldDisableDate}
+                                slotProps={{
+                                  textField: {
+                                    fullWidth: true,
+                                    size: "small",
+                                    error: !!errors.date,
+                                  },
+                                }}
+                              />
+                            </LocalizationProvider>
+                            {errors.date && (
+                              <FormHelperText error>{errors.date}</FormHelperText>
+                            )}
+                          </Box>
+                          <TextField
+                            select
+                            fullWidth
+                            value={formData.time}
+                            onChange={handleChange("time")}
+                            size="small"
+                            error={!!errors.time}
+                            helperText={errors.time}
+                          >
+                            {timeOptions.map((time) => (
+                              <MenuItem key={time} value={time}>
+                                {time}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        </Box>
 
-              <Typography fontSize={14} mt={2}>
-                Submit your request before{" "}
-                <span className="text-[#FF6514]">12 PM</span> for{" "}
-                <span className="text-[#FF6514]">Same-day Delivery</span>.
-              </Typography>
+                        {/* Food */}
+                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                          SELECT YOUR PREFERRED FOOD*
+                        </Typography>
+                        <TextField
+                          select
+                          fullWidth
+                          value={formData.food}
+                          onChange={handleChange("food")}
+                          size="small"
+                          error={!!errors.food}
+                          helperText={errors.food}
+                          sx={{ mt: 1 }}
+                        >
+                          <MenuItem value="Paneer Butter Masala">
+                            Paneer Butter Masala
+                          </MenuItem>
+                          <MenuItem value="Dal Tadka">Dal Tadka</MenuItem>
+                          <MenuItem value="Aloo Gobi">Aloo Gobi</MenuItem>
+                        </TextField>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="contained"
-                color="warning"
-                fullWidth
-                sx={{ mt: 2, py: 1.5 }}
-                disabled={loading}
-                endIcon={loading && <CircularProgress size={20} />}
-              >
-                Get Free Trial
-              </Button>
-            </>
-          )}
-        </FormBox>
-      </Box>
-    </Box>
+                        {/* Address */}
+                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                          RESIDENTIAL ADDRESS*
+                        </Typography>
+                        <TextField
+                          fullWidth
+                          multiline
+                          rows={3}
+                          value={formData.address}
+                          onChange={handleChange("address")}
+                          size="small"
+                          error={!!errors.address}
+                          helperText={errors.address}
+                          placeholder="Enter your delivery address"
+                          sx={{ mt: 1 }}
+                        />
+
+                        {/* Message */}
+                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                          MESSAGE
+                        </Typography>
+                        <TextField
+                          fullWidth
+                          multiline
+                          rows={2}
+                          value={formData.message}
+                          onChange={handleChange("message")}
+                          placeholder="Optional message"
+                          size="small"
+                          sx={{ mt: 1 }}
+                        />
+
+                        {errors.submit && (
+                          <FormHelperText error>{errors.submit}</FormHelperText>
+                        )}
+
+                        <Typography fontSize={14} mt={2}>
+                          Submit your request before{" "}
+                          <span className="text-[#FF6514]">12 PM</span> for{" "}
+                          <span className="text-[#FF6514]">Same-day Delivery</span>.
+                        </Typography>
+
+                      {/* Submit Button */}
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="warning"
+                        fullWidth
+                        sx={{ mt: 2, py: 1.5 }}
+                        disabled={loading}
+                        endIcon={loading && <CircularProgress size={20} />}
+                      >
+                        Get Free Trial
+                      </Button>
+                    </>
+                  )}
+                </FormBox>
+              </Box>
+            </Box>
+          </div>
+        </section>
+
+      </div>
+      <Mainfooter />
+    </div>
+
   );
 }
