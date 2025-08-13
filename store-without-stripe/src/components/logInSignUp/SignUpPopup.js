@@ -275,9 +275,9 @@ const validateForm = () => {
         fullWidth
         sx={{ "& .MuiDialog-paper": { height: "75vh" } }}
       >
-        <Box className="flex relative h-full relative overflow-hidden">
+        <Box className="flex relative h-full relative overflow-hidden signboxrow">
           <Box
-            className="w-[50%]"
+            className="w-[50%] signbLcol"
             sx={{
               backgroundImage: `url(${SignUpImage.src})`,
               backgroundSize: "cover",
@@ -286,7 +286,7 @@ const validateForm = () => {
           />
 
           <Box
-            className="w-[50%] p-[2.5vw] self-center signboxcol"
+            className="w-[50%] p-[2.5vw] self-center signboxcol signbRcol"
             sx={{
               bgcolor: "#fff",
             }}
@@ -306,6 +306,7 @@ const validateForm = () => {
               <CloseIcon />
             </IconButton>
 
+            <div className="signboxInrow">
             <div className="poptitles">
               <Typography variant="h4" sx={{ textTransform: "uppercase", mb: 1 }}>
                 {otpSent ? "Enter OTP" : "Sign Up"}
@@ -406,8 +407,8 @@ const validateForm = () => {
               <>
                 <div className="loginfiledss">
                   {/* Name Fields */}
-                  <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
-                    <Box sx={{ flex: 1 }}>
+                      <Box sx={{ display: "flex", gap: 2, mb: 1 }} className="sfrmrow">
+                        <Box sx={{ flex: 1 }} className="sfrmcol">
                       {renderLabel("First Name")}
                       <TextField
                         name="firstName"
@@ -422,7 +423,7 @@ const validateForm = () => {
                         inputProps={{ maxLength: 30 }}
                       />
                     </Box>
-                    <Box sx={{ flex: 1 }}>
+                        <Box sx={{ flex: 1 }} className="sfrmcol">
                       {renderLabel("Last Name")}
                       <TextField
                         name="lastName"
@@ -438,8 +439,8 @@ const validateForm = () => {
                       />
                     </Box>
                   </Box>
-
-                  <Box sx={{ mb: 1 }}>
+                      <Box className="sfrmrow">
+                        <Box sx={{ mb: 1 }} className="sfrmcol">
                     {renderLabel("Mobile Number")}
                     <TextField
                       name="mobile"
@@ -454,8 +455,9 @@ const validateForm = () => {
                       inputProps={{ maxLength: 10 }}
                     />
                   </Box>
-
-                  <Box sx={{ mb: 2 }}>
+                      </Box>
+                      <Box className="sfrmrow">
+                        <Box sx={{ mb: 2 }} className="sfrmcol">
                     {renderLabel("Email")}
                     <TextField
                       name="email"
@@ -469,6 +471,7 @@ const validateForm = () => {
                       helperText={errors.email}
                     />
                   </Box>
+                      </Box>
 
                   <Typography variant="body2" sx={{ mb: 1 }} className="para-tcpp">
                     By creating an account, I accept the{" "}
@@ -549,6 +552,7 @@ const validateForm = () => {
                 </Box> */}
               </>
             )}
+            </div>
           </Box>
         </Box>
       </Dialog>
