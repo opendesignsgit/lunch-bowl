@@ -917,7 +917,9 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .HProlistSec:before{    bottom: 46px;}
   body .SetpContainer .DetlsSepBox {max-width: 90vw;}
   .progroupitem{width: calc(50% - 20px);}
-
+  .HctaSec .HctatImg {width: 60%;}
+  .HctaTitle h3{margin-block: -10px -15px;}
+  ul.footmenu li {margin-inline: 15px;}
 }
 
 @media screen and (max-width:1023px){
@@ -993,6 +995,8 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .freetrilRow .ftLCol .ftLImg{height: auto;margin-bottom: 20px;}
   .freetrilRow .ftLCol .ftLImg img{position: relative!important;}
   .freetrilRow .ftRCol form{padding-left: 0;}
+  .faqcontain:before {height: 22px;}
+  .hbanLeft {padding-left: 46px;}
 }
 
 @media screen and (min-width:651px){
@@ -1066,7 +1070,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .rfbox {flex-direction: column;}
   .rfboximg{width: 85%;margin-bottom: 20px;}
   .rfboximg img{width: 70%;}
-  .rfboxcoint{text-align: center;width: 100%;}
+  .rfboxcoint{text-align: center;width: 100%;padding-left: 0;}
   .rfboxcoint p br{display: none;}
   .sliderRef2 h3 {font-size: 16px;width: 97%;}
   .sliderRef2 h3 span:before{    left: -1px;}
@@ -1205,8 +1209,11 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   #HamburgerMegamenu .mmMenuCon {width: 100%;}
   #HamburgerMegamenu .mmMenuCon ul.HamSMediaul li {margin-inline: 14px;}
   .Hworktabitems {padding-inline: 0px;}
+  .sliderRef1 .slick-arrow{top: 40%;}
+  footer ul.Somediaul li a {width: 30px;}
 }
 @media screen and (max-width:420px){
+  body {font-size: 14px;letter-spacing: 0;}
   .HmteamSec {padding-inline: 30px;}
   .hfformIconss .iconseven {top: 1%;left: 9%;width: 44px;}
   .hfformIconss .icontwo {width: 20px;right: 6%;top: 8%;}
@@ -1218,7 +1225,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .comtilte h2 {font-size: 38px;}
   .pagebansec h1 {font-size: 34px;}
   .aboutbanersec .pageinconter::after, .MenusLbanersec .pageinconter::after {width: 100%;}
-  .pagebansec { height: 500px; padding-inline: 25px; }
+  .pagebansec { height: 530px; padding-inline: 25px; }
   .myLogo {width: 45px;}
   .hbanLeft {padding-inline: 15px;}
   .hbanCont p br{display: none;}
@@ -1243,6 +1250,21 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .inputbox button span{padding-inline: 15px;}
   .inputbox select{margin-right: 0px;}
   .progroupitem {height: 490px;}
+  .sliderRef1 .rfbox h4 {font-size: 22px;line-height: 1;}
+  .HintroSec .hbanLeft:after {width: 34px;bottom: -16.5%;}
+  .HintroSec .hbanLeft:before{width: 31px;}
+  .aboutuspage .aboutmissionsec .hintroimgtwo{border: 4px solid #fff4d7;}
+  .sliderRef1 .slick-arrow {width: 26px;}
+  .aboutuspage .HworktabSec {padding-block: 60px;   }
+  .HOEnviroSec::before {top: 4px;height: 25px;}
+  .HOEnviroSec::after {bottom: 5px;height: 25px;}
+}
 
+@media screen and (max-width:350px){
+  .HintroSec, .HProlistSec, .HLFOlistSec, .HworktabSec, .HteamSec, .Hfaqinrow, footer.FooterSec, .formsec {padding-inline: 16px;}
+  .HctaTitle h3 {font-size: 54px;}
+  .HctaTitle h4 {font-size: 24px;}
+  .pagebansec h1 {font-size: 30px;}
+  .footcopyrow .copycol p {font-size: 11px;}
 
 }
