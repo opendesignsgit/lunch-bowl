@@ -107,7 +107,9 @@ const Mainfooter = () => {
                     <ul className='footmenu flex justify-center'>
                         <li><Link href="/" className="relative" ><span className='block flex items-center relative'>Home</span></Link></li>
               <li><Link href="/about-us" className="relative" ><span className='block flex items-center relative'>About Us</span></Link></li>
-              <li><Link href="/user/my-account" className="relative" ><span className='block flex items-center relative'>My Account</span></Link></li>
+              {session && (
+                <li><Link href="/user/my-account" className="relative" ><span className='block flex items-center relative'>My Account</span></Link></li>
+              )}
               <li><Link href="/Menulist" className="relative" ><span className='block flex items-center relative'>Food Menu</span></Link></li>
               <li><Link href="/contact-us" className="relative" ><span className='block flex items-center relative'>Contact Us</span></Link></li>
                     </ul>
@@ -125,20 +127,22 @@ const Mainfooter = () => {
                     </div>
                 </div>
                 {/* >>> Registration Completion Prompt <<< */}
-            {session && stepCheck !== 4 && (
-              <div className="incomplete-registration-msg mb-[2vh]">
-                If you don’t complete your registration?{" "}
-                <button
-                  onClick={() => router.push("/user/profile-Step-Form")}
-                  className="theme-link"
-                >
-                  please click here
-                </button>
-              </div>
-            )}
-            </div>
-        </footer>
-        
+
+        </div>
+      </footer>
+      {session && stepCheck !== 4 && (
+        <div className="incomplete-registration-msg">
+          <div className="incregbox">
+            If you don’t complete your registration?{" "}
+            <button
+              onClick={() => router.push("/user/profile-Step-Form")}
+              className="theme-link"
+            >
+              please click here
+            </button>
+          </div>
+        </div>
+      )}
         <GetinTouch open={open} onClose={handleCloseDialog}/>
     </>
   )

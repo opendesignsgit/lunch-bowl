@@ -213,7 +213,7 @@ const AboutUs = () => {
                   <h3 className="flex flex-col text4AB138">
                     <span className="block">Lunch Bowl</span>
                   </h3>
-                  <p>We strive to simplify mealtime for parents by delivering thoughtfully crafted, nutritionist- approved lunch boxes that are fresh, flavourful and tailored to children’s preferences. Our commitment to high-quality ingredients, eco-friendly packaging and timely delivery ensures that every meal is a blend of convenience, health and happiness</p>
+                  <p>We strive to simplify mealtime for parents by delivering thoughtfully crafted, nutritionist- approved lunch boxes that are fresh, flavourful and tailored to children’s preferences. Our commitment to high-quality ingredients, eco-friendly packaging and timely delivery ensures that every meal is a blend of convenience, health and happiness.</p>
                 </div>
               </div>
             </div>
@@ -285,7 +285,29 @@ const AboutUs = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap items-center mteamitembox ">
+            <div className="flex flex-wrap items-center mteamitembox ">              
+              <div className="flex-none flex mteambox relative group">
+                <div className="mteamfront w-full text-center">
+                  <div className="mteamimg">
+                    <Image
+                      className="w-full h-auto"
+                      priority
+                      src={RavishankarNImg}
+                      alt="logo"
+                    />
+                  </div>
+                  <h3>Ravishankar N</h3>
+                </div>
+                <div className="mteamback">
+                  <h3>Ravishankar N</h3>
+                  <p>Ravishankar N, Manager Operations: Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
+                  <p>
+                    <button onClick={() => setOpenRavishankarN(true)}>
+                      <span>Read More</span>
+                    </button>
+                  </p>
+                </div>
+              </div>
               <div className="flex-none flex mteambox relative group">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
@@ -372,28 +394,6 @@ const AboutUs = () => {
                       <span>Read More</span>
                     </button>
 
-                  </p>
-                </div>
-              </div>
-              <div className="flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={RavishankarNImg}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Ravishankar N</h3>
-                </div>
-                <div className="mteamback">
-                  <h3>Ravishankar N</h3>
-                  <p>Ravishankar N, Manager Operations: Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
-                  <p>
-                    <button onClick={() => setOpenRavishankarN(true)}>
-                      <span>Read More</span>
-                    </button>
                   </p>
                 </div>
               </div>
