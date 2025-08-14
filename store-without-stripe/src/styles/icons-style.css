@@ -197,6 +197,7 @@
   .ateamIconss .iconone{width: 50px;top: 4%;}
   .ateamIconss .iconeight{width: 75px;}
   .menulIconss .icontwo, .menulIconss .iconone{width: 50px;}
+  .hfformIconss .iconfive {bottom: 10%;   left: 25%;}
 }
 
 @media screen and (max-width:1000px){
@@ -263,4 +264,8 @@
   .hteamIconss .iconone {left: -4%;top: 21%;width: 48px;}
   .hteamIconss .iconsix{top: 28%;width: 40px;}
   .hteamIconss .icontwo{width: 40px;}
+  .hfformIconss .iconone{width: 32px;}
+  .hfformIconss .iconthree {width: 25px;}
+  .hfformIconss .iconsix {width: 21px;}
+  .hfformIconss .iconseven{width: 36px;}
 }
