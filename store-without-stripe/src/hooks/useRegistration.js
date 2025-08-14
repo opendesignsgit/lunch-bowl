@@ -31,7 +31,11 @@ const useRegistration = () => {
           _id,
         });
         return res;
-      }else if (path == "get-customer-form") {
+
+      } else if (path == "get-holiday-payments") {
+        const res = await CustomerServices.getHolidayPayments(data);
+        return res;
+      } else if (path == "get-customer-form") {
         const res = await CustomerServices.getCustomerFormData(_id);
         return res;
       } else if (path == "get-Menu-Calendar") {

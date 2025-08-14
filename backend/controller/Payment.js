@@ -6,6 +6,7 @@ const UserPayment = require("../models/Payment");
 const nodemailer = require("nodemailer");
 const { sendSMS } = require("../lib/sms-sender/smsService");
 const SmsLog = require("../models/SmsLog");
+const HolidayPayment = require("../models/HolidayPayment");
 
 const workingKey =
   process.env.CCAV_WORKING_KEY || "2A561B005709D8B4BAF69D049B23546B"; // Use env vars in production
@@ -219,50 +220,83 @@ exports.ccavenueResponse = async (req, res) => {
 // Holiday Payment Response Handler
 exports.holiydayPayment = async (req, res) => {
   let encResponse = "";
-  req.on("data", (data) => {
-    encResponse += data;
-  });
-
+  req.on("data", (data) => { encResponse += data; });
   req.on("end", async () => {
     try {
       const parsed = qs.parse(encResponse);
       const encrypted = parsed.encResp;
-
-      if (!encrypted) {
-        return res.status(400).send("Missing encrypted response");
-      }
+      if (!encrypted) return res.status(400).send("Missing encrypted response");
 
       const decrypted = ccav.decrypt(encrypted, workingKey);
       const responseData = qs.parse(decrypted);
-
       console.log("Holiday payment decrypted response:", responseData);
 
-      const {
-        order_status,
-        merchant_param1,
-        merchant_param2: holidayDate,
-      } = responseData;
+      const { order_status, merchant_param1: userId, merchant_param2: mealDate, merchant_param3, tracking_id } = responseData;
 
-      if (!merchant_param1) {
-        return res.status(400).send("Missing user ID in payment response");
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).send("Invalid user ID");
       }
-
-      if (!mongoose.Types.ObjectId.isValid(merchant_param1)) {
-        return res.status(400).send("Invalid user ID in payment response");
-      }
-
-      // Pass the responseData to processPaymentResponse so it can record payments properly,
-      // including holidayDate inside paymentTransaction
-      await processPaymentResponse(responseData, "holiday");
 
       if (order_status === "Success") {
-        return res.redirect("https://lunchbowl.co.in/payment/success"); // frontend route
+        // merchant_param3 contains array of {childId, dish}
+        const childrenData = JSON.parse(merchant_param3 || "[]");
+
+        for (const child of childrenData) {
+          await HolidayPayment.create({
+            userId,
+            childId: child.childId,
+            mealDate,
+            mealName: child.dish,
+            amount: 199,
+            paymentStatus: "Paid",
+            transactionDetails: { tracking_id, ...responseData },
+          });
+        }
+        // Redirect to front-end success page
+        return res.redirect("https://lunchbowl.co.in/payment/success");
       } else {
-        return res.redirect("https://lunchbowl.co.in/payment/failed"); // frontend route
+        return res.redirect("https://lunchbowl.co.in/payment/failed");
       }
-    } catch (error) {
-      console.error("CCAvenue holiday payment error:", error);
+    } catch (err) {
+      console.error("CCAvenue holiday payment error:", err);
       res.status(500).send("Internal Server Error");
     }
   });
+};
+
+
+
+// POST Paid Holiday Data for a Specific Date and User (from request body)
+exports.getHolidayPaymentsByDate = async (req, res) => {
+  const { date, userId } = req.body;
+
+  if (!date || !userId) {
+    return res.status(400).json({ error: "date and userId are required in request body" });
+  }
+
+  try {
+    // Validate date format YYYY-MM-DD
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return res.status(400).json({ error: "Invalid date format. Use YYYY-MM-DD" });
+    }
+    // Validate userId is valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid userId format" });
+    }
+
+    const payments = await HolidayPayment.find({
+      mealDate: date,
+      userId: userId
+    }).select("-__v -createdAt -updatedAt");
+
+    // Null/empty check
+    if (!payments || payments.length === 0) {
+      return res.json([]); // return empty array instead of null/error
+    }
+
+    return res.json(payments);
+  } catch (err) {
+    console.error("Error fetching holiday payments:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
