@@ -78,6 +78,11 @@ const CustomerServices = {
   getSavedMeals: async (body) => {
     return requests.post("/customer/get-saved-meals", body);
   },
+
+  getHolidayPayments: async (body) => {
+  return requests.post("/ccavenue/holiday-payments", body);
+},
+
   getCustomerFormData: async (id) => {
     return requests.get(`/customer/form/${id}`);
   },
