@@ -201,7 +201,6 @@
 }
 
 @media screen and (max-width:1000px){
-
   .hbanIconss,.hintroIconss,.hteamIconss .iconthree,.hteamIconss .iconfour,.hteamIconss .iconfive,.hteamIconss .iconsix,.hDoctIconss,.ateamIconss {/*display: none;*/}
   .hteamIconss .iconone {left: 11%;top: 8%;width: 75px;}
   .hteamIconss .icontwo {top: 12%;right: 9%;width: 55px;}
@@ -209,8 +208,18 @@
   .hfformIconss .icontwo{width: 30px;}
   .hfformIconss .iconfour {bottom: -6%;right: 35%;width: 35px;}
   .hfformIconss .iconfive {bottom: 7%;left: 27%;width: 40px;}
-  .ateamIconss{display: none;}
-  
+  .ateamIconss{display: none;}  
+}
+
+@media screen and (max-width:820px){
+  .hteamIconss .iconone {left: 5%;}
+  .hteamIconss .icontwo{right: 7%;}
+  .hDoctIconss .iconfive{width: 80px;}
+  .hDoctIconss .icontwo{width: 70px;}
+  .hDoctIconss .iconfour {bottom: -10%;left: 33%;}
+  .hDoctIconss .iconthree {bottom: 14%;right: 4%;}
+  .hDoctIconss .iconsix {top: 13%;left: 1%;}
+  .hDoctIconss .iconone {top: -9%;right: 31%;}
 }
 
 @media screen and (max-width:650px){

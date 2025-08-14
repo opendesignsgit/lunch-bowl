@@ -146,7 +146,7 @@ const Home = () => {
                                 <h3 className='flex flex-col text4AB138'>
                                     <span className='block'>Lunch Bowl</span> 
                                 </h3>
-                                <p>The goal of Lunch Bowl is to transform how kids get <br/>wholesome meals during the school day while directly <br/>addressing the difficulties experienced by working parents. <br/>In order to guarantee that every kid receives a nutritious, <br/>tasty meal that supports their learning and development, <br/>we are dedicated to delivering freshly made, healthful <br/>meals directly to schools.</p>
+                  <p>We strive to simplify mealtime for parents by delivering <br />thoughtfully crafted, nutritionist- approved lunch boxes <br />that are fresh, flavourful and tailored to children’s <br />preferences. Our commitment to high-quality ingredients, <br />eco-friendly packaging and timely delivery ensures that every <br />meal is a blend of convenience, health and happiness.</p>
                                 <p className="parabtn flex"><Link href="/about-us" className="emenulink relative" ><span className='block flex items-center relative'>Read More</span></Link></p>
                             </div>
                         </div>
