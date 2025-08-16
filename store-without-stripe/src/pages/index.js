@@ -59,6 +59,22 @@ const Home = () => {
 
     const faqItems = [
         {
+        title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
+        content: "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters.  To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery."
+      },
+      {
+        title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
+        content: "We make an effort to provide a varied and ever-changing menu to keep your child engaged.  In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients."
+      },
+      {
+        title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
+        content: "Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
+      },
+      {
+        title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls? ",
+        content: "We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
+      },
+      {
           title: "How do you ensure the food is nutritious and safe for my child?",
         content: "Our meals are nutritionist designed, made with fresh, high-quality ingredients, and prepared under strict hygiene standards. We also customise for dietary needs and take extra care to avoid allergens."
         },
@@ -71,20 +87,20 @@ const Home = () => {
           content: "We take effort to accommodate allergies and provide menu options that can be customized. Our team follows careful preparation practices to ensure meals are safe and free from cross-contamination."
         },
         {
-          title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
-          content: "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters.  To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery."
+          title: "What if I need food on Sunday?",
+          content: "Our regular service is available Monday to Friday. If you require meals on a Sunday, please call us at +91 9176 917602 in advance. Our team will confirm availability and make special arrangements based on your request and delivery location."
         },
         {
-          title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
-          content: "We make an effort to provide a varied and ever-changing menu to keep your child engaged.  In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients."
+          title: "Can I get a Free trial on Sunday?",
+          content: "We don’t offer free trials on Sundays. Please choose any weekday or Saturday slot for your trial."
         },
         {
-          title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
-          content: " Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
+          title: "what if I don’t need meal on any day during my subscription, will I get a refund ?",
+          content: "The days when you don’t avail meals will get carried forward and gets accumulated in your wallet , which can be redeemed during your next subscription."
         },
         {
-          title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls?",
-          content: "We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
+          title: "What if i want to terminate the service? ",
+          content: "Termination is possible , and the unconsumed meal days will be calculated and refund will be processed. Request you to contact customer service for termination of services."
         },
       ];
 
