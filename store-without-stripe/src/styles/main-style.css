@@ -12,7 +12,7 @@
 
 body{font-family: "Open Sans", sans-serif;line-height: 1.6;letter-spacing: -0.3px;font-size: 18px;font-weight: 500;}
 header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 99;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
-.myLogo{width: 7vw;}
+.myLogo{width: 5.5vw;}
 .navbox{margin-left: auto;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .logsinul{margin-left: 2.5vw;}
 .logsinul>li{margin-left: 2.5vw;position: relative;}
@@ -21,7 +21,7 @@ header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 
 .logsinul>li>a::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;}
 .logsinul li.trialbtn a{background: #FF6514;color: #ffffff;}
 .logsinul li.trialbtn a::after{-webkit-filter: invert(1);filter: invert(1);}
-.logsinul>li>button{line-height: 50px;padding-inline: 40px;background: #ffffff;display: block;font-family: 'Baloo';font-size: 18px;position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+.logsinul>li>button{line-height: 50px;padding-inline: 40px;background: #ffffff;display: block;font-family: 'Baloo';font-size: 18px;position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;font-weight: 100;}
 .logsinul>li>button::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;}
 .logsinul li.trialbtn button{background: #FF6514;color: #ffffff;}
 .logsinul li.trialbtn button::after{-webkit-filter: invert(1);filter: invert(1);}
@@ -134,6 +134,12 @@ body .secpaddblock {
 .combtntb p.parabtn a span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;}
 .combtntb p.parabtn a span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
 .combtntb p.parabtn a:hover span::after{top: -3px;right: -3px;}
+.combtntb p.parabtn button{}
+.combtntb p.parabtn button::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.combtntb p.parabtn button:hover::before{right: 0;bottom: 0;}
+.combtntb p.parabtn button span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 16px;font-weight: 400;letter-spacing: 0.5px;}
+.combtntb p.parabtn button span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+.combtntb p.parabtn button:hover span::after{top: -3px;right: -3px;}
 
 .comtilte p{color: #333333;}
 .comtilte p:last-child{margin-bottom: 0;}
@@ -141,8 +147,10 @@ body .secpaddblock {
 .comtilte h2 span{display: block;}
 .comtilte h3 {font-size: 4.3vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -2px;}
 .comtilte h3 span{display: block;}
-.comtilte h4{font-size: 2.2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';margin-bottom: 15px;letter-spacing: -1px;}
+.comtilte h4{font-size: 2.5vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';margin-bottom: 15px;letter-spacing: -1px;}
 .comtilte h4:first-child{margin-bottom: 0px;}
+.comtilte h5{font-size: 1.8vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';margin-bottom: 15px;letter-spacing: -1px;}
+.comtilte h5:first-child{margin-bottom: 0px;}
 .textcenter{text-align: center;}
 
 .comtilte h2.text4AB138 {color: #4AB138;}
@@ -153,17 +161,18 @@ body .secpaddblock {
 .comtilte h3.textFF6514 {color: #FF6514;}
 .comtilte h3.text-white {color: #ffffff;}
 .comtilte h4.text-white {color: #ffffff;}
+.comtilte h5.text-white {color: #ffffff;}
 .comtilte p.text-white{color: #ffffff;}
 
 
 .HctaSec {background: url(/cta-bg.jpg) no-repeat center center;background-size: cover;}
 .HctaTitle {width: 100%;}
-.HctaTitle h4{font-family: 'Baloo';color: #ffffff;font-size: 4vw;line-height: 1;-webkit-text-stroke: 1px #000000;}
-.HctaTitle h3{font-family: 'Baloo';color: #ffffff;font-size: 10vw;line-height: 1;margin-block: -35px -15px;-webkit-text-stroke: 1px #000000;}
+.HctaTitle h4{font-family: 'Baloo';color: #ffffff;font-size: 3.7vw;line-height: 1;-webkit-text-stroke: 1px #000000;text-transform: uppercase;}
+.HctaTitle h3{font-family: 'Baloo';color: #ffffff;font-size: 9vw;line-height: 1;margin-block: -28px -15px;-webkit-text-stroke: 1px #000000;}
 .HctaTitle P{color: #ffffff;}
-.HctaSec .combtntb p.parabtn a span{background: #ffffff;color: #FF6514;}
-.HctaSec .combtntb p.parabtn a span::after{filter: brightness(0) saturate(100%) invert(49%) sepia(90%) saturate(1395%) hue-rotate(359deg) brightness(105%) contrast(105%);}
-.HctaSec .combtntb p.parabtn a::before{border-color: #ffffff;}
+.HctaSec .combtntb p.parabtn button span{background: #ffffff;color: #FF6514;}
+.HctaSec .combtntb p.parabtn button span::after{filter: brightness(0) saturate(100%) invert(49%) sepia(90%) saturate(1395%) hue-rotate(359deg) brightness(105%) contrast(105%);}
+.HctaSec .combtntb p.parabtn button::before{border-color: #ffffff;}
 .steppage .HctaSec {display: none;}
 
 footer{background: #333333;}
@@ -179,7 +188,9 @@ footer::before{content: '';position: absolute;width: 100%;height: 40px;top: 12px
 .footlogo img{-webkit-filter: brightness(0) invert(1);filter: brightness(0) invert(1);}
 .footcopyrow .copycol{display: flex;}
 .footcopyrow .copycol p{position: relative;display: flex;}
-.footcopyrow .copycol p:after{content: ''; position: relative;width: 20px;aspect-ratio: 1;display: block;margin-left: 10px;background: url(/open-dd-logo.webp) no-repeat center center;background-size: auto 85%;}
+.footcopyrow .copycol p a{position: relative;display: flex;}
+.footcopyrow .copycol p a:hover{text-decoration: underline;}
+.footcopyrow .copycol p a:after{content: ''; position: relative;width: 20px;aspect-ratio: 1;display: block;margin-left: 10px;background: url(/open-dd-logo.webp) no-repeat center center;background-size: auto 70%;}
 
 ul.footmenu{}
 ul.footmenu li{margin-inline: 20px;}
@@ -311,7 +322,7 @@ ul.footmenu li a{color: #FFFFFF; }
 .HworktabSec{background: url(/home/hworkbg.jpg) no-repeat center center;background-size: cover;}
 .HworktabSec .slider-container{margin-inline: 4vw;}
 .sliderRef1 {}
-.sliderRef1 .rfbox h4{font-family: 'Baloo';margin-bottom: 10px;font-size: 1.2vw;}
+.sliderRef1 .rfbox h4{font-family: 'Baloo';margin-bottom: 10px;font-size: 1.5vw;letter-spacing: 1px;}
 .sliderRef1 .slick-arrow{width: 50px;height: auto;aspect-ratio: 1;opacity: 0.5;z-index: 99;}
 .sliderRef1 .slick-arrow:hover{opacity: 1;}
 .sliderRef1 .slick-arrow::before{opacity: 0;}
@@ -396,7 +407,7 @@ ul.footmenu li a{color: #FFFFFF; }
 .faqAccordion{}
 .faqAccordionitems {border-bottom: 2px dashed #cccccc;}
 .faqAccordion .faqAccordionitems:first-child{border-top: 2px dashed #cccccc;}
-.faqAccordionitems button{font-family: 'Baloo';font-size: 1vw;padding-block: 15px;padding-inline: 20px;}
+.faqAccordionitems button{font-family: 'Baloo';font-size: 1.1vw;padding-block: 15px;padding-inline: 20px;}
 .faqAccordionitems.active button{background: #ff6514;color: #ffffff;}
 .faqAccordionitems button span.faqarrows{margin-right: 15px;font-size: 2vw;line-height: 0;}
 .faqAccordionitems button span.faqtitles{    text-align: left;}
@@ -411,14 +422,15 @@ ul.footmenu li a{color: #FFFFFF; }
 .HfaqSec.senddesfaq::after{opacity: 0;}
 .HfaqSec.senddesfaq .Hfaqinrow::before{opacity: 0;}
 
-.pagebansec {height: 55vh;padding-top: 10vh;}
+.pagebansec {height: 520px;padding-top: 10vh;}
 .pagebansec {background: url(/about/aboutbanbg.jpg) no-repeat bottom center;background-size: cover;}
-.pagebansec h1{font-family: 'Baloo';font-size: 3.2vw;line-height: 1;text-transform: uppercase;}
+.pagebansec h1{font-family: 'Baloo';font-size: 3.5vw;line-height: 1;text-transform: uppercase;}
+.pagebansec h1 span{display: block;line-height: 0.9;}
 .pagebansec h1 span.firstspan{color: #4AB138;}
 .pagebansec p{font-weight: 500;}
 .pagebansec .breadcrumbs{margin-top: 15px;}
 .pagebansec .breadcrumbs ol{}
-.pagebansec .breadcrumbs ol li{}
+.pagebansec .breadcrumbs ol li{font-size: 14px;}
 .pagebansec .breadcrumbs ol li:last-child {color: #FF6514;}
 .pagebansec .breadcrumbs ol li a{color: #000000;}
 .pagebansec .breadcrumbs ol li a:hover{color: #4ab238;}
@@ -442,6 +454,9 @@ ul.footmenu li a{color: #FFFFFF; }
 
 .aboutuspage .aboutmissionsec .hintroimgtwo{border-color: #fff4d7;}
 
+.HmteamSec{position: relative;}
+.HmteamSec:before{content: ''; position: absolute;top: 0;left:0;right:0;height: 40px;background: url(/about/HmteambefImg.png) no-repeat top center;background-size: 100%; }
+.HmteamSec:after{content: '';position: absolute;bottom: 10px;left: 0;right: 0;height: 40px;background: url(/about/HmteamAftImg.png) repeat-x top center;background-size: 70%;transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .mteamitembox{border: 0px solid #ffffff;justify-content: center;}
 .mteambox {border: 1px solid #ffffff;overflow: hidden;width: 33.333%;}
 .mteamfront {position: relative;top: 0;}
@@ -481,43 +496,47 @@ ul.footmenu li a{color: #FFFFFF; }
 .HOEnviroSec::before{content: '';position: absolute;width: 100%;height: 70px;top: 12px;left: 0;background: url(/about/HOEnvirotopimg.png) no-repeat top center;background-size: 100%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);z-index: 9;pointer-events: none;}
 .HOEnviroSec::after{content: '';position: absolute;width: 100%;height: 70px;bottom: 12px;left: 0;background: url(/about/HOEnvirobtmimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;pointer-events: none;}
 .abtvideoSec {overflow: hidden;}
+.abtvideoSec:after {content: '';position: absolute;bottom: 10px;left: 0;right: 0;height: 40px;background: url(/about/howrkitbefimg.png) repeat-x top center;background-size: 70%;
+transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .abtvidosliders iframe{aspect-ratio: 2 / 1.125;}
 .abtvidosliders img{aspect-ratio: 2 / 1.125;}
 .abtvidosliders .slick-slide>div{line-height: 0;}
 .abtvidosliders .slick-arrow{display: none;}
 .abtvidosliders ul.slick-dots {bottom: 10vh;z-index: 99;}
-.abtvidosliders ul.slick-dots li{width: auto;height: auto;margin-inline: 10px;}
-.abtvidosliders ul.slick-dots li button{padding: 0;border-radius: 50%;background: #f9f9f9;width: 10px;height: auto;aspect-ratio: 1;box-shadow: 0 0 0 3px #838383;opacity: 0.5;}
-.abtvidosliders ul.slick-dots li.slick-active button{opacity: 1;}
+.abtvidosliders ul.slick-dots li{width: auto;height: auto;margin-inline: 3px;}
+.abtvidosliders ul.slick-dots li button{padding: 0;border-radius: 8px;background: #f9f9f9;width: 8px;height: 8px;}
+.abtvidosliders ul.slick-dots li.slick-active button{width: 16px;}
 .abtvidosliders ul.slick-dots li button::before{opacity: 0;}
 
 .HOEnviroSec{}
 .OEnvicontainer {width: 100%;overflow: hidden;}
-.hOEnvirorow .image_wrapper{width: 21vw;margin-inline: 20px;border: 4px solid #ffffff;overflow: hidden;}
-.hOEnvirorow .image_wrapper.imgsmlbox{width: 19vw;border-radius: 200px;}
+.hOEnvirorow .image_wrapper{width: 18vw;margin-inline: 20px;border: 4px solid #ffffff;overflow: hidden;}
+.hOEnvirorow .image_wrapper.imgsmlbox{width: 16vw;border-radius: 200px;}
 .hOEnvirorow .image_wrapper img{width: 100%;}
 
 .contuspage .HctaSec {display: none;}
 .contmapssec iframe{width: 100%;aspect-ratio: 2/0.6;}
 .contaddsboxs{margin-bottom: 10vh;}
-.addsboxss{background: #FFF4D7;padding: 30px;text-align: center;margin-inline: 15px;position: relative;height: 100%;border-radius: 25px;border: 1px solid rgb(255 101 20 / 20%);}
+.addsboxss{background: #FFF4D7;padding: 30px;text-align: center;margin-inline: 10px;position: relative;height: 100%;border-radius: 20px;border: 1px solid rgb(255 101 20 / 20%);}
 .addsIcon{width: 2.5vw;margin-inline: auto;margin-bottom: 10px;}
-.addsboxss h3{line-height: 1;font-family: 'Baloo';font-size: 1.1vw;margin-bottom: 8px;text-transform: uppercase;}
+.addsboxss h3{line-height: 1;font-family: 'Baloo';font-size: 1.2vw;margin-bottom: 8px;text-transform: uppercase;}
+.addsboxss h4{line-height: 1;font-family: 'Baloo';font-size: 1vw;margin-bottom: 8px;text-transform: uppercase;}
 .addsboxss p{margin-bottom: 0px;line-height: 1;}
-.addsboxss p.parabtn{margin-top: 20px;}
-.addsboxss p.parabtn a{color: #FF6514;font-weight: 600;line-height: 1.6;}
+.addsboxss p.parabtn{margin-top: 10px;}
+.addsboxss p.parabtn a{color: #FF6514;font-weight: 600;line-height: 1.4;}
 
 .formbox{}
-.formbox .inputbox label{color: #FF6514;text-transform: uppercase;font-weight: 700;font-size: 14px;position: relative;}
+.formbox.contuslast{width: 48%;}
+.formbox .inputbox label{color: #FF6514;text-transform: uppercase;font-weight: 700;font-size: 16px;position: relative;}
 .formbox .inputbox label sub{line-height: 0;vertical-align: super;margin-left: 1px;}
-.formbox .inputbox input{border:1px solid #cccccc;}
+.formbox .inputbox input{border:1px solid #cccccc;border-radius: 4px;}
 .formbox .inputbox textarea{border:1px solid #cccccc;}
 
 .formbox button{position: relative;}
 .formbox button::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
 .formbox button:hover::before{right: 0;bottom: 0;}
-.formbox button span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;}
-.formbox button span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+.formbox button span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 16px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;}
+.formbox button span::after{content: '';position: relative;display: block;width: 14px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
 .formbox button:hover span::after{top: -3px;right: -3px;}
 
 .SetpTabul .SetpTabli{}
@@ -798,7 +817,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .myaccContainer .notfetchbox h4{text-align: center;}
 
 .freetrilbanersec.pagebansec::before {background: url(/introtopbefrimg-fff4d7.png) repeat-x top center;background-size: 90%;}
-.freetrilbanersec .pageinconter::after {content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: 0;background: url(/about/about-banimg.png) no-repeat center bottom;background-size: 100%;}
+.freetrilbanersec .pageinconter::after {content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: -17%;background: url(/freetrailbanimg.png) no-repeat center top;background-size: 100%;}
 .freetrilsec{background:#FFF4D7;}
 .freetrilRow{}
 .freetrilRow .ftLCol {width: 50%;}
@@ -811,6 +830,8 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .incomplete-registration-msg .incregbox{background: #ff6514;padding: 4px 20px;border-radius: 20px 20px 0 0;font-size: 16px;}
 .incomplete-registration-msg .incregbox button{color: #ffffff;text-decoration: underline;}
 .incomplete-registration-msg .incregbox button:hover{color: #000000;}
+.incomplete-registration-msgspace{height: 40px;width: 100%;}
+
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
 }
@@ -924,6 +945,9 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .HctaSec .HctatImg {width: 60%;}
   .HctaTitle h3{margin-block: -10px -15px;}
   ul.footmenu li {margin-inline: 15px;}
+  .SetpTabli p {font-size: 13px;height: 36px;}
+  .SetpTabli p:before{border-top: 18px solid transparent;border-bottom: 18px solid transparent;border-left: 15px solid #ffffff;left: -1px;}
+  .SetpTabli p:after{border-top: 18px solid transparent;border-bottom: 18px solid transparent;}
 }
 
 @media screen and (max-width:1023px){
@@ -968,7 +992,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .hintroLeft.comtilte p br{display: none;}
   .faqAccordionitems button{padding-block: 10px;font-size: 15px;padding-inline: 15px;}
   ul.footmenu li {margin-inline: 12px;}
-  .copymenucol ul.footmenu li {margin-inline: 16px 0;}
+  .copymenucol ul.footmenu li {margin-inline: 14px 0;}
   .hteamIconss .icontwo {top: 12%;right: 6%;}
   .hteamIconss .iconone {left: 9%;top: 8%;}
   .pagebansec h1{flex-direction: column;}
@@ -983,13 +1007,14 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .HmteamSec {padding-inline: 40px;}
   .addsboxss p.parabtn {margin-top: 10px;}
   .pagebansec p br{display: none;}
-  .pagebansec .hworkTitle {width: 40%;}
+  .pagebansec .hworkTitle {width: 70%;}
+  .freetrilpage .pagebansec .hworkTitle {width: 40%;}
   .pagebansec.MyAccbanersec .hworkTitle {display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
   .menulIconss .iconone{right: -11px;}
   .SetpContainer  .subplnBoxss {-webkit-box-orient: vertical;-webkit-box-direction: reverse;-ms-flex-direction: column-reverse;flex-direction: column-reverse;}
   .ProdfilterBox ul{overflow-x: scroll;overflow-y: hidden;white-space: nowrap;-webkit-box-pack: start;-ms-flex-pack: start;justify-content: flex-start;}
   .aboutintroCol .hintroIntb {width: 100%;}
-  .aboutintroRow .aboutintroRCol{position: relative;width: 100%;}
+  .aboutintroRow .aboutintroRCol{position: relative;width: 65%;margin-top: 30px;}
   .aboutintroRow{-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;}
   .Hworktabitems{padding-inline: 40px;}
   .rfboximg {width: 35%;margin-inline: auto;flex: auto;}
@@ -1013,6 +1038,8 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .contaddsboxs .flex-1:nth-child(2){width: 50%; flex: auto;}
   .contaddsboxs .flex-1:nth-child(3){width: 100%; flex: auto;margin-top: 20px;}
   .contmapssec iframe {aspect-ratio: 2 / 1;}
+  footer::before{height: 21px;background-size: auto 45%;top: 13px;}
+  footer ul.Somediaul li a {width: 30px;}
 }
 
 @media screen and (min-width:651px){
@@ -1029,13 +1056,20 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .sscroll-animi header{background: #FFF4D7;padding: 10px 15px;}
   .logsinul>li>button{background: #000000;color: #ffffff;}
   .logsinul>li::before{border-color:#000000;right: -3px;bottom: -3px;}
+  .logsinul>li.userMenuBtn::before{opacity: 0;}
   .logsinul>li>button::after{filter: invert(1);}
+  .logsinul>li.userMenuBtn{margin-left: 20px;}
+  .logsinul>li.userMenuBtn>button{position: relative;padding-inline: 0;background: transparent;}
+  .logsinul>li.userMenuBtn>button::before{content: '';position: relative;display: block;width: 40px;aspect-ratio: 1;background: url(/userIcon.svg) no-repeat bottom center;background-size: 90%;}
+  .logsinul>li.userMenuBtn>button span{display: none;}
   .HbanSec{flex-wrap: wrap;}
   .hbanLeft {width: 100%;padding-block: 150px 40px;}
+  .HbanSec .hbanLeft {width: 100%;padding-block: 150px 40px;padding-left: 0;}
   .hbanRight {width: 100%;}
   .hbanRight::before{width: 100%;height: 30px;background: url(/home/bantoppattern.png) no-repeat bottom center;background-size: 100%;left: 0;top: -5px;}
   .hbanRight::after{content: '';position: absolute;width: 100%;height: 30px;bottom:-5px;left: 0;right: 0;background: url(/home/banMobbtmpattern.png) no-repeat top center;background-size: 100%;pointer-events: none;}
   .hbanCont {text-align: center;}
+  .hintroRight {padding-inline: 0;}
   .myLogo {width: 65px;}
   .hmenubox {margin-left: 25px;width: 45px;}
   .homepage .hmenubox h6{color: #000000;}
@@ -1228,6 +1262,10 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .Hworktabitems {padding-inline: 0px;}
   .sliderRef1 .slick-arrow{top: 40%;}
   footer ul.Somediaul li a {width: 30px;}
+  .aboutintroRow .aboutintroRCol{width: 100%;}
+  .incomplete-registration-msg .incregbox{font-size: 14px;}
+  .freetrilpage .pagebansec .hworkTitle {width: 100%;}
+  .freetrilbanersec .pageinconter::after{width: 100%;height: 50%;right: 0%;bottom: -7%;}
 }
 @media screen and (max-width:420px){
   body {font-size: 14px;letter-spacing: 0;}

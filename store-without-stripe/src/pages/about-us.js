@@ -24,6 +24,9 @@ import img4 from "../../public/about/environ-img4.jpg";
 import img5 from "../../public/about/environ-img5.jpg";
 import img6 from "../../public/about/environ-img6.jpg";
 
+import abtintroImgOne from "../../public/about/abtintroImgOne.jpg";
+import abtintroImgTwo from "../../public/about/abtintroImgTwo.png";
+
 import hintroicon1 from "../../public/home/icons/hintro/yellowround-flower.svg";
 import hintroicon2 from "../../public/home/icons/hintro/blue-and-orange-star.svg";
 import hintroicon3 from "../../public/home/icons/hintro/blur-and-yellow-star.svg";
@@ -88,7 +91,7 @@ const AboutUs = () => {
                 />
               </div>
               <div className="abbanicn icontwo absolute">
-                <Image src={abbanicon2} priority alt="Icon" />
+                <Image src={abbanicon2} priority alt="Icon" className="iconrubberband" />
               </div>
             </div>
           </div>
@@ -127,7 +130,7 @@ const AboutUs = () => {
                   <Image
                     className="w-full h-auto"
                     priority
-                    src={hintroImgOne}
+                    src={abtintroImgOne}
                     alt="logo"
                   />
                 </div>
@@ -135,7 +138,7 @@ const AboutUs = () => {
                   <Image
                     className="w-full h-auto"
                     priority
-                    src={hintroImgTwo}
+                    src={abtintroImgTwo}
                     alt="logo"
                   />
                 </div>
@@ -259,13 +262,16 @@ const AboutUs = () => {
                   className="iconrotates"
                 />
               </div>
+              <div className="hintroicn iconeight absolute">
+                &nbsp;
+              </div>
             </div>
           </div>
         </section>
         <section className="HmteamSec relative bg-FFE6E6 flex py-[12vh]">
           <div className="container mx-auto relative">
             <div className="hintroLeft combtntb comtilte text-center mb-[5vh]">
-              <h4>Meet the team</h4>
+              <h5>Meet the team</h5>
               <h3 className="flex flex-col text4AB138">
                 <span className="block">Behind the Magic</span>
               </h3>
@@ -278,10 +284,10 @@ const AboutUs = () => {
 
               <div className="ateamIconss">
                 <div className="ateamicn iconone absolute">
-                  <Image src={ateamicon1} priority alt="Icon" />
+                  <Image src={ateamicon1} priority alt="Icon" className="iconrubberband" />
                 </div>
                 <div className="ateamicn iconeight absolute">
-                  <Image src={ateamicon8} priority alt="Icon" />
+                  <Image src={ateamicon8} priority alt="Icon" className="zoominoutanimi" />
                 </div>
               </div>
             </div>
@@ -474,7 +480,7 @@ const AboutUs = () => {
         <section className="HworktabSec relative bg-white flex py-[12vh]">
           <div className="container mx-auto">
             <div className="hworkTitle combtntb comtilte textcenter  mb-[5vh]">
-              <h4 className="text-[#000000]">How IT</h4>
+              <h5 className="text-[#000000]">How IT</h5>
               <h3 className="flex flex-col textFF6514">
                 {" "}
                 <span className="block">Works?</span>{" "}
