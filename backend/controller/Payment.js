@@ -217,48 +217,125 @@ exports.ccavenueResponse = async (req, res) => {
   });
 };
 
-// Holiday Payment Response Handler
+// Holiday Payment Response Handler - Handles Both JSON Array and Comma String Formats
 exports.holiydayPayment = async (req, res) => {
   let encResponse = "";
   req.on("data", (data) => { encResponse += data; });
+
   req.on("end", async () => {
     try {
+      // Parse the CCAVenue response
       const parsed = qs.parse(encResponse);
       const encrypted = parsed.encResp;
-      if (!encrypted) return res.status(400).send("Missing encrypted response");
+      if (!encrypted) {
+        console.error("Missing encResp in payload:", encResponse);
+        return res.status(400).send("Missing encrypted response");
+      }
 
-      const decrypted = ccav.decrypt(encrypted, workingKey);
-      const responseData = qs.parse(decrypted);
+      let decrypted, responseData;
+      try {
+        decrypted = ccav.decrypt(encrypted, workingKey);
+      } catch (decryptErr) {
+        console.error("CCAVenue decrypt error:", decryptErr, "Input:", encrypted);
+        return res.status(400).send("Failed to decrypt payment response");
+      }
+
+      try {
+        responseData = qs.parse(decrypted);
+      } catch (parseErr) {
+        console.error("Failed to parse decrypted response:", decrypted, parseErr);
+        return res.status(400).send("Malformed payment response data");
+      }
+
       console.log("Holiday payment decrypted response:", responseData);
 
       const { order_status, merchant_param1: userId, merchant_param2: mealDate, merchant_param3, tracking_id } = responseData;
 
+      // Validate IDs and date
+      if (!userId) {
+        console.error("userId missing from responseData:", responseData);
+        return res.status(400).send("Missing user ID");
+      }
       if (!mongoose.Types.ObjectId.isValid(userId)) {
+        console.error("userId is not a valid ObjectId:", userId);
         return res.status(400).send("Invalid user ID");
+      }
+      if (!mealDate || !/^\d{4}-\d{2}-\d{2}$/.test(mealDate)) {
+        console.error("Invalid or missing mealDate:", mealDate);
+        return res.status(400).send("Invalid mealDate (should be YYYY-MM-DD)");
+      }
+
+      // Flexible parser for merchant_param3
+      let childrenData = [];
+      try {
+        if (merchant_param3 && merchant_param3.trim().startsWith("[")) {
+          // JSON array
+          childrenData = JSON.parse(merchant_param3);
+          if (!Array.isArray(childrenData)) throw new Error("childrenData is not array");
+        } else if (merchant_param3 && merchant_param3.includes("childId")) {
+          // Comma string format: childId... , dish... , mealDate...
+          const parts = merchant_param3.split(",");
+          const childObj = {};
+          for (const part of parts) {
+            const clean = part.trim();
+            if (clean.startsWith("childId")) childObj.childId = clean.replace("childId", "");
+            if (clean.startsWith("dish")) childObj.dish = clean.replace("dish", "");
+            if (clean.startsWith("mealDate")) childObj.mealDate = clean.replace("mealDate", "");
+          }
+          // If mealDate not present in string, fallback to POST param
+          if (!childObj.mealDate && mealDate) childObj.mealDate = mealDate;
+          childrenData.push(childObj);
+        }
+        // else: not present or empty, leave as []
+      } catch (err) {
+        console.error("Cannot parse merchant_param3 (childrenData):", merchant_param3, err);
+        return res.status(400).send("Malformed childrenData in payment");
       }
 
       if (order_status === "Success") {
-        // merchant_param3 contains array of {childId, dish}
-        const childrenData = JSON.parse(merchant_param3 || "[]");
+        // Validate every child before DB save!
+        for (const [index, child] of childrenData.entries()) {
+          if (!child || typeof child !== "object") {
+            console.error(`Child ${index} entry is not object:`, child);
+            continue; // Skip, or optionally throw
+          }
+          if (!child.childId || typeof child.childId !== "string") {
+            console.error(`Child ${index}: Missing or invalid childId:`, child.childId);
+            continue;
+          }
+          if (!child.dish || typeof child.dish !== "string") {
+            console.error(`Child ${index}: Missing or invalid dish:`, child.dish);
+            continue;
+          }
+          // If mealDate missing in child (for comma string), use response mealDate
+          const finalMealDate = child.mealDate || mealDate;
+          if (!finalMealDate) {
+            console.error(`Child ${index}: Missing mealDate in child and root.`, child);
+            continue;
+          }
 
-        for (const child of childrenData) {
-          await HolidayPayment.create({
-            userId,
-            childId: child.childId,
-            mealDate,
-            mealName: child.dish,
-            amount: 199,
-            paymentStatus: "Paid",
-            transactionDetails: { tracking_id, ...responseData },
-          });
+          try {
+            await HolidayPayment.create({
+              userId,
+              childId: child.childId,
+              mealDate: finalMealDate,
+              mealName: child.dish,
+              amount: 199,
+              paymentStatus: "Paid",
+              transactionDetails: { tracking_id, ...responseData },
+            });
+          } catch (dbErr) {
+            console.error(`DB save error for child:`, child, dbErr);
+            // Optionally: return res.status(500).send("Database save failed");
+            // Or just skip the broken entry and process others
+          }
         }
-        // Redirect to front-end success page
         return res.redirect("https://lunchbowl.co.in/payment/success");
       } else {
         return res.redirect("https://lunchbowl.co.in/payment/failed");
       }
     } catch (err) {
-      console.error("CCAvenue holiday payment error:", err);
+      console.error("CCAvenue holiday payment handler - Uncaught error:", err);
       res.status(500).send("Internal Server Error");
     }
   });
