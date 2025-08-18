@@ -163,7 +163,7 @@ const LeftPanel = ({
             const isOutOfRange =
               dayjs(dateKey).isBefore(subscriptionStart) ||
               dayjs(dateKey).isAfter(subscriptionEnd);
-            const isWithin48Hours = dayjs(dateKey).diff(dayjs(), "hour") < 48;
+            const isWithin48Hours = dayjs(dateKey).diff(dayjs(), "hour") < 24;
 
             if (!dish) return null;
 
