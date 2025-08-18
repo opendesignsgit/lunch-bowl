@@ -58,7 +58,7 @@ const RightPanel = ({
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
   const isSelectedHoliday = !!holiday;
-  const isWithin48Hours = selectedDateObj.diff(dayjs(), "hour") < 48;
+  const isWithin48Hours = selectedDateObj.diff(dayjs(), "hour") < 24;
   const isSunday = selectedDateObj.day() === 0;
   const { submitHandler, loading } = useRegistration();
 
