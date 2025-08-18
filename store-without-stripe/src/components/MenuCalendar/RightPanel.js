@@ -64,30 +64,30 @@ const RightPanel = ({
 
 
   // Load paid meal data from API, fallback to localStorage
- useEffect(() => {
-  const dateKey = formatDate(selectedDate);
-  if (!session?.user?.id) return;
+  useEffect(() => {
+    const dateKey = formatDate(selectedDate);
+    if (!session?.user?.id) return;
 
-  const fetchPaidMeals = async () => {
-    try {
-      const res = await submitHandler({
-        path: "get-holiday-payments",
-        data: { date: dateKey, userId: session.user.id }
-      });
-      if (res?.success !== false) {
-        setPaidHolidayMeals(res || []);
-        localStorage.setItem("paidHolidayMeal", JSON.stringify(res || []));
-      } else {
+    const fetchPaidMeals = async () => {
+      try {
+        const res = await submitHandler({
+          path: "get-holiday-payments",
+          data: { date: dateKey, userId: session.user.id }
+        });
+        if (res?.success !== false) {
+          setPaidHolidayMeals(res || []);
+          localStorage.setItem("paidHolidayMeal", JSON.stringify(res || []));
+        } else {
+          setPaidHolidayMeals([]);
+        }
+      } catch (err) {
+        console.error("Error fetching paid holiday data:", err);
         setPaidHolidayMeals([]);
       }
-    } catch (err) {
-      console.error("Error fetching paid holiday data:", err);
-      setPaidHolidayMeals([]);
-    }
-  };
+    };
 
-  fetchPaidMeals();
-}, [selectedDate, formatDate, session?.user?.id]);
+    fetchPaidMeals();
+  }, [selectedDate, formatDate, session?.user?.id]);
 
   const getDayMenu = (selectedDate) => {
     if (!mealPlanArray || mealPlanArray.length === 0) return [];
@@ -230,162 +230,176 @@ const RightPanel = ({
             <div className="childinputbox">
               {useMealPlan
                 ? dummyChildren.map((child, childIndex) => (
+                  <Box key={child.id} className="childmlist">
+                    <Typography className="menuddtitle">
+                      {(child.name || "").toUpperCase()}
+                    </Typography>
+                    <Box className="radiobtngroup">
+                      <FormControl
+                        className="radiobtnss"
+                        component="fieldset"
+                        fullWidth
+                      >
+                        <RadioGroup
+                          value={selectedPlans[child.id] || ""}
+                          onChange={(e) => {
+                            handlePlanChange(
+                              child.id,
+                              parseInt(e.target.value)
+                            );
+                            setActiveChild(childIndex);
+                          }}
+                          className="RGradiobtnSSS"
+                        >
+                          {mealPlans.map((plan) => (
+                            <Box
+                              key={plan.id}
+                              display="flex"
+                              alignItems="center"
+                              mb={0.5}
+                              className="RGradiobtn"
+                            >
+                              <Radio
+                                value={plan.id}
+                                size="small"
+                                className="radiobtnsinput"
+                              />
+                              <Typography
+                                fontSize="0.8rem"
+                                color="#000"
+                                sx={{ flexGrow: 1 }}
+                                className="radiobtnstext"
+                              >
+                                {plan.name}
+                              </Typography>
+                              <Link
+                                href="#"
+                                fontSize="0.8rem"
+                                sx={{
+                                  color: "#f97316",
+                                  textDecoration: "none",
+                                  "&:hover": { textDecoration: "underline" },
+                                }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  plan.id === 1
+                                    ? setDialogOpen1(true)
+                                    : setDialogOpen2(true);
+                                }}
+                              >
+                                View Plan
+                              </Link>
+                            </Box>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                    </Box>
+                  </Box>
+                ))
+                : dummyChildren.map((child, childIndex) => {
+                  const isPaid = paidHolidayMeals.some(
+                    (p) => p.childId === child.id && p.mealDate === formatDate(selectedDate)
+                  );
+
+                  return (
                     <Box key={child.id} className="childmlist">
                       <Typography className="menuddtitle">
                         {(child.name || "").toUpperCase()}
                       </Typography>
-                      <Box className="radiobtngroup">
-                        <FormControl
-                          className="radiobtnss"
-                          component="fieldset"
+
+                      <Box
+                        className="menuddlistbox"
+                        bgcolor="#fff"
+                        borderRadius={2}
+                        px={1}
+                        py={0.5}
+                      >
+                        <Select
+                          className="menuddlist"
+                          value={menuSelections[formatDate(selectedDate)]?.[child.id] || ""}
+                          onChange={(e) => {
+                            childIndex === 0
+                              ? handleFirstChildMenuChange(child.id, e.target.value)
+                              : handleMenuSelectionChange(child.id, e.target.value);
+                            setActiveChild(childIndex);
+                          }}
                           fullWidth
+                          variant="standard"
+                          disableUnderline
+                          MenuProps={{
+                            PaperProps: { style: { maxHeight: 48 * 4.5 } },
+                          }}
                         >
-                          <RadioGroup
-                            value={selectedPlans[child.id] || ""}
-                            onChange={(e) => {
-                              handlePlanChange(
-                                child.id,
-                                parseInt(e.target.value)
-                              );
-                              setActiveChild(childIndex);
-                            }}
-                            className="RGradiobtnSSS"
-                          >
-                            {mealPlans.map((plan) => (
-                              <Box
-                                key={plan.id}
-                                display="flex"
-                                alignItems="center"
-                                mb={0.5}
-                                className="RGradiobtn"
-                              >
-                                <Radio
-                                  value={plan.id}
-                                  size="small"
-                                  className="radiobtnsinput"
-                                />
-                                <Typography
-                                  fontSize="0.8rem"
-                                  color="#000"
-                                  sx={{ flexGrow: 1 }}
-                                  className="radiobtnstext"
-                                >
-                                  {plan.name}
-                                </Typography>
-                                <Link
-                                  href="#"
-                                  fontSize="0.8rem"
-                                  sx={{
-                                    color: "#f97316",
-                                    textDecoration: "none",
-                                    "&:hover": { textDecoration: "underline" },
-                                  }}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    plan.id === 1
-                                      ? setDialogOpen1(true)
-                                      : setDialogOpen2(true);
-                                  }}
-                                >
-                                  View Plan
-                                </Link>
-                              </Box>
-                            ))}
-                          </RadioGroup>
-                        </FormControl>
+                          <MenuItem value="">Select Dish</MenuItem>
+                          {getDayMenu(selectedDate).map((menu, i) => (
+                            <MenuItem key={i} value={menu}>
+                              {menu}
+                            </MenuItem>
+                          ))}
+                        </Select>
                       </Box>
-                    </Box>
-                  ))
-                : dummyChildren.map((child, childIndex) => {
-                    const isPaid = isChildPaid(child.id);
-                    return (
-                      <Box key={child.id} className="childmlist">
-                        <Typography className="menuddtitle">
-                          {(child.name || "").toUpperCase()}
-                        </Typography>
-                        <Box
-                          className="menuddlistbox"
-                          bgcolor="#fff"
-                          borderRadius={2}
-                          px={1}
-                          py={0.5}
-                        >
-                          <Select
-                            className="menuddlist"
-                            value={menuSelections[formatDate(selectedDate)]?.[child.id] || ""}
-                            onChange={(e) => {
-                              childIndex === 0
-                                ? handleFirstChildMenuChange(child.id, e.target.value)
-                                : handleMenuSelectionChange(child.id, e.target.value);
-                              setActiveChild(childIndex);
-                            }}
-                            fullWidth
-                            variant="standard"
-                            disableUnderline
-                            MenuProps={{
-                              PaperProps: { style: { maxHeight: 48 * 4.5 } },
-                            }}
-                          >
-                            <MenuItem value="">Select Dish</MenuItem>
-                            {getDayMenu(selectedDate).map((menu, i) => (
-                              <MenuItem key={i} value={menu}>
-                                {menu}
-                              </MenuItem>
-                            ))}
-                          </Select>
+
+                      {isSelectedHoliday && !isSunday && (
+                        <Box mt={1}>
+                          {isPaid ? (
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              fullWidth
+                              onClick={() => {
+                                if (typeof saveSelectedMeals === "function") {
+                                  saveSelectedMeals();
+                                }
+                              }}
+                            >
+                              Save
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              color="warning"
+                              fullWidth
+                              onClick={() => {
+                                const dish = menuSelections[formatDate(selectedDate)]?.[child.id];
+                                if (!dish) {
+                                  alert("Select a dish first");
+                                  return;
+                                }
+                                setHolidayPaymentData([
+                                  { childId: child.id, dish, mealDate: formatDate(selectedDate) },
+                                ]);
+                                setHolidayPaymentOpen(true);
+                              }}
+                            >
+                              Pay ₹199
+                            </Button>
+                          )}
                         </Box>
-                        {isSelectedHoliday && !isSunday && (
-                          <Box mt={1}>
-                            {isPaid ? (
-                              <Button variant="contained" color="success" disabled fullWidth>
-                                Paid
-                              </Button>
-                            ) : (
-                              <Button
-                                variant="contained"
-                                color="warning"
-                                fullWidth
-                                onClick={() => {
-                                  const dish =
-                                    menuSelections[formatDate(selectedDate)]?.[child.id];
-                                  if (!dish) {
-                                    alert("Select a dish first");
-                                    return;
-                                  }
-                                  setHolidayPaymentData([
-                                    { childId: child.id, dish, mealDate: formatDate(selectedDate) },
-                                  ]);
-                                  setHolidayPaymentOpen(true);
-                                }}
-                              >
-                                Pay ₹199
-                              </Button>
-                            )}
-                          </Box>
-                        )}
-                        {childIndex === 0 && !isSelectedHoliday && (
-                          <Box sx={{ mt: 1 }}>
-                            <FormControlLabel
-                              className="cbapplysbtn"
-                              control={
-                                <Checkbox
-                                  checked={applyToAll}
-                                  onChange={handleApplyToAllChange}
-                                  sx={{ color: "#fff" }}
-                                />
-                              }
-                              label={
-                                <Typography fontSize="0.8rem" color="#fff">
-                                  Apply the same menu for all children
-                                </Typography>
-                              }
-                            />
-                          </Box>
-                        )}
-                      </Box>
-                    );
-                  })}
+                      )}
+
+                      {childIndex === 0 && !isSelectedHoliday && (
+                        <Box sx={{ mt: 1 }}>
+                          <FormControlLabel
+                            className="cbapplysbtn"
+                            control={
+                              <Checkbox
+                                checked={applyToAll}
+                                onChange={handleApplyToAllChange}
+                                sx={{ color: "#fff" }}
+                              />
+                            }
+                            label={
+                              <Typography fontSize="0.8rem" color="#fff">
+                                Apply the same menu for all children
+                              </Typography>
+                            }
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                  );
+                })}
             </div>
 
             <div className="childbtnsbox">

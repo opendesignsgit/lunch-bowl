@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const { sendSMS } = require("../lib/sms-sender/smsService");
 const SmsLog = require("../models/SmsLog");
 const HolidayPayment = require("../models/HolidayPayment");
+const UserMeal = require("../models/UserMeal"); 
 
 const workingKey =
   process.env.CCAV_WORKING_KEY || "2A561B005709D8B4BAF69D049B23546B"; // Use env vars in production
@@ -217,18 +218,18 @@ exports.ccavenueResponse = async (req, res) => {
   });
 };
 
-// Holiday Payment Response Handler - Handles Both JSON Array and Comma String Formats
+// Holiday Payment Response Handler
 exports.holiydayPayment = async (req, res) => {
   let encResponse = "";
-  req.on("data", (data) => { encResponse += data; });
+  req.on("data", (data) => {
+    encResponse += data;
+  });
 
   req.on("end", async () => {
     try {
-      // Parse the CCAVenue response
       const parsed = qs.parse(encResponse);
       const encrypted = parsed.encResp;
       if (!encrypted) {
-        console.error("Missing encResp in payload:", encResponse);
         return res.status(400).send("Missing encrypted response");
       }
 
@@ -236,44 +237,27 @@ exports.holiydayPayment = async (req, res) => {
       try {
         decrypted = ccav.decrypt(encrypted, workingKey);
       } catch (decryptErr) {
-        console.error("CCAVenue decrypt error:", decryptErr, "Input:", encrypted);
         return res.status(400).send("Failed to decrypt payment response");
       }
 
       try {
         responseData = qs.parse(decrypted);
       } catch (parseErr) {
-        console.error("Failed to parse decrypted response:", decrypted, parseErr);
         return res.status(400).send("Malformed payment response data");
       }
 
-      console.log("Holiday payment decrypted response:", responseData);
-
       const { order_status, merchant_param1: userId, merchant_param2: mealDate, merchant_param3, tracking_id } = responseData;
 
-      // Validate IDs and date
-      if (!userId) {
-        console.error("userId missing from responseData:", responseData);
-        return res.status(400).send("Missing user ID");
-      }
-      if (!mongoose.Types.ObjectId.isValid(userId)) {
-        console.error("userId is not a valid ObjectId:", userId);
-        return res.status(400).send("Invalid user ID");
-      }
-      if (!mealDate || !/^\d{4}-\d{2}-\d{2}$/.test(mealDate)) {
-        console.error("Invalid or missing mealDate:", mealDate);
-        return res.status(400).send("Invalid mealDate (should be YYYY-MM-DD)");
-      }
+      if (!userId) return res.status(400).send("Missing user ID");
+      if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).send("Invalid user ID");
+      if (!mealDate || !/^\d{4}-\d{2}-\d{2}$/.test(mealDate)) return res.status(400).send("Invalid mealDate (should be YYYY-MM-DD)");
 
-      // Flexible parser for merchant_param3
+      // Parse children's paid meal data
       let childrenData = [];
       try {
         if (merchant_param3 && merchant_param3.trim().startsWith("[")) {
-          // JSON array
           childrenData = JSON.parse(merchant_param3);
-          if (!Array.isArray(childrenData)) throw new Error("childrenData is not array");
         } else if (merchant_param3 && merchant_param3.includes("childId")) {
-          // Comma string format: childId... , dish... , mealDate...
           const parts = merchant_param3.split(",");
           const childObj = {};
           for (const part of parts) {
@@ -282,38 +266,21 @@ exports.holiydayPayment = async (req, res) => {
             if (clean.startsWith("dish")) childObj.dish = clean.replace("dish", "");
             if (clean.startsWith("mealDate")) childObj.mealDate = clean.replace("mealDate", "");
           }
-          // If mealDate not present in string, fallback to POST param
           if (!childObj.mealDate && mealDate) childObj.mealDate = mealDate;
           childrenData.push(childObj);
         }
-        // else: not present or empty, leave as []
       } catch (err) {
-        console.error("Cannot parse merchant_param3 (childrenData):", merchant_param3, err);
         return res.status(400).send("Malformed childrenData in payment");
       }
 
-      if (order_status === "Success") {
-        // Validate every child before DB save!
-        for (const [index, child] of childrenData.entries()) {
-          if (!child || typeof child !== "object") {
-            console.error(`Child ${index} entry is not object:`, child);
-            continue; // Skip, or optionally throw
-          }
-          if (!child.childId || typeof child.childId !== "string") {
-            console.error(`Child ${index}: Missing or invalid childId:`, child.childId);
-            continue;
-          }
-          if (!child.dish || typeof child.dish !== "string") {
-            console.error(`Child ${index}: Missing or invalid dish:`, child.dish);
-            continue;
-          }
-          // If mealDate missing in child (for comma string), use response mealDate
-          const finalMealDate = child.mealDate || mealDate;
-          if (!finalMealDate) {
-            console.error(`Child ${index}: Missing mealDate in child and root.`, child);
-            continue;
-          }
+      if (order_status !== "Success") {
+        return res.redirect("https://lunchbowl.co.in/payment/failed");
+      }
 
+      // Always update HolidayPayment
+      for (const child of childrenData) {
+        const finalMealDate = child.mealDate || mealDate;
+        if (child.childId && child.dish && finalMealDate) {
           try {
             await HolidayPayment.create({
               userId,
@@ -325,15 +292,53 @@ exports.holiydayPayment = async (req, res) => {
               transactionDetails: { tracking_id, ...responseData },
             });
           } catch (dbErr) {
-            console.error(`DB save error for child:`, child, dbErr);
-            // Optionally: return res.status(500).send("Database save failed");
-            // Or just skip the broken entry and process others
+            // Log, don't block
+            console.error("HolidayPayment DB error:", dbErr);
           }
         }
-        return res.redirect("https://lunchbowl.co.in/payment/success");
-      } else {
-        return res.redirect("https://lunchbowl.co.in/payment/failed");
       }
+
+      // --- Only update existing UserMeal, DO NOT create new! ---
+      let userMeal = await UserMeal.findOne({ userId: mongoose.Types.ObjectId(userId) });
+      if (!userMeal) {
+        return res.status(404).send("User meal plan not found. Please contact support.");
+      }
+      let updated = false;
+      for (const child of childrenData) {
+        if (!child.childId || !child.dish) continue;
+        const finalMealDate = child.mealDate || mealDate;
+        const mealDateObj = new Date(finalMealDate);
+
+        // Find child's entry in userMeal
+        let childObj = userMeal.children.find(
+          c => c.childId.toString() === child.childId
+        );
+        if (!childObj) continue; // DO NOT create new child entry!
+
+        // Check if meal for this date exists
+        let mealIndex = childObj.meals.findIndex(
+          m => new Date(m.mealDate).toISOString().slice(0, 10) === mealDateObj.toISOString().slice(0, 10)
+        );
+        if (mealIndex >= 0) {
+          // Overwrite
+          childObj.meals[mealIndex].mealName = child.dish;
+          childObj.meals[mealIndex].mealDate = mealDateObj;
+        } else {
+          // Add new meal for that date
+          childObj.meals.push({
+            mealDate: mealDateObj,
+            mealName: child.dish,
+          });
+        }
+        updated = true;
+      }
+
+      // Save only if an update happened
+      if (updated) {
+        await userMeal.save();
+      }
+
+      return res.redirect("https://lunchbowl.co.in/payment/success");
     } catch (err) {
       console.error("CCAvenue holiday payment handler - Uncaught error:", err);
       res.status(500).send("Internal Server Error");
