@@ -1,5 +1,5 @@
 import React from "react";
-import dayjs from "dayjs"; // Add this import at the top
+// import dayjs from "dayjs"; // Commented out for date removal
 import {
   Dialog,
   DialogTitle,
@@ -12,50 +12,47 @@ import {
   Tab,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
 const meals = [
-  "Veg Biryani and Raita",
-  "Burnt garlic veg fried rice and Veg in black bean sauce",
   "Pav Bhaji",
-  "Aglio E Olio Veg Pasta and cheesy garlic bread",
-  "Veg Noodles and gravy",
-  "Alfredo Pasta Garlic bread",
-  "Mac and Cheese, Garlic Bread",
-  "Aloo Paratha",
-  "Hummus and Pita, Jalapeno Cheese Poppers",
-  "Creamy curd rice and potato roast",
-  "Ghee rice and Paneer curry",
-  "Phulka+ Paneer butter masala",
-  "Avocado sandwich and Hash brown potatoes",
-  "Arabiata Pasta and Garlic bread",
-  "Edamame Momos and Crispy lotus stem",
-  "Veg spring roll and Pan fried noodles with Veggies",
-  "Phulka and Chanamasala",
-  "Veg Hakka Noodles",
-  "5 spice fried rice and Baby Corn",
-  "Hummus and Pita, Jalapeno Cheese Poppers",
-  "Veg Noodles and gravy",
-  "Creamy curd rice and potato roast",
-  "Aloo Paratha",
-  "Alfredo Pasta Garlic bread",
-  "Phulka+ Paneer butter masala",
-  "Mac and Cheese, Garlic Bread",
-  "Edamame Momos and Crispy lotus stem",
-  "Mac and Cheese, Garlic Bread",
-  "Ghee rice and Paneer curry",
+  "Creamy Spinach & Corn Augratin",
+  "Paneer Bao -Butter and Garlic Saute Vegetables",
+  "Coconut Rice & Brown Chana Poriyal",
+  "Veg Pulav & Raita",
+  "Veg Noodle - Veg Manchurian",
+  "Veg Biriyani - Raita",
+  "Veg Alfredo Pasta - Garlic Bread",
+  "Veg Fried Rice - Veg in Black Bean Sauce",
+  "Lemon Rice & Sliced Potato Fry",
+  "Jeera Rice - Aloo Mutter",
+  "Paneer Katti Roll - Katta Meeta Sauce",
+  "Multi Millet Chapati - Paneer Lababdar",
+  "Ragi Arabiata pasta and garlic bread",
+  "Phulka - Paneer Butter Masala",
+  "Steamed Momos and Hot Garlic sauce",
+  "Multi Millet Chapati - Paneer Lababdar",
+  "Thai Green Curry - Butter Rice",
+  "Aglio E Olio Pasta - Cheesy Garlic Bread",
+  "Coconut Pulav with Crispy Bhindi and Peanut Fry",
+  "Phulka - Channa Masala",
+  "Creamy Curd Rice with Potato Roast",
   "Pav Bhaji",
+  "Creamy Spinach & Corn Augratin",
+  "Paneer Bao - Butter and Garlic Saute Vegetables",
+  "Coconut Rice & Brown Chana Poriyal",
+  "Veg Pulav & Raita",
+  "Veg Noodle - Veg Manchurian",
+  "Veg Biriyani - Raita",
+  "Veg Alfredo Pasta - Garlic Bread",
+  "Veg Fried Rice - Veg in Black Bean Sauce",
 ];
-
 const MealPlanDialog = ({
   open,
   onClose,
   startDate,
-  planId = 1, // Add this prop
+  planId = 1,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  // const [tabValue, setTabValue] = React.useState(planId ? planId - 1 : 0);
-
   const mealPlans = {
     1: {
       name: "Meal Plan 1",
@@ -66,21 +63,10 @@ const MealPlanDialog = ({
       meals: [...meals].reverse(),
     },
   };
-
-  // const handleTabChange = (event, newValue) => {
-  //   setTabValue(newValue);
-  // };
-
-  // const handleApply = () => {
-  //   onApplyPlan(tabValue + 1);
-  //   onClose();
-  // };
   const plan = mealPlans[planId] || mealPlans[1];
   const renderPlan = (planId) => {
-    //const plan = mealPlans[planId];
     const firstCol = plan.meals.slice(0, Math.ceil(plan.meals.length / 2));
     const secondCol = plan.meals.slice(Math.ceil(plan.meals.length / 2));
-
     const renderColumn = (data, startIndex) => (
       <Box>
         <Box
@@ -91,15 +77,14 @@ const MealPlanDialog = ({
           mb={1}
         >
           <Box width="30%">DAY</Box>
-          <Box width="40%">DATE</Box>
-          <Box width="30%">MEAL</Box>
+          {/* <Box width="40%">DATE</Box> */}
+          <Box width="70%">MEAL</Box>
         </Box>
         {data.map((item, idx) => {
           const dayNumber = startIndex + idx + 1;
-          const mealDate = dayjs(startDate)
-            .add(dayNumber - 1, "day")
-            .format("MMM D, YYYY");
-
+          // const mealDate = dayjs(startDate)
+          //   .add(dayNumber - 1, "day")
+          //   .format("MMM D, YYYY");
           return (
             <Box
               key={idx}
@@ -110,10 +95,10 @@ const MealPlanDialog = ({
               <Box width="30%" color="#666">
                 Day {String(dayNumber).padStart(2, "0")}
               </Box>
-              <Box width="40%" color="#666">
+              {/* <Box width="40%" color="#666">
                 {mealDate}
-              </Box>
-              <Box width="30%" color="#333">
+              </Box> */}
+              <Box width="70%" color="#333">
                 {item}
               </Box>
             </Box>
@@ -121,7 +106,6 @@ const MealPlanDialog = ({
         })}
       </Box>
     );
-
     return (
       <Box display="flex" flexDirection={isMobile ? "column" : "row"} gap={4}>
         <Box flex={1}>{renderColumn(firstCol, 0)}</Box>
@@ -129,7 +113,6 @@ const MealPlanDialog = ({
       </Box>
     );
   };
-
   return (
     <Dialog
       open={open}
@@ -175,10 +158,8 @@ const MealPlanDialog = ({
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-
       <DialogContent dividers>{renderPlan()}</DialogContent>
     </Dialog>
   );
 };
-
 export default MealPlanDialog;

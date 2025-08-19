@@ -1,0 +1,128 @@
+{
+    "meal_plan": [
+        {
+            "day": "Day 1",
+            "meal": "Pav Bhaji"
+        },
+        {
+            "day": "Day 2",
+            "meal": "Creamy Spinach & Corn Augratin"
+        },
+        {
+            "day": "Day 3",
+            "meal": "Paneer Bao - Butter and Garlic Saute Vegetables"
+        },
+        {
+            "day": "Day 4",
+            "meal": "Coconut Rice & Brown Chana Poriyal"
+        },
+        {
+            "day": "Day 5",
+            "meal": "Veg Pulav & Raita"
+        },
+        {
+            "day": "Day 6",
+            "meal": "Veg Noodle - Veg Manchurian"
+        },
+        {
+            "day": "Day 7",
+            "meal": "Veg Biriyani - Raita"
+        },
+        {
+            "day": "Day 8",
+            "meal": "Veg Alfredo Pasta - Garlic Bread"
+        },
+        {
+            "day": "Day 9",
+            "meal": "Veg Fried Rice - Veg in Black Bean Sauce"
+        },
+        {
+            "day": "Day 10",
+            "meal": "Lemon Rice & Sliced Potato Fry"
+        },
+        {
+            "day": "Day 11",
+            "meal": "Jeera Rice - Aloo Mutter"
+        },
+        {
+            "day": "Day 12",
+            "meal": "Paneer Katti Roll - Katta Meeta Sauce"
+        },
+        {
+            "day": "Day 13",
+            "meal": "Multi Millet Chapati - Paneer Lababdar"
+        },
+        {
+            "day": "Day 14",
+            "meal": "Ragi Arabiata pasta and garlic bread"
+        },
+        {
+            "day": "Day 15",
+            "meal": "Phulka - Paneer Butter Masala"
+        },
+        {
+            "day": "Day 16",
+            "meal": "Steamed Momos and Hot Garlic sauce"
+        },
+        {
+            "day": "Day 17",
+            "meal": "Multi Millet Chapati - Paneer Lababdar"
+        },
+        {
+            "day": "Day 18",
+            "meal": "Thai Green Curry - Butter Rice"
+        },
+        {
+            "day": "Day 19",
+            "meal": "Aglio E Olio Pasta - Cheesy Garlic Bread"
+        },
+        {
+            "day": "Day 20",
+            "meal": "Coconut Pulav with Crispy Bhindi and Peanut Fry"
+        },
+        {
+            "day": "Day 21",
+            "meal": "Phulka - Channa Masala"
+        },
+        {
+            "day": "Day 22",
+            "meal": "Creamy Curd Rice with Potato Roast"
+        },
+        {
+            "day": "Day 23",
+            "meal": "Pav Bhaji"
+        },
+        {
+            "day": "Day 24",
+            "meal": "Creamy Spinach & Corn Augratin"
+        },
+        {
+            "day": "Day 25",
+            "meal": "Paneer Bao - Butter and Garlic Saute Vegetables"
+        },
+        {
+            "day": "Day 26",
+            "meal": "Coconut Rice & Brown Chana Poriyal"
+        },
+        {
+            "day": "Day 27",
+            "meal": "Veg Pulav & Raita"
+        },
+        {
+            "day": "Day 28",
+            "meal": "Veg Noodle - Veg Manchurian"
+        },
+        {
+            "day": "Day 29",
+            "meal": "Veg Biriyani - Raita"
+        },
+        {
+            "day": "Day 30",
+            "meal": "Veg Alfredo Pasta - Garlic Bread"
+        },
+        {
+            "day": "Day 31",
+            "meal": "Veg Fried Rice - Veg in Black Bean Sauce"
+        }
+    ]
+}
