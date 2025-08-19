@@ -335,7 +335,7 @@ const RightPanel = ({
 
                       {isSelectedHoliday && !isSunday && (
                         <Box display="flex" gap={2} className="btngroups" mt={1}>
-                          {isPaid ? (
+                          {/* {isPaid ? (
                             <Button
                               variant="outlined"
                               className="paysavebtn"
@@ -347,7 +347,7 @@ const RightPanel = ({
                             >
                               <span>Save</span>
                             </Button>
-                          ) : (
+                          ) : ( */}
                             <Button
                               variant="contained"
                               className="paysavebtn"
@@ -366,7 +366,7 @@ const RightPanel = ({
                             >
                               <span>Pay ₹199</span>
                             </Button>
-                          )}
+                          {/* )} */}
                         </Box>
                       )}
 
