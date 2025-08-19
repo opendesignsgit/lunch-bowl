@@ -77,8 +77,9 @@
 .hbanIconss .icontwo{top: 0;left: 26%;-webkit-transform: translateY(-180%);-ms-transform: translateY(-180%);transform: translateY(-180%);}
 .hbanIconss .iconthree{top: 0;left: 65%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);}
 .hbanIconss .iconfour{top: 35%;right: 0;-webkit-transform: translate(100%, -100%);-ms-transform: translate(100%, -100%);transform: translate(100%, -100%);}
-.hbanIconss .iconfive{bottom: 0;right: 25%;}
+.hbanIconss .iconfive{bottom: 0;right: 14%;}
 .hbanIconss .iconsix{bottom: 30%;left: 0%;-webkit-transform: translateX(-120%);-ms-transform: translateX(-120%);transform: translateX(-120%);}
+.hbanIconss .iconseven{bottom: 10%;left: 56%;-webkit-transform: translateX(-120%);-ms-transform: translateX(-120%);transform: translateX(-120%);width: 10px;height: 10px;background: #F197B6;border-radius: 50%;}
 
 .hintroIconss .hintroicn{aspect-ratio: 1;pointer-events: none;}
 .hintroIconss .hintroicn img{width: 100%;height: 100%;}
@@ -90,8 +91,21 @@
 .hintroIconss .iconsix{bottom: 23%;left: 2.5%;width: 1.4vw;}
 .hintroIconss .iconseven{top: 7%;left: 1%;width: 1.5vw;}
 .hintroIconss .iconeight{background: #F9B71A;width: 15px;aspect-ratio: 1;bottom: 0%;left: 38%;font-size: 0;border-radius: 50%;z-index: 99;}
+.hintroIconss .iconnine{background: #F9B71A;width: 10px;aspect-ratio: 1;top: 0%;left: 26%;font-size: 0;border-radius: 50%;z-index: 99;}
 
 .aboutuspage .hintroIconss .icontwo{    bottom: -6%;}
+
+.hMenusIconss{}
+
+.hMenusIconss .iconone{right: 5%;top: -18%;width: 6vw;}
+.hMenusIconss .icontwo{right: 0%;top: 8%;transform: translateX(110%);width: 3vw;}
+.hMenusIconss .iconthree{right: 0;top: 30%;transform: translateX(120%);width: 5.6vw;}
+.hMenusIconss .iconfour{right: 0%;bottom: 30%;transform: translateX(120%);width: 5vw;}
+.hMenusIconss .iconfive{right: 0%;bottom: 10%;transform: translateX(120%);width: 3vw;}
+.hMenusIconss .iconsix{left: 0%;bottom: 20%;transform: translateX(-120%);width: 5vw;}
+.hMenusIconss .iconseven{left: 0%;bottom: 45%;transform: translateX(-120%);width: 6vw;}
+.hMenusIconss .iconeight{left: 0%;top: 20%;transform: translateX(-120%);width: 5vw;}
+.hMenusIconss .iconnine{left: 0%;top: -8%;transform: translateX(-110%);width: 4vw;}
 
 .hlfoutIconss .hlfouticn{aspect-ratio: 1;pointer-events: none;}
 .hlfoutIconss .hlfouticn img{width: 100%;height: 100%;}
@@ -108,12 +122,13 @@
 
 .hDoctIconss .hDocticn{aspect-ratio: 1;pointer-events: none;} 
 .hDoctIconss .hDocticn img{width: 100%;height: 100%;}
-.hDoctIconss .iconone{top: -5%; right: 31%;}
+.hDoctIconss .iconone{top: -3%;right: 31%;}
 .hDoctIconss .icontwo{top: 40%;right: 0;transform: translate(140%, -50%);}
-.hDoctIconss .iconthree{bottom: 16%;right: 6%;}
-.hDoctIconss .iconfour{bottom: -7%;left: 36%;}
-.hDoctIconss .iconfive{top: 50%;left: 0;transform: translateX(-150%);}
-.hDoctIconss .iconsix{top: 17%;left: 2%;}
+.hDoctIconss .iconthree{bottom: 20%;right: 4%;}
+.hDoctIconss .iconfour{bottom: -3%;left: 30%;}
+.hDoctIconss .iconfive{top: 62%;left: 0;transform: translateX(-150%);width: 5vw;}
+.hDoctIconss .iconsix{top: 21%;left: 3%;width: 24px;}
+.hDoctIconss .iconseven{top: 70%;right: 2%;}
 
 .hfformIconss .hfformicn{aspect-ratio: 1;pointer-events: none;} 
 .hfformIconss .hfformicn img{width: 100%;height: 100%;}
@@ -179,13 +194,15 @@
 
 .psfbanIconss .iconone{top: -72%;left: 0%;}
 .psfbanIconss .icontwo{top: -90%;left: 33%;}
-.psfbanIconss .iconthree{top: -69%;right: 26%;
-}
+.psfbanIconss .iconthree{top: -69%;right: 26%;}
 .psfbanIconss .iconfour{top: 4%;right: -15%;}
 .psfbanIconss .iconfive{bottom: -44%;right: 1%;}
 .psfbanIconss .iconsix{bottom: -46%;right: 36%;}
 .psfbanIconss .iconseven{bottom: -50%;left: 25%;}
 .psfbanIconss .iconeight{bottom: -20%;left: -12%;}
+
+
+.MyAccbanersec .psfbanIconss .iconfour{width: 4vw;}
 
 
 @media screen and (max-width:1100px) {

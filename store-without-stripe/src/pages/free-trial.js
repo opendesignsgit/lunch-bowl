@@ -168,13 +168,13 @@ export default function FreeTrialPage() {
             <div className="pageinconter relative h-full w-full flex items-center">
               <div className="hworkTitle combtntb comtilte">
                 <h1 className="flex flex-col textFF6514">
-                  {" "}
-                  <span className="block firstspan">The Story Behind</span>{" "}
-                  <span className="block">Every Bite</span>{" "}
+                  <span className="block firstspan">FREE TRIAL DAY </span>
+                  <span className="block">BECAUSE HEALTHY <br />STARTS HERE!</span>
                 </h1>
                 <p className="">
-                  As food is an emotion, there will be a story <br />
-                  behind every recipe. Let’s explore!
+                  Join hundreds of happy parents who trust us for fresh, <br />
+                  flavourful school lunches  get your first meal ocmpletely free.
+
                 </p>
                 <Breadcrumbs />
               </div>

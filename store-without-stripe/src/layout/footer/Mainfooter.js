@@ -62,10 +62,10 @@ const Mainfooter = () => {
           <div className='hfformIconss'>
             <div className='hfformicn iconone absolute'><Image src={hldocticon1} priority alt='Icon' /></div>
             <div className='hfformicn icontwo absolute'><Image src={hldocticon2} priority alt='Icon' className='iconrotates' /></div>
-            <div className='hfformicn iconthree absolute'><Image src={hldocticon3} priority alt='Icon' /></div>
-            <div className='hfformicn iconfour absolute'><Image src={hldocticon4} priority alt='Icon' className='iconrotates' /></div>
+            <div className='hfformicn iconthree absolute'><Image src={hldocticon3} priority alt='Icon' className='iconrotates' /></div>
+            <div className='hfformicn iconfour absolute'><Image src={hldocticon4} priority alt='Icon' className='iconrotates ' /></div>
             <div className='hfformicn iconfive absolute'><Image src={hldocticon5} priority alt='Icon' className="zoominoutanimi" /></div>
-            <div className='hfformicn iconsix absolute'><Image src={hldocticon6} priority alt='Icon' /></div>
+            <div className='hfformicn iconsix absolute'><Image src={hldocticon6} priority alt='Icon' className='iconrotates' /></div>
             <div className='hfformicn iconseven absolute'><Image src={hldocticon7} priority alt='Icon' className='iconrubberband' /></div>
           </div>
             </div>

@@ -43,6 +43,16 @@ import hldocticon3 from "../../public/home/icons/hdoctors/orangestar.svg";
 import hldocticon4 from "../../public/home/icons/hdoctors/skyblue-round.svg";
 import hldocticon5 from "../../public/home/icons/hdoctors/watermelon.svg";
 import hldocticon6 from "../../public/home/icons/hdoctors/yellowflower.svg";
+import hldocticon7 from "../../public/home/icons/hdoctors/arrowdownblack.svg";
+import hfoodicon1 from "../../public/home/icons/hfoodsec/arrowdownIcon.svg";
+import hfoodicon2 from "../../public/home/icons/hfoodsec/staricon.svg";
+import hfoodicon3 from "../../public/home/icons/hfoodsec/icecreamicon.svg";
+import hfoodicon4 from "../../public/home/icons/hfoodsec/yellowround-flower.svg";
+import hfoodicon5 from "../../public/home/icons/hfoodsec/bflyIcon.svg";
+import hfoodicon6 from "../../public/home/icons/hfoodsec/sunIcon.svg";
+import hfoodicon7 from "../../public/home/icons/hfoodsec/wmIcon.svg";
+import hfoodicon8 from "../../public/home/icons/hfoodsec/starssIcon.svg";
+import hfoodicon9 from "../../public/home/icons/hfoodsec/redflowerIcon.svg";
 
 
 
@@ -137,11 +147,12 @@ const Home = () => {
                               <div className='hbicn iconfour absolute'><Image src={banicon4} priority alt='Icon' className='iconrotates' /></div>
                 <div className='hbicn iconfive absolute'><Image src={banicon5} priority alt='Icon' className='iconrotates' /></div>
                               <div className='hbicn iconsix absolute'><Image src={banicon6} priority alt='Icon' className='iconrotates' /></div>
+                <div className='hbicn iconseven absolute'>&nbsp;</div>
                           </div>
                     </div>
                 </div>
                 <div className='hbanRight relative'>
-                    <div className='banimgss'><Image className="w-full h-auto" priority src= {Homebanimg} alt="Banimg"  onClick={handleOpenDialog}/></div>
+            <div className='banimgss'><div className='banvideobox' onClick={handleOpenDialog}>&nbsp;</div><Image className="w-full h-auto" priority src={Homebanimg} alt="Banimg" onClick={handleOpenDialog} /></div>
                 </div>
             </section>
 
@@ -175,6 +186,8 @@ const Home = () => {
                           <div className='hintroicn iconfive absolute'><Image src={hintroicon5} priority alt='Icon' className='iconrubberband' /></div>
                           <div className='hintroicn iconsix absolute'><Image src={hintroicon6} priority alt='Icon' /></div>
                           <div className='hintroicn iconseven absolute'><Image src={hintroicon7} priority alt='Icon' className='iconrotates' /></div>
+              <div className='hintroicn iconeight absolute'>&nbsp;</div>
+              <div className='hintroicn iconnine absolute'>&nbsp;</div>
                       </div>
                   </div>
             </section>
@@ -187,6 +200,7 @@ const Home = () => {
                         </h2>
                           <p className='text-white'>Nutrient-dense, well-portioned meals with a variety of flavors that are <br />intended to entertain and feed kids every day.</p>
                     </div>
+            <div className='relative'>
                     <div className='hProList'>
                         <HomeProductCard limit={6}/>
                     </div>
@@ -194,15 +208,18 @@ const Home = () => {
                         <p className="parabtn flex"><Link href="/Menulist" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
 
-                      {/* <div className='hMenusIconss'>
-                          <div className='hMenuicn iconone absolute'><Image src={hintroicon1} priority alt='Icon' className='iconrotates' /></div>
-                          <div className='hMenuicn icontwo absolute'><Image src={hintroicon2} priority alt='Icon' /></div>
-                          <div className='hMenuicn iconthree absolute'><Image src={hintroicon3} priority alt='Icon' /></div>
-                          <div className='hMenuicn iconfour absolute'><Image src={hintroicon4} priority alt='Icon' className='iconrotates' /></div>
-                          <div className='hMenuicn iconfive absolute'><Image src={hintroicon5} priority alt='Icon' className='iconrubberband' /></div>
-                          <div className='hMenuicn iconsix absolute'><Image src={hintroicon6} priority alt='Icon' /></div>
-                          <div className='hMenuicn iconseven absolute'><Image src={hintroicon7} priority alt='Icon' className='iconrotates' /></div>
-                      </div> */}
+              <div className='hMenusIconss'>
+                <div className='hMenuicn iconone absolute'><Image src={hfoodicon1} priority alt='Icon' /></div>
+                <div className='hMenuicn icontwo absolute'><Image src={hfoodicon2} priority alt='Icon' className='iconrotates' /></div>
+                <div className='hMenuicn iconthree absolute'><Image src={hfoodicon3} priority alt='Icon' /></div>
+                <div className='hMenuicn iconfour absolute'><Image src={hfoodicon4} priority alt='Icon' className='iconrotates' /></div>
+                <div className='hMenuicn iconfive absolute'><Image src={hfoodicon5} priority alt='Icon' className='iconrubberband' /></div>
+                <div className='hMenuicn iconsix absolute'><Image src={hfoodicon6} priority alt='Icon' className='zoominoutanimi' /></div>
+                <div className='hMenuicn iconseven absolute'><Image src={hfoodicon7} priority alt='Icon' /></div>
+                <div className='hMenuicn iconeight absolute'><Image src={hfoodicon8} priority alt='Icon' /></div>
+                <div className='hMenuicn iconnine absolute'><Image src={hfoodicon9} priority alt='Icon' className='iconrotates' /></div>
+              </div>
+            </div>
                 </div>
             </section>
               <section className='HLFOlistSec bg-FFE6E6 relative flex'>
@@ -248,35 +265,38 @@ const Home = () => {
                         <p className="parabtn flex"><Link href="/about-us" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
                       <div className='hteamIconss'>
-                          <div className='hteamicn iconone absolute'><Image src={hlteamicon1} priority alt='Icon' /></div>
-                          <div className='hteamicn icontwo absolute'><Image src={hlteamicon2} priority alt='Icon' /></div>
-                          <div className='hteamicn iconthree absolute'><Image src={hlteamicon3} priority alt='Icon' /></div>
-                          <div className='hteamicn iconfour absolute'><Image src={hlteamicon4} priority alt='Icon' /></div>
+              <div className='hteamicn iconone absolute'><Image src={hlteamicon1} priority alt='Icon' /></div>
+              <div className='hteamicn icontwo absolute'><Image src={hlteamicon2} priority alt='Icon' className="iconrubberband" /></div>
+              <div className='hteamicn iconthree absolute'><Image src={hlteamicon3} priority alt='Icon' className="iconrotates" /></div>
+              <div className='hteamicn iconfour absolute'><Image src={hlteamicon4} priority alt='Icon' className="iconrotates" /></div>
                           <div className='hteamicn iconfive absolute'><Image src={hlteamicon5} priority alt='Icon' /></div>
                           <div className='hteamicn iconsix absolute'><Image src={hlteamicon6} priority alt='Icon' className="zoominoutanimi" /></div>
                       </div>
                 </div>
             </section>
-              <section className='HNutritionSec relative bg-FFF4D7 flex secpaddblock'>
+        <section className='HNutritionSec relative bg-FFF4D7 flex'>
                   <div className='container mx-auto relative' >
-                    <div className='hNutritionTitle combtntb comtilte textcenter mb-[4vh]'>
+            <div className='hNutritionTitle combtntb comtilte textcenter mb-[4vh] relative'>
                         <h4 className='text-[#000000]'>Explore Nutritious food</h4>
                         <h3 className='flex flex-col textFF6514'> <span className='block'>First free session awaits you</span> </h3>
+              <div className='hDoctIconss'>
+                <div className='hDocticn iconseven absolute'><Image src={hldocticon7} priority alt='Icon' className="iconrubberband" /></div>
+              </div>
                     </div>
                     <div className='hNutritionintImg '>
-                        <Image className="w-full" priority src= {HNutritionImg} alt="logo" />
+              <div className='hDocInImg'><Image className="w-full" priority src={HNutritionImg} alt="logo" /></div>
                           <div className='hDoctIconss'>
-                              <div className='hDocticn iconone absolute'><Image src={hldocticon1} priority alt='Icon' /></div>
+                <div className='hDocticn iconone absolute'><Image src={hldocticon1} priority alt='Icon' className="iconrotates" /></div>
                               <div className='hDocticn icontwo absolute'><Image src={hldocticon2} priority alt='Icon' /></div>
-                              <div className='hDocticn iconthree absolute'><Image src={hldocticon3} priority alt='Icon' /></div>
-                              <div className='hDocticn iconfour absolute'><Image src={hldocticon4} priority alt='Icon' /></div>
+                <div className='hDocticn iconthree absolute'><Image src={hldocticon3} priority alt='Icon' className="iconrotates" /></div>
+                <div className='hDocticn iconfour absolute'><Image src={hldocticon4} priority alt='Icon' className="iconrotates" /></div>
                               <div className='hDocticn iconfive absolute'><Image src={hldocticon5} priority alt='Icon' /></div>
-                              <div className='hDocticn iconsix absolute'><Image src={hldocticon6} priority alt='Icon' /></div>
+                <div className='hDocticn iconsix absolute'><Image src={hldocticon6} priority alt='Icon' className="iconrotates" /></div>
                           </div>
                     </div>
                     <div className='hNutritionTitle combtntb comtilte textcenter mt-[4vh]'>      
               <p className=''>Sujatha Sasikumar is a Registered Dietitian under the Indian Dietetic Association. She has a Master's in Clinical Nutrition and has <br />her own independent clinical practice in Chennai. She is also certified in Sport Specific Nutrition Management, Nutrigenetics, <br />Critical  Care Nutrition and is a Certified Diabetes Educator. She helps people across all age groups modify their eating <br />habits to suit their goals for better health, fitness and performance.</p>      
-                          <p className="parabtn flex"><Link href="/" className="emenulink relative" onClick={handlepopOpenDialog}><span className='block flex items-center relative'>Lets Talk</span></Link></p>
+              <p className="parabtn flex"><button className="emenulink relative" onClick={handlepopOpenDialog}><span className='block flex items-center relative'>Lets Talk</span></button></p>
                     </div>
                 </div>
             </section>

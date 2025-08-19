@@ -38,12 +38,8 @@ export default function RavishankarNPopup({ open, onClose }) {
                 <div className='TeamMemberPopSec'>
                   <div className='TeamMemberTitles' data-aos="fade-left" data-aos-duration="1000" >                    
                         <h2>Ravishankar N</h2>
-                        <p>Ravishankar N, Manager Operations: Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms. With a sharp eye for efficiency and a deep understanding of operations, Ravi has consistently driven results through structured execution and team leadership. Now bringing his expertise into the food industry, he is set to apply his operational acumen to streamline workflows, enhance service quality, and contribute to building scalable systems in this dynamic sector.</p>
-                        <p className='paraalink'>
-                            <Link href="/">
-                            <span>LinkedIn</span>
-                            </Link>
-                        </p>
+                <h4>Manager Operations</h4>
+                <p>Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms. With a sharp eye for efficiency and a deep understanding of operations, Ravi has consistently driven results through structured execution and team leadership. Now bringing his expertise into the food industry, he is set to apply his operational acumen to streamline workflows, enhance service quality, and contribute to building scalable systems in this dynamic sector.</p>
                   </div>
                 </div>
             </DialogContent>

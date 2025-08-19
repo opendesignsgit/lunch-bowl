@@ -107,7 +107,7 @@ const AboutUs = () => {
                   </h3>
                   <p>Let’s be honest—packing lunch every single day is hard work. Between picky eaters, tight mornings, and the never-ending quest for something that’s both healthy and kid-approved, parents (especially moms) are juggling a lot.</p>
                   <div className="hintroIntb">
-                    <p><strong>That’s where the idea for Lunch Bowl was born.</strong></p>
+                    <p>That’s where the idea for <strong>Lunch Bowl</strong> was born.</p>
                     <p>We asked ourselves:</p>
                     <p><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
                     <p>So, we cooked up a solution.</p>
@@ -292,7 +292,7 @@ const AboutUs = () => {
               </div>
             </div>
             <div className="flex flex-wrap items-center mteamitembox ">              
-              <div className="flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
@@ -304,9 +304,9 @@ const AboutUs = () => {
                   </div>
                   <h3>Ravishankar N</h3>
                 </div>
-                <div className="mteamback">
+                <div className="mteamback ravishankarbg">
                   <h3>Ravishankar N</h3>
-                  <p>Ravishankar N, Manager Operations: Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
+                  <p>Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
                   <p>
                     <button onClick={() => setOpenRavishankarN(true)}>
                       <span>Read More</span>
@@ -314,7 +314,7 @@ const AboutUs = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
@@ -326,17 +326,15 @@ const AboutUs = () => {
                   </div>
                   <h3>S. Murugan</h3>
                 </div>
-                <div className="mteamback">
+                <div className="mteamback muruganbg">
                   <h3>S. Murugan</h3>
-                  <p>S. Murugan, our executive chef, is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. </p>
-                  <p>
-                    <button onClick={() => setOpenMurugan(true)}>
+                  <p>He is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. </p>
+                  <p> <button onClick={() => setOpenMurugan(true)}>
                       <span>Read More</span>
-                    </button>
-                  </p>
+                  </button> </p>
                 </div>
               </div>
-              <div className="flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
@@ -348,9 +346,9 @@ const AboutUs = () => {
                   </div>
                   <h3>Arul Mathan Thangam</h3>
                 </div>
-                <div className="mteamback">
+                <div className="mteamback arulmathanbg">
                   <h3>Arul Mathan Thangam</h3>
-                  <p>Arul Mathan Thangam, our Su Chef, is a skilled culinary professional with expertise in food production, customer service, and maintaining quality standards.</p>
+                  <p>Our Su Chef, is a skilled culinary professional with expertise in food production, customer service, and maintaining quality standards.</p>
                   <p>
                     <button onClick={() => setOpenArulMathanThangam(true)}>
                       <span>Read More</span>
@@ -358,7 +356,7 @@ const AboutUs = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
@@ -370,9 +368,9 @@ const AboutUs = () => {
                   </div>
                   <h3>Vijay Vellanganni</h3>
                 </div>
-                <div className="mteamback">
+                <div className="mteamback vijayvellbg">
                   <h3>Vijay Vellanganni</h3>
-                  <p>Vijay Vellanganni – our Commis 1,a remarkably talented baker and continental cuisine chef. With a flair for baking, Vijay crafts irresistible cookies, brownies, and an array of continental specialties. </p>
+                  <p>Our Commis 1,a remarkably talented baker and continental cuisine chef. With a flair for baking, Vijay crafts irresistible cookies, brownies, and an array of continental specialties. </p>
                   <p>
                     <button onClick={() => setOpenVijayVellanganni(true)}>
                       <span>Read More</span>
@@ -380,7 +378,7 @@ const AboutUs = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex-none flex mteambox relative group">
+              <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
@@ -392,14 +390,13 @@ const AboutUs = () => {
                   </div>
                   <h3>Vijay Antony</h3>
                 </div>
-                <div className="mteamback">
+                <div className="mteamback vijayantonybg">
                   <h3>Vijay Antony</h3>
-                  <p>Vijay Antony, Our Commis 3, holds a diploma in hotel and catering management from Villupuram.</p>
+                  <p>Our Commis 3, holds a diploma in hotel and catering management from Villupuram.</p>
                   <p>
                     <button onClick={() => setOpenVijayAntony(true)}>
                       <span>Read More</span>
                     </button>
-
                   </p>
                 </div>
               </div>

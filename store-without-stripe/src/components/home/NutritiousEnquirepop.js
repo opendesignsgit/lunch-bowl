@@ -89,95 +89,82 @@ const NutritiousEnquire = ({ open, onClose }) => {
           <Box
             className="w-[50%] nutriBoxCol nutriLCol "
             sx={{
-              backgroundImage: `url(/LogInSignUp/signuppopimg.jpg)`,
+              backgroundImage: `url(/let-talk-pop-img.jpg)`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           ></Box>
           <Box className="w-[50%] self-center nutriBoxCol nutriRCol logboxcol p-[3vw]">
             <div className="nutriinrRow">
-            <Box
-              sx={{ textAlign: "left", marginBottom: "24px" }}
-              className="poptitles"
-            >
-              <Typography
-                variant="h4"
-                color="#000"
-                sx={{ textTransform: "uppercase", marginBottom: "4px" }}
-              >
-                {" "}
-                Nutritious Enquire{" "}
-              </Typography>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.{" "}
-              </p>
-            </Box>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                id="fullName"
-                name="fullName"
-                label="Full Name"
-                type="text"
-                value={formData.fullName}
-                onChange={handleChange}
-                margin="normal"
-                placeholder="Joe Bloggs"
-                className="fieldbox"
-              />
-              <TextField
-                fullWidth
-                id="email"
-                name="email"
-                label="Email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                margin="normal"
-                placeholder="example@domain.com"
-                className="fieldbox"
-              />
-              <TextField
-                fullWidth
-                id="mobile"
-                name="mobile"
-                label="Mobile Number"
-                type="tel"
-                value={formData.mobile}
-                onChange={handleChange}
-                margin="normal"
-                placeholder="1234567890"
-                className="fieldbox"
-              />
-              <TextField
-                fullWidth
-                id="message"
-                name="message"
-                label="Message"
-                type="tel"
-                value={formData.message}
-                onChange={handleChange}
-                margin="normal"
-                placeholder="Message"
-                className="fieldbox"
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                fullWidth
-                type="submit"
-                sx={{
-                  mt: 3,
-                  backgroundColor: "#ff6514",
-                  "&:hover": {
-                    backgroundColor: "#e55c12",
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-            </form>
+              <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
+                <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} >Nutritious Enquire</Typography>
+                <p> Nutritious lunches delivered with care. Share your details and we’ll get in touch.</p>
+              </Box>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  fullWidth
+                  id="fullName"
+                  name="fullName"
+                  label="Full Name"
+                  type="text"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  margin="normal"
+                  placeholder="Joe Bloggs"
+                  className="fieldbox"
+                />
+                <TextField
+                  fullWidth
+                  id="email"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  margin="normal"
+                  placeholder="example@domain.com"
+                  className="fieldbox"
+                />
+                <TextField
+                  fullWidth
+                  id="mobile"
+                  name="mobile"
+                  label="Mobile Number"
+                  type="tel"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  margin="normal"
+                  placeholder="1234567890"
+                  className="fieldbox"
+                />
+                <TextField
+                  fullWidth
+                  id="message"
+                  name="message"
+                  label="Message"
+                  type="tel"
+                  value={formData.message}
+                  onChange={handleChange}
+                  margin="normal"
+                  placeholder="Message"
+                  className="fieldbox"
+                />
+                <Button
+                  color="primary"
+                  variant="contained"
+                  fullWidth
+                  type="submit"
+                  sx={{
+                    mt: 3,
+                    backgroundColor: "#ff6514",
+                    "&:hover": {
+                      backgroundColor: "#e55c12",
+                    },
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </form>
             </div>
           </Box>
         </Box>

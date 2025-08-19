@@ -57,9 +57,7 @@ const RefundCancellationPolicy = () => {
                   Private Limited, a company
                   <br /> registered under the Companies Act, 2013, having its
                   registered office at: <br />
-                  1B, KG Natraj Palace, 53/22, Saravana Street, T. Nagar,
-                  <br />
-                  Chennai – 600017
+                  1B, KG Natraj Palace, 53/22, Saravana Street, T. Nagar, Chennai – 600017
                   <br />
                   <br />
                   This Refund and Cancellation Policy applies to all
@@ -81,35 +79,15 @@ const RefundCancellationPolicy = () => {
               </div>
               <div className="policyintb">
                 <h4>2. Refunds</h4>
-                <ul>
-                  <li>
-                    Full refunds will be processed for timely cancellations.
-                  </li>
-                  <li>
-                    In cases of non-delivery due to our error, users may opt for
-                    either a full refund or a re-delivery.
-                  </li>
-                  <li>
-                    Refunds will be credited to the original payment method
-                    within 5–7 business days.
-                  </li>
-                </ul>
+                <p>Refunds are not applicable; however, if an order is cancelled, the amount will be credited to the Lunch Bowl wallet for use in your next meal.</p>
               </div>
               <div className="policyintb">
                 <h4>3. Trial Packages</h4>
-                <p>
-                  Trial packs are non-refundable once delivered. However, users
-                  may discontinue future services without penalty.
-                </p>
+                <p>No payment is collected from customers for trial packages.</p>
               </div>
               <div className="policyintb">
                 <h4>4. Force Majeure</h4>
-                <p>
-                  Refunds shall not be applicable in the event of service
-                  disruptions caused by events beyond our control, including but
-                  not limited to natural disasters, strikes, school holidays, or
-                  transport failures.
-                </p>
+                <p>Refunds do not apply for service disruptions caused by events beyond our control, including but not limited to natural disasters, strikes, school holidays, or transport failures.</p>
               </div>
             </div>
           </div>
