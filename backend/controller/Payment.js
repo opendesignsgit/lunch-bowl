@@ -167,7 +167,7 @@ exports.ccavenueResponse = async (req, res) => {
               <p>📍 School: ${schoolName}</p>
               <p>👦 Child: ${childName}</p>
               <p>We’re thrilled to be part of your child’s lunch journey!</p>
-              <p>For any help, reach out to <a href="mailto:support@lunchbowl.in">support@lunchbowl.in</a></p>
+              <p>For any help, reach out to <a href="mailto:contactus@lunchbowl.co.in">support@lunchbowl.in</a></p>
               <p>– Earth Tech Concepts Pvt Ltd</p>
             `,
           };

@@ -17,7 +17,7 @@ import { Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
 import HolidayPayment from "./HolidayPayment";
-import mealPlanData from "../../jsonHelper/meal_plan.json";
+import mealPlanData from "../../jsonHelper/Dietitian_meal_plan.json";
 import { useSession } from "next-auth/react";
 import useRegistration from "@hooks/useRegistration";
 
@@ -100,15 +100,6 @@ const RightPanel = ({
       id: 1,
       name: "Meal Plan 1",
       meals: mealPlanArray.map((day) => day.meals).flat(),
-    },
-    {
-      id: 2,
-      name: "Meal Plan 2",
-      meals: mealPlanArray
-        .slice()
-        .reverse()
-        .map((day) => day.meals)
-        .flat(),
     },
   ];
 
@@ -276,16 +267,14 @@ const RightPanel = ({
                                 href="#"
                                 fontSize="0.8rem"
                                 sx={{
-                                  color: "#f97316",
+                                  color: "#fff",
                                   textDecoration: "none",
                                   "&:hover": { textDecoration: "underline" },
                                 }}
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
-                                  plan.id === 1
-                                    ? setDialogOpen1(true)
-                                    : setDialogOpen2(true);
+                                  setDialogOpen1(true); // Always open dialog 1 (Meal Plan 1)
                                 }}
                               >
                                 View Plan
@@ -341,25 +330,24 @@ const RightPanel = ({
                       </Box>
 
                       {isSelectedHoliday && !isSunday && (
-                        <Box mt={1}>
+                        <Box display="flex" gap={2} className="btngroups" mt={1}>
                           {isPaid ? (
                             <Button
                               variant="outlined"
-                              color="primary"
-                              fullWidth
+                              className="paysavebtn"
                               onClick={() => {
                                 if (typeof saveSelectedMeals === "function") {
                                   saveSelectedMeals();
                                 }
                               }}
                             >
-                              Save
+                              <span>Save</span>
                             </Button>
                           ) : (
                             <Button
                               variant="contained"
+                              className="paysavebtn"
                               color="warning"
-                              fullWidth
                               onClick={() => {
                                 const dish = menuSelections[formatDate(selectedDate)]?.[child.id];
                                 if (!dish) {
@@ -372,11 +360,12 @@ const RightPanel = ({
                                 setHolidayPaymentOpen(true);
                               }}
                             >
-                              Pay ₹199
+                              <span>Pay ₹199</span>
                             </Button>
                           )}
                         </Box>
                       )}
+
 
                       {childIndex === 0 && !isSelectedHoliday && (
                         <Box sx={{ mt: 1 }}>
@@ -431,7 +420,7 @@ const RightPanel = ({
       )}
 
       <MealPlanDialog open={dialogOpen1} onClose={() => setDialogOpen1(false)} planId={1} startDate={formatDate(selectedDate)} />
-      <MealPlanDialog open={dialogOpen2} onClose={() => setDialogOpen2(false)} planId={2} startDate={formatDate(selectedDate)} />
+      {/* <MealPlanDialog open={dialogOpen2} onClose={() => setDialogOpen2(false)} planId={2} startDate={formatDate(selectedDate)} /> */}
 
       <HolidayPayment
         open={holidayPaymentOpen}
