@@ -38,12 +38,8 @@ export default function VijayAntonyPopup({ open, onClose }) {
                 <div className='TeamMemberPopSec'>
                   <div className='TeamMemberTitles' data-aos="fade-left" data-aos-duration="1000" >                    
                         <h2>Vijay Antony</h2>
-                        <p>Vijay Antony, Our Commis 3, holds a diploma in hotel and catering management from Villupuram. Vijay is a passionate culinary professional with a deep love for cooking. His dedication to the craft, combined with hands-on experience, makes him a promising talent in the world of food and hospitality.</p>
-                        <p className='paraalink'>
-                            <Link href="/">
-                            <span>LinkedIn</span>
-                            </Link>
-                        </p>
+                <h4>Commis 3</h4>
+                <p>Our Commis 3, holds a diploma in hotel and catering management from Villupuram. Vijay is a passionate culinary professional with a deep love for cooking. His dedication to the craft, combined with hands-on experience, makes him a promising talent in the world of food and hospitality.</p>
                   </div>
                 </div>
             </DialogContent>

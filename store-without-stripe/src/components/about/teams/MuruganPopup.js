@@ -38,12 +38,8 @@ export default function MuruganPopup({ open, onClose }) {
                 <div className='TeamMemberPopSec'>
                   <div className='TeamMemberTitles' data-aos="fade-left" data-aos-duration="1000" >                    
                         <h2>S. Murugan</h2>
-                        <p>S. Murugan, our executive chef, is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. He specializes in innovative cooking, menu development, and streamlining kitchen operations while maintaining high standards of quality and guest satisfaction. With expertise in Continental, Chinese, North Indian, South Indian, Tandoor, Italian, Asian, and European cuisines, he has successfully led culinary teams in various hotels across India and abroad. </p>
-                        <p className='paraalink'>
-                            <Link href="/">
-                            <span>LinkedIn</span>
-                            </Link>
-                        </p>
+                <h4>Our Executive Chef</h4>
+                <p>He is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. He specializes in innovative cooking, menu development, and streamlining kitchen operations while maintaining high standards of quality and guest satisfaction. With expertise in Continental, Chinese, North Indian, South Indian, Tandoor, Italian, Asian, and European cuisines, he has successfully led culinary teams in various hotels across India and abroad. </p>
                   </div>
                 </div>
             </DialogContent>

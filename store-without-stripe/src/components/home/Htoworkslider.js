@@ -98,7 +98,7 @@ const Htoworkslider = () => {
                         </div>       
                         <div className='flex-1 rfboxcoint'>
                             <h4>Sit Back and Relax</h4>
-                            <p>Once your order is placed, you can rest assured. Our team <br/>will expertly prepare a healthy and fresh lunch for <br/>your child and ensure it is reliably delivered <br/>directly to their school.</p>
+                              <p>Once your order is placed, you can rest assured. Our team <br />will prepare a healthy and fresh lunch for <br />your child and ensure it is reliably delivered <br />directly to their school.</p>
                         </div>                    
                     </div>   
                 </div>
