@@ -1,5 +1,5 @@
 import React from "react";
-// import dayjs from "dayjs"; // Commented out for date removal
+import dayjs from "dayjs"; // Add this import at the top
 import {
   Dialog,
   DialogTitle,
@@ -12,6 +12,7 @@ import {
   Tab,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+
 const meals = [
   "Pav Bhaji",
   "Creamy Spinach & Corn Augratin",
@@ -45,14 +46,17 @@ const meals = [
   "Veg Alfredo Pasta - Garlic Bread",
   "Veg Fried Rice - Veg in Black Bean Sauce",
 ];
+
 const MealPlanDialog = ({
   open,
   onClose,
   startDate,
-  planId = 1,
+  planId = 1, // Add this prop
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const [tabValue, setTabValue] = React.useState(planId ? planId - 1 : 0);
+
   const mealPlans = {
     1: {
       name: "Meal Plan 1",
@@ -63,10 +67,21 @@ const MealPlanDialog = ({
       meals: [...meals].reverse(),
     },
   };
+
+  // const handleTabChange = (event, newValue) => {
+  //   setTabValue(newValue);
+  // };
+
+  // const handleApply = () => {
+  //   onApplyPlan(tabValue + 1);
+  //   onClose();
+  // };
   const plan = mealPlans[planId] || mealPlans[1];
   const renderPlan = (planId) => {
+    //const plan = mealPlans[planId];
     const firstCol = plan.meals.slice(0, Math.ceil(plan.meals.length / 2));
     const secondCol = plan.meals.slice(Math.ceil(plan.meals.length / 2));
+
     const renderColumn = (data, startIndex) => (
       <Box>
         <Box
@@ -78,13 +93,14 @@ const MealPlanDialog = ({
         >
           <Box width="30%">DAY</Box>
           {/* <Box width="40%">DATE</Box> */}
-          <Box width="70%">MEAL</Box>
+          <Box width="30%">MEAL</Box>
         </Box>
         {data.map((item, idx) => {
           const dayNumber = startIndex + idx + 1;
-          // const mealDate = dayjs(startDate)
-          //   .add(dayNumber - 1, "day")
-          //   .format("MMM D, YYYY");
+          const mealDate = dayjs(startDate)
+            .add(dayNumber - 1, "day")
+            .format("MMM D, YYYY");
+
           return (
             <Box
               key={idx}
@@ -98,7 +114,7 @@ const MealPlanDialog = ({
               {/* <Box width="40%" color="#666">
                 {mealDate}
               </Box> */}
-              <Box width="70%" color="#333">
+              <Box width="30%" color="#333">
                 {item}
               </Box>
             </Box>
@@ -106,6 +122,7 @@ const MealPlanDialog = ({
         })}
       </Box>
     );
+
     return (
       <Box display="flex" flexDirection={isMobile ? "column" : "row"} gap={4}>
         <Box flex={1}>{renderColumn(firstCol, 0)}</Box>
@@ -113,6 +130,7 @@ const MealPlanDialog = ({
       </Box>
     );
   };
+
   return (
     <Dialog
       open={open}
@@ -158,8 +176,10 @@ const MealPlanDialog = ({
           <CloseIcon />
         </IconButton>
       </DialogTitle>
+
       <DialogContent dividers>{renderPlan()}</DialogContent>
     </Dialog>
   );
 };
+
 export default MealPlanDialog;

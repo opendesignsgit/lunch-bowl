@@ -50,6 +50,7 @@ const RightPanel = ({
   setActiveChild,
   onSave,
   saveSelectedMeals,
+  onMealPlanChange
 }) => {
   const { data: session } = useSession();
 
@@ -112,12 +113,15 @@ const RightPanel = ({
   ];
 
   const handlePlanChange = (childId, planId) => {
-    if (isWithin48Hours) return;
-    setSelectedPlans((prev) => ({ ...prev, [childId]: planId }));
-    const childIndex = dummyChildren.findIndex((child) => child.id === childId);
-    if (childIndex !== -1) setActiveChild(childIndex);
-    if (applyMealPlan) applyMealPlan(planId, childId);
-  };
+  if (isWithin48Hours) return;
+  setSelectedPlans((prev) => ({ ...prev, [childId]: planId }));
+  const childIndex = dummyChildren.findIndex((child) => child.id === childId);
+  if (childIndex !== -1) setActiveChild(childIndex);
+  if (applyMealPlan) applyMealPlan(planId, childId);
+  if (typeof onMealPlanChange === "function") {
+    onMealPlanChange(planId);
+  }
+};
 
   const handleApplyToAllChange = (e) => {
     if (isWithin48Hours) return;

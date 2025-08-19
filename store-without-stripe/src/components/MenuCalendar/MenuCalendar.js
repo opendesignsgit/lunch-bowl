@@ -17,6 +17,8 @@ import useAsync from "../../hooks/useAsync";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { useSession } from "next-auth/react";
+import dietitianMealPlanData from "../../jsonHelper/Dietitian_meal_plan.json";
+
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -53,6 +55,8 @@ const MenuCalendar = () => {
   const [subscriptionStart, setSubscriptionStart] = useState(dayjs());
   const [subscriptionEnd, setSubscriptionEnd] = useState(dayjs());
   const [menuData, setMenuData] = useState([]);
+  const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
+
   const _id = session?.user?.id;
 
   const { submitHandler, loading } = useRegistration();
@@ -210,6 +214,16 @@ const MenuCalendar = () => {
   };
 
 
+  const handleMealPlanChange = (planId) => {
+  // Assuming you want Meal Plan 1 meals or empty for now, add other plans if needed
+  if (planId === 1) {
+    setSelectedMealPlanMeals(dietitianMealPlanData.meal_plan.map(day => day.meal));
+  } else {
+    setSelectedMealPlanMeals([]);
+  }
+};
+
+
  const saveSelectedMeals = async () => {
    const allMenuData = getAllMenuData();
    const payload = {
@@ -301,32 +315,38 @@ const MenuCalendar = () => {
  };
 
  const applyMealPlan = (planId, childId) => {
-   const selectedPlan = planId === 1 ? menus : [...menus].reverse();
-   const updates = {};
+  let selectedPlanMeals;
 
-   const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
-   const daysInMonth = firstDayOfMonth.daysInMonth();
+  if (planId === 1) {
+    // Use dietitian meals to apply
+    selectedPlanMeals = dietitianMealPlanData.meal_plan.map(day => day.meal);
+  } else {
+    // Fallback or another plan — example reverse of menus array
+    selectedPlanMeals = [...menus].reverse();
+  }
 
-   for (let day = 1; day <= daysInMonth; day++) {
-     const currentDate = dayjs(
-       `${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`
-     );
-     if (!isHoliday(day, currentMonth, currentYear)) {
-       // Pass all three params
-       const mealDate = currentDate.format("YYYY-MM-DD");
-       const meal = selectedPlan[(day - 1) % selectedPlan.length];
-       updates[mealDate] = {
-         ...(menuSelections[mealDate] || {}),
-         [childId]: meal,
-       };
-     }
-   }
+  const updates = {};
+  const firstDayOfMonth = dayjs(`${currentYear}-${currentMonth + 1}-01`);
+  const daysInMonth = firstDayOfMonth.daysInMonth();
 
-   setMenuSelections((prev) => ({
-     ...prev,
-     ...updates,
-   }));
- };
+  for (let day = 1; day <= daysInMonth; day++) {
+    const currentDate = dayjs(`${currentYear}-${currentMonth + 1}-${String(day).padStart(2, "0")}`);
+    if (!isHoliday(day, currentMonth, currentYear)) {
+      const mealDate = currentDate.format("YYYY-MM-DD");
+      const meal = selectedPlanMeals[(day - 1) % selectedPlanMeals.length];
+      updates[mealDate] = {
+        ...(menuSelections[mealDate] || {}),
+        [childId]: meal,
+      };
+    }
+  }
+
+  setMenuSelections((prev) => ({
+    ...prev,
+    ...updates,
+  }));
+};
+
 
  const calendarDates = getCalendarGridDates();
 
@@ -478,6 +498,7 @@ const MenuCalendar = () => {
            setActiveChild={setActiveChild}
            onSave={handleSave}
            saveSelectedMeals={saveSelectedMeals}
+           onMealPlanChange={handleMealPlanChange}
          />
        </>
      )}
@@ -508,6 +529,7 @@ const MenuCalendar = () => {
          setActiveChild={setActiveChild}
          onSave={handleSave}
          saveSelectedMeals={saveSelectedMeals}
+         onMealPlanChange={handleMealPlanChange}
        />
      </Dialog>
 

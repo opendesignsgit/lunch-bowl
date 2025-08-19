@@ -98,6 +98,8 @@ const CenterPanel = ({
               )}`
             );
             const isBeforeStart = fullDate.isBefore(subscriptionStart, "day");
+            const isAfterEnd = fullDate.isAfter(subscriptionEnd, "day");
+
             const holiday = isHoliday(date);
             const isSelected = date === selectedDate;
 
@@ -108,7 +110,7 @@ const CenterPanel = ({
                 }`}
                 key={idx}
                 onClick={() => {
-                  if (!isBeforeStart) {
+                  if (!isBeforeStart && !isAfterEnd) {
                     setSelectedDate(date);
                   }
                 }}
@@ -119,9 +121,9 @@ const CenterPanel = ({
                 fontSize="0.875rem"
                 fontWeight="bold"
                 sx={{
-                  cursor: isBeforeStart ? "default" : "pointer",
-                  color: isBeforeStart ? "#ccc" : "inherit",
-                  opacity: isBeforeStart ? 0.5 : 1,
+                  cursor: isBeforeStart || isAfterEnd ? "default" : "pointer",
+                  color: isBeforeStart || isAfterEnd ? "#ccc" : "inherit",
+                  opacity: isBeforeStart || isAfterEnd ? 0.5 : 1,
                   mx: "auto",
                 }}
               >
