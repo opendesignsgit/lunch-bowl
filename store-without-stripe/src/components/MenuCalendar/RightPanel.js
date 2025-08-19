@@ -17,12 +17,16 @@ import { Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
 import HolidayPayment from "./HolidayPayment";
-import mealPlanData from "../../jsonHelper/Dietitian_meal_plan.json";
+import mealPlanData from "../../jsonHelper/meal_plan.json";
+import dietitianMealPlanData from "../../jsonHelper/Dietitian_meal_plan.json";
+
 import { useSession } from "next-auth/react";
 import useRegistration from "@hooks/useRegistration";
 
 
 const mealPlanArray = mealPlanData.meal_plan;
+const dietitianMealPlanArray = dietitianMealPlanData.meal_plan;
+
 
 const RightPanel = ({
   isSmall,
@@ -99,7 +103,7 @@ const RightPanel = ({
     {
       id: 1,
       name: "Meal Plan 1",
-      meals: mealPlanArray.map((day) => day.meals).flat(),
+      meals: dietitianMealPlanArray.map((day) => day.meals).flat(),
     },
   ];
 
