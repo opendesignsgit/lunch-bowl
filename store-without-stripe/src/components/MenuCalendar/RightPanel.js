@@ -12,6 +12,8 @@ import {
   RadioGroup,
   FormControl,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import dayjs from "dayjs";
@@ -27,7 +29,8 @@ import useRegistration from "@hooks/useRegistration";
 const mealPlanArray = mealPlanData.meal_plan;
 const dietitianMealPlanArray = dietitianMealPlanData.meal_plan;
 
-
+console.log("Meal Plan Array:", mealPlanArray);
+console.log("Dietitian Meal Plan Array:", dietitianMealPlanArray);
 const RightPanel = ({
   isSmall,
   selectedDate,
@@ -58,7 +61,7 @@ const RightPanel = ({
   const [holidayPaymentOpen, setHolidayPaymentOpen] = useState(false);
   const [holidayPaymentData, setHolidayPaymentData] = useState([]);
   const [paidHolidayMeals, setPaidHolidayMeals] = useState([]);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const selectedDateObj = dayjs(formatDate(selectedDate));
   const holiday = isHoliday(selectedDate);
   const isSelectedHoliday = !!holiday;
@@ -103,7 +106,8 @@ const RightPanel = ({
     {
       id: 1,
       name: "Meal Plan 1",
-      meals: dietitianMealPlanArray.map((day) => day.meals).flat(),
+      meals: dietitianMealPlanArray.map((day) => day.meal),
+
     },
   ];
 
@@ -158,6 +162,18 @@ const RightPanel = ({
   const allPaid =
     childrenWithSelectedMeals.length > 0 &&
     childrenWithSelectedMeals.every((child) => isChildPaid(child.id));
+
+  const handleSaveClick = () => {
+    if (typeof saveSelectedMeals === "function") {
+      saveSelectedMeals();
+      setSnackbarOpen(true); // Show snackbar
+    }
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
+  };
 
   return (
     <Box
@@ -246,45 +262,49 @@ const RightPanel = ({
                           }}
                           className="RGradiobtnSSS"
                         >
-                          {mealPlans.map((plan) => (
-                            <Box
-                              key={plan.id}
-                              display="flex"
-                              alignItems="center"
-                              mb={0.5}
-                              className="RGradiobtn"
-                            >
-                              <Radio
-                                value={plan.id}
-                                size="small"
-                                className="radiobtnsinput"
-                              />
-                              <Typography
-                                fontSize="0.8rem"
-                                color="#000"
-                                sx={{ flexGrow: 1 }}
-                                className="radiobtnstext"
+                          {mealPlans.map((plan) => {
+                            console.log("plan--->",plan);
+                            return (
+                              <Box
+                                key={plan.id}
+                                display="flex"
+                                alignItems="center"
+                                mb={0.5}
+                                className="RGradiobtn"
                               >
-                                {plan.name}
-                              </Typography>
-                              <Link
-                                href="#"
-                                fontSize="0.8rem"
-                                sx={{
-                                  color: "#fff",
-                                  textDecoration: "none",
-                                  "&:hover": { textDecoration: "underline" },
-                                }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setDialogOpen1(true); // Always open dialog 1 (Meal Plan 1)
-                                }}
-                              >
-                                View Plan
-                              </Link>
-                            </Box>
-                          ))}
+                                <Radio
+                                  value={plan.id}
+                                  size="small"
+                                  className="radiobtnsinput"
+                                />
+                                <Typography
+                                  fontSize="0.8rem"
+                                  color="#000"
+                                  sx={{ flexGrow: 1 }}
+                                  className="radiobtnstext"
+                                >
+                                  {plan.name}
+                                </Typography>
+                                <Link
+                                  href="#"
+                                  fontSize="0.8rem"
+                                  sx={{
+                                    color: "#fff",
+                                    textDecoration: "none",
+                                    "&:hover": { textDecoration: "underline" },
+                                  }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setDialogOpen1(true);
+                                  }}
+                                >
+                                  View Plan
+                                </Link>
+                              </Box>
+                            );
+                          })}
+
                         </RadioGroup>
                       </FormControl>
                     </Box>
@@ -335,19 +355,7 @@ const RightPanel = ({
 
                       {isSelectedHoliday && !isSunday && (
                         <Box display="flex" gap={2} className="btngroups" mt={1}>
-                          {/* {isPaid ? (
-                            <Button
-                              variant="outlined"
-                              className="paysavebtn"
-                              onClick={() => {
-                                if (typeof saveSelectedMeals === "function") {
-                                  saveSelectedMeals();
-                                }
-                              }}
-                            >
-                              <span>Save</span>
-                            </Button>
-                          ) : ( */}
+                          {!isPaid && (
                             <Button
                               variant="contained"
                               className="paysavebtn"
@@ -366,7 +374,7 @@ const RightPanel = ({
                             >
                               <span>Pay ₹199</span>
                             </Button>
-                          {/* )} */}
+                          )}
                         </Box>
                       )}
 
@@ -408,11 +416,7 @@ const RightPanel = ({
                   <Button
                     variant="outlined"
                     className="paysavebtn"
-                    onClick={() => {
-                      if (typeof saveSelectedMeals === "function") {
-                        saveSelectedMeals();
-                      }
-                    }}
+                    onClick={handleSaveClick}
                   >
                     <span>Save</span>
                   </Button>
@@ -432,6 +436,23 @@ const RightPanel = ({
         selectedDate={formatDate(selectedDate)}
         childrenData={holidayPaymentData}
       />
+
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+          variant="filled"
+        >
+          Your selected menu has been saved
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
