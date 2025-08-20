@@ -8,11 +8,10 @@ const AboutVideoSlider = () => {
   const [playingIndex, setPlayingIndex] = useState(null);
 
   const videoList = [
-      { id: "video1", url: "https://www.youtube.com/watch?v=WTUz9fOVpiI" },
-      { id: "video2", url: "https://www.youtube.com/watch?v=qMAYG-soxhw" },
-      { id: "video3", url: "https://www.youtube.com/watch?v=bXgxzzNm0U8" },
+    { id: "video1", url: "https://www.youtube.com/watch?v=HwOdzhMsquU" },
+    { id: "video2", url: "https://www.youtube.com/watch?v=HwOdzhMsquU" },
+    { id: "video3", url: "https://www.youtube.com/watch?v=HwOdzhMsquU" },
   ];
-
   const settings = {
     dots: true,
     arrows: true,
