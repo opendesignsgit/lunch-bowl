@@ -263,6 +263,7 @@ ul.footmenu li a:hover{text-decoration: underline;}
   }
 
 .HProlistSec{background: #FF6514 !important;}
+.HProlistSec .comtilte h2{text-transform: capitalize;}
 .menulistpage .HProlistSec {
   background: #FFF4D7 !important;
 }
@@ -452,6 +453,7 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .contusbanersec .pageinconter::after {content: '';position: absolute;width: 25%;height: 110%;right: 14%;bottom: 0;background: url(/contus/contusbanbg.png) no-repeat center bottom;background-size: 100%;}
 .MenusLbanersec .pageinconter::after{content: '';position: absolute;width: 45%;height: 110%;right: 0%;bottom: 0;background: url(/MenuListbanimg.png) no-repeat center bottom;background-size: 100%;filter: drop-shadow(2px 4px 6px rgb(51 51 51 / 12%));}
 .pagebansec.setpbanersec { height: 50vh;}
+.pagebansec.MyAccbanersec h1{justify-content: center;}
 
 .aboutintroRow{position: relative;}
 .aboutintroRow .aboutintroTCol{}
@@ -578,6 +580,7 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .steptitles h5{font-family: 'Baloo';line-height: 1;font-size: 1.2vw;}
 .DetlsSepBox h6{font-family: 'Baloo';font-size: 0.9vw;font-weight: 100;line-height: 1;}
 .DetlsSepBox p{margin-block: 14px;}
+.DetlsSepBox .SetpTabul p{margin-block: 0px;}
 .DetlsSepBox input{color: #333333;padding: 0;padding-inline: 20px;line-height: 50px;height: 50px;border-color: #EAEAEC;font-family: "Open Sans", sans-serif;font-weight: 400;letter-spacing: 0px;font-family: "Open Sans", sans-serif;}
 .DetlsSepBox textarea{color: #333333;padding: 0;padding-inline: 0px;line-height: 1;max-height: 80px;border-color: #EAEAEC;font-family: "Open Sans", sans-serif;font-weight: 400;letter-spacing: 0px;font-family: "Open Sans", sans-serif;}
 
@@ -614,7 +617,7 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .subscrip p{font-family: "Open Sans", sans-serif;}
 .radiogroub>.MuiBox-root{padding: 15px 20px;border-color: #EAEAEC;margin-bottom: 15px;margin-top: 0;}
 .radiogroub>.MuiBox-root>label{margin-left: 0;margin-right: 0;}
-.radiogroub>.MuiBox-root>label p{font-size: 15px;font-weight: 500;margin-left: 12px;color: #333333;}
+.radiogroub>.MuiBox-root>label p{font-size: 15px;font-weight: 500;margin-left: 12px;color: #333333;margin-block: 0;}
 .radiogroub>.MuiBox-root.css-1be353x>label p{color: #ffffff;}
 .radiogroub>.MuiBox-root>label .MuiRadio-root{padding: 0;}
 .radiogroub>.MuiBox-root .clanbtn {padding: 0;}
@@ -869,6 +872,14 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .incomplete-registration-msg .incregbox button:hover{color: #000000;}
 .incomplete-registration-msgspace{height: 40px;width: 100%;}
 
+.renewsec .comtilte{}
+.renewsec .comtilte .rnewbackbtn{width:  45%;}
+.renewsec .comtilte h4{width:  55%;margin-bottom: 0;}
+.renewsec .comtilte button{position: relative;background: #ff6a00;color: #ffffff;padding-inline: 20px;padding-block: 4px;border-radius: 4px;border: 2px solid #ff6a00;}
+.renewsec .comtilte button:hover{background: #ffffff;color: #ff6a00;}
+.renewsec .subplnBoxss {    gap: 0;}
+
+
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
 }
@@ -899,6 +910,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .faqAccordionitems button {    line-height: 1;  }
   .faqcontain::after {    height: 34px;  }
   .HLFOlistSec{padding-block: 16vh 12vh;}
+  .logsinul>li a,.logsinul .submenuul li button{padding-inline: 24px;font-size: 15px;line-height: 45px;}
 }
 
 @media screen and (max-width:1520px) {
