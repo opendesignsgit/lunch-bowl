@@ -57,7 +57,22 @@ const Htoworkslider = () => {
                       <h3><span>Step 04</span></h3>
                   </div>
               </Slider>
-            <Slider asNavFor={nav2} ref={slider => (sliderRef1 = slider)} swipeToSlide={true} arrows={true} infinite={true} className='sliderRef1'>
+              <Slider
+                  asNavFor={nav2}
+                  ref={slider => (sliderRef1 = slider)}
+                  swipeToSlide={true}
+                  arrows={true}
+                  infinite={false}
+                  className='sliderRef1'
+                  responsive={[
+                      {
+                          breakpoint: 650, // Mobile devices
+                          settings: {
+                              infinite: true,
+                          },
+                      },
+                  ]}
+              >
                 <div>
                       <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>

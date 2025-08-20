@@ -92,8 +92,8 @@ const GetinTouch = ({ open, onClose }) => {
           <Box className='w-[50%] gintPopCol gintRCol self-center logboxcol p-[3vw]'>
             <div className='gintPinRow'>
             <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
-              <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} > Enquire Now  </Typography>
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, </p>
+                <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} > ! NEED TO CLEAR YOUR QUIRIES? !   </Typography>
+                <p>We are here to lend hands from order details to partnership opportunities our team will reach you promptly.</p>
             </Box>
             <form onSubmit={handleSubmit}>
               <TextField
