@@ -403,6 +403,15 @@ const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
    setEditMode(false);
  };
 
+ const getSavedMenuDatesForChild = (childId) => {
+  // menuSelections: { "YYYY-MM-DD": { childId: dish, ... }, ... }
+  return Object.entries(menuSelections)
+    .filter(([date, selections]) => selections[childId])
+    .map(([date]) => date);
+};
+
+const savedMenuDates = getSavedMenuDatesForChild(children[activeChild]?.id);
+
  if (loading || !children.length) {
    return <CircularProgress />;
  }
@@ -431,6 +440,7 @@ const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
          dummyHolidays={holidays}
          subscriptionStart={subscriptionStart}
          subscriptionEnd={subscriptionEnd}
+         savedMenuDates={savedMenuDates}
        />
      )}
 
@@ -484,6 +494,7 @@ const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
            subscriptionStart={subscriptionStart}
            subscriptionEnd={subscriptionEnd}
            sx={{ width: "44%" }}
+           savedMenuDates={savedMenuDates}
          />
 
          <RightPanel
