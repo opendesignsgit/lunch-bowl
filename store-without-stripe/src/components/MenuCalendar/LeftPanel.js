@@ -17,6 +17,8 @@ const LeftPanel = ({
   sx,
   onMenuDataChange,
   selectedMealPlanMeals = [], // New prop for showing meal plan meals
+  setUseMealPlan,
+  setSelectedPlans,
 }) => {
   const formatDate = (day) =>
     `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(
@@ -194,7 +196,12 @@ const LeftPanel = ({
                     <IconButton
                       className="editbtn"
                       size="small"
-                      onClick={() => onEditClick(dateKey)}
+                      onClick={() => {
+                        // Reset the checkbox and radio button
+                        if (typeof setUseMealPlan === "function") setUseMealPlan(false);
+                        if (typeof setSelectedPlans === "function") setSelectedPlans({});
+                        onEditClick(dateKey); // Existing logic
+                      }}
                       sx={{ color: "#f97316", ml: 0.5, p: 0 }}
                       disabled={isWithin48Hours}
                     >

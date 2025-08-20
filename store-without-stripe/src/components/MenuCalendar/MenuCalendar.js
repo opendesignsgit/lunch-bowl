@@ -447,6 +447,8 @@ const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
          subscriptionEnd={subscriptionEnd}
          onEditClick={handleEditClick}
          onMenuDataChange={handleMenuDataChange}
+          setUseMealPlan={setUseMealPlan}
+  setSelectedPlans={setSelectedPlans}
        />
      )}
 
@@ -465,6 +467,8 @@ const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
            onEditClick={handleEditClick}
            onMenuDataChange={handleMenuDataChange}
            sx={{ width: "29%" }}
+            setUseMealPlan={setUseMealPlan}
+  setSelectedPlans={setSelectedPlans}
          />
 
          <CenterPanel
