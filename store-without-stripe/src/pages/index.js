@@ -13,7 +13,7 @@ import Accordion from '@components/faq/Accordion';
 import HomepopVideo from '@components/home/HomepopVideo';
 import NutritiousEnquire from '@components/home/NutritiousEnquirepop';
 
-import Homebanimg from "../../public/home/homebanimg.jpeg";
+import Homebanimg from "../../public/home/homebanimg.jpg";
 import hintroImgOne from "../../public/home/hintroImg-one.jpg";
 import hintroImgTwo from "../../public/home/hintroImg-two.jpg";
 import HNutritionImg from "../../public/home/HNutritionImg.jpg";
