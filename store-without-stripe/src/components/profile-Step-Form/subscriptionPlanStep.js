@@ -300,16 +300,16 @@ const SubscriptionPlanStep = ({
 
         {/* Right Form Section */}
         <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
-          <div className="steptitles">
+          {/*<div className="steptitles">
             <Typography variant="h6" fontWeight="bold">
               SUBSCRIPTION PLAN:
             </Typography>
-            {/* {numberOfChildren > 1 && (
+            {numberOfChildren > 1 && (
               <Typography color="primary" sx={{ mt: 1 }}>
                 Pricing for {numberOfChildren} children
               </Typography>
-            )} */}
-          </div>
+            )}
+          </div> */}
 
           {holidaysLoading && <LinearProgress />}
 

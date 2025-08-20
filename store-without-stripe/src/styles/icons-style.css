@@ -238,6 +238,7 @@
   .hDoctIconss .iconthree {bottom: 14%;right: 4%;}
   .hDoctIconss .iconsix {top: 13%;left: 1%;}
   .hDoctIconss .iconone {top: -9%;right: 31%;}
+  .hMenusIconss{display: none;}
 }
 
 @media screen and (max-width:650px){
@@ -279,6 +280,7 @@
   .psfbanIconss .iconsix {bottom: -31%;right: 36%;}
   .psfbanIconss .iconseven {bottom: -31%;left: 25%;}
   .psfbanIconss .iconeight {bottom: -8%;left: -12%;}
+  .hbanIconss .iconseven {bottom: 18%;}
 
 }
 
