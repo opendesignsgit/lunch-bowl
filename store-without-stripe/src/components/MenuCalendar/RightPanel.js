@@ -29,8 +29,7 @@ import useRegistration from "@hooks/useRegistration";
 const mealPlanArray = mealPlanData.meal_plan;
 const dietitianMealPlanArray = dietitianMealPlanData.meal_plan;
 
-console.log("Meal Plan Array:", mealPlanArray);
-console.log("Dietitian Meal Plan Array:", dietitianMealPlanArray);
+
 const RightPanel = ({
   isSmall,
   selectedDate,
@@ -50,12 +49,16 @@ const RightPanel = ({
   setActiveChild,
   onSave,
   saveSelectedMeals,
-  onMealPlanChange
+  onMealPlanChange,
+  useMealPlan,
+  setUseMealPlan,
+  selectedPlans,
+  setSelectedPlans,
 }) => {
   const { data: session } = useSession();
 
-  const [useMealPlan, setUseMealPlan] = useState(false);
-  const [selectedPlans, setSelectedPlans] = useState({});
+  // const [useMealPlan, setUseMealPlan] = useState(false);
+  // const [selectedPlans, setSelectedPlans] = useState({});
   const [applyToAll, setApplyToAll] = useState(false);
   const [dialogOpen1, setDialogOpen1] = useState(false);
   const [dialogOpen2, setDialogOpen2] = useState(false);
@@ -267,7 +270,6 @@ const RightPanel = ({
                           className="RGradiobtnSSS"
                         >
                           {mealPlans.map((plan) => {
-                            console.log("plan--->",plan);
                             return (
                               <Box
                                 key={plan.id}

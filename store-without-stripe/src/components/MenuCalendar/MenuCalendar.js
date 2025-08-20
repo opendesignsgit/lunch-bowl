@@ -34,9 +34,6 @@ const MenuCalendar = () => {
 
     reload,
   } = useAsync(AttributeServices.getAllHolidays);
-  console.log("====================================");
-  console.log("data", data);
-  console.log("====================================");
   const [currentMonth, setCurrentMonth] = useState(today.month());
   const [currentYear, setCurrentYear] = useState(today.year());
   const [selectedDate, setSelectedDate] = useState(today.date());
@@ -55,7 +52,10 @@ const MenuCalendar = () => {
   const [subscriptionStart, setSubscriptionStart] = useState(dayjs());
   const [subscriptionEnd, setSubscriptionEnd] = useState(dayjs());
   const [menuData, setMenuData] = useState([]);
-  const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
+  const [useMealPlan, setUseMealPlan] = useState(false);
+const [selectedPlans, setSelectedPlans] = useState({});
+const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
+
 
   const _id = session?.user?.id;
 
@@ -374,6 +374,9 @@ const MenuCalendar = () => {
 
    setCurrentMonth(newMonth);
    setCurrentYear(newYear);
+
+   setUseMealPlan(false);
+  setSelectedPlans({});
  };
 
  const handleDateClick = (date) => {
@@ -499,6 +502,10 @@ const MenuCalendar = () => {
            onSave={handleSave}
            saveSelectedMeals={saveSelectedMeals}
            onMealPlanChange={handleMealPlanChange}
+           useMealPlan={useMealPlan}
+  setUseMealPlan={setUseMealPlan}
+  selectedPlans={selectedPlans}
+  setSelectedPlans={setSelectedPlans}
          />
        </>
      )}
@@ -530,6 +537,10 @@ const MenuCalendar = () => {
          onSave={handleSave}
          saveSelectedMeals={saveSelectedMeals}
          onMealPlanChange={handleMealPlanChange}
+         useMealPlan={useMealPlan}
+  setUseMealPlan={setUseMealPlan}
+  selectedPlans={selectedPlans}
+  setSelectedPlans={setSelectedPlans}
        />
      </Dialog>
 
