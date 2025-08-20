@@ -122,12 +122,10 @@ const UserDashboard = () => {
               <div className="hworkTitle combtntb comtilte">
                 <h1 className="flex flex-col textFF6514">
                   {" "}
-                  <span className="block firstspan">The Story Behind</span>{" "}
-                  <span className="block">Every Bite</span>{" "}
+                  <span className="block firstspan">ONE BITE FULL SMILE <br />OUR BOWL FILLS </span>{" "}
+                  <span className="block">LIFE DESCRIPTION</span>{" "}
                 </h1>
-                <p className="">
-                  As food is an emotion, there will be a story <br />
-                  behind every recipe. Let’s explore!
+                <p className=""> !HEY! CONFUSED ALREADY? — We are here with full pack of protein <br />fiber and also an appetizing meal bowl for your little one; so no more <br />worries of lunch bowl for our little smiles.
                 </p>
                 <Breadcrumbs />
               </div>
@@ -186,18 +184,16 @@ const UserDashboard = () => {
             <div className='DashboardSecss secpaddblock'>
               <div className="container mx-auto ">
                 <div className='comtilte mb-[5vh]'>
-                  <h3 className='textFF6514'>Welcome, {dashboardData.parentName}</h3>
+                  <h3 className='textFF6514'>Welcome, <small>{dashboardData.parentName}</small></h3>
                   <p>Here's your account overview</p>
                 </div>
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 DashboardTBoxss">
                   {/* Total Subscriptions Card */}
-                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500 DashboardTItems">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-500">
-                          Total Subscriptions
-                        </p>
+                        <h5> Total Subscriptions </h5>
                         <p className="text-2xl font-semibold text-gray-800">
                           {dashboardData.subscriptionCount}
                         </p>
@@ -206,20 +202,20 @@ const UserDashboard = () => {
                         <HiUsers className="w-6 h-6" />
                       </div>
                     </div>
-                    <div className="mt-4 text-sm text-gray-500">
-                      <span>
-                        Current plan:{" "}
-                        {dashboardData.subscriptionCount > 0 ? "Active" : "None"}
-                      </span>
+                    <div className="mt-4 text-sm text-gray-500 curplan flex">
+                      <span> Current plan: </span>
+                      <strong
+                        className={`ml-1 ${dashboardData.subscriptionCount > 0 ? "planactive" : "planinactive"}`}
+                      >
+                        {dashboardData.subscriptionCount > 0 ? "Active" : "Inactive"}
+                      </strong>
                     </div>
                   </div>
 
                   {/* Renew Subscription Button (forced to show for testing) */}
-                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500 flex flex-col items-start ">
-                    <div className="text-center mb-4">
-                      <p className="text-sm font-medium text-gray-500 mb-1">
-                        Your subscription has expired
-                      </p>
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500 flex flex-col items-start DashboardTItems">
+                    <div className="mb-4">
+                      <h5> Your subscription has expired </h5>
                       <p className="text-lg font-semibold text-gray-800">
                         Renew to continue
                       </p>
@@ -235,12 +231,10 @@ const UserDashboard = () => {
                   </div>
 
                   {/* Children Card */}
-                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500 DashboardTItems">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-500">
-                          Registered Children
-                        </p>
+                        <h5> Registered Children </h5>
                         <p className="text-2xl font-semibold text-gray-800">
                           {dashboardData.childrenCount}
                         </p>
@@ -257,25 +251,23 @@ const UserDashboard = () => {
 
                 {/* Children Table */}
                 <div className="bg-white rounded-lg shadow overflow-hidden mb-8">
-                  <div className="px-6 py-4 border-b border-gray-200">
-                    <h2 className="text-lg font-semibold text-gray-800">
-                      Your Children ({dashboardData.childrenCount})
-                    </h2>
+                  <div className="px-6 py-4 border-b border-gray-200 comtilte">
+                    <h5 >  Your Children ({dashboardData.childrenCount}) </h5>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-bold text-[#333333] uppercase tracking-wider">
                             Name
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-bold text-[#333333] uppercase tracking-wider">
                             School
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-bold text-[#333333] uppercase tracking-wider">
                             Class
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-bold text-[#333333] uppercase tracking-wider">
                             Lunch Time
                           </th>
                         </tr>
@@ -289,7 +281,7 @@ const UserDashboard = () => {
                                   <HiUserCircle className="h-10 w-10 text-gray-400" />
                                 </div>
                                 <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">
+                                  <div className="text-sm font-bold text-[#FF6514]">
                                     {child.childFirstName} {child.childLastName}
                                   </div>
                                   <div className="text-sm text-gray-500">

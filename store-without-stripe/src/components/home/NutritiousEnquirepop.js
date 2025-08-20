@@ -162,7 +162,7 @@ const NutritiousEnquire = ({ open, onClose }) => {
                     },
                   }}
                 >
-                  Sign Up
+                  Submit
                 </Button>
               </form>
             </div>

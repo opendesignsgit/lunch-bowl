@@ -292,28 +292,6 @@ const MyAccount = () => {
 
                   </Box>
                   <Box className="myaccboxlist boxtwo">
-                    <h4>Children</h4>
-
-                    {userDetails.children && userDetails.children.length > 0 ? (
-                      userDetails.children.map((child, idx) => (
-                        <ul key={child._id || idx} sx={{ mb: 2, pl: 2 }}>
-                          <li><b>Name:</b> {child.childFirstName}{" "} {child.childLastName}</li>
-                          <li><b>Date of Birth:</b> {formatDate(child.dob)}</li>
-                          <li><b>School:</b> {child.school}</li>
-                          <li><b>Class:</b> {child.childClass}</li>
-                          <li><b>Section:</b> {child.section}</li>
-                          <li><b>Lunch Time:</b> {child.lunchTime}</li>
-                          <li><b>Location:</b> {child.location}</li>
-                          <li><b>Allergies:</b> {child.allergies || "None"}</li>
-                        </ul>
-                      ))
-                    ) : (
-                      <h6>No children details available.</h6>
-                    )}
-                  </Box>
-                  <Box className="myaccboxlist boxthree">
-
-
                     <h4> Subscription </h4>
                     {userDetails.subscriptionPlan ? (
                       <ul>
@@ -327,12 +305,35 @@ const MyAccount = () => {
                       <Typography>No subscription found.</Typography>
                     )}
 
-                  </Box>
-                  <Box className="myaccboxlist boxfour">
-                    <Typography>
+                    <Typography className="paystaus">
                       <b>Payment Status:</b>{" "}
-                      {userDetails.paymentStatus ? "Paid" : "Not Paid"}
+                      <strong
+                        className={`ml-1 ${userDetails.paymentStatus ? "paypaid" : "paynotpaid"}`}
+                      >{userDetails.paymentStatus ? "Paid" : "Not Paid"}</strong>
                     </Typography>
+                  </Box>
+                  <Box className="myaccboxlist boxthree ">
+                    <Box className="ChildlistBoxs flex">
+                      <Box className="ChildlistItems">
+                        <h4>Children </h4>
+                        {userDetails.children && userDetails.children.length > 0 ? (
+                          userDetails.children.map((child, idx) => (
+                            <ul key={child._id || idx} sx={{ mb: 2, pl: 2 }}>
+                              <li><b>Name:</b> {child.childFirstName}{" "} {child.childLastName}</li>
+                              <li><b>Date of Birth:</b> {formatDate(child.dob)}</li>
+                              <li><b>School:</b> {child.school}</li>
+                              <li><b>Class:</b> {child.childClass}</li>
+                              <li><b>Section:</b> {child.section}</li>
+                              <li><b>Lunch Time:</b> {child.lunchTime}</li>
+                              <li><b>Location:</b> {child.location}</li>
+                              <li><b>Allergies:</b> {child.allergies || "None"}</li>
+                            </ul>
+                          ))
+                        ) : (
+                          <h6>No children details available.</h6>
+                        )}
+                      </Box>
+                    </Box>
                   </Box>
               </Box>
             ) : (

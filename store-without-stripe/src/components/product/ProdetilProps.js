@@ -42,12 +42,14 @@ const ProdetilProps = ({ open, onClose, product }) => {
         <div className="popbimg w-[45%] bg-FFF4D7 overflow-hidden relative p-[2vw]">
           <div className="fontanimi pointer-events-none">
             <div className="animitext animiOne">
+              <div className="animiintext">
               <span>{product?.primaryDishTitle || "Dish Title"}</span>
-              <span>{product?.primaryDishTitle || "Dish Title"}</span>
+                <span>{product?.primaryDishTitle || "Dish Title"}</span></div>
             </div>
             <div className="animitext animiTwo">
+              <div className="animiintext">
               <span>{product?.subDishTitle || "Sub Title"}</span>
-              <span>{product?.subDishTitle || "Sub Title"}</span>
+                <span>{product?.subDishTitle || "Sub Title"}</span></div>
             </div>
           </div>
           <div className="slider-container flex items-center">

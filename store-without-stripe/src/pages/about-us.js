@@ -108,11 +108,9 @@ const AboutUs = () => {
                   <p>Let’s be honest—packing lunch every single day is hard work. Between picky eaters, tight mornings, and the never-ending quest for something that’s both healthy and kid-approved, parents (especially moms) are juggling a lot.</p>
                   <div className="hintroIntb">
                     <p>That’s where the idea for <strong>Lunch Bowl</strong> was born.</p>
-                    <p>We asked ourselves:</p>
-                    <p><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
-                    <p>So, we cooked up a solution.</p>
-                    <p>Lunch Bowl is your lunchtime lifesaver. We deliver fresh, delicious, and nutritious meals straight to your child—hot and ready to enjoy. No last-minute chopping, no repeat sandwich cycles, and no lunchbox guilt.</p>
-                    <p>Here’s what we bring to the table:</p>
+                    <p>We asked ourselves: <br /><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
+                    <p>So, we cooked up a solution: <strong>Lunch Bowl</strong> is your lunchtime lifesaver. We deliver fresh, delicious, and nutritious meals straight to your child—hot and ready to enjoy. No last-minute chopping, no repeat sandwich cycles, and no lunchbox guilt.</p>
+                    <p><strong>Here’s what we bring to the table:</strong></p>
                     <ul className="list-disc pl-5">
                       <li>Tasty, kid-friendly meals crafted by real nutritionists (and tested by real kids!).</li>
                       <li>A fun, easy-to-use meal planning app that lets you mix and match based on your child’s tastes.</li>
@@ -120,7 +118,7 @@ const AboutUs = () => {
                       <li>Flexible, affordable plans that make sense for busy families.</li>
                     </ul>
                     <p>At Lunch Bowl, we’re here to take one big thing off your plate, while putting something great into your kid’s.</p>
-                    <p>Healthy. Happy. Hassle-free. That’s how we do lunch.</p>
+                    <p><strong>Healthy. Happy. Hassle-free.</strong> That’s how we do lunch.</p>
                   </div>
                 </div>
               </div>

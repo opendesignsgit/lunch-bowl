@@ -152,7 +152,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className='hbanRight relative'>
-            <div className='banimgss'><div className='banvideobox' onClick={handleOpenDialog}>&nbsp;</div><Image className="w-full h-auto" priority src={Homebanimg} alt="Banimg" onClick={handleOpenDialog} /></div>
+            <div className='banimgss'><div className='banvideobox' onClick={handleOpenDialog}><div className='banvideoinbox'>&nbsp;</div></div><Image className="w-full h-auto" priority src={Homebanimg} alt="Banimg" onClick={handleOpenDialog} /></div>
                 </div>
             </section>
 

@@ -61,6 +61,19 @@ const Hoteamsslide = () => {
         <div>
                       <div className='flex teambox items-center group relative overflow-hidden layone'>
                           <div className='flex-1 teamboximg overflow-hidden '>
+                              <Image className="w-full h-auto m-auto" priority src={RavishankarNImg} alt="logo" />
+                          </div>
+                          <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
+                              <h4>Ravishankar N</h4>
+                              <p><button onClick={() => setOpenRavishankarN(true)}>
+                                  <span>Read More</span>
+                              </button></p>
+                          </div>
+                      </div>
+                  </div>
+                  <div>
+                      <div className='flex teambox items-center group relative overflow-hidden layone'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
                               <Image className="w-full h-auto m-auto" priority src={SMuruganImg} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
@@ -109,20 +122,7 @@ const Hoteamsslide = () => {
                               </button></p>
                 </div>                    
             </div> 
-        </div>
-        <div>
-                      <div className='flex teambox items-center group relative overflow-hidden layone'>
-                          <div className='flex-1 teamboximg overflow-hidden '>
-                              <Image className="w-full h-auto m-auto" priority src={RavishankarNImg} alt="logo" />
-                </div>       
-                <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
-                              <h4>Ravishankar N</h4>
-                              <p><button onClick={() => setOpenRavishankarN(true)}>
-                                  <span>Read More</span>
-                              </button></p>
-                </div>                    
-            </div> 
-        </div>
+                  </div>
       </Slider>
     </div>
 
