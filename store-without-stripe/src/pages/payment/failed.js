@@ -26,9 +26,9 @@ const PaymentFailed = () => {
       <Button
         variant="contained"
         color="error"
-        onClick={() => router.push("/payment")} // Replace with retry or form page
+        onClick={() => router.push("/user/menuCalendarPage")} // Replace with retry or form page
       >
-        Retry Payment
+        Menu Calendar  
       </Button>
     </Box>
   );
