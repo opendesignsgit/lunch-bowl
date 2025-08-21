@@ -47,18 +47,18 @@ const ChildDetailsStep = ({
     formData.children.length > 0
       ? formData.children
       : [
-          {
-            childFirstName: "",
-            childLastName: "",
-            dob: null,
-            lunchTime: "",
-            school: "",
-            location: "",
-            childClass: "",
-            section: "",
-            allergies: "",
-          },
-        ]
+        {
+          childFirstName: "",
+          childLastName: "",
+          dob: null,
+          lunchTime: "",
+          school: "",
+          location: "",
+          childClass: "",
+          section: "",
+          allergies: "",
+        },
+      ]
   );
   const { submitHandler, loading } = useRegistration();
 
@@ -334,27 +334,35 @@ const ChildDetailsStep = ({
             >
               DATE OF BIRTH*
             </Typography>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Controller
-                name="dob"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                    {...field}
-                    inputFormat="dd/MM/yyyy"
-                    renderInput={(params) => (
-                      <TextField
-                        fullWidth
-                        {...params}
-                        error={!!errors.dob}
-                        helperText={errors.dob?.message}
-                        sx={{ width: "300px", minWidth: "300px" }}
-                      />
-                    )}
-                  />
-                )}
-              />
-            </LocalizationProvider>
+            <Controller
+              name="dob"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="date"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  error={!!errors.dob}
+                  helperText={errors.dob?.message}
+                  sx={{ width: "300px", minWidth: "300px" }}
+                  // Convert the value to yyyy-MM-dd format for the input
+                  value={
+                    field.value
+                      ? typeof field.value === "string"
+                        ? field.value
+                        : field.value instanceof Date
+                          ? field.value.toISOString().substring(0, 10)
+                          : ""
+                      : ""
+                  }
+                  onChange={e => {
+                    const val = e.target.value;
+                    field.onChange(val ? new Date(val) : null);
+                  }}
+                />
+              )}
+            />
           </Grid>
 
           {/* School Dropdown */}
@@ -418,8 +426,8 @@ const ChildDetailsStep = ({
                     {!watchSchool
                       ? "Select a school first"
                       : filteredLocations.length === 0
-                      ? "No locations available"
-                      : "Select Location"}
+                        ? "No locations available"
+                        : "Select Location"}
                   </MenuItem>
                   {filteredLocations.map((location) => (
                     <MenuItem key={location} value={location}>
@@ -457,8 +465,8 @@ const ChildDetailsStep = ({
                     {!watchLocation
                       ? "Select a location first"
                       : filteredLunchTimes.length === 0
-                      ? "No lunch times available"
-                      : "Select Lunch Time"}
+                        ? "No lunch times available"
+                        : "Select Lunch Time"}
                   </MenuItem>
                   {filteredLunchTimes.map((time) => (
                     <MenuItem key={time} value={time}>

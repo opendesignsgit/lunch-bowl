@@ -240,25 +240,25 @@ const MyAccount = () => {
                             onChange={(e) => setEditValue(e.target.value)}
                             sx={{ mr: 1 }}
                           />
-                          <IconButton
+                          {/* <IconButton
                             onClick={() => handleSave("email")}
                             color="primary"
                             disabled={saving}
                             size="small"
                           >
                             <SaveIcon fontSize="inherit" />
-                          </IconButton>
+                          </IconButton> */}
                         </p>
                       ) : (
                           <p>
                             {userDetails.parentDetails?.email}
-                            <IconButton
+                            {/* <IconButton
                               onClick={() => handleEdit("email")}
                               size="small"
                               sx={{ ml: 1 }}
                             >
                               <EditIcon fontSize="inherit" />
-                            </IconButton>
+                            </IconButton> */}
                         </p>
                       )}</li>
                       <li className="editli"><b>Mobile:</b>{" "}  {editField === "mobile" ? (
@@ -269,25 +269,25 @@ const MyAccount = () => {
                             onChange={(e) => setEditValue(e.target.value)}
                             sx={{ mr: 1 }}
                           />
-                          <IconButton
+                          {/* <IconButton
                             onClick={() => handleSave("mobile")}
                             color="primary"
                             disabled={saving}
                             size="small"
                           >
                             <SaveIcon fontSize="inherit" />
-                          </IconButton>
+                          </IconButton> */}
                         </p>
                       ) : (
                           <p>
                             {userDetails.parentDetails?.mobile}
-                            <IconButton
+                            {/* <IconButton
                               onClick={() => handleEdit("mobile")}
                               size="small"
                               sx={{ ml: 1 }}
                             >
                               <EditIcon fontSize="inherit" />
-                            </IconButton>
+                            </IconButton> */}
                         </p>
                       )}</li>
                       <li><b>Address:</b> <p>{userDetails.parentDetails?.address}</p></li>
