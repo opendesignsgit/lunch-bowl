@@ -104,7 +104,7 @@ const GetinTouch = ({ open, onClose }) => {
       <Dialog
         open={open}
         onClose={onClose}
-        maxWidth="lg"
+        maxWidth="md"
         fullWidth
         className="gintpopus compopups"
         sx={{

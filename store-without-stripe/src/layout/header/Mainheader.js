@@ -30,6 +30,8 @@ const Mainheader = ({ title, description, children }) => {
   const { submitHandler, loading, error } = useRegistration();
   const [stepCheck, setStepCheck] = useState(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+  const [active, setActive] = useState(false);
 
   const userId = session?.user?.id;
   const freeTrial = session?.user?.freeTrial;
@@ -113,6 +115,21 @@ const Mainheader = ({ title, description, children }) => {
     sessionStorage.clear();
   };
 
+  // detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handleClick = () => {
+    if (isMobile) {
+      setActive((prev) => !prev); // toggle state
+    }
+  };
+
+
   return (
     <>
       <Head>
@@ -173,11 +190,10 @@ const Mainheader = ({ title, description, children }) => {
                 stepCheck === 4 ? (
                   // StepCheck === 4 → Full My Account menu
                   <li className="userMenuBtn" style={{ position: "relative" }}>
-                    <button onClick={() => setShowUserMenu((prev) => !prev)}>
+                    <button onClick={handleClick}>
                       <span>My Account</span>
                     </button>
-                    {showUserMenu && (
-                      <ul className="submenuul">
+                    <ul className={`submenuul ${active ? "submenuulactive" : ""}`}>
                         <li>
                           <Link href="/user/userDashBoard">Dashboard</Link>
                         </li>
@@ -190,8 +206,7 @@ const Mainheader = ({ title, description, children }) => {
                         <li>
                           <button onClick={() => setShowLogoutConfirm(true)}>Log Out</button>
                         </li>
-                      </ul>
-                    )}
+                    </ul>
                   </li>
 
                 ) : (
