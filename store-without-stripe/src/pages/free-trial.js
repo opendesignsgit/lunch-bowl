@@ -28,9 +28,6 @@ import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
 
 console.log("Config:", config);
 
-
-const timeOptions = ["1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM"];
-
 const ImageBox = styled(Box)({
   position: "relative",
   width: "100%",
@@ -54,7 +51,6 @@ export default function FreeTrialPage() {
 
   const [formData, setFormData] = useState({
     date: null,
-    time: "",
     food: "",
     address: "",
     message: "",
@@ -71,7 +67,6 @@ export default function FreeTrialPage() {
   useEffect(() => {
     setFormData({
       date: null,
-      time: "",
       food: "",
       address: "",
       message: "",
@@ -107,7 +102,7 @@ export default function FreeTrialPage() {
         newErrors.date = "Same-day delivery is closed after 12 PM";
       }
     }
-    if (!formData.time) newErrors.time = "Please select a time";
+    // Removed time validation
     if (!formData.food) newErrors.food = "Please select a dish";
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
@@ -144,7 +139,7 @@ export default function FreeTrialPage() {
         schoolName: "Free Trial",
         message: `Dish: ${formData.food}\nDelivery Date: ${
           formData.date?.format("YYYY-MM-DD")
-        }\nTime: ${formData.time}\n${formData.message}`,
+        }\n${formData.message}`,
         userId: formData.userId,
       });
       setSubmitted(true);
@@ -225,7 +220,7 @@ export default function FreeTrialPage() {
                       </Typography>
                       <Typography>
                         Delivery scheduled for:{" "}
-                        {formData.date?.format("MMMM D, YYYY")} at {formData.time}
+                        {formData.date?.format("MMMM D, YYYY")}
                       </Typography>
                       <Typography mt={1}>Dish: {formData.food}</Typography>
                       <Typography>Address: {formData.address}</Typography>
@@ -268,9 +263,9 @@ export default function FreeTrialPage() {
                           sx={{ mt: 1 }}
                         />
 
-                        {/* Date & Time */}
+                        {/* Date */}
                         <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                          SELECT YOUR PREFERRED SLOT FOR DELIVERY*
+                          SELECT YOUR PREFERRED DATE FOR DELIVERY*
                         </Typography>
                         <Box display="flex" gap={2} mt={1} flexWrap="wrap">
                           <Box flex={1}>
@@ -293,21 +288,7 @@ export default function FreeTrialPage() {
                               <FormHelperText error>{errors.date}</FormHelperText>
                             )}
                           </Box>
-                          <TextField
-                            select
-                            fullWidth
-                            value={formData.time}
-                            onChange={handleChange("time")}
-                            size="small"
-                            error={!!errors.time}
-                            helperText={errors.time}
-                          >
-                            {timeOptions.map((time) => (
-                              <MenuItem key={time} value={time}>
-                                {time}
-                              </MenuItem>
-                            ))}
-                          </TextField>
+                          {/* Removed Time Field */}
                         </Box>
 
                         {/* Food */}
@@ -367,11 +348,11 @@ export default function FreeTrialPage() {
                           <FormHelperText error>{errors.submit}</FormHelperText>
                         )}
 
-                        <Typography fontSize={14} mt={2}>
+                        {/* <Typography fontSize={14} mt={2}>
                           Submit your request before{" "}
                           <span className="text-[#FF6514]">12 PM</span> for{" "}
                           <span className="text-[#FF6514]">Same-day Delivery</span>.
-                        </Typography>
+                        </Typography> */}
 
                       {/* Submit Button */}
                       <Button
