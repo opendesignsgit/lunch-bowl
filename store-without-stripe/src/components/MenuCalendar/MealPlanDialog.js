@@ -59,7 +59,7 @@ const MealPlanDialog = ({
 
   const mealPlans = {
     1: {
-      name: "Meal Plan 1",
+      name: "Meal Plan ",
       meals: meals,
     },
     2: {

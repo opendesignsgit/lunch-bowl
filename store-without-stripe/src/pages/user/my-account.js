@@ -193,7 +193,7 @@ const MyAccount = () => {
                     <h4> Parent Details </h4>
                     <ul>
                       <li> <b>Father's Name:</b>{" "} <p>{userDetails.parentDetails?.fatherFirstName}{" "}{userDetails.parentDetails?.fatherLastName}</p></li>
-                      <li> <b>Mother's Name:</b>{" "} <p>{userDetails.parentDetails?.fatherFirstName}{" "}{userDetails.parentDetails?.fatherLastName}</p></li>
+                      <li> <b>Mother's Name:</b>{" "} <p>{userDetails.parentDetails?.motherFirstName}{" "}{userDetails.parentDetails?.motherLastName}</p></li>
                       <li className="editli"> <b>Email:</b>{" "} {editField === "email" ? (
                         <p>
                           <TextField
@@ -282,7 +282,7 @@ const MyAccount = () => {
                     <h4> Subscription </h4>
                     {userDetails.subscriptionPlan ? (
                       <ul>
-                        <li> <b>Plan ID:</b> {userDetails.subscriptionPlan.planId} </li>
+                        {/* <li> <b>Plan ID:</b> {userDetails.subscriptionPlan.planId} </li> */}
                         <li>  <b>Start Date:</b>{" "}  {formatDate(userDetails.subscriptionPlan.startDate)}  </li>
                         <li>  <b>End Date:</b>{" "} {formatDate(userDetails.subscriptionPlan.endDate)} </li>
                         <li> <b>Working Days:</b>{" "} {userDetails.subscriptionPlan.workingDays} </li>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog,
@@ -18,37 +18,68 @@ const NutritiousEnquire = ({ open, onClose }) => {
     message: "",
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [errors, setErrors] = useState({});
 
-    try {
-      // Split fullName into firstName and lastName for the API
-      const [firstName, ...lastNameParts] = formData.fullName.split(" ");
-      const lastName = lastNameParts.join(" ") || "";
-
-      const enquiryData = {
-        firstName: firstName,
-        lastName: lastName,
-        mobileNumber: formData.mobile,
-        schoolName: "Nutrition Enquiry", // Using this as identifier in email
-        message: formData.message,
-        email: formData.email, // Adding email since your form has it
-      };
-
-      await axios.post(
-        "http://localhost:5055/api/admin/school-enquiry", // Using same endpoint
-        enquiryData
-      );
-
-      alert("Thank you for your enquiry! We'll get back to you soon.");
-      onClose();
-      // Reset form
+  // Reset form and errors whenever dialog opens
+  useEffect(() => {
+    if (open) {
       setFormData({
         fullName: "",
         email: "",
         mobile: "",
         message: "",
       });
+      setErrors({});
+    }
+  }, [open]);
+
+  // Validation (message now optional)
+  const validate = () => {
+    const errs = {};
+    if (!formData.fullName.trim()) errs.fullName = "Full Name is required!";
+    if (!formData.email.trim()) {
+      errs.email = "Email is required!";
+    } else if (
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)
+    ) {
+      errs.email = "Enter a valid email.";
+    }
+    if (!formData.mobile.trim()) {
+      errs.mobile = "Mobile Number is required!";
+    } else if (!/^\d{10}$/.test(formData.mobile)) {
+      errs.mobile = "Enter a valid 10-digit mobile number.";
+    }
+    // message is optional, no error
+    return errs;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const currErrs = validate();
+    setErrors(currErrs);
+    if (Object.keys(currErrs).length > 0) return;
+
+    try {
+      const [firstName, ...lastNameParts] = formData.fullName.split(" ");
+      const lastName = lastNameParts.join(" ") || "";
+
+      const enquiryData = {
+        firstName,
+        lastName,
+        mobileNumber: formData.mobile,
+        schoolName: "Nutrition Enquiry",
+        message: formData.message,
+        email: formData.email,
+      };
+
+      await axios.post(
+        "http://localhost:5055/api/admin/school-enquiry",
+        enquiryData
+      );
+
+      alert("Thank you for your enquiry! We'll get back to you soon.");
+      onClose();
+      // Reset handled by useEffect on close/open
     } catch (err) {
       console.error("Error submitting form:", err);
       alert("There was an error submitting the form. Please try again.");
@@ -61,41 +92,43 @@ const NutritiousEnquire = ({ open, onClose }) => {
       ...prev,
       [name]: value,
     }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
   return (
-    <div>
-      <Dialog
-        open={open}
-        onClose={onClose}
-        maxWidth="md"
-        fullWidth
-        className="nutripopup compopups"
-        sx={{
-          "& .MuiDialog-paper": {
-            height: "auto",
-          },
-        }}
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      className="nutripopup compopups"
+      sx={{
+        "& .MuiDialog-paper": {
+          height: "auto",
+        },
+      }}
+    >
+      <IconButton
+        className="popClose"
+        onClick={onClose}
+        sx={{ position: "absolute", top: 16, right: 16, zIndex: 99 }}
       >
-        <IconButton
-          className="popClose"
-          onClick={onClose}
-          sx={{ position: "absolute", top: 16, right: 16, zIndex: 99 }}
-        >
-          {" "}
-          <CloseIcon />{" "}
-        </IconButton>
-        <Box className="nutriPopBox nutriBoxRow Box flex bg-white relative h-full">
-          <Box
-            className="w-[50%] nutriBoxCol nutriLCol "
-            sx={{
-              backgroundImage: `url(/LogInSignUp/signuppopimg.jpg)`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          ></Box>
-          <Box className="w-[50%] self-center nutriBoxCol nutriRCol logboxcol p-[3vw]">
-            <div className="nutriinrRow">
+        <CloseIcon />
+      </IconButton>
+      <Box className="nutriPopBox nutriBoxRow Box flex bg-white relative h-full">
+        <Box
+          className="w-[50%] nutriBoxCol nutriLCol "
+          sx={{
+            backgroundImage: `url(/LogInSignUp/signuppopimg.jpg)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></Box>
+        <Box className="w-[50%] self-center nutriBoxCol nutriRCol logboxcol p-[3vw]">
+          <div className="nutriinrRow">
             <Box
               sx={{ textAlign: "left", marginBottom: "24px" }}
               className="poptitles"
@@ -105,15 +138,11 @@ const NutritiousEnquire = ({ open, onClose }) => {
                 color="#000"
                 sx={{ textTransform: "uppercase", marginBottom: "4px" }}
               >
-                {" "}
-                Nutritious Enquire{" "}
+                Nutritious Enquire
               </Typography>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.{" "}
-              </p>
+              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </Box>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               <TextField
                 fullWidth
                 id="fullName"
@@ -125,6 +154,8 @@ const NutritiousEnquire = ({ open, onClose }) => {
                 margin="normal"
                 placeholder="Joe Bloggs"
                 className="fieldbox"
+                error={!!errors.fullName}
+                helperText={errors.fullName}
               />
               <TextField
                 fullWidth
@@ -137,6 +168,8 @@ const NutritiousEnquire = ({ open, onClose }) => {
                 margin="normal"
                 placeholder="example@domain.com"
                 className="fieldbox"
+                error={!!errors.email}
+                helperText={errors.email}
               />
               <TextField
                 fullWidth
@@ -149,18 +182,22 @@ const NutritiousEnquire = ({ open, onClose }) => {
                 margin="normal"
                 placeholder="1234567890"
                 className="fieldbox"
+                error={!!errors.mobile}
+                helperText={errors.mobile}
               />
               <TextField
                 fullWidth
                 id="message"
                 name="message"
                 label="Message"
-                type="tel"
+                type="text"
                 value={formData.message}
                 onChange={handleChange}
                 margin="normal"
                 placeholder="Message"
                 className="fieldbox"
+                error={!!errors.message}
+                helperText={errors.message}
               />
               <Button
                 color="primary"
@@ -175,14 +212,13 @@ const NutritiousEnquire = ({ open, onClose }) => {
                   },
                 }}
               >
-                Sign Up
+                Submit
               </Button>
             </form>
-            </div>
-          </Box>
+          </div>
         </Box>
-      </Dialog>
-    </div>
+      </Box>
+    </Dialog>
   );
 };
 

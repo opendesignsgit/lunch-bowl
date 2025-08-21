@@ -248,11 +248,12 @@ const Mainheader = ({ title, description, children }) => {
                   <li className="nav__item hamnavlink">
                     <Link href="/">Home</Link>
                   </li>
-                  {session && (
+                  {session && stepCheck === 4 && (
                     <li className="nav__item hamnavlink">
                       <Link href="/user/my-account">My Account</Link>
                     </li>
                   )}
+
                   <li className="nav__item hamnavlink">
                     <Link href="/about-us">About Us</Link>
                   </li>

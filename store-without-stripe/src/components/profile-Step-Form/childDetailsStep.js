@@ -501,6 +501,14 @@ const ChildDetailsStep = ({
                     "Grade 2",
                     "Grade 3",
                     "Grade 4",
+                    "Grade 5",
+                    "Grade 6",
+                    "Grade 7",
+                    "Grade 8",
+                    "Grade 9",
+                    "Grade 10",
+                    "Grade 11",
+                    "Grade 12",
                   ].map((grade) => (
                     <MenuItem key={grade} value={grade}>
                       {grade}
@@ -535,7 +543,7 @@ const ChildDetailsStep = ({
                   <MenuItem value="" disabled>
                     Select Section
                   </MenuItem>
-                  {["A", "B", "C"].map((section) => (
+                  {["A", "B", "C", "D", "E", "F", "G", "H"].map((section) => (
                     <MenuItem key={section} value={section}>
                       {section}
                     </MenuItem>
