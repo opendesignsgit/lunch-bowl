@@ -1222,7 +1222,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .footcopyrow .copymenucol{width: 100%;}
   .copymenucol ul.footmenu{-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;font-size: 12px;margin-top: 10px;}
   .copymenucol ul.footmenu li:first-child{margin-left: 0;}
-  .copymenucol ul.footmenu li:last-child{margin-left: 0;}
+  .copymenucol ul.footmenu li:last-child{margin-left: 12px;}
   .pagebansec .hworkTitle {width: 100%;text-align: center;}
   .myaccontpage .pagebansec .hworkTitle {width: 80%;text-align: center;}
   .pagebansec h1{font-size: 40px;}
@@ -1230,7 +1230,11 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .pagebansec{height: 600px;padding-inline: 30px;}
   .pagebansec .pageinconter{padding-bottom: 70%;}
   .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 420px;}
-  .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter{padding-bottom: 0%;}
+  .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter,.pagebansec.Policysbanersec .pageinconter{padding-bottom: 0%;}
+  .pagebansec.Policysbanersec {height: 200px;}
+  .PolicyCont{padding-inline: 30px;}
+
+
   .aboutbanersec .pageinconter::after,.MenusLbanersec .pageinconter::after{width: 90%;}
   .Dashboardbanersec .pageinconter::after{width: 86%;}
   .contusbanersec .pageinconter::after{width: 60%;right:15%;}
