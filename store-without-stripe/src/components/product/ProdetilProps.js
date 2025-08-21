@@ -48,8 +48,8 @@ const ProdetilProps = ({ open, onClose, product }) => {
             </div>
             <div className="animitext animiTwo">
               <div className="animiintext">
-              <span>{product?.subDishTitle || "Sub Title"}</span>
-                <span>{product?.subDishTitle || "Sub Title"}</span></div>
+                <span>{product?.primaryDishTitle || "Dish Title"}</span>
+                <span>{product?.primaryDishTitle || "Dish Title"}</span></div>
             </div>
           </div>
           <div className="slider-container flex items-center">

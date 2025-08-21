@@ -517,6 +517,9 @@ ul.footmenu li a:hover{text-decoration: underline;}
 transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .abtvidosliders iframe{aspect-ratio: 2 / 1.125;}
 .abtvidosliders img{aspect-ratio: 2 / 1.125;}
+.abtvidosliders .avidoplaybtns{}
+.abtvidosliders .avidoplaybtns button{width: 3.2vw;aspect-ratio: 1;padding: 0;padding-left: 4px;color: #ff6514;border: 2px solid #ff6514;}
+.abtvidosliders .avidoplaybtns button:hover{background: #ff6514;color: #ffffff;border-color:#ffffff;}
 .abtvidosliders .slick-slide>div{line-height: 0;}
 .abtvidosliders .slick-arrow{display: none;}
 .abtvidosliders ul.slick-dots {bottom: 10vh;z-index: 99;}
