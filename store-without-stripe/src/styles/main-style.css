@@ -449,8 +449,10 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .pagebansec::before{content: '';position: absolute;width: 100%;height: 35px;bottom: -1px;left: 0;background: url(/introtopbefrimg.png) repeat-x top center;background-size: 90%;-webkit-transform: translateY(00%);-ms-transform: translateY(00%);transform: translateY(00%);z-index: 9;pointer-events: none;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .allpolicypage .pagebansec::before {background: url(/introtopbefrimg-fafafa.png) repeat-x top center;background-size: 90%;}
 .MenusLbanersec.pagebansec::before{background: url(/introtopbefrimg-fff4d7.png) repeat-x top center;background-size: 90%;}
+.Dashboardbanersec.pagebansec::before{background: url(/introtopbefrimg-fafafa.png) repeat-x top center;background-size: 90%;}
 .aboutbanersec .pageinconter::after{content: '';position: absolute;width: 40%;height: 100%;right: 5%;bottom: 0;background: url(/about/about-banimg.png) no-repeat center bottom;background-size: 100%;}
 .contusbanersec .pageinconter::after {content: '';position: absolute;width: 25%;height: 110%;right: 14%;bottom: 0;background: url(/contus/contusbanbg.png) no-repeat center bottom;background-size: 100%;}
+.Dashboardbanersec .pageinconter::after {content: '';position: absolute;width: 38%;height: 110%;right: 7%;bottom: 0;background: url(/dash-board-banner.png) no-repeat center bottom;background-size: 100%;}
 .MenusLbanersec .pageinconter::after{content: '';position: absolute;width: 45%;height: 110%;right: 0%;bottom: 0;background: url(/MenuListbanimg.png) no-repeat center bottom;background-size: 100%;filter: drop-shadow(2px 4px 6px rgb(51 51 51 / 12%));}
 .pagebansec.setpbanersec { height: 50vh;}
 .pagebansec.MyAccbanersec h1{justify-content: center;}
@@ -515,6 +517,9 @@ ul.footmenu li a:hover{text-decoration: underline;}
 transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .abtvidosliders iframe{aspect-ratio: 2 / 1.125;}
 .abtvidosliders img{aspect-ratio: 2 / 1.125;}
+.abtvidosliders .avidoplaybtns{}
+.abtvidosliders .avidoplaybtns button{width: 3.2vw;aspect-ratio: 1;padding: 0;padding-left: 4px;color: #ff6514;border: 2px solid #ff6514;}
+.abtvidosliders .avidoplaybtns button:hover{background: #ff6514;color: #ffffff;border-color:#ffffff;}
 .abtvidosliders .slick-slide>div{line-height: 0;}
 .abtvidosliders .slick-arrow{display: none;}
 .abtvidosliders ul.slick-dots {bottom: 10vh;z-index: 99;}
