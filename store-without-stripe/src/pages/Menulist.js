@@ -18,8 +18,8 @@ const Menulist = () => {
                 <div className='container mx-auto relative h-full' >
                   <div className='pageinconter relative h-full w-full flex items-center'>
                     <div className='hworkTitle combtntb comtilte'>
-                  <h1 className='flex flex-col textFF6514'> <span className='block firstspan'>ONE BOWL = TUMMY FULL </span> <span className='block'>HEALTHY WHOLE</span> </h1>
-                  <p className=''>Fuel your little one’s day with our specially themed KID’S LUNCH BOWL ; <br />wrapped with fresh veggies, delicious flavors and wholesome grains <br />they will love — NUTRITIOUS for them and WORRY-FREE for you.</p>
+                  <h1 className='flex flex-col textFF6514'> <span className='block firstspan'>TINY TASTY BOWL </span> <span className='block'>HEALTHY WHOLE</span> </h1>
+                  <p className=''>Fuel your little one’s day with our specially themed KID’S LUNCH BOWL ; <br />wrapped with fresh veggies, delicious flavors and wholesome grains they will <br />love — NUTRITIOUS for them and WORRY-FREE for you.</p>
                         <Breadcrumbs/>
                     </div>
                   </div>

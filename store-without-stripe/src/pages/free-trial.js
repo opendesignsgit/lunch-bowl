@@ -168,10 +168,10 @@ export default function FreeTrialPage() {
             <div className="pageinconter relative h-full w-full flex items-center">
               <div className="hworkTitle combtntb comtilte">
                 <h1 className="flex flex-col textFF6514">
-                  <span className="block firstspan">YOUR FIRST BOWL IS <br />ON US — GET YOUR </span>
-                  <span className="block">FREE TRIAL DESCRIPTION:</span>
+                  <span className="block firstspan">YOUR FIRST </span>
+                  <span className="block">BOWL IS ON US</span>
                 </h1>
-                <p className="">Worried if your little one will like it? Don’t worry we provide a free trial <br />meal No risk- no commitments absolute !!FREE!! </p>
+                <p>Worried if your little one will like it? Don’t worry we provide a <br />free trial meal No risk- no commitments absolute !!FREE!!</p>
                 <Breadcrumbs />
               </div>
             </div>
