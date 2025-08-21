@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from "next/image";
 import { Dialog, DialogTitle, DialogContent, TextField, Button, Typography, Box} from '@mui/material';
-import addSchoolPopUp from "../../../public/home/addSchoolPopUp.jpg";
+import addSchoolPopUp from "../../../public/home/ready-to-serve-your-school.jpg";
 import closeicon from "../../../public/menuclose-icon.svg";
 import axios from "axios";
 

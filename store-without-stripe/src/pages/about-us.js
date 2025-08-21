@@ -24,6 +24,9 @@ import img4 from "../../public/about/environ-img4.jpg";
 import img5 from "../../public/about/environ-img5.jpg";
 import img6 from "../../public/about/environ-img6.jpg";
 
+import abtintroImgOne from "../../public/about/abtintroImgOne.jpg";
+import abtintroImgTwo from "../../public/about/abtintroImgTwo.png";
+
 import hintroicon1 from "../../public/home/icons/hintro/yellowround-flower.svg";
 import hintroicon2 from "../../public/home/icons/hintro/blue-and-orange-star.svg";
 import hintroicon3 from "../../public/home/icons/hintro/blur-and-yellow-star.svg";
@@ -88,7 +91,7 @@ const AboutUs = () => {
                 />
               </div>
               <div className="abbanicn icontwo absolute">
-                <Image src={abbanicon2} priority alt="Icon" />
+                <Image src={abbanicon2} priority alt="Icon" className="iconrubberband" />
               </div>
             </div>
           </div>
@@ -104,12 +107,10 @@ const AboutUs = () => {
                   </h3>
                   <p>Let’s be honest—packing lunch every single day is hard work. Between picky eaters, tight mornings, and the never-ending quest for something that’s both healthy and kid-approved, parents (especially moms) are juggling a lot.</p>
                   <div className="hintroIntb">
-                    <p><strong>That’s where the idea for Lunch Bowl was born.</strong></p>
-                    <p>We asked ourselves:</p>
-                    <p><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
-                    <p>So, we cooked up a solution.</p>
-                    <p>Lunch Bowl is your lunchtime lifesaver. We deliver fresh, delicious, and nutritious meals straight to your child—hot and ready to enjoy. No last-minute chopping, no repeat sandwich cycles, and no lunchbox guilt.</p>
-                    <p>Here’s what we bring to the table:</p>
+                    <p>That’s where the idea for <strong>Lunch Bowl</strong> was born.</p>
+                    <p>We asked ourselves: <br /><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
+                    <p>So, we cooked up a solution: <strong>Lunch Bowl</strong> is your lunchtime lifesaver. We deliver fresh, delicious, and nutritious meals straight to your child—hot and ready to enjoy. No last-minute chopping, no repeat sandwich cycles, and no lunchbox guilt.</p>
+                    <p><strong>Here’s what we bring to the table:</strong></p>
                     <ul className="list-disc pl-5">
                       <li>Tasty, kid-friendly meals crafted by real nutritionists (and tested by real kids!).</li>
                       <li>A fun, easy-to-use meal planning app that lets you mix and match based on your child’s tastes.</li>
@@ -117,7 +118,7 @@ const AboutUs = () => {
                       <li>Flexible, affordable plans that make sense for busy families.</li>
                     </ul>
                     <p>At Lunch Bowl, we’re here to take one big thing off your plate, while putting something great into your kid’s.</p>
-                    <p>Healthy. Happy. Hassle-free. That’s how we do lunch.</p>
+                    <p><strong>Healthy. Happy. Hassle-free.</strong> That’s how we do lunch.</p>
                   </div>
                 </div>
               </div>
@@ -127,7 +128,7 @@ const AboutUs = () => {
                   <Image
                     className="w-full h-auto"
                     priority
-                    src={hintroImgOne}
+                    src={abtintroImgOne}
                     alt="logo"
                   />
                 </div>
@@ -135,7 +136,7 @@ const AboutUs = () => {
                   <Image
                     className="w-full h-auto"
                     priority
-                    src={hintroImgTwo}
+                    src={abtintroImgTwo}
                     alt="logo"
                   />
                 </div>
@@ -213,7 +214,7 @@ const AboutUs = () => {
                   <h3 className="flex flex-col text4AB138">
                     <span className="block">Lunch Bowl</span>
                   </h3>
-                  <p>We strive to simplify mealtime for parents by delivering thoughtfully crafted, nutritionist- approved lunch boxes that are fresh, flavourful and tailored to children’s preferences. Our commitment to high-quality ingredients, eco-friendly packaging and timely delivery ensures that every meal is a blend of convenience, health and happiness</p>
+                  <p>We strive to simplify mealtime for parents by delivering thoughtfully crafted, nutritionist- approved lunch boxes that are fresh, flavourful and tailored to children’s preferences. Our commitment to high-quality ingredients, eco-friendly packaging and timely delivery ensures that every meal is a blend of convenience, health and happiness.</p>
                 </div>
               </div>
             </div>
@@ -259,13 +260,16 @@ const AboutUs = () => {
                   className="iconrotates"
                 />
               </div>
+              <div className="hintroicn iconeight absolute">
+                &nbsp;
+              </div>
             </div>
           </div>
         </section>
         <section className="HmteamSec relative bg-FFE6E6 flex py-[12vh]">
           <div className="container mx-auto relative">
             <div className="hintroLeft combtntb comtilte text-center mb-[5vh]">
-              <h4>Meet the team</h4>
+              <h5>Meet the team</h5>
               <h3 className="flex flex-col text4AB138">
                 <span className="block">Behind the Magic</span>
               </h3>
@@ -278,104 +282,15 @@ const AboutUs = () => {
 
               <div className="ateamIconss">
                 <div className="ateamicn iconone absolute">
-                  <Image src={ateamicon1} priority alt="Icon" />
+                  <Image src={ateamicon1} priority alt="Icon" className="iconrubberband" />
                 </div>
                 <div className="ateamicn iconeight absolute">
-                  <Image src={ateamicon8} priority alt="Icon" />
+                  <Image src={ateamicon8} priority alt="Icon" className="zoominoutanimi" />
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap items-center mteamitembox ">
-              <div className="flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={SMuruganImg}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>S. Murugan</h3>
-                </div>
-                <div className="mteamback">
-                  <h3>S. Murugan</h3>
-                  <p>S. Murugan, our executive chef, is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. </p>
-                  <p>
-                    <button onClick={() => setOpenMurugan(true)}>
-                      <span>Read More</span>
-                    </button>
-                  </p>
-                </div>
-              </div>
-              <div className="flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={ArulMadhanImg}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Arul Mathan Thangam</h3>
-                </div>
-                <div className="mteamback">
-                  <h3>Arul Mathan Thangam</h3>
-                  <p>Arul Mathan Thangam, our Su Chef, is a skilled culinary professional with expertise in food production, customer service, and maintaining quality standards.</p>
-                  <p>
-                    <button onClick={() => setOpenArulMathanThangam(true)}>
-                      <span>Read More</span>
-                    </button>
-                  </p>
-                </div>
-              </div>
-              <div className="flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={VijayVImg}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Vijay Vellanganni</h3>
-                </div>
-                <div className="mteamback">
-                  <h3>Vijay Vellanganni</h3>
-                  <p>Vijay Vellanganni – our Commis 1,a remarkably talented baker and continental cuisine chef. With a flair for baking, Vijay crafts irresistible cookies, brownies, and an array of continental specialties. </p>
-                  <p>
-                    <button onClick={() => setOpenVijayVellanganni(true)}>
-                      <span>Read More</span>
-                    </button>
-                  </p>
-                </div>
-              </div>
-              <div className="flex-none flex mteambox relative group">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={VijayAntonyImg}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Vijay Antony</h3>
-                </div>
-                <div className="mteamback">
-                  <h3>Vijay Antony</h3>
-                  <p>Vijay Antony, Our Commis 3, holds a diploma in hotel and catering management from Villupuram.</p>
-                  <p>
-                    <button onClick={() => setOpenVijayAntony(true)}>
-                      <span>Read More</span>
-                    </button>
-
-                  </p>
-                </div>
-              </div>
-              <div className="flex-none flex mteambox relative group">
+            <div className="flex flex-wrap items-center mteamitembox ">              
+              <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
                     <Image
@@ -387,11 +302,97 @@ const AboutUs = () => {
                   </div>
                   <h3>Ravishankar N</h3>
                 </div>
-                <div className="mteamback">
+                <div className="mteamback ravishankarbg">
                   <h3>Ravishankar N</h3>
-                  <p>Ravishankar N, Manager Operations: Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
+                  <p>Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
                   <p>
                     <button onClick={() => setOpenRavishankarN(true)}>
+                      <span>Read More</span>
+                    </button>
+                  </p>
+                </div>
+              </div>
+              <div className="flex-none flex mteambox relative">
+                <div className="mteamfront w-full text-center">
+                  <div className="mteamimg">
+                    <Image
+                      className="w-full h-auto"
+                      priority
+                      src={SMuruganImg}
+                      alt="logo"
+                    />
+                  </div>
+                  <h3>S. Murugan</h3>
+                </div>
+                <div className="mteamback muruganbg">
+                  <h3>S. Murugan</h3>
+                  <p>He is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. </p>
+                  <p> <button onClick={() => setOpenMurugan(true)}>
+                      <span>Read More</span>
+                  </button> </p>
+                </div>
+              </div>
+              <div className="flex-none flex mteambox relative">
+                <div className="mteamfront w-full text-center">
+                  <div className="mteamimg">
+                    <Image
+                      className="w-full h-auto"
+                      priority
+                      src={ArulMadhanImg}
+                      alt="logo"
+                    />
+                  </div>
+                  <h3>Arul Mathan Thangam</h3>
+                </div>
+                <div className="mteamback arulmathanbg">
+                  <h3>Arul Mathan Thangam</h3>
+                  <p>Our Su Chef, is a skilled culinary professional with expertise in food production, customer service, and maintaining quality standards.</p>
+                  <p>
+                    <button onClick={() => setOpenArulMathanThangam(true)}>
+                      <span>Read More</span>
+                    </button>
+                  </p>
+                </div>
+              </div>
+              <div className="flex-none flex mteambox relative">
+                <div className="mteamfront w-full text-center">
+                  <div className="mteamimg">
+                    <Image
+                      className="w-full h-auto"
+                      priority
+                      src={VijayVImg}
+                      alt="logo"
+                    />
+                  </div>
+                  <h3>Vijay Vellanganni</h3>
+                </div>
+                <div className="mteamback vijayvellbg">
+                  <h3>Vijay Vellanganni</h3>
+                  <p>Our Commis 1,a remarkably talented baker and continental cuisine chef. With a flair for baking, Vijay crafts irresistible cookies, brownies, and an array of continental specialties. </p>
+                  <p>
+                    <button onClick={() => setOpenVijayVellanganni(true)}>
+                      <span>Read More</span>
+                    </button>
+                  </p>
+                </div>
+              </div>
+              <div className="flex-none flex mteambox relative">
+                <div className="mteamfront w-full text-center">
+                  <div className="mteamimg">
+                    <Image
+                      className="w-full h-auto"
+                      priority
+                      src={VijayAntonyImg}
+                      alt="logo"
+                    />
+                  </div>
+                  <h3>Vijay Antony</h3>
+                </div>
+                <div className="mteamback vijayantonybg">
+                  <h3>Vijay Antony</h3>
+                  <p>Our Commis 3, holds a diploma in hotel and catering management from Villupuram.</p>
+                  <p>
+                    <button onClick={() => setOpenVijayAntony(true)}>
                       <span>Read More</span>
                     </button>
                   </p>
@@ -474,7 +475,7 @@ const AboutUs = () => {
         <section className="HworktabSec relative bg-white flex py-[12vh]">
           <div className="container mx-auto">
             <div className="hworkTitle combtntb comtilte textcenter  mb-[5vh]">
-              <h4 className="text-[#000000]">How IT</h4>
+              <h5 className="text-[#000000]">How IT</h5>
               <h3 className="flex flex-col textFF6514">
                 {" "}
                 <span className="block">Works?</span>{" "}

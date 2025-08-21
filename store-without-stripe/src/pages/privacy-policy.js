@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Breadcrumbs from "@layout/Breadcrumbs";
 import Mainheader from '@layout/header/Mainheader';
 import Mainfooter from '@layout/footer/Mainfooter';
@@ -112,7 +113,7 @@ const PrivacyPolicy = () => {
                 <h4>5. User Rights</h4>
                 <p>
                   You may request access, correction, or deletion of your
-                  personal data by contacting us at reachus@lunchbowl.co.in.
+                  personal data by contacting us at <Link href="mailto:contactus@lunchbowl.co.in">contactus@lunchbowl.co.in</Link>
                 </p>
               </div>
             </div>

@@ -129,7 +129,7 @@ const HomeProductCard = ({ limit }) => {
             <div className="proboxfront px-[2vw] py-[5vh] bg-FFF4D7 relative z-50 group-hover:z-0">
               <div className="fontanimi pointer-events-none">
                 <div className="animitext animiOne">
-                  <div className="animitext animiOne">
+                  <div className="animiintext">
                     <span>
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
@@ -137,7 +137,7 @@ const HomeProductCard = ({ limit }) => {
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
                   </div>
-                  <div className="animitext animiTwo">
+                  <div className="animiintext">
                     <span>
                       {item.subDishTitle} {item.primaryDishTitle}
                     </span>
@@ -147,7 +147,7 @@ const HomeProductCard = ({ limit }) => {
                   </div>
                 </div>
                 <div className="animitext animiTwo">
-                  <div className="animitext animiOne">
+                  <div className="animiintext">
                     <span>
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
@@ -155,7 +155,7 @@ const HomeProductCard = ({ limit }) => {
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
                   </div>
-                  <div className="animitext animiTwo">
+                  <div className="animiintext">
                     <span>
                       {item.subDishTitle} {item.primaryDishTitle}
                     </span>
@@ -207,7 +207,7 @@ const HomeProductCard = ({ limit }) => {
               </div>
               <div className="fontanimi pointer-events-none">
                 <div className="animitext animiOne">
-                  <div className="animitext animiOne">
+                  <div className="animiintext">
                     <span>
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
@@ -215,7 +215,7 @@ const HomeProductCard = ({ limit }) => {
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
                   </div>
-                  <div className="animitext animiTwo">
+                  <div className="animiintext">
                     <span>
                       {item.subDishTitle} {item.primaryDishTitle}
                     </span>
@@ -225,7 +225,7 @@ const HomeProductCard = ({ limit }) => {
                   </div>
                 </div>
                 <div className="animitext animiTwo">
-                  <div className="animitext animiOne">
+                  <div className="animiintext">
                     <span>
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
@@ -233,7 +233,7 @@ const HomeProductCard = ({ limit }) => {
                       {item.primaryDishTitle} {item.subDishTitle}
                     </span>
                   </div>
-                  <div className="animitext animiTwo">
+                  <div className="animiintext">
                     <span>
                       {item.subDishTitle} {item.primaryDishTitle}
                     </span>

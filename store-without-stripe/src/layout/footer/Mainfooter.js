@@ -57,24 +57,24 @@ const Mainfooter = () => {
                     <h4 className=''>We’d Love to Hear</h4>
                     <h3 className='flex flex-col textFF6514'> <span className='block'>From You</span> </h3>
                     <p className=''>We are super excited in cooking and <br/>providing the best meals to your kids. <br/>Give us a try.</p>                
-                    <p className="parabtn flex mt-[3vh]"><Link href="/" className="emenulink relative" onClick={handleOpenDialog}><span className='block flex items-center relative'>Get in Touch</span></Link></p>
+            <p className="parabtn flex mt-[3vh]"><button className="emenulink relative" onClick={handleOpenDialog}><span className='block flex items-center relative'>Get in Touch</span></button></p>
                 </div>
           <div className='hfformIconss'>
             <div className='hfformicn iconone absolute'><Image src={hldocticon1} priority alt='Icon' /></div>
             <div className='hfformicn icontwo absolute'><Image src={hldocticon2} priority alt='Icon' className='iconrotates' /></div>
-            <div className='hfformicn iconthree absolute'><Image src={hldocticon3} priority alt='Icon' /></div>
-            <div className='hfformicn iconfour absolute'><Image src={hldocticon4} priority alt='Icon' className='iconrotates' /></div>
+            <div className='hfformicn iconthree absolute'><Image src={hldocticon3} priority alt='Icon' className='iconrotates' /></div>
+            <div className='hfformicn iconfour absolute'><Image src={hldocticon4} priority alt='Icon' className='iconrotates ' /></div>
             <div className='hfformicn iconfive absolute'><Image src={hldocticon5} priority alt='Icon' className="zoominoutanimi" /></div>
-            <div className='hfformicn iconsix absolute'><Image src={hldocticon6} priority alt='Icon' /></div>
+            <div className='hfformicn iconsix absolute'><Image src={hldocticon6} priority alt='Icon' className='iconrotates' /></div>
             <div className='hfformicn iconseven absolute'><Image src={hldocticon7} priority alt='Icon' className='iconrubberband' /></div>
           </div>
             </div>
         </section>
     
-        <footer className='FooterSec relative flex '>
+      <footer className='FooterSec relative flex flex-wrap'>
             <div className='container mx-auto relative' >                
                 <div className='Footertop m-auto py-[8vh] textcenter'>
-                    <div className='footlogo w-[80px] m-auto mb-[2vh]'>
+            <div className='footlogo w-[100px] m-auto mb-[2vh]'>
                         <Image className="w-full" priority src= {myLogo} alt="logo" />
                     </div>
                     <p className='text-white mb-[2vh]'>Fresh, healthy school lunches delivered with care, <br/>making mealtime easy for you.</p>
@@ -114,7 +114,7 @@ const Mainfooter = () => {
                 </div>
                 <div className='footcopyrow columns-2 py-3'>
                     <div className='copycol'>
-                        <p className='text-white'>Copyright © 2025. Lunch Bowl / Designed By</p>      
+              <p className='text-white'>Copyright © 2025. Lunch Bowl /&nbsp;<Link href="https://opendesignsin.com/" target='_blank'>Designed By</Link></p>      
                     </div>
                     <div className='copymenucol'>
                         <ul className='footmenu flex justify-end'>
@@ -125,20 +125,27 @@ const Mainfooter = () => {
                     </div>
                 </div>
                 {/* >>> Registration Completion Prompt <<< */}
-            {session && stepCheck !== 4 && (
-              <div className="incomplete-registration-msg mb-[2vh]">
-                If you don’t complete your registration?{" "}
-                <button
-                  onClick={() => router.push("/user/profile-Step-Form")}
-                  className="theme-link"
-                >
-                  please click here
-                </button>
-              </div>
-            )}
-            </div>
-        </footer>
-        
+
+        </div>
+        {session && stepCheck !== 4 && (
+          <div className="incomplete-registration-msgspace">
+            &nbsp;
+          </div>
+        )}
+      </footer>
+      {session && stepCheck !== 4 && (
+        <div className="incomplete-registration-msg">
+          <div className="incregbox">
+            If you don’t complete your registration?{" "}
+            <button
+              onClick={() => router.push("/user/profile-Step-Form")}
+              className="theme-link"
+            >
+              Please click here
+            </button>
+          </div>
+        </div>
+      )}
         <GetinTouch open={open} onClose={handleCloseDialog}/>
     </>
   )

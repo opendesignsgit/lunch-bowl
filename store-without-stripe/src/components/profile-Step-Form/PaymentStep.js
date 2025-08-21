@@ -3,6 +3,7 @@ import { Box, Button, Typography, LinearProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import CryptoJS from "crypto-js";
 import useRegistration from "@hooks/useRegistration";
+import stepFour from "../../../public/profileStepImages/stepFour.png";  
 
 const PaymentStep = ({ prevStep, _id }) => {
   const router = useRouter();
@@ -142,31 +143,49 @@ const PaymentStep = ({ prevStep, _id }) => {
   };
 
   return (
-    <Box sx={{ textAlign: "center", py: 4 }}>
+    <Box className="subplnBoxss" sx={{
+      display: "flex", alignItems: "center",
+      flexDirection: { xs: "column", md: "row" },
+      gap: 2,
+    }}>
+
+      {/* Image Side */}
+      <Box className="spboximg"
+        sx={{
+          width: { xs: "100%", md: "45%" },
+          backgroundImage: `url(${stepFour.src})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          minHeight: 500,
+        }}
+      />
+      <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
       {loading && <LinearProgress sx={{ mb: 3 }} />}
       {error && (
         <Typography color="error" sx={{ mb: 2 }}>
           {error}
         </Typography>
       )}
-
-      <Typography variant="h4" sx={{ mb: 3, color: "#4AB138" }}>
-        Complete Payment
-      </Typography>
-      <Typography sx={{ mb: 4 }}>Secure payment via CCAvenue</Typography>
-      <Box className="subbtnrow" sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
-        <Button className="backbtn" variant="outlined" onClick={prevStep}>
-          <span className="nextspan">Back</span>
-        </Button>
-        <Button 
-          className="nextbtn Proceedbtn widthautobtn"
-          variant="contained"
-          onClick={initiatePayment}
-          disabled={loading}
-          sx={{ bgcolor: "#FF6A00", "&:hover": { bgcolor: "#E55C00" } }}
-        >
-          <span className="nextspan">Proceed to Payment</span>
-        </Button>
+        <div className="steptitles">
+          <h3>Complete Payment</h3>
+          <h6>Secure payment via CCAvenue</h6>
+          <p>We have curated our payment system with the finest level of security ensuring a smooth and dependable experience.</p>
+        </div>
+        <Box className="subbtnrow" sx={{ display: "flex", gap: 3 }}>
+          <Button className="backbtn" variant="outlined" onClick={prevStep}>
+            <span className="nextspan">Back</span>
+          </Button>
+          <Button
+            className="nextbtn Proceedbtn widthautobtn"
+            variant="contained"
+            onClick={initiatePayment}
+            disabled={loading}
+            sx={{ bgcolor: "#FF6A00", "&:hover": { bgcolor: "#E55C00" } }}
+          >
+            <span className="nextspan">Proceed to Payment</span>
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

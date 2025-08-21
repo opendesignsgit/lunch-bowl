@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   Box,
   Typography,
@@ -14,6 +15,14 @@ import Mainfooter from "@layout/footer/Mainfooter";
 import Accordion from "@components/faq/Accordion";
 import { useSession } from "next-auth/react";
 import AccountServices from "@services/AccountServices";
+import abbanicon1 from "../../../public/enterrequireddetails/redroundedandlines.svg";
+import abbanicon2 from "../../../public/enterrequireddetails/yellowroundedflower.svg";
+import abbanicon3 from "../../../public/enterrequireddetails/redlittleheart.svg";
+import abbanicon4 from "../../../public/enterrequireddetails/lighergreenarrow.svg";
+import abbanicon5 from "../../../public/enterrequireddetails/violetyellow-star.svg";
+import abbanicon6 from "../../../public/enterrequireddetails/redtriangle.svg";
+import abbanicon7 from "../../../public/enterrequireddetails/redlittleflower.svg";
+import abbanicon8 from "../../../public/enterrequireddetails/layerflower.svg";
 
 const StepHeader = ({ label }) => (
   <Box className="SetpTabNav" sx={{ textAlign: "center", mb: 6 }}>
@@ -119,49 +128,52 @@ const MyAccount = () => {
     return new Date(dateStr).toLocaleDateString();
   }
 
-  // FAQ items...
   const faqItems = [
     {
-      title: "How do you ensure the food is nutritious and safe for my child?",
-      content:
-        "We do quality tests, adhere to stringent cleanliness, and utilize only the freshest products. We adapt dishes to dietary requirements and address allergies.",
-    },
-    {
-      title: "What if my child has specific dietary restrictions or allergies?",
-      content:
-        "We take effort to accommodate allergies and provide menus that may be customized. We prevent cross-contamination with strict protocols.",
-    },
-    {
-      title:
-        "How does the delivery process work, and can I trust it will arrive on time?",
-      content:
-        "For prompt delivery in temperature-controlled trucks, we work with schools. Confirmations will be sent to you, and any delays will be quickly communicated.",
-    },
-    {
-      title:
-        "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
-      content:
-        "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters. To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery.",
-    },
-    {
-      title:
-        "Over time, what type of variation can I anticipate in the lunch bowl options?",
-      content:
-        "We make an effort to provide a varied and ever-changing menu to keep your child engaged. In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients.",
-    },
-    {
-      title:
-        "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
-      content:
-        "Our cooking facilities are kept to the greatest hygienic standards. All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines. We perform regular inspections and follow food safety laws.",
-    },
-    {
-      title:
-        "How can I go about giving comments or resolving any issues I might have with the lunch bowls?",
-      content:
-        "We appreciate your input and invite you to contact our customer service department by phone or email. We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously.",
-    },
-  ];
+    title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
+    content: "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters.  To assist preserve the freshness of the food and temperature until noon, we use insulated bags for delivery."
+  },
+  {
+    title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
+    content: "We make an effort to provide a varied and ever-changing menu to keep your child engaged.  In order to provide a variety of wholesome and enticing options, our culinary team frequently introduces new recipes and seasonal ingredients."
+  },
+  {
+    title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
+    content: "Our cooking facilities are kept to the greatest hygienic standards.  All surfaces and equipment are routinely sterilized, our employees wear the proper protective gear, and they adhere to stringent handwashing guidelines.  We perform regular inspections and follow food safety laws."
+  },
+  {
+    title: "How can I go about giving comments or resolving any issues I might have with the lunch bowls? ",
+    content: "We appreciate your input and invite you to contact our customer service department by phone or email.  We are dedicated to immediately resolving any difficulties to ensure your child's satisfaction since we take all complaints seriously."
+  },
+  {
+        title: "How do you ensure the food is nutritious and safe for my child?",
+    content: "Our meals are nutritionist designed, made with fresh, high-quality ingredients, and prepared under strict hygiene standards. We also customise for dietary needs and take extra care to avoid allergens."
+  },
+  {
+    title: "How does the delivery process work, and can I trust it will arrive on time?",
+    content: "We deliver meals directly to schools in temperature-controlled vehicles, timed to arrive just before lunchtime. You’ll receive delivery confirmations, and in the rare case of a delay, we’ll notify you right away."
+  },
+  {
+    title: "What if my child has specific dietary restrictions or allergies?",
+    content: "We take effort to accommodate allergies and provide menu options that can be customized. Our team follows careful preparation practices to ensure meals are safe and free from cross-contamination."
+  },
+  {
+    title: "What if I need food on Sunday?",
+    content: "Our regular service is available Monday to Friday. If you require meals on a Sunday, please call us at +91 9176 917602 in advance. Our team will confirm availability and make special arrangements based on your request and delivery location."
+  },
+  {
+    title: "Can I get a Free trial on Sunday?",
+    content: "We don’t offer free trials on Sundays. Please choose any weekday or Saturday slot for your trial."
+  },
+  {
+    title: "what if I don’t need meal on any day during my subscription, will I get a refund ?",
+    content: "The days when you don’t avail meals will get carried forward and gets accumulated in your wallet , which can be redeemed during your next subscription."
+  },
+  {
+    title: "What if i want to terminate the service? ",
+    content: "Termination is possible , and the unconsumed meal days will be calculated and refund will be processed. Request you to contact customer service for termination of services."
+  },
+];
 
   return (
     <div className="steppage">
@@ -170,12 +182,38 @@ const MyAccount = () => {
         <section className="pagebansec MyAccbanersec relative">
           <div className="container mx-auto relative h-full">
             <div className="pageinconter relative h-full w-full flex items-center justify-center text-center">
-              <div className="hworkTitle combtntb comtilte">
+              <div className="hworkTitle combtntb comtilte relative">
                 <h1 className="flex flex-row textFF6514">
                   <span className="block">My</span>
                   <span className="block firstspan ml-2">Account</span>
                 </h1>
                 <p>Here you can view and update your account details.</p>
+                <div className="psfbanIconss">
+                  <div className="psfbanicn iconone absolute">
+                    <Image src={abbanicon1} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn icontwo absolute">
+                    <Image src={abbanicon2} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn iconthree absolute">
+                    <Image src={abbanicon3} priority alt="Icon" className="iconrubberband" />
+                  </div>
+                  <div className="psfbanicn iconfour absolute">
+                    <Image src={abbanicon4} priority alt="Icon" />
+                  </div>
+                  <div className="psfbanicn iconfive absolute">
+                    <Image src={abbanicon5} priority alt="Icon" />
+                  </div>
+                  <div className="psfbanicn iconsix absolute">
+                    <Image src={abbanicon6} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn iconseven absolute">
+                    <Image src={abbanicon7} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn iconeight absolute">
+                    <Image src={abbanicon8} priority alt="Icon" className="iconrotates" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -257,28 +295,6 @@ const MyAccount = () => {
 
                   </Box>
                   <Box className="myaccboxlist boxtwo">
-                    <h4>Children</h4>
-
-                    {userDetails.children && userDetails.children.length > 0 ? (
-                      userDetails.children.map((child, idx) => (
-                        <ul key={child._id || idx} sx={{ mb: 2, pl: 2 }}>
-                          <li><b>Name:</b> {child.childFirstName}{" "} {child.childLastName}</li>
-                          <li><b>Date of Birth:</b> {formatDate(child.dob)}</li>
-                          <li><b>School:</b> {child.school}</li>
-                          <li><b>Class:</b> {child.childClass}</li>
-                          <li><b>Section:</b> {child.section}</li>
-                          <li><b>Lunch Time:</b> {child.lunchTime}</li>
-                          <li><b>Location:</b> {child.location}</li>
-                          <li><b>Allergies:</b> {child.allergies || "None"}</li>
-                        </ul>
-                      ))
-                    ) : (
-                      <h6>No children details available.</h6>
-                    )}
-                  </Box>
-                  <Box className="myaccboxlist boxthree">
-
-
                     <h4> Subscription </h4>
                     {userDetails.subscriptionPlan ? (
                       <ul>
@@ -292,12 +308,35 @@ const MyAccount = () => {
                       <Typography>No subscription found.</Typography>
                     )}
 
-                  </Box>
-                  <Box className="myaccboxlist boxfour">
-                    <Typography>
+                    <Typography className="paystaus">
                       <b>Payment Status:</b>{" "}
-                      {userDetails.paymentStatus ? "Paid" : "Not Paid"}
+                      <strong
+                        className={`ml-1 ${userDetails.paymentStatus ? "paypaid" : "paynotpaid"}`}
+                      >{userDetails.paymentStatus ? "Paid" : "Not Paid"}</strong>
                     </Typography>
+                  </Box>
+                  <Box className="myaccboxlist boxthree ">
+                    <Box className="ChildlistBoxs flex">
+                      <Box className="ChildlistItems">
+                        <h4>Children </h4>
+                        {userDetails.children && userDetails.children.length > 0 ? (
+                          userDetails.children.map((child, idx) => (
+                            <ul key={child._id || idx} sx={{ mb: 2, pl: 2 }}>
+                              <li><b>Name:</b> {child.childFirstName}{" "} {child.childLastName}</li>
+                              <li><b>Date of Birth:</b> {formatDate(child.dob)}</li>
+                              <li><b>School:</b> {child.school}</li>
+                              <li><b>Class:</b> {child.childClass}</li>
+                              <li><b>Section:</b> {child.section}</li>
+                              <li><b>Lunch Time:</b> {child.lunchTime}</li>
+                              <li><b>Location:</b> {child.location}</li>
+                              <li><b>Allergies:</b> {child.allergies || "None"}</li>
+                            </ul>
+                          ))
+                        ) : (
+                          <h6>No children details available.</h6>
+                        )}
+                      </Box>
+                    </Box>
                   </Box>
               </Box>
             ) : (

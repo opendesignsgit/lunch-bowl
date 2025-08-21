@@ -8,11 +8,8 @@ const AboutVideoSlider = () => {
   const [playingIndex, setPlayingIndex] = useState(null);
 
   const videoList = [
-      { id: "video1", url: "https://www.youtube.com/watch?v=WTUz9fOVpiI" },
-      { id: "video2", url: "https://www.youtube.com/watch?v=qMAYG-soxhw" },
-      { id: "video3", url: "https://www.youtube.com/watch?v=bXgxzzNm0U8" },
+    { id: "video1", url: "https://www.youtube.com/watch?v=HwOdzhMsquU" },
   ];
-
   const settings = {
     dots: true,
     arrows: true,
@@ -46,12 +43,18 @@ const AboutVideoSlider = () => {
                 onClick={() => handlePlay(index)}
               >
                 {/* Custom thumbnail or black box */}
-                <img
+                  <img
+                    key={video.id}
+                    src={`https://img.youtube.com/vi/${new URL(video.url).searchParams.get('v')}/hqdefault.jpg`}
+                    alt="Video thumbnail"
+                    className="w-full h-full object-cover"
+                  />
+                  {/*<img
                   src={`https://img.youtube.com/vi/${video.url.split("v=")[1]}/hqdefault.jpg`}
                   alt="Video thumbnail"
                   className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
+                />*/}
+                  <div className="avidoplaybtns absolute inset-0 flex items-center justify-center">
                   <button className="bg-white p-4 rounded-full shadow-lg text-black font-bold text-xl">
                     ▶
                   </button>

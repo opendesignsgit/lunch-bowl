@@ -2,7 +2,10 @@ import React from 'react';
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Slider from "react-slick";
-import hworkstepImgone from "../../../public/home/hworkstepImg-one.png"
+import hworkstepImgone from "../../../public/home/create-your-account.svg";
+import hworkstepImgTwo from "../../../public/home/choose-your-menu.svg";
+import hworkstepImgThree from "../../../public/home/place-your-order.svg";
+import hworkstepImgFour from "../../../public/home/sitback-relax.svg";
 
 
 const Htoworkslider = () => {
@@ -57,11 +60,26 @@ const Htoworkslider = () => {
                       <h3><span>Step 04</span></h3>
                   </div>
               </Slider>
-            <Slider asNavFor={nav2} ref={slider => (sliderRef1 = slider)} swipeToSlide={true} arrows={true} infinite={true} className='sliderRef1'>
+              <Slider
+                  asNavFor={nav2}
+                  ref={slider => (sliderRef1 = slider)}
+                  swipeToSlide={true}
+                  arrows={true}
+                  infinite={false}
+                  className='sliderRef1'
+                  responsive={[
+                      {
+                          breakpoint: 650, // Mobile devices
+                          settings: {
+                              infinite: true,
+                          },
+                      },
+                  ]}
+              >
                 <div>
                       <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
-                            <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
+                              <Image className="h-auto m-auto" priority src={hworkstepImgone} alt="logo" />
                         </div>       
                         <div className='flex-1 rfboxcoint'>
                             <h4>Create Your Account</h4>
@@ -72,7 +90,7 @@ const Htoworkslider = () => {
                 <div>
                       <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
-                            <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
+                              <Image className="h-auto m-auto" priority src={hworkstepImgTwo} alt="logo" />
                         </div>       
                         <div className='flex-1 rfboxcoint'>
                             <h4>Choose Your Menu</h4>
@@ -83,7 +101,7 @@ const Htoworkslider = () => {
                 <div>
                       <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
-                            <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
+                              <Image className="h-auto m-auto" priority src={hworkstepImgThree} alt="logo" />
                         </div>       
                         <div className='flex-1 rfboxcoint'>
                             <h4>Place Your Order</h4>
@@ -94,11 +112,11 @@ const Htoworkslider = () => {
                 <div>
                       <div className='flex rfbox items-center Hworktabitems'>
                         <div className='flex-1 rfboximg'>
-                            <Image className="w-[16vw] h-auto m-auto" priority src= {hworkstepImgone} alt="logo" />
+                              <Image className="h-auto m-auto" priority src={hworkstepImgFour} alt="logo" />
                         </div>       
                         <div className='flex-1 rfboxcoint'>
                             <h4>Sit Back and Relax</h4>
-                            <p>Once your order is placed, you can rest assured. Our team <br/>will expertly prepare a healthy and fresh lunch for <br/>your child and ensure it is reliably delivered <br/>directly to their school.</p>
+                              <p>Once your order is placed, you can rest assured. Our team <br />will prepare a healthy and fresh lunch for <br />your child and ensure it is reliably delivered <br />directly to their school.</p>
                         </div>                    
                     </div>   
                 </div>
