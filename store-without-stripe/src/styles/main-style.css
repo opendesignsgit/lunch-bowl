@@ -1322,6 +1322,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .incomplete-registration-msg .incregbox{font-size: 14px;}
   .freetrilpage .pagebansec .hworkTitle {width: 100%;}
   .freetrilbanersec .pageinconter::after{width: 100%;height: 50%;right: 0%;bottom: -7%;}
+  .hintroimgtwo{padding: 8px;}
 }
 @media screen and (max-width:420px){
   body {font-size: 14px;letter-spacing: 0;}
