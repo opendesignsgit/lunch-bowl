@@ -70,11 +70,9 @@ const UserDashboard = () => {
 
   // TEMPORARY FOR TESTING - Always return true to show renew button
   const isSubscriptionExpired = () => {
-    return true; // Force show renew button for testing
-    // Original implementation:
-    // if (!dashboardData.subscriptionDates.end) return true;
-    // const endDate = new Date(dashboardData.subscriptionDates.end);
-    // return endDate < new Date();
+    if (!dashboardData.subscriptionDates.end) return true;
+    const endDate = new Date(dashboardData.subscriptionDates.end);
+    return endDate < new Date();
   };
 
   const handleRenewSuccess = () => {
@@ -210,7 +208,8 @@ const UserDashboard = () => {
                     </div>
                   </div>
 
-                  {/* Renew Subscription Button (forced to show for testing) */}
+                {/* Renew Subscription Button/Card - only show if subscription is expired */}
+                {isSubscriptionExpired() && (
                   <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500 flex flex-col items-start DashboardTItems">
                     <div className="mb-4">
                       <h5> Your subscription has expired </h5>
@@ -227,6 +226,7 @@ const UserDashboard = () => {
                       Renew Subscription
                     </Button>
                   </div>
+                )}
 
                   {/* Children Card */}
                   <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500 DashboardTItems">

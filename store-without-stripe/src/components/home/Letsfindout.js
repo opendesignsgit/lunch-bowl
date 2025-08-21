@@ -78,7 +78,7 @@ const Letsfindout = () => {
             onClick={handleSelectSubmit}
             disabled={!selectedSchool}
           >
-            <span>Submit</span>
+            <span>Next</span>
           </button>
         </div>
       </div>
@@ -100,7 +100,7 @@ const Letsfindout = () => {
             className="form-radio outline-none focus:ring-0 text-emerald-500"
           />
           <button className="btn" onClick={handleSubmit}>
-            <span>Submit</span>
+            <span>Next</span>
           </button>
         </div>
       </div>

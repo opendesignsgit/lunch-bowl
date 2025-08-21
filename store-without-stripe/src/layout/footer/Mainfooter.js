@@ -107,9 +107,7 @@ const Mainfooter = () => {
                     <ul className='footmenu flex justify-center'>
                         <li><Link href="/" className="relative" ><span className='block flex items-center relative'>Home</span></Link></li>
               <li><Link href="/about-us" className="relative" ><span className='block flex items-center relative'>About Us</span></Link></li>
-              {session && (
-                <li><Link href="/user/my-account" className="relative" ><span className='block flex items-center relative'>My Account</span></Link></li>
-              )}
+              {/* <li><Link href="/user/my-account" className="relative" ><span className='block flex items-center relative'>My Account</span></Link></li> */}
               <li><Link href="/Menulist" className="relative" ><span className='block flex items-center relative'>Food Menu</span></Link></li>
               <li><Link href="/contact-us" className="relative" ><span className='block flex items-center relative'>Contact Us</span></Link></li>
                     </ul>

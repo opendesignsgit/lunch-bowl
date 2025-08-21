@@ -109,7 +109,7 @@ const RightPanel = ({
   const mealPlans = [
     {
       id: 1,
-      name: "Meal Plan 1",
+      name: "Meal Plan ",
       meals: dietitianMealPlanArray.map((day) => day.meal),
 
     },
@@ -378,7 +378,7 @@ const RightPanel = ({
                                 setHolidayPaymentOpen(true);
                               }}
                             >
-                              <span>Pay ₹199</span>
+                              <span>Pay ₹200</span>
                             </Button>
                           )}
                         </Box>

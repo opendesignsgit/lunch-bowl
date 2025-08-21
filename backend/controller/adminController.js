@@ -519,7 +519,7 @@ const sendSchoolEnquiryMail = async (req, res) => {
     // Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: "shivarex.c@gmail.com",
+      to: "shivarex.c@gmail.com, maniyarasanodi20@gmail.com",
       subject,
       html: `
         <h2>${enquiryType} Enquiry</h2>
