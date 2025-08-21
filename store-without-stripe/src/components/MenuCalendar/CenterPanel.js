@@ -186,10 +186,12 @@ const CenterPanel = ({
             );
           })}
         </ul>
-        <Box display="flex" justifyContent="flex-end">
+        <Box display="flex" justifyContent="flex-end" className="holylicolor">
           <Typography variant="caption" mt={1} display="block">
-            (<span style={{ color: "#FFE6E6" }}>◯</span>) Denotes Holiday.{" "}<br />
-            (<span style={{ color: "green" }}>◯</span>) Denotes Selected / Saved Menu.
+            <ul>
+              <li>(<span style={{ color: "#FFE6E6", fontSize: '24px', lineHeight: '1' }}>&#9673;</span>) Denotes Holiday.{" "}</li>
+              <li>(<span style={{ color: "green", fontSize: '24px', lineHeight: '1' }}>&#9673;</span>) Denotes Selected / Saved Menu.</li>
+            </ul>
           </Typography>
         </Box>
       </div>
