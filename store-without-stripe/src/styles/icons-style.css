@@ -282,6 +282,10 @@
   .psfbanIconss .iconeight {bottom: -8%;left: -12%;}
   .hbanIconss .iconseven {bottom: 18%;}
 
+  .hintroIconss .iconseven{top: 3%;left: 0%;width: 20px;}
+  .hintroIconss .iconnine{top: -4%;left: 95%;}
+  
+
 }
 
 @media screen and (max-width:420px){
@@ -297,4 +301,7 @@
   .hfformIconss .iconthree {width: 25px;}
   .hfformIconss .iconsix {width: 21px;}
   .hfformIconss .iconseven{width: 36px;}
+  .hintroIconss .iconone, .hintroIconss .icontwo, .hintroIconss .iconthree, .hintroIconss .iconfour {width: 30px;}
+  .hintroIconss .iconfour {bottom: 14%;left: 6%;}
+  .hintroIconss .iconfive {bottom: 53%;}
 }
