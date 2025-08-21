@@ -679,6 +679,8 @@ h4.holylistitle:after{content:'';position: absolute;width: 100%;height: 2px;bott
 ul.holylisul{}
 ul.holylisul li{font-size: 14px;color: #333333;padding-block: 7px;padding-left: 18px;position: relative;line-height: 1;}
 ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;background: #FF6514;left: 0;top: 50%;display: block;-webkit-transform: rotate(45deg) translateY(-75%);-ms-transform: rotate(45deg) translateY(-75%);transform: rotate(45deg) translateY(-75%);}
+.holylistbox .holylicolor ul{}
+.holylistbox .holylicolor ul li{display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 
 .fixcheckboxs{padding: 8px 10px;background: #FFECE2;border-radius: 5px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .fixcheckboxs label{margin: 0;}
