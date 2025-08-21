@@ -122,11 +122,10 @@ const UserDashboard = () => {
               <div className="hworkTitle combtntb comtilte">
                 <h1 className="flex flex-col textFF6514">
                   {" "}
-                  <span className="block firstspan">ONE BITE FULL SMILE <br />OUR BOWL FILLS </span>{" "}
-                  <span className="block">LIFE DESCRIPTION</span>{" "}
+                  <span className="block firstspan">HEALTHY BITES </span>{" "}
+                  <span className="block">JOYFULL SMILES</span>{" "}
                 </h1>
-                <p className=""> !HEY! CONFUSED ALREADY? — We are here with full pack of protein <br />fiber and also an appetizing meal bowl for your little one; so no more <br />worries of lunch bowl for our little smiles.
-                </p>
+                <p className="">!HEY! CONFUSED ALREADY? — We are here with full pack of protein fiber <br />and also an appetizing meal bowl for your little one; so no more worries <br />of lunch bowl for our little smiles.</p>
                 <Breadcrumbs />
               </div>
             </div>
@@ -134,7 +133,7 @@ const UserDashboard = () => {
               <div className="abbanicn iconone absolute">
                 <Image
                   src={abbanicon1}
-                  priority
+                  priority  
                   alt="Icon"
                   className="iconrotates"
                 />
