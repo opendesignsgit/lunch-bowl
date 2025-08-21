@@ -176,7 +176,7 @@ const MyAccount = () => {
 ];
 
   return (
-    <div className="steppage">
+    <div className="myaccontpage">
       <Mainheader title="My Account" description="User Account Details" />
       <div className="pagebody">
         <section className="pagebansec MyAccbanersec relative">

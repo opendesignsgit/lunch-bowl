@@ -284,7 +284,8 @@
 
   .hintroIconss .iconseven{top: 3%;left: 0%;width: 20px;}
   .hintroIconss .iconnine{top: -4%;left: 95%;}
-  
+  .hDoctIconss .iconseven{display: none;}
+  .MyAccbanersec .psfbanIconss .iconfour{display: none;}
 
 }
 
@@ -304,4 +305,11 @@
   .hintroIconss .iconone, .hintroIconss .icontwo, .hintroIconss .iconthree, .hintroIconss .iconfour {width: 30px;}
   .hintroIconss .iconfour {bottom: 14%;left: 6%;}
   .hintroIconss .iconfive {bottom: 53%;}
+  .hDoctIconss .iconone {top: -1%;right: 33%;}
+  .hDoctIconss .iconthree {bottom: 19%;right: 4%;}
+  .hDoctIconss .iconfour {bottom: -3%;}
+  .hDoctIconss .iconsix {top: 21%;}
+  .myaccontpage .psfbanIconss .psfbanicn{        width: 25px;}
+  .myaccontpage .psfbanIconss .iconthree{        right: -7%;}
+  .myaccontpage .psfbanIconss .icontwo{left: 48%;}
 }

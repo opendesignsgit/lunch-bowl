@@ -11,7 +11,7 @@
 }
 
 body{font-family: "Open Sans", sans-serif;line-height: 1.6;letter-spacing: -0.3px;font-size: 18px;font-weight: 500;}
-header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 99;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 99999;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
 .myLogo{width: 5.5vw;}
 .navbox{margin-left: auto;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .logsinul{margin-left: 2.5vw;}
@@ -456,6 +456,9 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .MenusLbanersec .pageinconter::after{content: '';position: absolute;width: 45%;height: 110%;right: 0%;bottom: 0;background: url(/MenuListbanimg.png) no-repeat center bottom;background-size: 100%;filter: drop-shadow(2px 4px 6px rgb(51 51 51 / 12%));}
 .pagebansec.setpbanersec { height: 50vh;}
 .pagebansec.MyAccbanersec h1{justify-content: center;}
+.pagebansec.Policysbanersec{height: 50vh;}
+.pagebansec.Policysbanersec h1{justify-content: center;}
+.pagebansec.Policysbanersec .breadcrumbs ol{    justify-content: center;}
 
 .aboutintroRow{position: relative;}
 .aboutintroRow .aboutintroTCol{}
@@ -652,13 +655,15 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .MCcalendy .MCMiddlePanel .clandhead p{margin-bottom: 0;padding-block: 10px;font-weight: 600;text-transform: uppercase;letter-spacing: -0.5px;}
 .MCcalendy .MCMiddlePanel .clandybox  {}
 .MCcalendy .MCMiddlePanel .clandbody  {}
-.MCcalendy .MCMiddlePanel .daybox {aspect-ratio: 2 / 1.3;width: 100%;}
-.MCcalendy .MCMiddlePanel .daybox span{width: 30px;aspect-ratio: 1;border-radius: 50%;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;text-align: center;font-weight: 600;}
+.MCcalendy .MCMiddlePanel .daybox {aspect-ratio: 2 / 1.3;width: 100%;border: none;box-shadow: none;}
+.MCcalendy .MCMiddlePanel .daybox span{width: 30px;aspect-ratio: 1;border-radius: 50%;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;text-align: center;font-weight: 600;border: 1px solid transparent;}
 .MCcalendy .MCMiddlePanel .normalday{}
 .MCcalendy .MCMiddlePanel .selectday{}
 .MCcalendy .MCMiddlePanel .holiday {}
 .MCcalendy .MCMiddlePanel .normalday span{background: #ffffff; color:#777777;}
-.MCcalendy .MCMiddlePanel .selectday span{background: #f97316;color: #ffffff;}
+.MCcalendy .MCMiddlePanel .selectday span{background: #f97316;color: #ffffff;border-color: #f97316;}
+.MCcalendy .MCMiddlePanel .savedmenu span{background: green;color: #ffffff;border-color: green;}
+.MCcalendy .MCMiddlePanel .savedmenu.selectday span{background: #f97316;color: #ffffff;border-color: green;}
 .MCcalendy .MCMiddlePanel .holiday span{background: #FFE6E6;color: #777777;}
 .MCcalendy .MCRightPanel {padding: 2vw 1.5vw;}
 .MCLeftPanel .titles {font-family: 'Baloo';text-align: center;line-height: 1;padding-block: 1.5vh;margin-bottom: 8px;  font-size: 1vw;position: relative;}
@@ -885,6 +890,18 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .renewsec .comtilte button:hover{background: #ffffff;color: #ff6a00;}
 .renewsec .subplnBoxss {    gap: 0;}
 
+.ssrpopups .MuiDialogContent-root{overflow: hidden;}
+.ssrpopups form{}
+.ssrpopups .formrows{display: flex;margin-inline: -15px;}
+.ssrpopups .formrows .formcol {padding-inline: 15px;margin-bottom: 15px;}
+.ssrpopups form .formrows:last-child .formcol{margin-bottom: 0px;}
+.ssrpopups .formrows .fhalfcol {width: 50%;}
+.ssrpopups .formrows .ffullcol {width: 100%;}
+.ssrpopups .fboxrow{position: relative;}
+.ssrpopups .fboxrow .fboxcol{}
+.ssrpopups .fboxrow .colLeft{}
+.ssrpopups .fboxrow .colRight{}
+
 
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
@@ -1100,6 +1117,11 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   footer ul.Somediaul li a {width: 30px;}
   .banvideobox{width: 90px;}
   .banvideobox .banvideoinbox{border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-left: 22px solid #FF6514;}
+  .ssrpopups .MuiPaper-elevation{max-width: 100%;margin-inline: 5px;}
+  .DashboardSecss {padding-inline: 20px;}
+  .DashboardSecss .comtilte h3 small {font-size: 14px;}
+  .DashboardSecss .comtilte{margin-bottom: 30px;}
+  .comtilte h5{font-size: 16px;letter-spacing: 0;}
 }
 
 @media screen and (min-width:651px){
@@ -1185,7 +1207,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .teamsliders .slick-arrow::before {font-size: 36px;}
   .teamsliders .slick-prev {left: 20px;}
   .teamsliders .slick-next {right: 20px;}
-  .HNutritionSec{padding-inline: 30px;}
+  .HNutritionSec{padding-inline: 30px;padding-block: 60px 60px;}
   .hNutritionintImg {width: 100%;}
   .faqcontain:before,.faqcontain::after {height: 13px;}
   .HctaSec{}
@@ -1202,6 +1224,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .copymenucol ul.footmenu li:first-child{margin-left: 0;}
   .copymenucol ul.footmenu li:last-child{margin-left: 0;}
   .pagebansec .hworkTitle {width: 100%;text-align: center;}
+  .myaccontpage .pagebansec .hworkTitle {width: 80%;text-align: center;}
   .pagebansec h1{font-size: 40px;}
   .pagebansec .breadcrumbs ol {justify-content: center;}
   .pagebansec{height: 600px;padding-inline: 30px;}
@@ -1209,6 +1232,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 420px;}
   .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter{padding-bottom: 0%;}
   .aboutbanersec .pageinconter::after,.MenusLbanersec .pageinconter::after{width: 90%;}
+  .Dashboardbanersec .pageinconter::after{width: 86%;}
   .contusbanersec .pageinconter::after{width: 60%;right:15%;}
   .MenusLbanersec .pageinconter::after{}
   .pagebansec::before {height: 18px;bottom: -9px;}
@@ -1240,7 +1264,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .addsboxss h3 {font-size: 22px;letter-spacing: -0.5px;}
   .addsboxss.adboxthree p.parabtn a br{display: none;}
   .contuslast {padding-inline: 0;}
-  .faqAccordionitems button span.faqarrows{font-size: 19px;}
+  .faqAccordionitems button span.faqarrows{font-size: 19px;    margin-right: 8px;}
   .contmapssec iframe {aspect-ratio: 1;}
   .myaccContainer{padding-inline: 20px;}
   .myaccboxitems .myaccboxlist ul li{    font-size: 13px;}
@@ -1322,7 +1346,19 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .incomplete-registration-msg .incregbox{font-size: 14px;}
   .freetrilpage .pagebansec .hworkTitle {width: 100%;}
   .freetrilbanersec .pageinconter::after{width: 100%;height: 50%;right: 0%;bottom: -7%;}
-  .hintroimgtwo{padding: 8px;}
+  .hintroimgtwo{padding: 8px;}  
+  .ssrpopups .fboxrow button.popclosebtn{z-index: 999;}
+  .ssrpopups .fboxrow .colLeft{position: absolute;width: 100%;height: 100%;}
+  .ssrpopups .fboxrow .colRight{width: 100%;background: rgb(255 255 255 / 89%);z-index: 9;padding: 40px 20px 20px;}
+  .ssrpopups .fboxrow .colRight h2{font-size: 20px;line-height: 1;}
+  .ssrpopups .formrows{flex-wrap: wrap;}
+  .ssrpopups .formrows .fhalfcol {width: 100%;}
+  .logsinul li .submenuul{width: 150px;}
+  .logsinul li .submenuulactive{opacity: 1;pointer-events: all;visibility: visible;transform: translateY(0px);}
+  .logsinul>li a, .logsinul .submenuul li button {padding-inline: 15px;font-size: 14px;line-height: 38px;}
+  .myaccboxitems .ChildlistBoxs .ChildlistItems{width: calc(100% - 20px);border-right: 0px solid #e1e1e1;border-bottom: 1px solid #e1e1e1;margin-bottom: 20px;}
+  .myaccboxitems .ChildlistBoxs .ChildlistItems:last-child{border-bottom: 0px solid #e1e1e1;margin-bottom: 0px;}
+  .myaccboxitems .paystaus .paypaid{    font-size: 13px;}
 }
 @media screen and (max-width:420px){
   body {font-size: 14px;letter-spacing: 0;}
@@ -1370,6 +1406,9 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .aboutuspage .HworktabSec {padding-block: 60px;   }
   .HOEnviroSec::before {top: 4px;height: 25px;}
   .HOEnviroSec::after {bottom: 5px;height: 25px;}
+      .pagebansec.MyAccbanersec, .pagebansec.setpbanersec {
+        height: 330px;
+    }
 }
 
 @media screen and (max-width:350px){
