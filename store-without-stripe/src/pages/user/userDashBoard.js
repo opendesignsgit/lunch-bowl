@@ -116,7 +116,7 @@ const UserDashboard = () => {
       <Mainheader title="Dashboard" description="User Dashboard" />
 
       <div className="Dashboardbody">
-        <section className="pagebansec aboutbanersec relative">
+        <section className="pagebansec Dashboardbanersec relative">
           <div className="container mx-auto relative h-full">
             <div className="pageinconter relative h-full w-full flex items-center">
               <div className="hworkTitle combtntb comtilte">
