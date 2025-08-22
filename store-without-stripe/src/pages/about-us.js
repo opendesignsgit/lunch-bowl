@@ -113,7 +113,7 @@ const AboutUs = () => {
                     <p><strong>Here’s what we bring to the table:</strong></p>
                     <ul className="list-disc pl-5">
                       <li>Tasty, kid-friendly meals crafted by real nutritionists (and tested by real kids!).</li>
-                      <li>A fun, easy-to-use meal planning app that lets you mix and match based on your child’s tastes.</li>
+                      <li>A fun, easy-to-use meal planning that lets you mix and match based on your child’s tastes.</li>
                       <li>Fresh deliveries, right before lunchtime—because soggy sandwiches are so last year.</li>
                       <li>Flexible, affordable plans that make sense for busy families.</li>
                     </ul>
@@ -289,29 +289,8 @@ const AboutUs = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap items-center mteamitembox ">              
-              <div className="flex-none flex mteambox relative">
-                <div className="mteamfront w-full text-center">
-                  <div className="mteamimg">
-                    <Image
-                      className="w-full h-auto"
-                      priority
-                      src={RavishankarNImg}
-                      alt="logo"
-                    />
-                  </div>
-                  <h3>Ravishankar N</h3>
-                </div>
-                <div className="mteamback ravishankarbg">
-                  <h3>Ravishankar N</h3>
-                  <p>Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
-                  <p>
-                    <button onClick={() => setOpenRavishankarN(true)}>
-                      <span>Read More</span>
-                    </button>
-                  </p>
-                </div>
-              </div>
+            <div className="flex flex-wrap items-center mteamitembox ">   
+
               <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
@@ -322,16 +301,17 @@ const AboutUs = () => {
                       alt="logo"
                     />
                   </div>
-                  <h3>S. Murugan</h3>
+                  <h3>Murugan</h3>
                 </div>
                 <div className="mteamback muruganbg">
-                  <h3>S. Murugan</h3>
+                  <h3>Murugan</h3>
                   <p>He is an award-winning culinary professional with over 25 years of experience, including 13 years in management roles within the hospitality industry. </p>
                   <p> <button onClick={() => setOpenMurugan(true)}>
                       <span>Read More</span>
                   </button> </p>
                 </div>
               </div>
+
               <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
@@ -342,11 +322,11 @@ const AboutUs = () => {
                       alt="logo"
                     />
                   </div>
-                  <h3>Arul Mathan Thangam</h3>
+                  <h3>Mathan</h3>
                 </div>
                 <div className="mteamback arulmathanbg">
-                  <h3>Arul Mathan Thangam</h3>
-                  <p>Our Su Chef, is a skilled culinary professional with expertise in food production, customer service, and maintaining quality standards.</p>
+                  <h3>Mathan</h3>
+                  <p>Our Sous Chef, is a skilled culinary professional with expertise in food production, customer service, and maintaining quality standards.</p>
                   <p>
                     <button onClick={() => setOpenArulMathanThangam(true)}>
                       <span>Read More</span>
@@ -354,6 +334,7 @@ const AboutUs = () => {
                   </p>
                 </div>
               </div>
+
               <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
@@ -364,10 +345,10 @@ const AboutUs = () => {
                       alt="logo"
                     />
                   </div>
-                  <h3>Vijay Vellanganni</h3>
+                  <h3>Vijay V</h3>
                 </div>
                 <div className="mteamback vijayvellbg">
-                  <h3>Vijay Vellanganni</h3>
+                  <h3>Vijay V</h3>
                   <p>Our Commis 1,a remarkably talented baker and continental cuisine chef. With a flair for baking, Vijay crafts irresistible cookies, brownies, and an array of continental specialties. </p>
                   <p>
                     <button onClick={() => setOpenVijayVellanganni(true)}>
@@ -376,6 +357,7 @@ const AboutUs = () => {
                   </p>
                 </div>
               </div>
+
               <div className="flex-none flex mteambox relative">
                 <div className="mteamfront w-full text-center">
                   <div className="mteamimg">
@@ -386,10 +368,10 @@ const AboutUs = () => {
                       alt="logo"
                     />
                   </div>
-                  <h3>Vijay Antony</h3>
+                  <h3>Vijay A</h3>
                 </div>
                 <div className="mteamback vijayantonybg">
-                  <h3>Vijay Antony</h3>
+                  <h3>Vijay A</h3>
                   <p>Our Commis 3, holds a diploma in hotel and catering management from Villupuram.</p>
                   <p>
                     <button onClick={() => setOpenVijayAntony(true)}>
@@ -398,6 +380,30 @@ const AboutUs = () => {
                   </p>
                 </div>
               </div>
+
+              <div className="flex-none flex mteambox relative">
+                <div className="mteamfront w-full text-center">
+                  <div className="mteamimg">
+                    <Image
+                      className="w-full h-auto"
+                      priority
+                      src={RavishankarNImg}
+                      alt="logo"
+                    />
+                  </div>
+                  <h3>Ravi</h3>
+                </div>
+                <div className="mteamback ravishankarbg">
+                  <h3>Ravi</h3>
+                  <p>Ravi is an experienced operations specialist and supervisor with a strong background in managing processes across several notable private firms.</p>
+                  <p>
+                    <button onClick={() => setOpenRavishankarN(true)}>
+                      <span>Read More</span>
+                    </button>
+                  </p>
+                </div>
+              </div>
+
             </div>
             <div className="ateamIconss">
               <div className="ateamicn icontwo absolute">
