@@ -997,7 +997,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 }
 
 @media screen and (max-width:1200px) {
-  html body {font-size: 14px;  }
+  html body {font-size: 15px;  }
   .HLFOlistSec {padding-block: 80px;}
   .logsinul li button, .combtntb p.parabtn a span {line-height: 32px;padding-inline: 15px;font-size: 13px;}
   .logsinul li button::after {width: 10px;}
@@ -1041,6 +1041,17 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .SetpTabli p {font-size: 13px;height: 36px;}
   .SetpTabli p:before{border-top: 18px solid transparent;border-bottom: 18px solid transparent;border-left: 15px solid #ffffff;left: -1px;}
   .SetpTabli p:after{border-top: 18px solid transparent;border-bottom: 18px solid transparent;}
+  .proboxtitle h5 {font-size: 24px;}
+  .HbanSec .hbanLeft{padding-top: 70px;}
+  .hmenubox{width: 40px;}
+  .comtilte {margin-bottom: 30px;}
+  .hProbutSec.comtilte {margin-top: 30px;margin-bottom: 0;}
+  .comtilte h2{letter-spacing: -1px;}
+  .combtntb p.parabtn {margin-top: 30px;}
+  .hLFOintrow {width: 60%;}
+  .HNutritionSec {padding-block: 80px;}
+  .faqAccordionitems button { font-size: 18px; letter-spacing: 0; }
+  .ProdfilterBox ul li button {font-size: 14px;padding-inline: 12px;}
 }
 
 @media screen and (max-width:1023px){
