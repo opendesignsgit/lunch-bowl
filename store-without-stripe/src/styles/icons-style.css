@@ -206,9 +206,9 @@
 
 
 @media screen and (max-width:1100px) {
-  .hbanIconss .iconsix {width: 30px;}
+  .hbanIconss .iconsix {width: 22px;}
   .hbanIconss .iconone {width: 28px;}
-  .hteamIconss .iconsix{-webkit-transform: translateX(-65%);-ms-transform: translateX(-65%);transform: translateX(-65%);}
+  .hteamIconss .iconsix{-webkit-transform: translateX(-65%);-ms-transform: translateX(-65%);transform: translateX(-65%);width: 60px;}
   .hfformIconss .iconthree,.hfformIconss .iconsix{width: 60px;}
   .hteamIconss .iconthree{-webkit-transform: translateX(90%);-ms-transform: translateX(90%);transform: translateX(90%);}
   .ateamIconss .icontwo,.ateamIconss .iconthree,.ateamIconss .iconfive,.ateamIconss .iconsix, .ateamIconss .iconseven{width: 50px;}
@@ -216,6 +216,12 @@
   .ateamIconss .iconeight{width: 75px;}
   .menulIconss .icontwo, .menulIconss .iconone{width: 50px;}
   .hfformIconss .iconfive {bottom: 10%;   left: 25%;}
+  .hintroIconss .iconone {right: -2%;}
+  .hintroIconss .iconthree {left: 2%;}
+  .hMenusIconss{display: none;}
+  .hteamIconss .iconone{width: 75px;}
+  .hteamIconss .iconfive{width: 65px;}
+  .hDoctIconss .iconseven {top: 25%;right: 15%;width: 80px;}
 }
 
 @media screen and (max-width:1000px){
@@ -227,6 +233,7 @@
   .hfformIconss .iconfour {bottom: -6%;right: 35%;width: 35px;}
   .hfformIconss .iconfive {bottom: 7%;left: 27%;width: 40px;}
   .ateamIconss{display: none;}  
+  .hintroIconss .iconeight{width: 10px;}
 }
 
 @media screen and (max-width:820px){
