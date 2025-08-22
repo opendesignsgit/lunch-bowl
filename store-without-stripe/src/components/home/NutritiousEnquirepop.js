@@ -130,8 +130,8 @@ const NutritiousEnquire = ({ open, onClose }) => {
         <Box className="w-[50%] self-center nutriBoxCol nutriRCol logboxcol p-[3vw]">
           <div className="nutriinrRow">
             <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
-              <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} >Nutritious Enquire</Typography>
-              <p> Nutritious lunches delivered with care. Share your details and we’ll get in touch.</p>
+              <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} >!Talk Nutrition!</Typography>
+              <p>Get expert guidance to provide a nutritious future to your little one.</p>
             </Box>
             <form onSubmit={handleSubmit} noValidate>
               <TextField

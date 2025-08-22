@@ -1052,6 +1052,12 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .HNutritionSec {padding-block: 80px;}
   .faqAccordionitems button { font-size: 18px; letter-spacing: 0; }
   .ProdfilterBox ul li button {font-size: 14px;padding-inline: 12px;}
+  .formbox.contuslast {width: 60%;}
+  .logsinul li:hover .submenuul{width: 150px;}
+  .DashboardSecss,.myaccContainer  {padding-inline: 40px;}
+  .calandySecs {padding-block: 60px;padding-inline: 40px;}
+  .MCcalendy .MCMainPanel, .MCcalendy .MCLeftPanel {min-height: 75vh;}
+
 }
 
 @media screen and (max-width:1023px){
