@@ -591,6 +591,94 @@ const sendSchoolEnquiryMail = async (req, res) => {
   }
 };
 
+
+const talkNutrition = async (req, res) => {
+  const { firstName, lastName, mobileNumber, schoolName, message, email } = req.body;
+
+  // Setup transporter
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  // Compose the email
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: "csivarex.odi@gmail.com",
+    subject: "New Nutrition Enquiry Received",
+    html: `
+      <h2>Nutrition Enquiry Details</h2>
+      <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Mobile:</strong> ${mobileNumber}</p>
+      <p><strong>School Name:</strong> ${schoolName}</p>
+      <p><strong>Message:</strong> ${message || 'N/A'}</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Nutrition enquiry email sent successfully--------->", mailOptions);
+
+    res.status(200).json({ success: true, message: "Enquiry sent successfully." });
+  } catch (error) {
+    console.error("Email send error:", error);
+    res.status(500).json({ success: false, error: "Failed to send email." });
+  }
+};
+
+const freeTrialEnquiry = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    mobileNumber,
+    address,
+    schoolName,
+    className,
+    message,
+    userId,
+  } = req.body;
+
+  // Configure nodemailer
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER, // your gmail address
+      pass: process.env.EMAIL_PASS, // your gmail app password
+    },
+  });
+
+  // Compose email content
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: "shivarex.c@gmail.com",
+    subject: "New Free Trial Enquiry",
+    html: `
+      <h2>Free Trial Enquiry Received</h2>
+      <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>School:</strong> ${schoolName}</p>
+      <p><strong>Class:</strong> ${className}</p>
+      <p><strong>Address:</strong> ${address}</p>
+      <p><strong>UserId:</strong> ${userId}</p>
+      <p><strong>Mobile Number:</strong> ${mobileNumber || "N/A"}</p>
+      <p><strong>Message:</strong><br/>${message}</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: "Enquiry sent!" });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ success: false, error: "Failed to send email." });
+  }
+};
+
 module.exports = {
   registerAdmin,
   loginAdmin,
@@ -612,4 +700,6 @@ module.exports = {
   updateHoliday,
   deleteHoliday,
   sendSchoolEnquiryMail,
+  talkNutrition,
+  freeTrialEnquiry,
 };

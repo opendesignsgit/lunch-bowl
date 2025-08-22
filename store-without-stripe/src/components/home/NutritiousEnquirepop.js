@@ -73,7 +73,7 @@ const NutritiousEnquire = ({ open, onClose }) => {
       };
 
       await axios.post(
-        "http://api.lunchbowl.co.in/api/admin/school-enquiry",
+        "http://api.lunchbowl.co.in/api/admin/talk-nutrition",
         enquiryData
       );
 

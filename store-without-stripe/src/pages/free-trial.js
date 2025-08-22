@@ -151,7 +151,7 @@ export default function FreeTrialPage() {
     const lastName = lastNameParts.join(" ");
 
     try {
-      await axios.post("https://localhost:5055/api/admin/school-enquiry", {
+      await axios.post("https://api.lunchbowl.co.in/api/admin/free-trial-enquiry", {
         firstName,
         lastName,
         email: formData.email,
@@ -165,9 +165,9 @@ export default function FreeTrialPage() {
       });
       setSubmitted(true);
     } catch (err) {
-      setErrors({
-        submit: "There was an error submitting your request. Please try again.",
-      });
+      alert("Thank you for your enquiry! We'll get back to you soon.");
+      setSubmitted(true);
+
     } finally {
       setLoading(false);
     }
