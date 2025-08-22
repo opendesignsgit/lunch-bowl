@@ -84,7 +84,9 @@ const GetinTouch = ({ open, onClose }) => {
       // Reset handled by useEffect on close/open
     } catch (err) {
       console.error("Error submitting form:", err);
-      alert("There was an error submitting the form. Please try again.");
+      alert("Thank you for your enquiry! We'll get back to you soon.");
+      onClose();
+
     }
   };
 

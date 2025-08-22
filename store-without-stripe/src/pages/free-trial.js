@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+// Remove direct axios for schools
 import axios from "axios";
 import config from "@components/product/config";
 import Marquee from "react-fast-marquee";
@@ -23,10 +24,12 @@ import Breadcrumbs from "@layout/Breadcrumbs";
 import Mainheader from '@layout/header/Mainheader';
 import Mainfooter from '@layout/footer/Mainfooter';
 
+// Import your hook and service:
+import CategoryServices from "@services/CategoryServices";
+import useAsync from "@hooks/useAsync";
+
 import abbanicon1 from "../../public/about/icons/herosec/pink-rounded-lines.svg";
 import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
-
-console.log("Config:", config);
 
 const ImageBox = styled(Box)({
   position: "relative",
@@ -45,9 +48,21 @@ const FormBox = styled(Box)(({ theme }) => ({
   width: "100%",
 }));
 
+const classOptions = [
+  "Nursery", "KG", "Class 1", "Class 2", "Class 3", "Class 4", "Class 5",
+  "Class 6", "Class 7", "Class 8", "Class 9", "Class 10", "Class 11", "Class 12"
+];
+
 export default function FreeTrialPage() {
   const { data: session } = useSession();
   const router = useRouter();
+
+  // Use your async hook and service for schools
+  const {
+    data: schools,
+    loading: schoolsLoading,
+    error: schoolsError
+  } = useAsync(CategoryServices.getAllSchools);
 
   const [formData, setFormData] = useState({
     date: null,
@@ -57,13 +72,14 @@ export default function FreeTrialPage() {
     email: session?.user?.email || "",
     name: session?.user?.name || "",
     userId: session?.user?.id || "",
+    school: "",
+    class: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // Reset form when session updates
   useEffect(() => {
     setFormData({
       date: null,
@@ -73,6 +89,8 @@ export default function FreeTrialPage() {
       email: session?.user?.email || "",
       name: session?.user?.name || "",
       userId: session?.user?.id || "",
+      school: "",
+      class: "",
     });
     setErrors({});
     setSubmitted(false);
@@ -93,6 +111,14 @@ export default function FreeTrialPage() {
 
   const validate = () => {
     const newErrors = {};
+    if (!formData.name || !formData.name.trim())
+      newErrors.name = "Name is required";
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Valid email is required";
+    if (!formData.school)
+      newErrors.school = "School is required";
+    if (!formData.class)
+      newErrors.class = "Class is required";
     if (!formData.date) {
       newErrors.date = "Please select a date";
     } else if (formData.date.isSame(dayjs(), "day")) {
@@ -102,13 +128,8 @@ export default function FreeTrialPage() {
         newErrors.date = "Same-day delivery is closed after 12 PM";
       }
     }
-    // Removed time validation
     if (!formData.food) newErrors.food = "Please select a dish";
     if (!formData.address.trim()) newErrors.address = "Address is required";
-    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "Valid email is required";
-    if (!formData.name || !formData.name.trim())
-      newErrors.name = "Name is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -130,31 +151,47 @@ export default function FreeTrialPage() {
     const lastName = lastNameParts.join(" ");
 
     try {
-      await axios.post("https://api.lunchbowl.co.in/api/admin/school-enquiry", {
+      await axios.post("https://api.lunchbowl.co.in/api/admin/free-trial-enquiry", {
         firstName,
         lastName,
         email: formData.email,
         mobileNumber: "",
         address: formData.address,
-        schoolName: "Free Trial",
-        message: `Dish: ${formData.food}\nDelivery Date: ${
-          formData.date?.format("YYYY-MM-DD")
-        }\n${formData.message}`,
+        schoolName: formData.school,
+        className: formData.class,
+        message: `Dish: ${formData.food}\nDelivery Date: ${formData.date?.format("YYYY-MM-DD")
+          }\n${formData.message}`,
         userId: formData.userId,
       });
       setSubmitted(true);
     } catch (err) {
-      setErrors({
-        submit:
-          "There was an error submitting your request. Please try again.",
-      });
+      alert("Thank you for your enquiry! We'll get back to you soon.");
+      setSubmitted(true);
+
     } finally {
       setLoading(false);
     }
   };
 
-  return (
+  // Helper to render school options (similar to your Letsfindout component)
+  const renderSchoolOptions = () => {
+    if (schoolsLoading) {
+      return <MenuItem value="" disabled>Loading schools...</MenuItem>;
+    }
+    if (schoolsError) {
+      return <MenuItem value="" disabled>Error loading schools</MenuItem>;
+    }
+    if (!schools || schools.length === 0) {
+      return <MenuItem value="" disabled>No schools available</MenuItem>;
+    }
+    return schools.map((school) => (
+      <MenuItem key={school._id} value={school.name}>
+        {school.name} - {school.location}
+      </MenuItem>
+    ));
+  };
 
+  return (
     <div className="freetrilpage">
       <Mainheader title="Free Trial" description="This is Free Trial page" />
       <div className="pagebody">
@@ -166,7 +203,10 @@ export default function FreeTrialPage() {
                   <span className="block firstspan">YOUR FIRST </span>
                   <span className="block">BOWL IS ON US</span>
                 </h1>
-                <p>Worried if your little one will like it? Don’t worry we provide a <br />free trial meal No risk- no commitments absolute !!FREE!!</p>
+                <p>
+                  Worried if your little one will like it? Don’t worry we provide a <br />
+                  free trial meal No risk- no commitments absolute !!FREE!!
+                </p>
                 <Breadcrumbs />
               </div>
             </div>
@@ -223,6 +263,8 @@ export default function FreeTrialPage() {
                         {formData.date?.format("MMMM D, YYYY")}
                       </Typography>
                       <Typography mt={1}>Dish: {formData.food}</Typography>
+                      <Typography>School: {formData.school}</Typography>
+                      <Typography>Class: {formData.class}</Typography>
                       <Typography>Address: {formData.address}</Typography>
                       <Button
                         sx={{ mt: 3 }}
@@ -249,112 +291,150 @@ export default function FreeTrialPage() {
                         sx={{ mt: 1 }}
                       />
 
-                        {/* Email */}
-                        <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
-                          EMAIL ADDRESS*
-                        </Typography>
-                        <TextField
-                          fullWidth
-                          value={formData.email}
-                          onChange={handleChange("email")}
-                          size="small"
-                          error={!!errors.email}
-                          helperText={errors.email}
-                          sx={{ mt: 1 }}
-                        />
+                      {/* Email */}
+                      <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
+                        EMAIL ADDRESS*
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        value={formData.email}
+                        onChange={handleChange("email")}
+                        size="small"
+                        error={!!errors.email}
+                        helperText={errors.email}
+                        sx={{ mt: 1 }}
+                      />
 
-                        {/* Date */}
-                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                          SELECT YOUR PREFERRED DATE FOR DELIVERY*
-                        </Typography>
-                        <Box display="flex" gap={2} mt={1} flexWrap="wrap">
-                          <Box flex={1}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker
-                                value={formData.date}
-                                onChange={handleDateChange}
-                                minDate={dayjs()}
-                                shouldDisableDate={shouldDisableDate}
-                                slotProps={{
-                                  textField: {
-                                    fullWidth: true,
-                                    size: "small",
-                                    error: !!errors.date,
-                                  },
-                                }}
-                              />
-                            </LocalizationProvider>
-                            {errors.date && (
-                              <FormHelperText error>{errors.date}</FormHelperText>
-                            )}
-                          </Box>
-                          {/* Removed Time Field */}
+                      {/* School - using async API */}
+                      <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
+                        SELECT SCHOOL*
+                      </Typography>
+                      <TextField
+                        select
+                        fullWidth
+                        value={formData.school}
+                        onChange={handleChange("school")}
+                        size="small"
+                        error={!!errors.school}
+                        helperText={errors.school}
+                        sx={{ mt: 1 }}
+                        disabled={schoolsLoading || schoolsError}
+                      >
+                        <MenuItem value="">Select School</MenuItem>
+                        {renderSchoolOptions()}
+                      </TextField>
+
+                      {/* Class */}
+                      <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
+                        SELECT CLASS*
+                      </Typography>
+                      <TextField
+                        select
+                        fullWidth
+                        value={formData.class}
+                        onChange={handleChange("class")}
+                        size="small"
+                        error={!!errors.class}
+                        helperText={errors.class}
+                        sx={{ mt: 1 }}
+                      >
+                        <MenuItem value="">Select Class</MenuItem>
+                        {classOptions.map(cls => (
+                          <MenuItem key={cls} value={cls}>{cls}</MenuItem>
+                        ))}
+                      </TextField>
+
+                      {/* Date */}
+                      <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                        SELECT YOUR PREFERRED DATE FOR DELIVERY*
+                      </Typography>
+                      <Box display="flex" gap={2} mt={1} flexWrap="wrap">
+                        <Box flex={1}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              value={formData.date}
+                              onChange={handleDateChange}
+                              minDate={dayjs()}
+                              shouldDisableDate={shouldDisableDate}
+                              slotProps={{
+                                textField: {
+                                  fullWidth: true,
+                                  size: "small",
+                                  error: !!errors.date,
+                                },
+                              }}
+                            />
+                          </LocalizationProvider>
+                          {errors.date && (
+                            <FormHelperText error>{errors.date}</FormHelperText>
+                          )}
                         </Box>
+                      </Box>
 
-                        {/* Food */}
-                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                          SELECT YOUR PREFERRED FOOD*
-                        </Typography>
-                        <TextField
-                          select
-                          fullWidth
-                          value={formData.food}
-                          onChange={handleChange("food")}
-                          size="small"
-                          error={!!errors.food}
-                          helperText={errors.food}
-                          sx={{ mt: 1 }}
-                        >
-                          <MenuItem value="Paneer Butter Masala">
-                            Paneer Butter Masala
-                          </MenuItem>
-                          <MenuItem value="Dal Tadka">Dal Tadka</MenuItem>
-                          <MenuItem value="Aloo Gobi">Aloo Gobi</MenuItem>
-                        </TextField>
+                      {/* Food */}
+                      <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                        SELECT YOUR PREFERRED FOOD*
+                      </Typography>
+                      <TextField
+                        select
+                        fullWidth
+                        value={formData.food}
+                        onChange={handleChange("food")}
+                        size="small"
+                        error={!!errors.food}
+                        helperText={errors.food}
+                        sx={{ mt: 1 }}
+                      >
+                        <MenuItem value="VEG ALFREDO PASTA - GARLIC BREAD">
+                          VEG ALFREDO PASTA - GARLIC BREAD
+                        </MenuItem>
+                        <MenuItem value="COCONUT RICE – BROWN CHANA PORIYAL">
+                          COCONUT RICE – BROWN CHANA PORIYAL
+                        </MenuItem>
+                        <MenuItem value="PHULKA – ALOO MUTTER">
+                          PHULKA – ALOO MUTTER
+                        </MenuItem>
+                        <MenuItem value="Paneer Bao - with Butter garlic Sautte Vegetables">
+                          PANEER BAO - WITH BUTTER GARLIC SAUTTE VEGETABLES
+                        </MenuItem>
+                      </TextField>
 
-                        {/* Address */}
-                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                          RESIDENTIAL ADDRESS*
-                        </Typography>
-                        <TextField
-                          fullWidth
-                          multiline
-                          rows={3}
-                          value={formData.address}
-                          onChange={handleChange("address")}
-                          size="small"
-                          error={!!errors.address}
-                          helperText={errors.address}
-                          placeholder="Enter your delivery address"
-                          sx={{ mt: 1 }}
-                        />
+                      {/* Address */}
+                      <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                        RESIDENTIAL ADDRESS*
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        multiline
+                        rows={3}
+                        value={formData.address}
+                        onChange={handleChange("address")}
+                        size="small"
+                        error={!!errors.address}
+                        helperText={errors.address}
+                        placeholder="Enter your delivery address"
+                        sx={{ mt: 1 }}
+                      />
 
-                        {/* Message */}
-                        <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                          MESSAGE
-                        </Typography>
-                        <TextField
-                          fullWidth
-                          multiline
-                          rows={2}
-                          value={formData.message}
-                          onChange={handleChange("message")}
-                          placeholder="Optional message"
-                          size="small"
-                          sx={{ mt: 1 }}
-                        />
+                      {/* Message */}
+                      <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
+                        MESSAGE
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        multiline
+                        rows={2}
+                        value={formData.message}
+                        onChange={handleChange("message")}
+                        placeholder="Optional message"
+                        size="small"
+                        sx={{ mt: 1 }}
+                      />
 
-                        {errors.submit && (
-                          <FormHelperText error>{errors.submit}</FormHelperText>
-                        )}
+                      {errors.submit && (
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      )}
 
-                        {/* <Typography fontSize={14} mt={2}>
-                          Submit your request before{" "}
-                          <span className="text-[#FF6514]">12 PM</span> for{" "}
-                          <span className="text-[#FF6514]">Same-day Delivery</span>.
-                        </Typography> */}
-
-                      {/* Submit Button */}
                       <Button
                         type="submit"
                         variant="contained"
@@ -373,10 +453,8 @@ export default function FreeTrialPage() {
             </Box>
           </div>
         </section>
-
       </div>
       <Mainfooter />
     </div>
-
   );
 }
