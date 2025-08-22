@@ -10,7 +10,7 @@
   font-display: swap;
 }
 
-body{font-family: "Open Sans", sans-serif;line-height: 1.6;letter-spacing: -0.3px;font-size: 18px;font-weight: 500;}
+html body{font-family: "Open Sans", sans-serif;line-height: 1.6;letter-spacing: -0.3px;font-size: 19px;font-weight: 500;}
 header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 99999;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
 .myLogo{width: 5.5vw;}
 .navbox{margin-left: auto;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
@@ -242,7 +242,7 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .proboxtitle{}
 .proboxtitle h5{font-size: 1.2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;}
 .proboxtitle h3{font-size: 2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -2px;margin-bottom: 10px;}
-.proboxtitle p{font-size: 15px;}
+.proboxtitle p{}
 .proImage{}
 .proImage img{filter: drop-shadow(4px 4px 13px rgb(0 0 0 / 48%));}
 
@@ -253,11 +253,23 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .fontanimi .animiintext span{position: relative;font-size: 5.1vw;color: #FF6514;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;text-transform: uppercase;will-change: transform;transform: translateX(0);white-space: nowrap;-webkit-animation: marquee 24s linear infinite;animation: marquee 60s linear infinite;}
 .fontanimi .animiOne .animiintext span{color: transparent;-webkit-text-stroke: 1px #FF6514;}
 .fontanimi .animiTwo .animiintext span{animation-direction: reverse;}
-@keyframes marquee {
+@-webkit-keyframes marquee {
     0% {
+      -webkit-transform: translateX(0);
       transform: translateX(0);
     }
     100% {
+      -webkit-transform: translateX(-100%);
+      transform: translateX(-100%);
+    }
+  }
+@keyframes marquee {
+    0% {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+    100% {
+      -webkit-transform: translateX(-100%);
       transform: translateX(-100%);
     }
   }
@@ -746,7 +758,11 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 
 
 .poptitles h4{font-size: 2vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 5px;}
+.poptitles h5{font-size: 1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 0px;}
+.poptitles h5{font-size: 1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 0px;}
 .poptitles p{font-size: 0.9vw;margin: 0 0 10px;}
+.poptitles p a{color:#db4b00;}
+.poptitles p a:hover{text-decoration: underline;}
 .loginfiledss h6{font-size: 0.9vw;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;}
 .loginfiledss label{font-size: 0.9vw;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;font-weight: 200;margin: 0;}
 .loginfiledss input{height: 50px;padding: 0 30px;font-family: "Open Sans", sans-serif;border-color: #EAEAEC;color: #333333;letter-spacing: -0.5px;font-weight: 500;}
@@ -919,11 +935,11 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 }
 
 @media screen and (max-width:1800px) {
-  body {font-size: 17px;}
+  html body {font-size: 18px;}
 }
 
 @media screen and (max-width:1620px) {
-  body {font-size: 16px;}
+  html body {font-size: 17px;}
   .myLogo {width: 6vw;}
   .HteamSec::after {height: 40px;  }
   .logsinul li button,  .combtntb p.parabtn a span {    line-height: 40px;    padding-inline: 25px;    font-size: 16px;  }
@@ -939,7 +955,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 }
 
 @media screen and (max-width:1520px) {
-  body {    font-size: 14.5px;  }
+  html body {    font-size: 15.5px;  }
   .homepage {    overflow: hidden;  }
   body .nutripopup .fieldbox input {    padding: 0 20px;    height: 40px;    font-size: 14px;  }
   body .nutripopup .fieldbox label {    top: -6px;    font-size: 14px;  }
@@ -952,7 +968,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 }
 
 @media screen and (max-width:1420px) {
-  body {    font-size: 13.5px;  }
+  html body {    font-size: 14.5px;  }
   header {    padding: 2vh 4vw 1vh;  }
   .logsinul li button,  .combtntb p.parabtn a span {    line-height: 36px;    padding-inline: 22px;    font-size: 14px;  }
   .inputbox button span {    line-height: 36px;    padding-inline: 22px;    font-size: 13px;  }
@@ -981,7 +997,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 }
 
 @media screen and (max-width:1200px) {
-  body {font-size: 13px;  }
+  html body {font-size: 14px;  }
   .HLFOlistSec {padding-block: 80px;}
   .logsinul li button, .combtntb p.parabtn a span {line-height: 32px;padding-inline: 15px;font-size: 13px;}
   .logsinul li button::after {width: 10px;}
