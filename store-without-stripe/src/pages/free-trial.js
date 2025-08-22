@@ -16,13 +16,11 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-// Remove direct axios for schools
 import axios from "axios";
 import config from "@components/product/config";
-import Marquee from "react-fast-marquee";
 import Breadcrumbs from "@layout/Breadcrumbs";
-import Mainheader from '@layout/header/Mainheader';
-import Mainfooter from '@layout/footer/Mainfooter';
+import Mainheader from "@layout/header/Mainheader";
+import Mainfooter from "@layout/footer/Mainfooter";
 
 // Import your hook and service:
 import CategoryServices from "@services/CategoryServices";
@@ -57,11 +55,11 @@ export default function FreeTrialPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  // Use your async hook and service for schools
+  // Fetch schools async
   const {
     data: schools,
     loading: schoolsLoading,
-    error: schoolsError
+    error: schoolsError,
   } = useAsync(CategoryServices.getAllSchools);
 
   const [formData, setFormData] = useState({
@@ -74,6 +72,7 @@ export default function FreeTrialPage() {
     userId: session?.user?.id || "",
     school: "",
     class: "",
+    childName: "", // ✅ new field
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -91,6 +90,7 @@ export default function FreeTrialPage() {
       userId: session?.user?.id || "",
       school: "",
       class: "",
+      childName: "", // ✅ reset
     });
     setErrors({});
     setSubmitted(false);
@@ -112,7 +112,9 @@ export default function FreeTrialPage() {
   const validate = () => {
     const newErrors = {};
     if (!formData.name || !formData.name.trim())
-      newErrors.name = "Name is required";
+      newErrors.name = "Full Name is required";
+    if (!formData.childName || !formData.childName.trim())
+      newErrors.childName = "Child Name is required"; // ✅ validation
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Valid email is required";
     if (!formData.school)
@@ -137,8 +139,7 @@ export default function FreeTrialPage() {
   const shouldDisableDate = (date) => {
     const currentHour = dayjs().hour();
     const currentMinute = dayjs().minute();
-    const isAfterNoon =
-      currentHour > 12 || (currentHour === 12 && currentMinute >= 0);
+    const isAfterNoon = currentHour > 12 || (currentHour === 12 && currentMinute >= 0);
     return date.isSame(dayjs(), "day") && isAfterNoon;
   };
 
@@ -159,21 +160,20 @@ export default function FreeTrialPage() {
         address: formData.address,
         schoolName: formData.school,
         className: formData.class,
-        message: `Dish: ${formData.food}\nDelivery Date: ${formData.date?.format("YYYY-MM-DD")
-          }\n${formData.message}`,
+        childName: formData.childName, // ✅ send to API
+        message: `Dish: ${formData.food}\nDelivery Date: ${formData.date?.format("YYYY-MM-DD")}\n${formData.message}`,
         userId: formData.userId,
       });
       setSubmitted(true);
     } catch (err) {
       alert("Thank you for your enquiry! We'll get back to you soon.");
       setSubmitted(true);
-
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper to render school options (similar to your Letsfindout component)
+  // Schools rendering
   const renderSchoolOptions = () => {
     if (schoolsLoading) {
       return <MenuItem value="" disabled>Loading schools...</MenuItem>;
@@ -212,12 +212,7 @@ export default function FreeTrialPage() {
             </div>
             <div className="abbanIconss">
               <div className="abbanicn iconone absolute">
-                <Image
-                  src={abbanicon1}
-                  priority
-                  alt="Icon"
-                  className="iconrotates"
-                />
+                <Image src={abbanicon1} priority alt="Icon" className="iconrotates" />
               </div>
               <div className="abbanicn icontwo absolute">
                 <Image src={abbanicon2} priority alt="Icon" />
@@ -259,10 +254,10 @@ export default function FreeTrialPage() {
                         Your order will be delivered on time.
                       </Typography>
                       <Typography>
-                        Delivery scheduled for:{" "}
-                        {formData.date?.format("MMMM D, YYYY")}
+                        Delivery scheduled for: {formData.date?.format("MMMM D, YYYY")}
                       </Typography>
-                      <Typography mt={1}>Dish: {formData.food}</Typography>
+                      <Typography mt={1}>Child Name: {formData.childName}</Typography>
+                      <Typography>Dish: {formData.food}</Typography>
                       <Typography>School: {formData.school}</Typography>
                       <Typography>Class: {formData.class}</Typography>
                       <Typography>Address: {formData.address}</Typography>
@@ -277,7 +272,7 @@ export default function FreeTrialPage() {
                     </Box>
                   ) : (
                     <>
-                      {/* Name */}
+                      {/* Full Name */}
                       <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
                         FULL NAME*
                       </Typography>
@@ -290,6 +285,8 @@ export default function FreeTrialPage() {
                         helperText={errors.name}
                         sx={{ mt: 1 }}
                       />
+
+                      
 
                       {/* Email */}
                       <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
@@ -305,7 +302,21 @@ export default function FreeTrialPage() {
                         sx={{ mt: 1 }}
                       />
 
-                      {/* School - using async API */}
+                      {/* Child Name */}
+                      <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
+                        CHILD NAME*
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        value={formData.childName}
+                        onChange={handleChange("childName")}
+                        size="small"
+                        error={!!errors.childName}
+                        helperText={errors.childName}
+                        sx={{ mt: 1 }}
+                      />
+
+                      {/* School */}
                       <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
                         SELECT SCHOOL*
                       </Typography>
@@ -339,7 +350,7 @@ export default function FreeTrialPage() {
                         sx={{ mt: 1 }}
                       >
                         <MenuItem value="">Select Class</MenuItem>
-                        {classOptions.map(cls => (
+                        {classOptions.map((cls) => (
                           <MenuItem key={cls} value={cls}>{cls}</MenuItem>
                         ))}
                       </TextField>
