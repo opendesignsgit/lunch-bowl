@@ -44,9 +44,10 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
 
     try {
       await axios.post(
-        "http://localhost:5055/api/admin/school-enquiry",
+        "http://api.lunchbowl.co.in/api/admin/school-enquiry",
         formData
       );
+      alert("Thank you for your enquiry! We'll get back to you soon.");
       // Optionally show success toast/message here
       onClose();
     } catch (err) {
