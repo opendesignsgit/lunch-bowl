@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import Link from "next/link";
 import {
   Dialog,
   IconButton,
@@ -104,7 +105,7 @@ const GetinTouch = ({ open, onClose }) => {
       <Dialog
         open={open}
         onClose={onClose}
-        maxWidth="lg"
+        maxWidth="md"
         fullWidth
         className="gintpopus compopups"
         sx={{
@@ -129,11 +130,11 @@ const GetinTouch = ({ open, onClose }) => {
               backgroundPosition: "center",
             }}
           ></Box>
-          <Box className="w-[50%] gintPopCol gintRCol self-center logboxcol p-[3vw]">
+          <Box className="w-[50%] gintPopCol gintRCol self-center logboxcol p-[2.5vw]">
             <div className="gintPinRow">
               <Box sx={{ textAlign: "left", marginBottom: "24px" }} className="poptitles">
-                <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} > ! NEED TO CLEAR YOUR QUIRIES? !   </Typography>
-                <p>We are here to lend hands from order details to partnership opportunities our team will reach you promptly.</p>
+                <Typography variant="h4" color="#000" sx={{ textTransform: "uppercase", marginBottom: "4px" }} >!Reach out We deliver excellence!</Typography>
+                <p>We are here to ensure personalized solutions with complete transparency to reach out  - <Link href="mailto:contactus@lunchbowl.co.in">contactus@lunchbowl.co.in</Link></p>
               </Box>
               <form onSubmit={handleSubmit} noValidate>
                 <TextField

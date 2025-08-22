@@ -73,13 +73,13 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
         },
       }}
     >
-      <Box sx={{ display: "flex", height: "100%" }}>
+      <Box sx={{ display: "flex", height: "100%" }} className="fboxrow">
         <button className="popclosebtn" onClick={onClose}>
           <Image src={closeicon} alt="" />
         </button>
 
         {/* Left Side - Image Section */}
-        <Box
+        <Box className="fboxcol colLeft"
           sx={{
             width: "45%",
             display: "flex",
@@ -97,7 +97,7 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
         </Box>
 
         {/* Right Side - Form */}
-        <Box sx={{ width: "55%", p: 4 }}>
+        <Box className="fboxcol colRight" sx={{ width: "55%", p: 4 }}>
           <DialogTitle
             className="comffamily"
             sx={{
@@ -114,8 +114,8 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
           <DialogContent sx={{ px: 0 }}>
             <form onSubmit={handleSubmit}>
               {/* FIRST NAME & LAST NAME */}
-              <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
-                <Box sx={{ flex: 1 }}>
+              <Box className="formrows">
+                <Box className="formcol fhalfcol">
                   <Typography
                     className="comffamily"
                     variant="subtitle2"
@@ -136,7 +136,7 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                     placeholder="Enter your First Name"
                   />
                 </Box>
-                <Box sx={{ flex: 1 }}>
+                <Box className="formcol fhalfcol">
                   <Typography
                     className="comffamily"
                     variant="subtitle2"
@@ -160,7 +160,8 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
               </Box>
 
               {/* MOBILE NUMBER */}
-              <Box sx={{ mb: 3 }}>
+              <Box className="formrows">
+                <Box className="formcol ffullcol">
                 <Typography
                   className="comffamily"
                   variant="subtitle2"
@@ -182,9 +183,11 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                   placeholder="Enter your Mobile Number"
                 />
               </Box>
+              </Box>
 
               {/* SCHOOL NAME */}
-              <Box sx={{ mb: 3 }}>
+              <Box className="formrows">
+                <Box className="formcol ffullcol">
                 <Typography
                   className="comffamily"
                   variant="subtitle2"
@@ -205,9 +208,11 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                   placeholder="Enter your School Name"
                 />
               </Box>
+              </Box>
 
               {/* MESSAGE */}
-              <Box sx={{ mb: 4 }}>
+              <Box className="formrows">
+                <Box className="formcol ffullcol">
                 <Typography
                   className="comffamily"
                   variant="subtitle2"
@@ -228,7 +233,10 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
                   placeholder="Feel free to type here if you'd like to share something with us."
                 />
               </Box>
+              </Box>
 
+              <Box className="formrows">
+                <Box className="formcol ffullcol">
               {/* SUBMIT */}
               <Button
                 type="submit"
@@ -248,7 +256,7 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
               >
                 {" "}
                 Submit Request{" "}
-              </Button>
+                  </Button></Box></Box>
             </form>
           </DialogContent>
         </Box>

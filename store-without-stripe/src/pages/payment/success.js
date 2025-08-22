@@ -121,19 +121,7 @@ const PaymentSuccess = () => {
         position="relative"
         paddingTop="100px" // <-- set to your actual header height!
       >
-        <Box
-          sx={{
-            animation: "bounce 2s infinite",
-            mb: 1.5
-          }}
-        >
-          <Image
-            src="/lunchbowl-logo.jpg"
-            alt="Lunch Bowl Logo"
-            width={120}
-            height={120}
-          />
-        </Box>
+
         <style>{`
           @keyframes bounce {
             0%, 100% { transform: translateY(0);}

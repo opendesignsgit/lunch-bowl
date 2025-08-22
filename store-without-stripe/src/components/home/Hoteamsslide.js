@@ -58,26 +58,13 @@ const Hoteamsslide = () => {
     <>
         <div className="slider-container">
       <Slider {...settings} className='teamsliders'>
-        <div>
-                      <div className='flex teambox items-center group relative overflow-hidden layone'>
-                          <div className='flex-1 teamboximg overflow-hidden '>
-                              <Image className="w-full h-auto m-auto" priority src={RavishankarNImg} alt="logo" />
-                          </div>
-                          <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
-                              <h4>Ravishankar N</h4>
-                              <p><button onClick={() => setOpenRavishankarN(true)}>
-                                  <span>Read More</span>
-                              </button></p>
-                          </div>
-                      </div>
-                  </div>
                   <div>
                       <div className='flex teambox items-center group relative overflow-hidden layone'>
                           <div className='flex-1 teamboximg overflow-hidden '>
                               <Image className="w-full h-auto m-auto" priority src={SMuruganImg} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
-                              <h4>S. Murugan</h4>
+                              <h4>Murugan</h4>
                               <p><button onClick={() => setOpenMurugan(true)}>
                                   <span>Read More</span>
                               </button></p>
@@ -90,7 +77,7 @@ const Hoteamsslide = () => {
                               <Image className="w-full h-auto m-auto" priority src={ArulMadhanImg} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
-                              <h4>Arul Mathan Thangam</h4>
+                              <h4>Mathan</h4>
                               <p><button onClick={() => setOpenArulMathanThangam(true)}>
                                   <span>Read More</span>
                               </button></p>
@@ -103,7 +90,7 @@ const Hoteamsslide = () => {
                               <Image className="w-full h-auto m-auto" priority src={VijayVImg} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
-                              <h4>Vijay Vellanganni</h4>
+                              <h4>Vijay V</h4>
                               <p><button onClick={() => setOpenVijayVellanganni(true)}>
                                   <span>Read More</span>
                               </button></p>
@@ -116,12 +103,25 @@ const Hoteamsslide = () => {
                               <Image className="w-full h-auto m-auto" priority src={VijayAntonyImg} alt="logo" />
                 </div>       
                 <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
-                              <h4>Vijay Antony</h4>
+                              <h4>Vijay A</h4>
                               <p><button onClick={() => setOpenVijayAntony(true)}>
                                   <span>Read More</span>
                               </button></p>
                 </div>                    
             </div> 
+                  </div>
+                  <div>
+                      <div className='flex teambox items-center group relative overflow-hidden layone'>
+                          <div className='flex-1 teamboximg overflow-hidden '>
+                              <Image className="w-full h-auto m-auto" priority src={RavishankarNImg} alt="logo" />
+                          </div>
+                          <div className='flex-1 teamboxcont absolute t-0 l-0 w-full h-full flex flex-col items-center justify-center'>
+                              <h4>Ravi</h4>
+                              <p><button onClick={() => setOpenRavishankarN(true)}>
+                                  <span>Read More</span>
+                              </button></p>
+                          </div>
+                      </div>
                   </div>
       </Slider>
     </div>

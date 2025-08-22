@@ -16,10 +16,10 @@ const RefundCancellationPolicy = () => {
         description="This is Refund & Cancellation Policy page"
       />
       <div className="pagebody">
-        <section className="pagebansec aboutbanersec relative">
+        <section className="pagebansec Policysbanersec relative">
           <div className="container mx-auto relative h-full">
-            <div className="pageinconter relative h-full w-full flex items-center">
-              <div className="hworkTitle combtntb comtilte">
+            <div className="pageinconter relative h-full w-full flex items-center justify-center">
+              <div className="hworkTitle combtntb comtilte  text-center">
                 <h1 className="flex flex-col textFF6514">
                   {" "}
                   <span className="block firstspan">
@@ -28,19 +28,6 @@ const RefundCancellationPolicy = () => {
                   <span className="block">Policy</span>{" "}
                 </h1>
                 <Breadcrumbs />
-              </div>
-            </div>
-            <div className="abbanIconss">
-              <div className="abbanicn iconone absolute">
-                <Image
-                  src={abbanicon1}
-                  priority
-                  alt="Icon"
-                  className="iconrotates"
-                />
-              </div>
-              <div className="abbanicn icontwo absolute">
-                <Image src={abbanicon2} priority alt="Icon" />
               </div>
             </div>
           </div>
