@@ -607,10 +607,14 @@ const deleteCustomer = (req, res) => {
 // Send OTP
 const sendOtp = async (req, res) => {
   try {
-    const { mobile, path } = req.body;
+    const { email, mobile, path } = req.body;
 
     if (!mobile) {
       return res.status(400).json({ message: "Mobile number is required" });
+    }
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
     }
 
     // Only allow signUp or logIn for sending OTP
@@ -623,6 +627,13 @@ const sendOtp = async (req, res) => {
       const existingUser = await Customer.findOne({ phone: mobile });
       if (existingUser) {
         return res.status(400).json({ message: "Mobile number already registered" });
+      }
+    }
+
+    if (path === "signUp") {
+      const existingUser = await Customer.findOne({ email: email });
+      if (existingUser) {
+        return res.status(400).json({ message: "Email already registered" });
       }
     }
 

@@ -121,7 +121,7 @@ const validateForm = () => {
   const handleSendOtp = async () => {
     if (validateForm()) {
       try {
-        const res = await submitHandler({ phone: form.mobile, path: "signUp" });
+        const res = await submitHandler({ email: form.email, phone: form.mobile, path: "signUp" });
         console.log("sendOtp response:", res);
 
         if (res.success) {
