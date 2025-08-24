@@ -1,6 +1,8 @@
 const cron = require("node-cron");
 const Form = require("../models/Form");
 const nodemailer = require("nodemailer");
+const { sendSMS } = require("../lib/sms-sender/smsService");
+const SmsLog = require("../models/SmsLog");
 
 // Run every hour
 cron.schedule("0 * * * *", async () => {
@@ -54,5 +56,32 @@ cron.schedule("0 * * * *", async () => {
         console.error("Renewal Reminder Mail Error:", err);
       }
     });
+
+    // Send SMS renewal reminder
+    const parentPhone = form.parentDetails?.fatherMobile || form.parentDetails?.motherMobile;
+    if (parentPhone) {
+      try {
+        const smsResult = await sendSMS(parentPhone, 'SUBSCRIPTION_RENEWAL', [parentName, endDate]);
+        
+        // Log SMS
+        const smsLog = new SmsLog({
+          mobile: parentPhone,
+          messageType: 'SUBSCRIPTION_RENEWAL',
+          message: smsResult.message || '',
+          templateId: smsResult.templateId || '',
+          messageId: smsResult.messageId || '',
+          status: smsResult.success ? 'sent' : 'failed',
+          error: smsResult.error || undefined,
+          customerId: form.user,
+          variables: [parentName, endDate],
+          sentAt: new Date()
+        });
+        
+        await smsLog.save();
+        console.log('Renewal reminder SMS sent to:', parentPhone);
+      } catch (smsError) {
+        console.error('Error sending renewal reminder SMS:', smsError);
+      }
+    }
   }
 });

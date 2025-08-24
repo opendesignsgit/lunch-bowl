@@ -14,6 +14,8 @@ const School = require("../models/School");
 const Holiday = require("../models/holidaySchema");
 const nodemailer = require("nodemailer");
 const Customer = require("../models/Customer");
+const { sendSMS } = require("../lib/sms-sender/smsService");
+const SmsLog = require("../models/SmsLog");
 
 const registerAdmin = async (req, res) => {
   try {
@@ -541,6 +543,37 @@ const sendSchoolEnquiryMail = async (req, res) => {
 
     // Send email
     await transporter.sendMail(mailOptions);
+
+    // Send SMS confirmation for free trial requests
+    if (isFreeTrial && mobileNumber) {
+      try {
+        const date = new Date().toLocaleDateString('en-IN');
+        const location = "as per your preference"; // This could be dynamic based on school/location
+        const childName = `${firstName}'s child`; // Generic since child name might not be available
+        
+        const smsResult = await sendSMS(mobileNumber, 'TRIAL_FOOD_CONFIRMATION', [childName, date, location]);
+        
+        // Log SMS
+        const smsLog = new SmsLog({
+          mobile: mobileNumber,
+          messageType: 'TRIAL_FOOD_CONFIRMATION',
+          message: smsResult.message || '',
+          templateId: smsResult.templateId || '',
+          messageId: smsResult.messageId || '',
+          status: smsResult.success ? 'sent' : 'failed',
+          error: smsResult.error || undefined,
+          customerId: _id,
+          variables: [childName, date, location],
+          sentAt: new Date()
+        });
+        
+        await smsLog.save();
+        console.log('Trial food confirmation SMS sent to:', mobileNumber);
+      } catch (smsError) {
+        console.error('Error sending trial food confirmation SMS:', smsError);
+        // Don't fail the enquiry process if SMS fails
+      }
+    }
 
     res.status(200).json({
       success: true,
