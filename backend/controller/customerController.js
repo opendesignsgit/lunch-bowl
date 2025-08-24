@@ -613,10 +613,6 @@ const sendOtp = async (req, res) => {
       return res.status(400).json({ message: "Mobile number is required" });
     }
 
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
-
     // Only allow signUp or logIn for sending OTP
     if (!["signUp", "logIn"].includes(path)) {
       return res.status(400).json({ message: "Invalid path" });
