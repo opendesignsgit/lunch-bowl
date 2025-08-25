@@ -14,6 +14,9 @@ const {
   sendSchoolEnquiryMail,
   talkNutrition,
   freeTrialEnquiry,
+  getInTouch,
+  contactUs,
+  schoolServiceEnquiry,
 } = require("../controller/adminController");
 const { passwordVerificationLimit } = require("../lib/email-sender/sender");
 const { sendTrialFeedbackSMS, getTrialCustomers } = require("../utils/trialSmsUtils");
@@ -35,6 +38,13 @@ router.post("/school-enquiry", sendSchoolEnquiryMail);
 router.post("/talk-nutrition", talkNutrition);
 
 router.post("/free-trial-enquiry", freeTrialEnquiry);
+
+router.post("/get-in-touch", getInTouch);
+
+router.post("/contact-us", contactUs);
+
+router.post("/get-school-enquiry", schoolServiceEnquiry);
+
 
 // SMS utilities for trial customers
 router.post("/send-trial-feedback-sms", sendTrialFeedbackSMS);

@@ -31,9 +31,9 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
     if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
     if (!formData.mobileNumber.trim()) {
       newErrors.mobileNumber = "Mobile number is required";
-    } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
-      newErrors.mobileNumber = "Enter a valid 10-digit mobile number";
-    }
+    } else if (!/^[6-9]\d{9}$/.test(formData.mobileNumber)) {
+    newErrors.mobileNumber = "Enter a valid 10-digit mobile number";
+  }
     if (!formData.schoolName.trim())
       newErrors.schoolName = "School name is required";
 
@@ -44,7 +44,7 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
 
     try {
       await axios.post(
-        "http://api.lunchbowl.co.in/api/admin/school-enquiry",
+        "https://api.lunchbowl.co.in/api/admin/get-school-enquiry",
         formData
       );
       alert("Thank you for your enquiry! We'll get back to you soon.");

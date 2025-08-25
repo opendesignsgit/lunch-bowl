@@ -46,11 +46,11 @@ const GetinTouch = ({ open, onClose }) => {
     ) {
       errs.email = "Enter a valid email.";
     }
-    if (!formData.mobile.trim()) {
-      errs.mobile = "Mobile Number is required!";
-    } else if (!/^\d{10}$/.test(formData.mobile)) {
-      errs.mobile = "Enter a valid 10-digit mobile number.";
-    }
+   if (!formData.mobile.trim()) {
+    errs.mobile = "Mobile Number is required!";
+  } else if (!/^[6-9]\d{9}$/.test(formData.mobile)) {
+    errs.mobile = "Enter a valid 10-digit mobile number";
+  }
     // message is optional, no error
     return errs;
   };
@@ -75,7 +75,7 @@ const GetinTouch = ({ open, onClose }) => {
       };
 
       await axios.post(
-        "http://api.lunchbowl.co.in/api/admin/school-enquiry",
+        "https://api.lunchbowl.co.in/api/admin/get-in-touch",
         enquiryData
       );
 

@@ -26,7 +26,7 @@ const HolidayPayment = ({
   const [error, setError] = useState("");
   const { submitHandler } = useRegistration();
 
-  const totalAmount = childrenData.length * 199;
+  const totalAmount = childrenData.length * 200;
   const orderId = `LB-HOLIDAY-${Date.now()}`;
 
   const ccavenueConfig = {
