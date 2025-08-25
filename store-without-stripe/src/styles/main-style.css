@@ -88,7 +88,9 @@ header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 
 #HamburgerMegamenu .mmMenuCon ul.HamSMediaul li a{color: #ffffff;text-transform: uppercase;letter-spacing: 1px;}
 #HamburgerMegamenu .mmMenuCon ul.HamSMediaul li a:hover{text-decoration: underline;}
 
-.compopup{}
+body .compopups {z-index: 99999;}
+body .compopup{z-index: 99999;}
+html body .LogoutMpops {z-index: 99999!important;}
 .compopup button.popclosebtn{position: absolute;top: 8px;right: 8px;width: 35px;aspect-ratio: 1;padding: 8px;background: #ffffff;border: 2px solid #333333;}
 .compopup button.popclosebtn img{-webkit-filter: brightness(0);filter: brightness(0);}
 .compopup button.popclosebtn:hover{background: #333333;}
@@ -1152,11 +1154,19 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   footer ul.Somediaul li a {width: 30px;}
   .banvideobox{width: 90px;}
   .banvideobox .banvideoinbox{border-top: 15px solid transparent;border-bottom: 15px solid transparent;border-left: 22px solid #FF6514;}
-  .ssrpopups .MuiPaper-elevation{max-width: 100%;margin-inline: 5px;}
+  .ssrpopups .MuiPaper-elevation{max-width: 100%;margin-inline: 5px;width: 96%;}
+  .compopups .MuiPaper-elevation{max-width: 100%;margin-inline: 5px;width: 96%;}
   .DashboardSecss {padding-inline: 20px;}
   .DashboardSecss .comtilte h3 small {font-size: 14px;}
   .DashboardSecss .comtilte{margin-bottom: 30px;}
   .comtilte h5{font-size: 16px;letter-spacing: 0;}
+  .teamboxcont h4{font-size: 22px;}
+  .TeamMemberPopSec h4{font-size: 22px;}
+  .steptitles h5 {font-size: 22px;}
+  .DetlsSepBox h3 {font-size: 22px;}
+  .LogoutMpops .LogoutMCoont h3 {font-size: 22px;}
+  .contusmid{display: none;}
+  .formbox.contuslast {width: 100%;}
 }
 
 @media screen and (min-width:651px){
@@ -1264,7 +1274,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .pagebansec .breadcrumbs ol {justify-content: center;}
   .pagebansec{height: 600px;padding-inline: 30px;}
   .pagebansec .pageinconter{padding-bottom: 70%;}
-  .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 420px;}
+  .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 420px;overflow: hidden;}
   .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter,.pagebansec.Policysbanersec .pageinconter{padding-bottom: 0%;}
   .pagebansec.Policysbanersec {height: 200px;}
   .PolicyCont{padding-inline: 30px;}
@@ -1352,7 +1362,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .logboxrow .logbRcol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 78%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
   .logbRcol .poptitles {margin-bottom: 15px;}
   .poptitles h4{font-size: 26px;margin-bottom: 0;}
-  .poptitles p {font-size: 12px;}
+  .poptitles p {font-size: 15px;}
   .poptitles p span{font-size: 18px;}
   .loginfiledss h6{font-size: 14px;letter-spacing: 0;}
   .loginfiledss input{height: 38px;padding-inline: 18px;font-size: 14px;letter-spacing: 0;}
@@ -1397,7 +1407,25 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .logsinul>li a, .logsinul .submenuul li button {padding-inline: 15px;font-size: 14px;line-height: 38px;}
   .myaccboxitems .ChildlistBoxs .ChildlistItems{width: calc(100% - 20px);border-right: 0px solid #e1e1e1;border-bottom: 1px solid #e1e1e1;margin-bottom: 20px;}
   .myaccboxitems .ChildlistBoxs .ChildlistItems:last-child{border-bottom: 0px solid #e1e1e1;margin-bottom: 0px;}
-  .myaccboxitems .paystaus .paypaid{    font-size: 13px;}
+  .myaccboxitems .paystaus .paypaid{font-size: 13px;}  
+  .teamboxcont h4{font-size: 18px;}
+  .TeamMemberPopSec h4{font-size: 18px;}
+  .hNutritionintImg .hDocInImg{padding: 12px;}
+  .hintroimgone{padding: 8px;}  
+  .steptitles h5 {font-size: 18px;}
+  .DetlsSepBox .formboxrow .formboxcol {width: 100%;}
+  .radiogroub>.MuiBox-root {padding: 5px 10px;}
+  .radiogroub>.MuiBox-root>label p{font-size: 14px;margin-left: 10px;letter-spacing: 0.2px;}
+  .SetpContainer .SetpTabNav {margin-bottom: 15px;}
+  .DetlsSepBox h6 { font-size: 15px; }
+  .DetlsSepBox h6 span{display: block;}
+  .DetlsSepBox h3{font-size: 18px;}
+  .calandySecs .container {max-width: 100%;}
+  .LogoutMpops .LogoutMbtn button span{font-size: 16px;padding-inline: 30px;}
+  .LogoutMpops .LogoutMbtn button span::after{width: 14px;}
+  .LogoutMpops .LogoutMCoont {padding-inline: 20px !important;}
+  .LogoutMpops .LogoutMCoont h3{font-size: 18px;}
+  .TeamMemberPopSec{padding-top: 40px;}
 }
 @media screen and (max-width:420px){
   body {font-size: 14px;letter-spacing: 0;}
@@ -1445,9 +1473,19 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .aboutuspage .HworktabSec {padding-block: 60px;   }
   .HOEnviroSec::before {top: 4px;height: 25px;}
   .HOEnviroSec::after {bottom: 5px;height: 25px;}
-      .pagebansec.MyAccbanersec, .pagebansec.setpbanersec {
-        height: 330px;
-    }
+  .pagebansec.MyAccbanersec, .pagebansec.setpbanersec {height: 330px;}
+  .resendbtn {width: 100%;}
+  .sendotpbox h6 {    font-size: 14px;}
+  .logboxInrow .sendotpbox .MuiTextField-root{width: 45px;}
+  .logboxrow .logbRcol{padding: 15px;}
+  .resendbtn button::after{width: 12px;margin-left: 6px;}
+  .pagebansec, .pagebansec.setpbanersec{padding-inline: 38px;}
+  .calandySecs {padding-inline: 15px;}
+  .aboutintroRow .aboutintroRCol{padding-top: 0;margin-top: 0;}
+  .HintroSec.aboutmissionsec .hbanLeft{padding-bottom: 0;}
+  .abtvidosliders img {aspect-ratio: auto;height: 200px;}
+  .abtvideoSec:after{height: 5px;bottom: 4px;}
+
 }
 
 @media screen and (max-width:350px){

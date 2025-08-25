@@ -309,9 +309,9 @@
   .hfformIconss .iconthree {width: 25px;}
   .hfformIconss .iconsix {width: 21px;}
   .hfformIconss .iconseven{width: 36px;}
-  .hintroIconss .iconone, .hintroIconss .icontwo, .hintroIconss .iconthree, .hintroIconss .iconfour {width: 30px;}
-  .hintroIconss .iconfour {bottom: 14%;left: 6%;}
-  .hintroIconss .iconfive {bottom: 53%;}
+  .hintroIconss .iconone, .hintroIconss .icontwo, .hintroIconss .iconthree, .hintroIconss .iconfour {width: 32px;}
+  .hintroIconss .iconfour {bottom: 4%;left: 6%;}
+  .hintroIconss .iconfive {bottom: 48%;}
   .hDoctIconss .iconone {top: -1%;right: 33%;}
   .hDoctIconss .iconthree {bottom: 19%;right: 4%;}
   .hDoctIconss .iconfour {bottom: -3%;}
@@ -319,4 +319,6 @@
   .myaccontpage .psfbanIconss .psfbanicn{        width: 25px;}
   .myaccontpage .psfbanIconss .iconthree{        right: -7%;}
   .myaccontpage .psfbanIconss .icontwo{left: 48%;}
+  .psfbanIconss .psfbanicn{width: 20px;}
+  .hDoctIconss .iconfour{        width: 14px;}
 }
