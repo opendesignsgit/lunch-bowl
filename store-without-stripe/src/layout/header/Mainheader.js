@@ -168,7 +168,7 @@ const Mainheader = ({ title, description, children }) => {
                     <span>Start Free Trial</span>
                   </button>
                 </li> */}
-              {!(freeTrial === true || stepCheck === 4) && (
+              {!(freeTrial == "true" || stepCheck == 4) && (
                 <li className="trialbtn">
                   <button
                     onClick={() => {

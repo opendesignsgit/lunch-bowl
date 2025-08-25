@@ -643,12 +643,27 @@ const freeTrialEnquiry = async (req, res) => {
     userId,
   } = req.body;
 
+  // Update/create customer with freeTrial: true
+  let _id = userId;
+  if (email && _id) {
+    try {
+      await Customer.findOneAndUpdate(
+        { _id },
+        { freeTrial: true, email, firstName, lastName, mobileNumber },
+        { upsert: true, new: true }
+      );
+    } catch (customerErr) {
+      console.error('Error updating customer for free trial:', customerErr);
+      // You may choose to fail here or just log, as per requirements
+    }
+  }
+
   // Configure nodemailer
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.EMAIL_USER, // your gmail address
-      pass: process.env.EMAIL_PASS, // your gmail app password
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 
@@ -664,15 +679,48 @@ const freeTrialEnquiry = async (req, res) => {
       <p><strong>School:</strong> ${schoolName}</p>
       <p><strong>Class:</strong> ${className}</p>
       <p><strong>Address:</strong> ${address}</p>
-      <p><strong>UserId:</strong> ${userId}</p>
+      <!--<p><strong>UserId:</strong> ${userId}</p>-->
       <p><strong>Mobile Number:</strong> ${mobileNumber || "N/A"}</p>
       <p><strong>Message:</strong><br/>${message}</p>
+      <p>This is a Free Trial enquiry.</p>
+      <br>
+      <p>This enquiry was submitted through the website contact form.</p>
     `,
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true, message: "Enquiry sent!" });
+
+    // Send SMS confirmation for free trial requests
+    if (mobileNumber) {
+      try {
+        const date = new Date().toLocaleDateString('en-IN');
+        const location = "as per your preference";
+        const childName = `${firstName}'s child`;
+
+        const smsResult = await sendSMS(mobileNumber, 'TRIAL_FOOD_CONFIRMATION', [childName, date, location]);
+        
+        const smsLog = new SmsLog({
+          mobile: mobileNumber,
+          messageType: 'TRIAL_FOOD_CONFIRMATION',
+          message: smsResult.message || '',
+          templateId: smsResult.templateId || '',
+          messageId: smsResult.messageId || '',
+          status: smsResult.success ? 'sent' : 'failed',
+          error: smsResult.error || undefined,
+          customerId: _id,
+          variables: [childName, date, location],
+          sentAt: new Date()
+        });
+        await smsLog.save();
+        console.log('Trial food confirmation SMS sent to:', mobileNumber);
+      } catch (smsError) {
+        console.error('Error sending trial food confirmation SMS:', smsError);
+        // Do not fail the main process if SMS fails
+      }
+    }
+
+    res.status(200).json({ success: true, message: "Free trial request submitted successfully. We will contact you soon." });
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).json({ success: false, error: "Failed to send email." });
