@@ -105,7 +105,7 @@ const Htoworkslider = () => {
                         </div>       
                         <div className='flex-1 rfboxcoint'>
                             <h4>Place Your Order</h4>
-                            <p>Conveniently plan your preferred delivery schedule and <br/>carefully review all order information to ensure accuracy. <br/>Our secure payment system offers a safe and straightforward process <br/>for finalizing your order.</p>
+                            <p>Conveniently plan your preferred delivery schedule and <br/>carefully review all order information to ensure accuracy. <br/>Our secure payment system offers a safe and straightforward <br/>process for finalizing your order.</p>
                         </div>                    
                     </div>   
                 </div>
