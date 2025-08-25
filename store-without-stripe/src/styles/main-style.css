@@ -105,7 +105,8 @@ body .secpaddblock {
 
 .HbanSec{}
 .HbanSec::before{content:'';position: absolute;width: 100%;height:7%;left: 0px;bottom: -3px;background: url(/home/banbtmpattern.png) no-repeat top center;background-size: 100%;pointer-events: none;z-index: 9;}
-.hbanLeft{width: 43%;}
+.hbanLeft{width: 43%;position: relative;}
+.hbanLeft::after{content:'';position: absolute;width: 6vw;aspect-ratio: 2/0.7; right: 3vw;bottom: 3vw;background: url(/home/vegicon.svg) no-repeat center center;background-size: auto 100%;pointer-events: none;}
 .hbanRight{width: 57%;}
 .hbanRight::before{content:'';position: absolute;width: 15%;height:100%;left: -2px;top: 0;background: url(/home/banleftpattern.png) no-repeat left center;background-size: auto 100%;pointer-events: none;}
 .banvideobox{position: absolute;width: 6.5vw;aspect-ratio: 1; left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);padding: 5px;z-index: 99;line-height: 0;cursor: pointer;border-radius: 50%;filter: brightness(0) invert(1);overflow: hidden;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
@@ -125,7 +126,6 @@ body .secpaddblock {
 .banvideobox::after{content:'';position: absolute;display: block;width:calc(100% - 6px);height: calc(100% - 6px); background: #ffffff;pointer-events: none;opacity: 0.4;top: 3px;left:3px;right: 3px;bottom: 3px;border-radius: 50%;}
 .banvideobox:hover::after{opacity: 1;}
 .banimgss img{pointer-events: none;}
-.banimgss::after{content:'';position: absolute;width: 6vw;aspect-ratio: 2/0.7; left: 3vw;bottom: 3vw;background: url(/home/vegicon.svg) no-repeat center center;background-size: auto 100%;pointer-events: none;}
 .hbanCont{}
 .hbanCont h1{font-size: 4.5vw;color: #4AB138;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -2px;}
 .hbanCont h1 span{display: block;}

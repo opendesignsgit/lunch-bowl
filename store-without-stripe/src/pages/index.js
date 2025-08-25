@@ -262,7 +262,7 @@ const Home = () => {
                         <Hoteamsslide/>
                     </div>
                     <div className='hworkTitle combtntb comtilte textcenter mt-[5vh]'>                    
-                        <p className="parabtn flex"><Link href="/about-us" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+                        <p className="parabtn flex"><Link href="/about-us#HmteamSec" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
                     </div>
                       <div className='hteamIconss'>
               <div className='hteamicn iconone absolute'><Image src={hlteamicon1} priority alt='Icon' /></div>
