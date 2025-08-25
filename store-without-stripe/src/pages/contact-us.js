@@ -1,5 +1,5 @@
 import React from "react";
-import  { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@layout/Breadcrumbs";
@@ -18,6 +18,7 @@ import mailicon from '../../public/contus/mail-icon.png'
 import locaticon from '../../public/contus/locat-icon.png'
 import ateamicon1 from "../../public/menulist/icons/ban/yellowround-flower.svg";
 import ateamicon2 from "../../public/menulist/icons/ban/redstar.svg";
+import axios from "axios";
 
 const ContactUs = () => {
   const { t } = useTranslation();
@@ -25,37 +26,45 @@ const ContactUs = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
-
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
     consent: false,
   });
 
+  // Checkbox handler
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: checked,
     }));
   };
 
-
-  const submitHandler = () => {
-    notifySuccess(
-      "your message sent successfully. We will contact you shortly."
-    );
-    e.preventDefault();
+  // API call with validation
+  const submitHandler = async (data) => {
     if (!formData.consent) {
       alert("Please agree to be contacted by Lunch Bowl.");
       return;
     }
-    console.log("Form Submitted:", formData);
-    // Submit your form logic here
+    try {
+      const payload = {
+        firstName: data.firstname,
+        lastName: data.Lastname,
+        mobileNumber: data.phone,
+        email: data.email,
+        message: data.message,
+        consent: formData.consent,
+      };
+      await axios.post("https://api.lunchbowl.co.in/api/admin/contact-us", payload);
+      notifySuccess("your message sent successfully. We will contact you shortly.");
+      reset();
+      setFormData({ consent: false });
+    } catch (error) {
+      alert("Something went wrong! Please try again.");
+    }
   };
-
 
   const faqItems = [
     {
@@ -103,7 +112,6 @@ const ContactUs = () => {
       content: "Termination is possible , and the unconsumed meal days will be calculated and refund will be processed. Request you to contact customer service for termination of services."
     },
   ];
-
 
   return (
     <div className="contuspage">
@@ -208,10 +216,14 @@ const ContactUs = () => {
                         <InputArea
                           register={register}
                           name="firstname"
+                          validation={{
+                            required: "First name is required",
+                            minLength: { value: 2, message: "First name must be at least 2 characters" },
+                          }}
                           type="text"
                           placeholder="Enter First Name"
                         />
-                        <Error errorName={errors.name} />
+                        <Error errorName={errors.firstname?.message} />
                       </div>
                       <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
                         <label>
@@ -220,10 +232,14 @@ const ContactUs = () => {
                         <InputArea
                           register={register}
                           name="Lastname"
+                          validation={{
+                            required: "Last name is required",
+                            minLength: { value: 2, message: "Last name must be at least 2 characters" },
+                          }}
                           type="text"
                           placeholder="Enter Last Name"
                         />
-                        <Error errorName={errors.name} />
+                        <Error errorName={errors.Lastname?.message} />
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
@@ -234,10 +250,17 @@ const ContactUs = () => {
                         <InputArea
                           register={register}
                           name="phone"
+                          validation={{
+                            required: "Mobile number is required",
+                            pattern: {
+                              value: /^[6-9]\d{9}$/,
+                              message: "Enter a valid 10-digit Indian mobile number starting with 6,7,8, or 9",
+                            },
+                          }}
                           type="tel"
                           placeholder="Enter Mobile Number"
                         />
-                        <Error errorName={errors.name} />
+                        <Error errorName={errors.phone?.message} />
                       </div>
                       <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
                         <label>
@@ -246,10 +269,17 @@ const ContactUs = () => {
                         <InputArea
                           register={register}
                           name="email"
+                          validation={{
+                            required: "Email is required",
+                            pattern: {
+                              value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                              message: "Enter a valid email address",
+                            },
+                          }}
                           type="email"
                           placeholder="Enter Email"
                         />
-                        <Error errorName={errors.email} />
+                        <Error errorName={errors.email?.message} />
                       </div>
                     </div>
                     <div className="relative mb-4 inputbox">
@@ -259,6 +289,7 @@ const ContactUs = () => {
                       <textarea
                         {...register("message", {
                           required: `Message is required!`,
+                          minLength: { value: 5, message: "Message must be at least 5 characters" },
                         })}
                         name="message"
                         className="px-4 py-3 flex items-center w-full rounded appearance-none opacity-75 transition duration-300 ease-in-out text-sm focus:ring-0 bg-white border border-gray-300 focus:shadow-none focus:outline-none focus:border-gray-500 placeholder-body"
@@ -267,7 +298,7 @@ const ContactUs = () => {
                         rows="2"
                         placeholder="Feel free to type here if you'd like to share something with us."
                       ></textarea>
-                      <Error errorName={errors.message} />
+                      <Error errorName={errors.message?.message} />
                     </div>
                     <div className="relative mb-4 agreebox">
                       <div className="flex items-start">
