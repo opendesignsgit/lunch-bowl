@@ -319,7 +319,7 @@ const ContactUs = () => {
                       </div>
                     </div>
                     <div className="relative">
-                      <button data-variant="flat" className="">
+                      <button data-variant="flat" className="" type="submit">
                         <span>Submit</span>
                       </button>
                     </div>
@@ -350,9 +350,9 @@ const ContactUs = () => {
         <section className="contmapssec relative">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4610.708751752066!2d80.2405698!3d13.0379553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267002fc8e3ed%3A0xc8eb66b7d153fa91!2sKG%20NATARAJ%20PALACE!5e1!3m2!1sen!2sin!4v1750498617264!5m2!1sen!2sin"
-            allowfullscreen=""
+            allowFullScreen=""
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
+            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </section>
       </div>
