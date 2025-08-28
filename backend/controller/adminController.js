@@ -645,13 +645,17 @@ const freeTrialEnquiry = async (req, res) => {
 
   // Update/create customer with freeTrial: true
   let _id = userId;
+
+  console.log("Free trial enquiry received for user:", _id);
+
   if (email && _id) {
     try {
-      await Customer.findOneAndUpdate(
+      const customer = await Customer.findOneAndUpdate(
         { _id },
         { freeTrial: true, email, firstName, lastName, mobileNumber },
         { upsert: true, new: true }
       );
+      console.log("Customer updated for free trial:", customer);
     } catch (customerErr) {
       console.error('Error updating customer for free trial:', customerErr);
       // You may choose to fail here or just log, as per requirements

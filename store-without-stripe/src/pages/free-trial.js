@@ -403,7 +403,7 @@ export default function FreeTrialPage() {
                           COCONUT RICE – BROWN CHANA PORIYAL
                         </MenuItem>
                         <MenuItem value="PHULKA – ALOO MUTTER">
-                          Jeera Rice – Aloo Mutter
+                          JEERA RICE – ALOO MUTTER
                         </MenuItem>
                         <MenuItem value="Paneer Bao - with Butter garlic Sautte Vegetables">
                           PANEER BAO - WITH BUTTER GARLIC SAUTTE VEGETABLES

@@ -7,7 +7,7 @@ const nodemailer = require("nodemailer");
 const { sendSMS } = require("../lib/sms-sender/smsService");
 const SmsLog = require("../models/SmsLog");
 const HolidayPayment = require("../models/HolidayPayment");
-const UserMeal = require("../models/UserMeal"); 
+const UserMeal = require("../models/UserMeal");
 
 const workingKey =
   process.env.CCAV_WORKING_KEY || "2A561B005709D8B4BAF69D049B23546B"; // Use env vars in production
@@ -139,8 +139,8 @@ exports.ccavenueResponse = async (req, res) => {
           const amount = updatedForm.subscriptionPlan.price;
           const startDate = updatedForm.subscriptionPlan.startDate
             ? new Date(
-                updatedForm.subscriptionPlan.startDate
-              ).toLocaleDateString("en-IN")
+              updatedForm.subscriptionPlan.startDate
+            ).toLocaleDateString("en-IN")
             : "";
           const schoolName = updatedForm.children?.[0]?.school || "";
           const childName = updatedForm.children?.[0]
@@ -183,7 +183,7 @@ exports.ccavenueResponse = async (req, res) => {
           if (parentPhone) {
             try {
               const smsResult = await sendSMS(parentPhone, 'PAYMENT_CONFIRMATION', [amount]);
-              
+
               // Log SMS
               const smsLog = new SmsLog({
                 mobile: parentPhone,
@@ -197,7 +197,7 @@ exports.ccavenueResponse = async (req, res) => {
                 variables: [amount],
                 sentAt: new Date()
               });
-              
+
               await smsLog.save();
               console.log('Payment confirmation SMS sent to:', parentPhone);
             } catch (smsError) {
@@ -291,6 +291,48 @@ exports.holiydayPayment = async (req, res) => {
               paymentStatus: "Paid",
               transactionDetails: { tracking_id, ...responseData },
             });
+
+            try {
+              const userForm = await Form.findOne({ user: userId });
+              if (userForm && userForm.parentDetails) {
+                const parentName = `${userForm.parentDetails.fatherFirstName} ${userForm.parentDetails.fatherLastName}`;
+                const email = userForm.parentDetails.email;
+                const mealDateFormatted = new Date(finalMealDate).toLocaleDateString("en-IN");
+                const menuName = child.dish;
+
+                const transporter = nodemailer.createTransport({
+                  service: "gmail",
+                  auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
+                  },
+                });
+
+                const mailOptions = {
+                  from: process.env.EMAIL_USER,
+                  to: email,
+                  subject: "Holiday Meal Payment Confirmation – LunchBowl",
+                  html: `
+        <p>Hi ${parentName},</p>
+        <p>Your holiday meal payment is successful.</p>
+        <p>A meal has been booked for <b>${mealDateFormatted}</b> with menu <b>${menuName}</b>.</p>
+        <p>We hope your child enjoys their special holiday meal!</p>
+        <p>For any queries, contact <a href="mailto:contactus@lunchbowl.co.in">contactus@lunchbowl.co.in</a></p>
+        <p>– Earth Tech Concepts Pvt Ltd</p>
+      `,
+                };
+
+                transporter.sendMail(mailOptions, (err, info) => {
+                  if (err) {
+                    console.error("Holiday meal email error:", err);
+                  } else {
+                    console.log("Holiday meal email sent:", info.response);
+                  }
+                });
+              }
+            } catch (emailErr) {
+              console.error("Error sending holiday meal email:", emailErr);
+            }
           } catch (dbErr) {
             // Log, don't block
             console.error("HolidayPayment DB error:", dbErr);
