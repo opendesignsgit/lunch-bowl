@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import dayjs from "dayjs";
-
 const CenterPanel = ({
   isSmall,
   currentMonth,
@@ -29,7 +28,6 @@ const CenterPanel = ({
     const dateStr = dayjs(`${currentYear}-${currentMonth + 1}-${String(date).padStart(2, "0")}`).format("YYYY-MM-DD");
     return savedMenuDates.includes(dateStr);
   };
-
   return (
     <Box
       className="MCMiddlePanel"
@@ -57,7 +55,6 @@ const CenterPanel = ({
           <ChevronRight />
         </IconButton>
       </Box>
-
       <div className="clandybox">
         <Box
           className="clandhead"
@@ -71,7 +68,6 @@ const CenterPanel = ({
             </Typography>
           ))}
         </Box>
-
         <Box
           className="clandbody"
           display="grid"
@@ -98,7 +94,6 @@ const CenterPanel = ({
                 </Box>
               );
             }
-
             const fullDate = dayjs(
               `${currentYear}-${currentMonth + 1}-${String(date).padStart(
                 2,
@@ -107,22 +102,27 @@ const CenterPanel = ({
             );
             const isBeforeStart = fullDate.isBefore(subscriptionStart, "day");
             const isAfterEnd = fullDate.isAfter(subscriptionEnd, "day");
-
             const holiday = isHoliday(date);
             const isSelected = date === selectedDate;
             const saved = isDateSaved(date);
 
+            // Add savedmenu in addition to other classes, do NOT use inline style for saved
+            let className = "daybox";
+            if (isSelected && saved) {
+  className += " selectday savedmenu";
+} else if (isSelected) {
+  className += " selectday";
+} else if (saved) {
+  className += " savedmenu";
+} else if (holiday) {
+  className += " holiday";
+} else {
+  className += " normalday";
+}
+
             return (
               <Box
-                className={`daybox ${
-                  isSelected
-                    ? "selectday"
-                    : holiday
-                    ? "holiday"
-                    : saved
-                    ? "savedmenu"
-                    : "normalday"
-                }`}
+                className={className}
                 key={idx}
                 onClick={() => {
                   if (!isBeforeStart && !isAfterEnd) {
@@ -140,12 +140,8 @@ const CenterPanel = ({
                   color: isBeforeStart || isAfterEnd ? "#ccc" : "inherit",
                   opacity: isBeforeStart || isAfterEnd ? 0.5 : 1,
                   mx: "auto",
-                  border: saved
-                    ? "2px solid green"
-                    : undefined,
-                  boxShadow: saved
-                    ? "0 0 0 2px rgba(0,128,0,0.15)"
-                    : undefined,
+                  // -- REMOVE inline styles for 'saved' state here --
+                  // border and boxShadow for saved are removed
                 }}
               >
                 <span>{String(date).padStart(2, "0")}</span>
@@ -154,7 +150,6 @@ const CenterPanel = ({
           })}
         </Box>
       </div>
-
       <div className="holylistbox">
         <h4 gutterBottom className="holylistitle">
           {" "}
@@ -189,8 +184,8 @@ const CenterPanel = ({
         <Box display="flex" justifyContent="flex-end" className="holylicolor">
           <Typography variant="caption" mt={1} display="block">
             <ul>
-              <li>(<span style={{ color: "#FFE6E6", fontSize: '24px', lineHeight: '1' }}>&#9673;</span>) Denotes Holiday.{" "}</li>
-              <li>(<span style={{ color: "green", fontSize: '24px', lineHeight: '1' }}>&#9673;</span>) Denotes Selected / Saved Menu.</li>
+              <li>(<span style={{ color: "#FFE6E6", fontSize: '24px', lineHeight: '1' }}>◉</span>) Denotes Holiday.{" "}</li>
+              <li>(<span style={{ color: "green", fontSize: '24px', lineHeight: '1' }}>◉</span>) Denotes Selected / Saved Menu.</li>
             </ul>
           </Typography>
         </Box>
@@ -198,5 +193,4 @@ const CenterPanel = ({
     </Box>
   );
 };
-
 export default CenterPanel;
