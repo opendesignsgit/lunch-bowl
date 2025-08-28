@@ -16,7 +16,7 @@ import { signOut } from "next-auth/react";
 import useRegistration from "@hooks/useRegistration";
 
 
-const Mainheader = ({ title, description, children }) => {
+const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [openLogin, setOpenLogin] = useState(false);
@@ -29,6 +29,7 @@ const Mainheader = ({ title, description, children }) => {
   const [shadow, setShow] = React.useState();
   const { submitHandler, loading, error } = useRegistration();
   const [stepCheck, setStepCheck] = useState(null);
+  const [apiFreeTrial, setApiFreeTrial] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
   const [active, setActive] = useState(false);
@@ -48,10 +49,11 @@ const Mainheader = ({ title, description, children }) => {
           _id: session?.user?.id, // Using the user ID from session
         });
 
-        setStepCheck(result?.data);
+        setStepCheck(result?.data?.step);
+        setApiFreeTrial(result?.data?.freeTrial);
 
         console.log("====================================");
-        console.log("Step Check Result:", result.data);
+        console.log("Step Check Result-->header:", result.data.step);
         console.log("====================================");
       } catch (error) {
         console.error("Error:", error);
@@ -168,7 +170,7 @@ const Mainheader = ({ title, description, children }) => {
                     <span>Start Free Trial</span>
                   </button>
                 </li> */}
-              {!(freeTrial == "true" || stepCheck == 4) && (
+              {!(apiFreeTrial == true || stepCheck == 4 || freeTrialTaken == true) && (
                 <li className="trialbtn">
                   <button
                     onClick={() => {
@@ -194,18 +196,18 @@ const Mainheader = ({ title, description, children }) => {
                       <span>My Account</span>
                     </button>
                     <ul className={`submenuul ${active ? "submenuulactive" : ""}`}>
-                        <li>
-                          <Link href="/user/userDashBoard">Dashboard</Link>
-                        </li>
-                        <li>
-                          <Link href="/user/menuCalendarPage">Menu Calendar</Link>
-                        </li>
-                        <li>
-                          <Link href="/user/my-account">My Profile</Link>
-                        </li>
-                        <li>
-                          <button onClick={() => setShowLogoutConfirm(true)}>Log Out</button>
-                        </li>
+                      <li>
+                        <Link href="/user/userDashBoard">Dashboard</Link>
+                      </li>
+                      <li>
+                        <Link href="/user/menuCalendarPage">Menu Calendar</Link>
+                      </li>
+                      <li>
+                        <Link href="/user/my-account">My Profile</Link>
+                      </li>
+                      <li>
+                        <button onClick={() => setShowLogoutConfirm(true)}>Log Out</button>
+                      </li>
                     </ul>
                   </li>
 

@@ -34,7 +34,7 @@ const DataRoutingPage = () => {
         console.log('====================================');
         // Assuming result is already the parsed response
         // Adjust this condition based on your actual API response structure
-        if (result.data >= 3) {
+        if (result.data >= 4) {
           router.push('/user/menuCalendarPage');
         } else {
           router.push('/user/profile-Step-Form');
