@@ -109,16 +109,16 @@ const CenterPanel = ({
             // Add savedmenu in addition to other classes, do NOT use inline style for saved
             let className = "daybox";
             if (isSelected && saved) {
-  className += " selectday savedmenu";
-} else if (isSelected) {
-  className += " selectday";
-} else if (saved) {
-  className += " savedmenu";
-} else if (holiday) {
-  className += " holiday";
-} else {
-  className += " normalday";
-}
+              className += " selectday savedmenu";
+            } else if (isSelected) {
+              className += " selectday";
+            } else if (saved) {
+              className += " savedmenu";
+            } else if (holiday) {
+              className += " holiday";
+            } else {
+              className += " normalday";
+            }
 
             return (
               <Box

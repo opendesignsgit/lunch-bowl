@@ -732,7 +732,7 @@ const verifyOtp = async (req, res) => {
         email,
         freeTrialCheck,
       });
-      
+
       if (email) {
         const transporter = nodemailer.createTransport({
           service: "gmail",
@@ -790,7 +790,7 @@ const verifyOtp = async (req, res) => {
 };
 
 // Create Customer
-const createCustomer = async ({ firstName, lastName, mobile, email, freeTrialCheck}) => {
+const createCustomer = async ({ firstName, lastName, mobile, email, freeTrialCheck }) => {
   const newUser = new Customer({
     name: `${firstName} ${lastName}`,
     phone: mobile,
@@ -998,11 +998,20 @@ const stepCheck = async (req, res) => {
 
     const form = await Form.findOne({ user: mongoose.Types.ObjectId(_id) });
 
+    const customer = await Customer.findById(_id);
+
+    const freeTrial = customer ? customer.freeTrial : false;
+
     // If form not found, return step 1 as default
     // If found, return the form's step
     const step = form ? form.step : 1;
 
-    res.status(200).json({ success: true, data: step });
+    res.status(200).json({
+      success: true, data: {
+        step,
+        freeTrial,
+      },
+    });
   } catch (error) {
     console.error("Error in stepCheck:", error);
     res.status(500).json({

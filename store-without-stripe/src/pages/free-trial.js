@@ -78,6 +78,7 @@ export default function FreeTrialPage() {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [freeTrialTaken, setFreeTrialTaken] = useState(false);
 
   useEffect(() => {
     setFormData({
@@ -165,6 +166,7 @@ export default function FreeTrialPage() {
         userId: formData.userId,
       });
       setSubmitted(true);
+      setFreeTrialTaken(true);
     } catch (err) {
       alert("Thank you for your enquiry! We'll get back to you soon.");
       setSubmitted(true);
@@ -193,7 +195,7 @@ export default function FreeTrialPage() {
 
   return (
     <div className="freetrilpage">
-      <Mainheader title="Free Trial" description="This is Free Trial page" />
+      <Mainheader freeTrialTaken={freeTrialTaken} title="Free Trial" description="This is Free Trial page" />
       <div className="pagebody">
         <section className="pagebansec freetrilbanersec relative">
           <div className="container mx-auto relative h-full">
