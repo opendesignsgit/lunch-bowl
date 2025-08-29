@@ -23,7 +23,14 @@ import useAsync from "@hooks/useAsync";
 const schema = yup.object().shape({
   childFirstName: yup.string().required("Child's first name is required"),
   childLastName: yup.string().required("Child's last name is required"),
-  dob: yup.date().nullable().required("Date of Birth is required"),
+  dob: yup
+    .date()
+    .nullable()
+    .transform((value, originalValue) => {
+      // If the value is an empty string, set to null
+      return originalValue === "" ? null : value;
+    })
+    .required("Date of Birth is required"),
   lunchTime: yup.string().required("Lunch time is required"),
   school: yup.string().required("School is required"),
   location: yup.string().required("Location is required"),
@@ -50,18 +57,18 @@ const ChildDetailsStep = ({
     formData.children.length > 0
       ? formData.children
       : [
-          {
-            childFirstName: "",
-            childLastName: "",
-            dob: null,
-            lunchTime: "",
-            school: "",
-            location: "",
-            childClass: "",
-            section: "",
-            allergies: "",
-          },
-        ]
+        {
+          childFirstName: "",
+          childLastName: "",
+          dob: null,
+          lunchTime: "",
+          school: "",
+          location: "",
+          childClass: "",
+          section: "",
+          allergies: "",
+        },
+      ]
   );
   const { submitHandler, loading } = useRegistration();
 
@@ -81,6 +88,7 @@ const ChildDetailsStep = ({
     watch,
     control,
     setValue,
+    setError,
   } = useForm({
     defaultValues: {
       ...children[activeTab],
@@ -94,24 +102,24 @@ const ChildDetailsStep = ({
     mode: "onTouched",
   });
 
-  // Watch school and location changes
+  // Watch school and location changes 
   const watchSchool = watch("school");
   const watchLocation = watch("location");
 
   // Ensure dropdowns and date field correctly reflect DB data on mount/tab change
-  useEffect(() => {
+   useEffect(() => {
     if (children[activeTab]) {
       const child = {
         ...children[activeTab],
         dob: children[activeTab]?.dob
           ? typeof children[activeTab].dob === "string"
             ? children[activeTab].dob.slice(0, 10)
-            : ""
-          : "",
+            :""
+            : "",
       };
       reset(child);
     }
-  }, [activeTab, children, reset]);
+  }, [activeTab, reset]);
 
   useEffect(() => {
     if (formData.children && formData.children.length > 0) {
@@ -121,39 +129,39 @@ const ChildDetailsStep = ({
   }, [formData.children, setChildCount]);
 
   // Update filtered locations when school changes
- useEffect(() => {
-  if (watchSchool && schools) {
-    const schoolLocations = schools
-      .filter((school) => school.name === watchSchool)
-      .map((school) => school.location);
+  useEffect(() => {
+    if (watchSchool && schools) {
+      const schoolLocations = schools
+        .filter((school) => school.name === watchSchool)
+        .map((school) => school.location);
 
-    const uniqueLocations = [...new Set(schoolLocations)];
-    setFilteredLocations(uniqueLocations);
+      const uniqueLocations = [...new Set(schoolLocations)];
+      setFilteredLocations(uniqueLocations);
 
-    // Only reset location if non-matching and schools are LOADED
-    const currentLocation = watch("location");
-    if (
-      currentLocation &&
-      uniqueLocations.length > 0 &&
-      !uniqueLocations.includes(currentLocation)
-    ) {
+      // Only reset location if non-matching and schools are LOADED
+      const currentLocation = watch("location");
+      if (
+        currentLocation &&
+        uniqueLocations.length > 0 &&
+        !uniqueLocations.includes(currentLocation)
+      ) {
+        setValue("location", "");
+      } else if (
+        currentLocation &&
+        uniqueLocations.includes(currentLocation)
+      ) {
+        // Ensure react-hook-form knows to keep user's value
+        setValue("location", currentLocation);
+      }
+    } else if (watchSchool) {
+      // If schools not loaded yet, let location persist (do NOT clear)
+      setFilteredLocations([]);
+    } else {
+      // If school not selected at all, clear location
+      setFilteredLocations([]);
       setValue("location", "");
-    } else if (
-      currentLocation &&
-      uniqueLocations.includes(currentLocation)
-    ) {
-      // Ensure react-hook-form knows to keep user's value
-      setValue("location", currentLocation);
     }
-  } else if (watchSchool) {
-    // If schools not loaded yet, let location persist (do NOT clear)
-    setFilteredLocations([]);
-  } else {
-    // If school not selected at all, clear location
-    setFilteredLocations([]);
-    setValue("location", "");
-  }
-}, [watchSchool, schools, setValue, watch]);
+  }, [watchSchool, schools, setValue, watch]);
 
 
 
@@ -220,6 +228,7 @@ const ChildDetailsStep = ({
         nextStep();
       }
     } catch (err) {
+      console.log("Validation errors:", err.inner);
       if (err.name === "ValidationError") {
         const invalidIndex = children.findIndex((child) => {
           try {
@@ -231,7 +240,14 @@ const ChildDetailsStep = ({
         });
         if (invalidIndex >= 0) {
           setActiveTab(invalidIndex);
-          reset(children[invalidIndex]);
+          if (err.inner && Array.isArray(err.inner)) {
+            err.inner.forEach((validationError) => {
+              setError(validationError.path, {
+                type: "manual",
+                message: validationError.message,
+              });
+            });
+          }
         }
       }
     }
@@ -443,8 +459,8 @@ const ChildDetailsStep = ({
                     {!watchSchool
                       ? "Select a school first"
                       : filteredLocations.length === 0
-                      ? "No locations available"
-                      : "Select Location"}
+                        ? "No locations available"
+                        : "Select Location"}
                   </MenuItem>
                   {filteredLocations.map((location) => (
                     <MenuItem key={location} value={location}>
