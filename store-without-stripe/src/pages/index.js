@@ -227,7 +227,7 @@ const Home = () => {
                     <div className='hLFOTitle combtntb comtilte mb-[5vh]'>
                         <h3 className='text-[#000000]'>serving your school</h3>
                         <h2 className='flex flex-col text-EA1A27'>
-                            <span className='block'>Lets Find Out!</span> 
+                <span className='block'>Let's Find Out!</span> 
                         </h2>
                         <p className=''>See whether your school is included in our list of schools that provide healthy, <br/>kid-friendly meals.</p>
                     </div>
@@ -262,7 +262,7 @@ const Home = () => {
                         <Hoteamsslide/>
                     </div>
                     <div className='hworkTitle combtntb comtilte textcenter mt-[5vh]'>                    
-                        <p className="parabtn flex"><Link href="/about-us#HmteamSec" className="emenulink relative" ><span className='block flex items-center relative'>Explore Menu</span></Link></p>
+              <p className="parabtn flex"><Link href="/about-us#HmteamSec" className="emenulink relative" ><span className='block flex items-center relative'>View All</span></Link></p>
                     </div>
                       <div className='hteamIconss'>
               <div className='hteamicn iconone absolute'><Image src={hlteamicon1} priority alt='Icon' /></div>
@@ -296,7 +296,7 @@ const Home = () => {
                     </div>
                     <div className='hNutritionTitle combtntb comtilte textcenter mt-[4vh]'>      
               <p className=''>Sujatha Sasikumar is a Registered Dietitian under the Indian Dietetic Association. She has a Master's in Clinical Nutrition and has <br />her own independent clinical practice in Chennai. She is also certified in Sport Specific Nutrition Management, Nutrigenetics, <br />Critical  Care Nutrition and is a Certified Diabetes Educator. She helps people across all age groups modify their eating <br />habits to suit their goals for better health, fitness and performance.</p>      
-              <p className="parabtn flex"><button className="emenulink relative" onClick={handlepopOpenDialog}><span className='block flex items-center relative'>Lets Talk</span></button></p>
+              <p className="parabtn flex"><button className="emenulink relative" onClick={handlepopOpenDialog}><span className='block flex items-center relative'>Let's Talk</span></button></p>
                     </div>
                 </div>
             </section>

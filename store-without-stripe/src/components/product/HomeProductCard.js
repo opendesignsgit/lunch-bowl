@@ -119,7 +119,7 @@ const HomeProductCard = ({ limit }) => {
         </ul>
       </div>
 
-      <div className="flex flex-row max-md:flex-col-reverse flex-wrap produtDeskView">
+      <div className="flex flex-row flex-wrap produtDeskView">
         {displayedProducts.map((item, index) => (
           <div
             key={item._id || index}
@@ -168,7 +168,7 @@ const HomeProductCard = ({ limit }) => {
               <div className="profbboxs">
                 <div className="textcenter proboxtitle mb-[3vh]">
                   <h5>{item.primaryDishTitle}</h5>
-                  <h3>{item.subDishTitle}</h3>
+                  {/*<h3>{item.subDishTitle}</h3>*/}
                   <p>{item.shortDescription}</p>
                 </div>
                 <div className="proImage">
