@@ -292,6 +292,7 @@ const MultiStepForm = () => {
                 prevStep={prevStep}
                 _id={_id}
                 numberOfChildren={childCount}
+                initialSubscriptionPlan={formData.subscriptionPlan}
               />
             )}
 

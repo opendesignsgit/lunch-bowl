@@ -41,8 +41,10 @@ const useHolidays = () => {
 };
 
 const isWeekend = (date) => [0, 6].includes(dayjs(date).day());
+
 const isHoliday = (date, holidays) =>
   holidays.includes(dayjs(date).format("YYYY-MM-DD"));
+
 const isWorkingDay = (date, holidays) =>
   !isWeekend(date) && !isHoliday(date, holidays);
 
@@ -109,9 +111,8 @@ const calculatePlans = (holidays, childCount = 1) => {
       id: 1,
       label: `22 Working Days - Rs. ${Math.round(
         22 * BASE_PRICE_PER_DAY * (1 - discounts[22]) * childCount
-      ).toLocaleString("en-IN")}${
-        discounts[22] > 0 ? ` (${discounts[22] * 100}% OFF)` : ""
-      }`,
+      ).toLocaleString("en-IN")}${discounts[22] > 0 ? ` (${discounts[22] * 100}% OFF)` : ""
+        }`,
       workingDays: 22,
       price: Math.round(
         22 * BASE_PRICE_PER_DAY * (1 - discounts[22]) * childCount
@@ -158,6 +159,7 @@ const SubscriptionPlanStep = ({
   prevStep,
   _id,
   numberOfChildren = 1,
+  initialSubscriptionPlan = {},
 }) => {
   const router = useRouter();
   const { holidays, holidaysLoading } = useHolidays();
@@ -181,37 +183,56 @@ const SubscriptionPlanStep = ({
   // Initialize plans and dates
   useEffect(() => {
     if (holidays.length >= 0) {
+      // Calculate default plans
       const computedPlans = calculatePlans(holidays, numberOfChildren);
       setPlans(computedPlans);
-      setStartDate(computedPlans[0].startDate);
-      setEndDate(computedPlans[0].endDate);
-    }
-  }, [holidays, numberOfChildren]);
 
-  const handlePlanChange = (e) => {
-    const newPlanId = e.target.value;
-    setSelectedPlan(newPlanId);
-    setErrors({ startDate: false, endDate: false, dateOrder: false });
-
-    if (newPlanId !== "byDate") {
-      const selectedPlanObj = plans.find(
-        (plan) => plan.id.toString() === newPlanId
-      );
-      if (selectedPlanObj) {
-        setStartDate(selectedPlanObj.startDate);
-        setEndDate(selectedPlanObj.endDate);
+      // If API data available, parse and set those dates + plan
+      if (
+        initialSubscriptionPlan &&
+        initialSubscriptionPlan.startDate &&
+        initialSubscriptionPlan.endDate &&
+        initialSubscriptionPlan.planId
+      ) {
+        setSelectedPlan(initialSubscriptionPlan.planId.toString());
+        setStartDate(dayjs(initialSubscriptionPlan.startDate));
+        setEndDate(dayjs(initialSubscriptionPlan.endDate));
+      } else {
+        // fallback to defaults
+        setSelectedPlan(computedPlans[0].id.toString());
+        setStartDate(computedPlans[0].startDate);
+        setEndDate(computedPlans[0].endDate);
       }
     }
-  };
+  }, [holidays, numberOfChildren, initialSubscriptionPlan]);
+
+  const handlePlanChange = (e) => {
+  const newPlanId = e.target.value;
+  setSelectedPlan(newPlanId);
+  setErrors({ startDate: false, endDate: false, dateOrder: false });
+
+  if (newPlanId === "byDate") {
+    // Clear start and end dates when selecting Subscription By Date
+    setStartDate(null);
+    setEndDate(null);
+  } else {
+    const selectedPlanObj = plans.find(
+      (plan) => plan.id.toString() === newPlanId
+    );
+    if (selectedPlanObj) {
+      setStartDate(selectedPlanObj.startDate);
+      setEndDate(selectedPlanObj.endDate);
+    }
+  }
+};
+
 
   const handleStartDateChange = (newValue) => {
     setStartDate(newValue);
     setErrors({ ...errors, startDate: false, dateOrder: false });
 
     if (selectedPlan !== "byDate") {
-      const selected = plans.find(
-        (plan) => plan.id.toString() === selectedPlan
-      );
+      const selected = plans.find((plan) => plan.id.toString() === selectedPlan);
       if (selected) {
         const newEndDate = calculateEndDateByWorkingDays(
           newValue,
@@ -285,9 +306,15 @@ const SubscriptionPlanStep = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box className="subplnBoxss" display="flex" flexDirection={{ xs: "column", md: "row" }} gap={4}>
+      <Box
+        className="subplnBoxss"
+        display="flex"
+        flexDirection={{ xs: "column", md: "row" }}
+        gap={4}
+      >
         {/* Left Illustration */}
-        <Box className="spboximg"
+        <Box
+          className="spboximg"
           sx={{
             width: { xs: "100%", md: "45%" },
             backgroundImage: `url("/profileStepImages/stepThree.png")`,
@@ -319,7 +346,7 @@ const SubscriptionPlanStep = ({
           >
             SELECT YOUR SUBSCRIPTION PLAN*{" "}
             <Typography component="span" variant="caption" color="#888">
-              (Taxes not included)
+              (All Taxes included)
             </Typography>
           </Typography>
 
@@ -416,15 +443,12 @@ const SubscriptionPlanStep = ({
                     }
                     sx={{ flex: 1 }}
                   />
-                  {plan.isOneMonth && (
+                  {selectedPlan === plan.id.toString() && (
                     <IconButton onClick={() => setCalendarOpen(true)}>
                       <EventIcon
                         sx={{
                           cursor: "pointer",
-                          color:
-                            selectedPlan === plan.id.toString()
-                              ? "#fff"
-                              : "#FF6A00",
+                          color: "#fff",
                         }}
                       />
                     </IconButton>
@@ -443,6 +467,7 @@ const SubscriptionPlanStep = ({
                 holidays={holidays}
                 isWorkingDay={isWorkingDayMemo}
                 numberOfChildren={numberOfChildren}
+                openCalendar={() => setCalendarOpen(true)} // Pass calendar open handler
               />
             </RadioGroup>
 
@@ -505,9 +530,9 @@ const SubscriptionPlanStep = ({
                       (Saved Rs.{" "}
                       {Math.round(
                         currentPlan.workingDays *
-                          BASE_PRICE_PER_DAY *
-                          numberOfChildren *
-                          currentPlan.discount
+                        BASE_PRICE_PER_DAY *
+                        numberOfChildren *
+                        currentPlan.discount
                       ).toLocaleString("en-IN")}
                       )
                     </span>
@@ -516,15 +541,14 @@ const SubscriptionPlanStep = ({
               </Box>
             )}
 
-            {/* Offers section --->*/}
+            {/* Offers section */}
             <OffersSection numberOfChildren={numberOfChildren} />
 
             <Typography mt={2} fontSize={12}>
               <strong>
                 Note: Per Day Meal = Rs. {BASE_PRICE_PER_DAY} (No. of Days × Rs.{" "}
                 {BASE_PRICE_PER_DAY} × {numberOfChildren}{" "}
-                {numberOfChildren > 1 ? "children" : "child"} = Subscription
-                Amount)
+                {numberOfChildren > 1 ? "children" : "child"} = Subscription Amount)
                 {selectedPlan === "byDate" &&
                   " No discounts apply to custom date selections."}
               </strong>
@@ -577,6 +601,7 @@ const CustomDateSelection = ({
   holidays,
   isWorkingDay,
   numberOfChildren,
+  openCalendar, // receive openCalendar callback
 }) => (
   <Box
     className="custmontplan"
@@ -589,38 +614,46 @@ const CustomDateSelection = ({
       bgcolor: selectedPlan === "byDate" ? "#FFF3EB" : "#fff",
     }}
   >
-    <FormControlLabel
-      value="byDate"
-      control={
-        <Radio
-          sx={{
-            color: selectedPlan === "byDate" ? "#FF6A00" : "rgba(0, 0, 0, 0.6)",
-            "&.Mui-checked": { color: "#FF6A00" },
-          }}
-        />
-      }
-      label={
-        <Typography
-          variant="body2"
-          sx={{ color: selectedPlan === "byDate" ? "#FF6A00" : "inherit" }}
-        >
-          Subscription By Date{" "}
-          <Typography component="span" fontSize={12} color="#777">
-            (Pre Book)
-          </Typography>
-          {numberOfChildren > 1 && (
-            <Typography
-              component="span"
-              fontSize={12}
-              color="#777"
-              sx={{ ml: 1 }}
-            >
-              for {numberOfChildren} children
+    <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
+      <FormControlLabel
+        value="byDate"
+        control={
+          <Radio
+            sx={{
+              color: selectedPlan === "byDate" ? "#FF6A00" : "rgba(0, 0, 0, 0.6)",
+              "&.Mui-checked": { color: "#FF6A00" },
+            }}
+          />
+        }
+        label={
+          <Typography
+            variant="body2"
+            sx={{ color: selectedPlan === "byDate" ? "#FF6A00" : "inherit" }}
+          >
+            Subscription By Date{" "}
+            <Typography component="span" fontSize={12} color="#777">
+              (Pre Book)
             </Typography>
-          )}
-        </Typography>
-      }
-    />
+            {numberOfChildren > 1 && (
+              <Typography
+                component="span"
+                fontSize={12}
+                color="#777"
+                sx={{ ml: 1 }}
+              >
+                for {numberOfChildren} children
+              </Typography>
+            )}
+          </Typography>
+        }
+      />
+      {selectedPlan === "byDate" && startDate && endDate && (
+        <IconButton onClick={openCalendar} sx={{ color: "#FF6A00" }}>
+          <EventIcon />
+        </IconButton>
+      )}
+    </Box>
+
     {selectedPlan === "byDate" && (
       <Grid container spacing={2} className="custdatepick">
         <Grid item xs={12} sm={6} className="cusdpstart">
@@ -693,8 +726,7 @@ const CustomDateDetails = ({
       </Typography>
       <Typography variant="body2">
         <strong>Price per child:</strong> Rs.{" "}
-        {pricePerChild.toLocaleString("en-IN")}({days} days × Rs.{" "}
-        {BASE_PRICE_PER_DAY})
+        {pricePerChild.toLocaleString("en-IN")}({days} days × Rs. {BASE_PRICE_PER_DAY})
       </Typography>
       {numberOfChildren > 1 && (
         <>
@@ -717,10 +749,7 @@ const CustomDateDetails = ({
 
 const OffersSection = ({ numberOfChildren = 1 }) => (
   <Box mt={3}>
-    <Typography
-      sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }}
-      variant="subtitle2"
-    >
+    <Typography sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }} variant="subtitle2">
       OFFERS AVAILABLE
     </Typography>
     <ul style={{ margin: 0 }}>
@@ -728,20 +757,17 @@ const OffersSection = ({ numberOfChildren = 1 }) => (
         <>
           <li>
             <Typography fontSize={14}>
-              Save <strong>5%</strong> on the 22 Working Days Plan (for 2+
-              children).
+              Save <strong>5%</strong> on the 22 Working Days Plan (for 2+ children).
             </Typography>
           </li>
           <li>
             <Typography fontSize={14}>
-              Save <strong>15%</strong> on the 66 Working Days Plan (for 2+
-              children).
+              Save <strong>15%</strong> on the 66 Working Days Plan (for 2+ children).
             </Typography>
           </li>
           <li>
             <Typography fontSize={14}>
-              Save <strong>20%</strong> on the 132 Working Days Plan (for 2+
-              children).
+              Save <strong>20%</strong> on the 132 Working Days Plan (for 2+ children).
             </Typography>
           </li>
         </>
