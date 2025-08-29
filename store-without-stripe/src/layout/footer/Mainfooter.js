@@ -75,7 +75,7 @@ const Mainfooter = () => {
             <div className='container mx-auto relative' >                
                 <div className='Footertop m-auto py-[8vh] textcenter'>
             <div className='footlogo w-[100px] m-auto mb-[2vh]'>
-                        <Image className="w-full" priority src= {myLogo} alt="logo" />
+              <Link href="/"><Image className="w-full" priority src={myLogo} alt="logo" /></Link>
                     </div>
                     <p className='text-white mb-[2vh]'>Fresh, healthy school lunches delivered with care, <br/>making mealtime easy for you.</p>
             <div className='SomediaBox flex justify-center  mb-[2vh]'>
