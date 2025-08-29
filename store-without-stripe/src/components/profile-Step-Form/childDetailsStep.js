@@ -13,8 +13,6 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloseIcon from "@mui/icons-material/Close";
 import stepTwo from "../../../public/profileStepImages/stepTwo.png";
 import useRegistration from "@hooks/useRegistration";
@@ -25,7 +23,14 @@ import useAsync from "@hooks/useAsync";
 const schema = yup.object().shape({
   childFirstName: yup.string().required("Child's first name is required"),
   childLastName: yup.string().required("Child's last name is required"),
-  dob: yup.date().nullable().required("Date of Birth is required"),
+  dob: yup
+    .date()
+    .nullable()
+    .transform((value, originalValue) => {
+      // If the value is an empty string, set to null
+      return originalValue === "" ? null : value;
+    })
+    .required("Date of Birth is required"),
   lunchTime: yup.string().required("Lunch time is required"),
   school: yup.string().required("School is required"),
   location: yup.string().required("Location is required"),
@@ -33,6 +38,11 @@ const schema = yup.object().shape({
   section: yup.string().required("Section is required"),
   allergies: yup.string(),
 });
+
+const lunchTimeOptions = [
+  "11:00 AM - 12:00 PM",
+  "12:00 PM - 01:00 PM",
+];
 
 const ChildDetailsStep = ({
   formData,
@@ -67,9 +77,15 @@ const ChildDetailsStep = ({
     CategoryServices.getAllSchools
   );
 
-  // State for filtered locations and lunch times
+  // State for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([]);
-  const [filteredLunchTimes, setFilteredLunchTimes] = useState([]);
+
+  const getYesterdayDateString = () => {
+    const now = new Date();
+    now.setDate(now.getDate() - 1); // Move one day back
+    return now.toISOString().slice(0, 10); // 'YYYY-MM-DD'
+  };
+
 
   const {
     register,
@@ -79,16 +95,45 @@ const ChildDetailsStep = ({
     watch,
     control,
     setValue,
-    getValues,
+    setError,
   } = useForm({
-    defaultValues: children[activeTab],
+    defaultValues: {
+      ...children[activeTab],
+      dob: children[activeTab]?.dob
+        ? typeof children[activeTab].dob === "string"
+          ? children[activeTab].dob.slice(0, 10)
+          : ""
+        : "",
+    },
     resolver: yupResolver(schema),
     mode: "onTouched",
   });
 
-  // Watch school and location changes
+  // Watch school and location changes 
   const watchSchool = watch("school");
   const watchLocation = watch("location");
+
+  // Ensure dropdowns and date field correctly reflect DB data on mount/tab change
+  useEffect(() => {
+    if (children[activeTab]) {
+      const child = {
+        ...children[activeTab],
+        dob: children[activeTab]?.dob
+          ? typeof children[activeTab].dob === "string"
+            ? children[activeTab].dob.slice(0, 10)
+            : ""
+          : "",
+      };
+      reset(child);
+    }
+  }, [activeTab, reset]);
+
+  useEffect(() => {
+    if (formData.children && formData.children.length > 0) {
+      setChildren(formData.children);
+      setChildCount(formData.children.length);
+    }
+  }, [formData.children, setChildCount]);
 
   // Update filtered locations when school changes
   useEffect(() => {
@@ -97,48 +142,37 @@ const ChildDetailsStep = ({
         .filter((school) => school.name === watchSchool)
         .map((school) => school.location);
 
-      // Remove duplicates and set filtered locations
       const uniqueLocations = [...new Set(schoolLocations)];
       setFilteredLocations(uniqueLocations);
 
-      // Reset location and lunch time when school changes
-      setValue("location", "");
-      setValue("lunchTime", "");
-    } else {
-      setFilteredLocations([]);
-    }
-  }, [watchSchool, schools, setValue]);
-
-  // Update filtered lunch times when location changes
-  useEffect(() => {
-    if (watchLocation && watchSchool && schools) {
-      const matchingSchools = schools.filter(
-        (school) =>
-          school.name === watchSchool && school.location === watchLocation
-      );
-
-      if (matchingSchools.length > 0) {
-        const lunchTimes = matchingSchools.map((school) => school.lunchTime);
-        setFilteredLunchTimes(lunchTimes);
-
-        // If there's only one lunch time, auto-select it
-        if (lunchTimes.length === 1) {
-          setValue("lunchTime", lunchTimes[0]);
-        }
-      } else {
-        setFilteredLunchTimes([]);
+      // Only reset location if non-matching and schools are LOADED
+      const currentLocation = watch("location");
+      if (
+        currentLocation &&
+        uniqueLocations.length > 0 &&
+        !uniqueLocations.includes(currentLocation)
+      ) {
+        setValue("location", "");
+      } else if (
+        currentLocation &&
+        uniqueLocations.includes(currentLocation)
+      ) {
+        // Ensure react-hook-form knows to keep user's value
+        setValue("location", currentLocation);
       }
+    } else if (watchSchool) {
+      // If schools not loaded yet, let location persist (do NOT clear)
+      setFilteredLocations([]);
     } else {
-      setFilteredLunchTimes([]);
+      // If school not selected at all, clear location
+      setFilteredLocations([]);
+      setValue("location", "");
     }
-  }, [watchLocation, watchSchool, schools, setValue]);
+  }, [watchSchool, schools, setValue, watch]);
 
-  useEffect(() => {
-    if (children[activeTab]) {
-      reset(children[activeTab]);
-    }
-  }, [activeTab, children, reset]);
 
+
+  // Sync form with children state
   useEffect(() => {
     const subscription = watch((values) => {
       setChildren((prevChildren) => {
@@ -197,12 +231,12 @@ const ChildDetailsStep = ({
 
       if (res) {
         setFormData({ ...formData, children });
-        setChildCount(children.length); // Update the child count
+        setChildCount(children.length);
         nextStep();
       }
     } catch (err) {
+      console.log("Validation errors:", err.inner);
       if (err.name === "ValidationError") {
-        // Find the index of the first invalid child
         const invalidIndex = children.findIndex((child) => {
           try {
             schema.validateSync(child, { abortEarly: false });
@@ -213,6 +247,14 @@ const ChildDetailsStep = ({
         });
         if (invalidIndex >= 0) {
           setActiveTab(invalidIndex);
+          if (err.inner && Array.isArray(err.inner)) {
+            err.inner.forEach((validationError) => {
+              setError(validationError.path, {
+                type: "manual",
+                message: validationError.message,
+              });
+            });
+          }
         }
       }
     }
@@ -224,7 +266,8 @@ const ChildDetailsStep = ({
     : [];
 
   return (
-    <Box className="subplnBoxss"
+    <Box
+      className="subplnBoxss"
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       sx={{
@@ -234,7 +277,8 @@ const ChildDetailsStep = ({
       }}
     >
       {/* Image Side */}
-      <Box className="spboximg"
+      <Box
+        className="spboximg"
         sx={{
           width: { xs: "100%", md: "45%" },
           backgroundImage: `url(${stepTwo.src})`,
@@ -249,7 +293,6 @@ const ChildDetailsStep = ({
       <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
         <div className="steptitles">
           <Typography variant="h5">CHILD DETAILS :</Typography>
-
           {/* Tabs */}
           <Box
             sx={{ display: "flex", alignItems: "center", mb: 2 }}
@@ -299,7 +342,7 @@ const ChildDetailsStep = ({
         </div>
 
         <Grid container className="formboxrow">
-          {/* Text Inputs */}
+          {/* Child First/Last Name */}
           {[
             [
               "CHILD'S FIRST NAME*",
@@ -346,20 +389,18 @@ const ChildDetailsStep = ({
                   error={!!errors.dob}
                   helperText={errors.dob?.message}
                   sx={{ width: "300px", minWidth: "300px" }}
-                  // Convert the value to yyyy-MM-dd format for the input
                   value={
                     field.value
                       ? typeof field.value === "string"
-                        ? field.value
-                        : field.value instanceof Date
-                          ? field.value.toISOString().substring(0, 10)
-                          : ""
+                        ? field.value.slice(0, 10)
+                        : ""
                       : ""
                   }
-                  onChange={e => {
+                  onChange={(e) => {
                     const val = e.target.value;
-                    field.onChange(val ? new Date(val) : null);
+                    field.onChange(val ? val : "");
                   }}
+                  inputProps={{ max: getYesterdayDateString() }}
                 />
               )}
             />
@@ -439,7 +480,7 @@ const ChildDetailsStep = ({
             />
           </Grid>
 
-          {/* Lunch Time Dropdown */}
+          {/* Lunch Time Dropdown (STATIC & mapped with DB values) */}
           <Grid item className="formboxcol" key="lunchTime">
             <Typography
               variant="subtitle2"
@@ -459,16 +500,11 @@ const ChildDetailsStep = ({
                   error={!!errors.lunchTime}
                   helperText={errors.lunchTime?.message}
                   sx={{ width: "300px", minWidth: "300px" }}
-                  disabled={!watchLocation || filteredLunchTimes.length === 0}
                 >
                   <MenuItem value="" disabled>
-                    {!watchLocation
-                      ? "Select a location first"
-                      : filteredLunchTimes.length === 0
-                        ? "No lunch times available"
-                        : "Select Lunch Time"}
+                    Select Lunch Time
                   </MenuItem>
-                  {filteredLunchTimes.map((time) => (
+                  {lunchTimeOptions.map((time) => (
                     <MenuItem key={time} value={time}>
                       {time}
                     </MenuItem>

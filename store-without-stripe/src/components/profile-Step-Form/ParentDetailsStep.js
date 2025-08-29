@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   TextField,
   Button,
   Typography,
   Grid,
   Box,
-  Divider,
-  MenuItem,
   InputAdornment,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -14,7 +12,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import stepOne from "../../../public/profileStepImages/stepOne.png";
 import useRegistration from "@hooks/useRegistration";
-import pinCodeData from "../../jsonHelper/zipcode.json"; // Import your JSON data
 
 const nameRegex = /^[A-Za-z\s]+$/; // allows only letters and spaces
 
@@ -44,50 +41,42 @@ const schema = yup.object().shape({
     .email("Enter a valid email")
     .required("Email is required"),
   address: yup.string().required("Residential address is required"),
-  pincode: yup.string().required("Pincode is required"),
+  pincode: yup
+    .string()
+    .required("Pincode is required")
+    .matches(/^\d{6}$/, "Enter a valid 6-digit pincode"),
   city: yup.string().required("City is required"),
   state: yup.string().required("State is required"),
   country: yup.string().required("Country is required"),
 });
 
-const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
+const ParentDetailsStep = ({ formData, setFormData, nextStep, _id, sessionData }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    watch,
+    reset,
   } = useForm({
     defaultValues: {
       ...formData,
-      country: "India", // Set default country
+      mobile: sessionData?.user?.phone || "",
+      email: sessionData?.user?.email || "",
+      country: "India",
     },
     resolver: yupResolver(schema),
     mode: "onTouched",
   });
 
   const { submitHandler, loading } = useRegistration();
-  const [pinCodes, setPinCodes] = useState([]);
 
-  // Load pin codes from JSON data
-  useEffect(() => {
-    setPinCodes(pinCodeData);
-  }, []);
-
-  // Watch for pincode changes to auto-fill other fields
-  const selectedPincode = watch("pincode");
-  useEffect(() => {
-    if (selectedPincode) {
-      const selectedLocation = pinCodes.find(
-        (item) => item.Pincode === selectedPincode
-      );
-      if (selectedLocation) {
-        setValue("city", selectedLocation.City);
-        setValue("state", selectedLocation.State);
-        setValue("country", "India"); // Always set country to India
-      }
-    }
-  }, [selectedPincode, pinCodes, setValue]);
+   useEffect(() => {
+    reset({
+      ...formData,
+      mobile: sessionData?.user?.phone || "",
+      email: sessionData?.user?.email || "",
+      country: formData.country || "India",
+    });
+  }, [formData, reset, sessionData]);
 
   const onSubmit = async (data) => {
     console.log("Form data submitted:", data);
@@ -138,8 +127,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
             >
-              {" "}
-              FATHER FIRST NAME*{" "}
+              FATHER FIRST NAME*
             </Typography>
             <TextField
               fullWidth
@@ -156,8 +144,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
             >
-              {" "}
-              FATHER LAST NAME*{" "}
+              FATHER LAST NAME*
             </Typography>
             <TextField
               fullWidth
@@ -169,6 +156,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
+
           {/* Mother Names */}
           <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
@@ -204,12 +192,10 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
+
           {/* Contact Info */}
           <Grid className="formboxcol" item xs={12} sm={6}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-            >
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
               MOBILE NUMBER*
             </Typography>
             <TextField
@@ -220,13 +206,13 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               error={!!errors.mobile}
               helperText={errors.mobile?.message}
               sx={{ width: "300px", minWidth: "300px" }}
+              InputProps={{
+                readOnly: true
+              }}
             />
           </Grid>
           <Grid className="formboxcol" item xs={12} sm={6}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-            >
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
               EMAIL*
             </Typography>
             <TextField
@@ -238,30 +224,13 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               error={!!errors.email}
               helperText={errors.email?.message}
               sx={{ width: "300px", minWidth: "300px" }}
+              InputProps={{
+                readOnly: true
+              }}
             />
           </Grid>
-          {/* Address (full width) */}
-          {/* <Grid className="formboxcol" item xs={12}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-            >
-              RESIDENTIAL ADDRESS*
-            </Typography>
-            <TextField
-              fullWidth
-              variant="outlined"
-              multiline
-              maxRows={4}
-              rows={5}
-              placeholder="Enter your Residential Address"
-              {...register("address")}
-              sx={{ width: "625px", minWidth: "625px" }}
-              error={!!errors.address}
-              helperText={errors.address?.message}
-            />
-          </Grid> */}
-          {/* New Address Fields */}
+
+          {/* Address Fields */}
           <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
@@ -270,39 +239,16 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               PINCODE*
             </Typography>
             <TextField
-              select
               fullWidth
               variant="outlined"
-              placeholder="Select Pincode"
+              placeholder="Enter Pincode"
               {...register("pincode")}
               error={!!errors.pincode}
               helperText={errors.pincode?.message}
               sx={{ width: "300px", minWidth: "300px" }}
-              SelectProps={{
-                MenuProps: {
-                  anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "left",
-                  },
-                  transformOrigin: {
-                    vertical: "top",
-                    horizontal: "left",
-                  },
-                  PaperProps: {
-                    style: {
-                      maxHeight: 300, // Limit dropdown height
-                    },
-                  },
-                },
-              }}
-            >
-              {pinCodes.map((option) => (
-                <MenuItem key={option.Pincode} value={option.Pincode}>
-                  {option.Pincode}
-                </MenuItem>
-              ))}
-            </TextField>
+            />
           </Grid>
+
           <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
@@ -313,22 +259,14 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="City will auto-fill"
+              placeholder="Enter City"
               {...register("city")}
               error={!!errors.city}
               helperText={errors.city?.message}
-              sx={{
-                width: "300px",
-                minWidth: "300px",
-                "& .MuiInputBase-input": {
-                  color: "#333"
-                },
-              }}
-              InputProps={{
-                readOnly: true,
-              }}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
+
           <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
@@ -339,22 +277,14 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="State will auto-fill"
+              placeholder="Enter State"
               {...register("state")}
               error={!!errors.state}
               helperText={errors.state?.message}
-              sx={{
-                width: "300px",
-                minWidth: "300px",
-                "& .MuiInputBase-input": {
-                  color: "#333"
-                },
-              }}
-              InputProps={{
-                readOnly: true,
-              }}
+              sx={{ width: "300px", minWidth: "300px" }}
             />
           </Grid>
+
           <Grid className="formboxcol" item xs={12} sm={6}>
             <Typography
               variant="subtitle2"
@@ -385,7 +315,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               }}
             />
           </Grid>
-          {/* Address (full width) */}
+
           <Grid className="formboxcol" item xs={12}>
             <Typography
               variant="subtitle2"
