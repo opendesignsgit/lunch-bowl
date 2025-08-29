@@ -271,6 +271,7 @@ const MultiStepForm = () => {
                 setFormData={setFormData}
                 nextStep={nextStep}
                 _id={_id}
+                sessionData={session}
               />
             )}
 

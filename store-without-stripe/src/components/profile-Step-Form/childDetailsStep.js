@@ -80,6 +80,13 @@ const ChildDetailsStep = ({
   // State for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([]);
 
+  const getYesterdayDateString = () => {
+    const now = new Date();
+    now.setDate(now.getDate() - 1); // Move one day back
+    return now.toISOString().slice(0, 10); // 'YYYY-MM-DD'
+  };
+
+
   const {
     register,
     handleSubmit,
@@ -107,15 +114,15 @@ const ChildDetailsStep = ({
   const watchLocation = watch("location");
 
   // Ensure dropdowns and date field correctly reflect DB data on mount/tab change
-   useEffect(() => {
+  useEffect(() => {
     if (children[activeTab]) {
       const child = {
         ...children[activeTab],
         dob: children[activeTab]?.dob
           ? typeof children[activeTab].dob === "string"
             ? children[activeTab].dob.slice(0, 10)
-            :""
-            : "",
+            : ""
+          : "",
       };
       reset(child);
     }
@@ -393,6 +400,7 @@ const ChildDetailsStep = ({
                     const val = e.target.value;
                     field.onChange(val ? val : "");
                   }}
+                  inputProps={{ max: getYesterdayDateString() }}
                 />
               )}
             />

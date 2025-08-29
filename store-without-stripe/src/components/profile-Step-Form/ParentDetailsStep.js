@@ -50,7 +50,7 @@ const schema = yup.object().shape({
   country: yup.string().required("Country is required"),
 });
 
-const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
+const ParentDetailsStep = ({ formData, setFormData, nextStep, _id, sessionData }) => {
   const {
     register,
     handleSubmit,
@@ -59,7 +59,9 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
   } = useForm({
     defaultValues: {
       ...formData,
-      country: "India", // Set default country
+      mobile: sessionData?.user?.phone || "",
+      email: sessionData?.user?.email || "",
+      country: "India",
     },
     resolver: yupResolver(schema),
     mode: "onTouched",
@@ -67,9 +69,14 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
 
   const { submitHandler, loading } = useRegistration();
 
-  useEffect(() => {
-    reset({ ...formData, country: formData.country || "India" });
-  }, [formData, reset]);
+   useEffect(() => {
+    reset({
+      ...formData,
+      mobile: sessionData?.user?.phone || "",
+      email: sessionData?.user?.email || "",
+      country: formData.country || "India",
+    });
+  }, [formData, reset, sessionData]);
 
   const onSubmit = async (data) => {
     console.log("Form data submitted:", data);
@@ -188,10 +195,7 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
 
           {/* Contact Info */}
           <Grid className="formboxcol" item xs={12} sm={6}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-            >
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
               MOBILE NUMBER*
             </Typography>
             <TextField
@@ -202,13 +206,13 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               error={!!errors.mobile}
               helperText={errors.mobile?.message}
               sx={{ width: "300px", minWidth: "300px" }}
+              InputProps={{
+                readOnly: true
+              }}
             />
           </Grid>
           <Grid className="formboxcol" item xs={12} sm={6}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
-            >
+            <Typography variant="subtitle2" sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}>
               EMAIL*
             </Typography>
             <TextField
@@ -220,6 +224,9 @@ const ParentDetailsStep = ({ formData, setFormData, nextStep, _id }) => {
               error={!!errors.email}
               helperText={errors.email?.message}
               sx={{ width: "300px", minWidth: "300px" }}
+              InputProps={{
+                readOnly: true
+              }}
             />
           </Grid>
 
