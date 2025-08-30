@@ -160,6 +160,8 @@ const SubscriptionPlanStep = ({
   const [calendarOpen, setCalendarOpen] = useState(false);
   const { submitHandler, loading } = useRegistration();
 
+  const [hideMessage, setHideMessage] = useState(false);
+
   // Properly initialize state from initialSubscriptionPlan prop or defaults
   useEffect(() => {
     const computedPlans = calculatePlans(holidays, numberOfChildren);
@@ -196,6 +198,10 @@ const SubscriptionPlanStep = ({
       setEndDate(computedPlans[0].endDate);
     }
   }, [holidays, numberOfChildren, initialSubscriptionPlan]);
+
+  const booleanStateMessage = () => {
+    setHideMessage(true);
+  };
 
   const handlePlanChange = (e) => {
     const newPlanId = e.target.value;
@@ -422,7 +428,10 @@ const SubscriptionPlanStep = ({
                     sx={{ flex: 1 }}
                   />
                   {selectedPlan === plan.id.toString() && (
-                    <IconButton onClick={() => setCalendarOpen(true)}>
+                    <IconButton onClick={() => {
+                      setHideMessage(false);   // hideMessage false for standard plans
+                      setCalendarOpen(true);
+                    }}>
                       <EventIcon
                         sx={{
                           cursor: "pointer",
@@ -445,6 +454,7 @@ const SubscriptionPlanStep = ({
                 isWorkingDay={isWorkingDayMemo}
                 numberOfChildren={numberOfChildren}
                 openCalendar={() => setCalendarOpen(true)}
+                setHideMessage={setHideMessage}
               />
             </RadioGroup>
 
@@ -499,9 +509,9 @@ const SubscriptionPlanStep = ({
                       (Saved Rs.{" "}
                       {Math.round(
                         currentPlan.workingDays *
-                          BASE_PRICE_PER_DAY *
-                          numberOfChildren *
-                          currentPlan.discount
+                        BASE_PRICE_PER_DAY *
+                        numberOfChildren *
+                        currentPlan.discount
                       ).toLocaleString("en-IN")}
                       )
                     </span>
@@ -546,6 +556,7 @@ const SubscriptionPlanStep = ({
             : calculateWorkingDays(startDate, endDate, holidays)
         }
         holidays={holidays}
+        hideMessage={hideMessage}
       />
     </LocalizationProvider>
   );
@@ -562,6 +573,7 @@ const CustomDateSelection = ({
   isWorkingDay,
   numberOfChildren,
   openCalendar,
+  setHideMessage
 }) => (
   <Box
     className="custmontplan"
@@ -608,7 +620,10 @@ const CustomDateSelection = ({
         }
       />
       {selectedPlan === "byDate" && startDate && endDate && (
-        <IconButton onClick={openCalendar} sx={{ color: "#FF6A00" }}>
+        <IconButton onClick={() => {
+          setHideMessage(true);
+          openCalendar();
+        }} sx={{ color: "#FF6A00" }}>
           <EventIcon />
         </IconButton>
       )}

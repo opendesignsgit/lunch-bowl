@@ -17,6 +17,7 @@ const WorkingDaysCalendar = ({
   startDate,
   workingDays,
   holidays = [],
+  hideMessage,
 }) => {
   if (!open) return null;
 
@@ -327,6 +328,11 @@ const WorkingDaysCalendar = ({
           Subscription Period: {startDate.format("DD MMM YYYY")} -{" "}
           {endDate.format("DD MMM YYYY")}
         </Typography>
+        {!hideMessage && (
+          <Typography align="center" fontSize="0.875rem">
+            This plan activates after 48 hrs
+          </Typography>
+        )}
         <Typography align="center" fontSize="0.875rem">
           Total Working Days: {workingDays}
         </Typography>
