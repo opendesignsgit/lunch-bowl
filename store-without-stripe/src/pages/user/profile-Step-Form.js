@@ -131,6 +131,16 @@ const MultiStepForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id]);
 
+  const handleSubscriptionPlanChange = (newPlanData) => {
+  setFormData(prev => ({
+    ...prev,
+    subscriptionPlan: {
+      ...prev.subscriptionPlan,
+      ...newPlanData,
+    }
+  }));
+};
+
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
@@ -292,6 +302,8 @@ const MultiStepForm = () => {
                 prevStep={prevStep}
                 _id={_id}
                 numberOfChildren={childCount}
+                initialSubscriptionPlan={formData.subscriptionPlan}
+                onSubscriptionPlanChange={handleSubscriptionPlanChange}
               />
             )}
 
