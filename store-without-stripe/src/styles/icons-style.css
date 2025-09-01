@@ -221,13 +221,21 @@
   .hMenusIconss{display: none;}
   .hteamIconss .iconone{width: 75px;}
   .hteamIconss .iconfive{width: 65px;}
-  .hDoctIconss .iconseven {top: 25%;right: 15%;width: 80px;}
+  .hDoctIconss .iconseven {top: 25%;right: 5%;width: 80px;}
+}
+@media screen and (max-width:1100px){
+  .hteamIconss .iconone {left: 5%;top: 5%;width: 64px;}
+  .hteamIconss .icontwo {top: 9%;right: 3%;width: 40px;}
+  .hteamIconss .iconthree{width: 38px;}
+  .hteamIconss .iconfour{width: 38px;}
+  .hteamIconss .iconsix{width: 45px;top: 30%;}
+
 }
 
 @media screen and (max-width:1000px){
   .hbanIconss,.hintroIconss,.hteamIconss .iconthree,.hteamIconss .iconfour,.hteamIconss .iconfive,.hteamIconss .iconsix,.hDoctIconss,.ateamIconss {/*display: none;*/}
-  .hteamIconss .iconone {left: 11%;top: 8%;width: 75px;}
-  .hteamIconss .icontwo {top: 12%;right: 9%;width: 55px;}
+  .hteamIconss .iconone {left: 6%;top: 8%;width: 75px;}
+  .hteamIconss .icontwo {top: 12%;right: 4%;width: 55px;}
   .hfformIconss .iconthree, .hfformIconss .iconsix {width: 40px;}
   .hfformIconss .icontwo{width: 30px;}
   .hfformIconss .iconfour {bottom: -6%;right: 35%;width: 35px;}
@@ -235,6 +243,15 @@
   .ateamIconss{display: none;}  
   .hintroIconss .iconeight{width: 10px;}
   .hbanIconss .iconseven {bottom: 0%;left: 61%;}
+}
+
+@media screen and (max-width:920px){
+  .hteamIconss .iconone {left: 5%;top: 5%;width: 64px;}
+  .hteamIconss .icontwo {top: 9%;right: 3%;width: 40px;}
+  .hteamIconss .iconthree{width: 38px;}
+  .hteamIconss .iconfour{width: 38px;}
+  .hteamIconss .iconsix{width: 45px;}
+
 }
 
 @media screen and (max-width:820px){
