@@ -929,6 +929,8 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .ssrpopups .fboxrow .colRight{}
 
 
+.ppricesec .comtilte h4 strong{font-weight: 500;display: block;color:#4AB238;}
+
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
 }
