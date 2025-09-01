@@ -170,7 +170,7 @@ const LeftPanel = ({
             const dateKey = formatDate(day);
             const dish = menuSelections[dateKey]?.[currentChild.id];
             const isOutOfRange =
-              dayjs(dateKey).isBefore(subscriptionStart) ||
+              dayjs(dateKey).isBefore(subscriptionStart.subtract(1, "day")) ||
               dayjs(dateKey).isAfter(subscriptionEnd);
             const isWithin48Hours = dayjs(dateKey).diff(dayjs(), "hour") < 24;
 

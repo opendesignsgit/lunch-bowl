@@ -73,6 +73,8 @@ const RightPanel = ({
   const isSunday = selectedDateObj.day() === 0;
   const { submitHandler, loading } = useRegistration();
 
+  const isSaturday = selectedDateObj.day() === 6;
+
 
   // Load paid meal data from API, fallback to localStorage
   useEffect(() => {
@@ -116,15 +118,15 @@ const RightPanel = ({
   ];
 
   const handlePlanChange = (childId, planId) => {
-  if (isWithin48Hours) return;
-  setSelectedPlans((prev) => ({ ...prev, [childId]: planId }));
-  const childIndex = dummyChildren.findIndex((child) => child.id === childId);
-  if (childIndex !== -1) setActiveChild(childIndex);
-  if (applyMealPlan) applyMealPlan(planId, childId);
-  if (typeof onMealPlanChange === "function") {
-    onMealPlanChange(planId);
-  }
-};
+    if (isWithin48Hours) return;
+    setSelectedPlans((prev) => ({ ...prev, [childId]: planId }));
+    const childIndex = dummyChildren.findIndex((child) => child.id === childId);
+    if (childIndex !== -1) setActiveChild(childIndex);
+    if (applyMealPlan) applyMealPlan(planId, childId);
+    if (typeof onMealPlanChange === "function") {
+      onMealPlanChange(planId);
+    }
+  };
 
   const handleApplyToAllChange = (e) => {
     if (isWithin48Hours) return;
@@ -202,24 +204,26 @@ const RightPanel = ({
         </Box>
       )}
 
-      <div className="fixcheckboxs">
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={useMealPlan}
-              onChange={(e) => !isWithin48Hours && setUseMealPlan(e.target.checked)}
-              sx={{ color: "#fff" }}
-              disabled={isWithin48Hours}
-            />
-          }
-          label={
-            <Typography fontSize="0.8rem" color="#fff">
-              Meal Plan Approved by Dietitian
-            </Typography>
-          }
-          sx={{ mb: 1, alignSelf: "flex-start" }}
-        />
-      </div>
+      {!(isSelectedHoliday || isSaturday || isSunday) && (
+        <div className="fixcheckboxs">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={useMealPlan}
+                onChange={(e) => !isWithin48Hours && setUseMealPlan(e.target.checked)}
+                sx={{ color: "#fff" }}
+                disabled={isWithin48Hours}
+              />
+            }
+            label={
+              <Typography fontSize="0.8rem" color="#fff">
+                Meal Plan Approved by Dietitian
+              </Typography>
+            }
+            sx={{ mb: 1, alignSelf: "flex-start" }}
+          />
+        </div>
+      )}
 
       <div className="fixdatesboxs">
         <h2>{String(selectedDate).padStart(2, "0")}</h2>
@@ -385,7 +389,7 @@ const RightPanel = ({
                       )}
 
 
-                      {childIndex === 0 && !isSelectedHoliday && (
+                      {childIndex === 0 && !isSelectedHoliday && dummyChildren.length > 1 && (
                         <Box sx={{ mt: 1 }}>
                           <FormControlLabel
                             className="cbapplysbtn"
@@ -404,6 +408,7 @@ const RightPanel = ({
                           />
                         </Box>
                       )}
+
                     </Box>
                   );
                 })}

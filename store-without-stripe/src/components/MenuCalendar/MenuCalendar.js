@@ -382,6 +382,7 @@ const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
  const handleDateClick = (date) => {
    setSelectedDate(date);
    setEditMode(false);
+   setUseMealPlan(false);
    if (isSmall) {
      setOpenDialog(true);
    }
@@ -393,6 +394,7 @@ const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
    setCurrentYear(parseInt(year));
    setSelectedDate(parseInt(day));
    setEditMode(true);
+   setUseMealPlan(false);
    if (isSmall) {
      setOpenDialog(true);
    }
