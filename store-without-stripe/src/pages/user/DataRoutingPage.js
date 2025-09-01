@@ -30,11 +30,11 @@ const DataRoutingPage = () => {
           _id: session?.user?.id, // Using the user ID from session
         });
         console.log('====================================');
-        console.log('Step Check Result:', result);
+        console.log('Step Check Result------>:', result?.data?.step);
         console.log('====================================');
         // Assuming result is already the parsed response
         // Adjust this condition based on your actual API response structure
-        if (result.data >= 4) {
+        if (result?.data?.step == 4) {
           router.push('/user/menuCalendarPage');
         } else {
           router.push('/user/profile-Step-Form');
