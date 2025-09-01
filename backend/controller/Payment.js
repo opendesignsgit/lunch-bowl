@@ -209,7 +209,7 @@ exports.ccavenueResponse = async (req, res) => {
 
         return res.redirect("https://lunchbowl.co.in/user/menuCalendarPage");
       } else {
-        return res.redirect("https://lunchbowl.co.in/payment/failed");
+        return res.redirect("https://lunchbowl.co.in/payment/subscriptionFailed");
       }
     } catch (error) {
       console.error("CCAvenue subscription response error:", error);
