@@ -25,6 +25,8 @@ import Mainfooter from "@layout/footer/Mainfooter";
 // Import your hook and service:
 import CategoryServices from "@services/CategoryServices";
 import useAsync from "@hooks/useAsync";
+import useEmail from "@hooks/useEmail";
+
 
 import abbanicon1 from "../../public/about/icons/herosec/pink-rounded-lines.svg";
 import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
@@ -79,6 +81,8 @@ export default function FreeTrialPage() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [freeTrialTaken, setFreeTrialTaken] = useState(false);
+  const { sendEmail, loading: emailLoading, error: emailError } = useEmail();
+
 
   useEffect(() => {
     setFormData({
@@ -152,28 +156,31 @@ export default function FreeTrialPage() {
     const [firstName, ...lastNameParts] = (formData.name || "").split(" ");
     const lastName = lastNameParts.join(" ");
 
+    const emailData = {
+      firstName,
+      lastName,
+      email: formData.email,
+      mobileNumber: "",
+      address: formData.address,
+      schoolName: formData.school,
+      className: formData.class,
+      childName: formData.childName,
+      message: `Dish: ${formData.food}\nDelivery Date: ${formData.date?.format("YYYY-MM-DD")}\n${formData.message}`,
+      userId: formData.userId,
+    };
+
     try {
-      await axios.post("https://api.lunchbowl.co.in/api/admin/free-trial-enquiry", {
-        firstName,
-        lastName,
-        email: formData.email,
-        mobileNumber: "",
-        address: formData.address,
-        schoolName: formData.school,
-        className: formData.class,
-        childName: formData.childName, // ✅ send to API
-        message: `Dish: ${formData.food}\nDelivery Date: ${formData.date?.format("YYYY-MM-DD")}\n${formData.message}`,
-        userId: formData.userId,
-      });
+      await sendEmail(emailData); // ✔️ replaces axios.post
       setSubmitted(true);
       setFreeTrialTaken(true);
     } catch (err) {
-      alert("Thank you for your enquiry! We'll get back to you soon.");
+      alert("Thank you for your enquiry! We'll get back to you soon."); // Optionally show error from hook
       setSubmitted(true);
     } finally {
       setLoading(false);
     }
   };
+
 
   // Schools rendering
   const renderSchoolOptions = () => {
@@ -288,7 +295,7 @@ export default function FreeTrialPage() {
                         sx={{ mt: 1 }}
                       />
 
-                      
+
 
                       {/* Email */}
                       <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
@@ -454,8 +461,8 @@ export default function FreeTrialPage() {
                         color="warning"
                         fullWidth
                         sx={{ mt: 2, py: 1.5 }}
-                        disabled={loading}
-                        endIcon={loading && <CircularProgress size={20} />}
+                        disabled={loading || emailLoading}
+                        endIcon={(loading || emailLoading) && <CircularProgress size={20} />}
                       >
                         Get Free Trial
                       </Button>

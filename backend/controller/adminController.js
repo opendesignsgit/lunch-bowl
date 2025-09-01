@@ -595,6 +595,11 @@ const sendSchoolEnquiryMail = async (req, res) => {
 const talkNutrition = async (req, res) => {
   const { firstName, lastName, mobileNumber, schoolName, message, email } = req.body;
 
+  // Validate user email
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    return res.status(400).json({ success: false, error: "A valid user email is required for thank you mail." });
+  }
+
   // Setup transporter
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -604,10 +609,10 @@ const talkNutrition = async (req, res) => {
     },
   });
 
-  // Compose the email
+  // Compose the admin/team email
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: "csivarex.odi@gmail.com, , maniyarasanodi20@gmail.com",
+    to: "csivarex.odi@gmail.com, maniyarasanodi20@gmail.com",
     subject: "New Nutrition Enquiry Received",
     html: `
       <h2>Nutrition Enquiry Details</h2>
@@ -619,16 +624,36 @@ const talkNutrition = async (req, res) => {
     `,
   };
 
+  // Compose thank you email for the user
+  const thankYouMailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Thank you for submitting your Nutrition Form!",
+    html: `
+      <p>Hello ${firstName} ${lastName},</p>
+      <p>Thank you for filling out our Nutrition Form. We’ve received your details and our team will review them carefully to prepare a personalized meal plan that suits your needs.</p>
+      <p><em>Note: Your first session is free.</em> One of our nutrition specialists will reach out to you shortly with recommendations and the next steps.</p>
+      <br>
+      <p>Best regards,<br>Team LunchBowl</p>
+    `,
+  };
+
   try {
-    await transporter.sendMail(mailOptions);
-    console.log("Nutrition enquiry email sent successfully--------->", mailOptions);
+    // Send admin/team email
+    const adminResult = await transporter.sendMail(mailOptions);
+    console.log("Nutrition enquiry email sent successfully:", adminResult);
+
+    // Send thank you email to user
+    const thankYouResult = await transporter.sendMail(thankYouMailOptions);
+    console.log("Thank you mail sent to user:", thankYouResult);
 
     res.status(200).json({ success: true, message: "Enquiry sent successfully." });
   } catch (error) {
     console.error("Email send error:", error);
-    res.status(500).json({ success: false, error: "Failed to send email." });
+    res.status(500).json({ success: false, error: "Failed to send email.", details: error.message });
   }
 };
+
 
 const freeTrialEnquiry = async (req, res) => {
   const {
@@ -641,6 +666,7 @@ const freeTrialEnquiry = async (req, res) => {
     className,
     message,
     userId,
+    childName, // <-- child name received from frontend
   } = req.body;
 
   // Update/create customer with freeTrial: true
@@ -658,7 +684,7 @@ const freeTrialEnquiry = async (req, res) => {
       console.log("Customer updated for free trial:", customer);
     } catch (customerErr) {
       console.error('Error updating customer for free trial:', customerErr);
-      // You may choose to fail here or just log, as per requirements
+      // Optionally fail or log only
     }
   }
 
@@ -671,7 +697,7 @@ const freeTrialEnquiry = async (req, res) => {
     },
   });
 
-  // Compose email content
+  // Compose admin notification email
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: "shivarex.c@gmail.com, maniyarasanodi20@gmail.com",
@@ -679,12 +705,11 @@ const freeTrialEnquiry = async (req, res) => {
     html: `
       <h2>Free Trial Enquiry Received</h2>
       <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+      <p><strong>Child Name:</strong> ${childName}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>School:</strong> ${schoolName}</p>
       <p><strong>Class:</strong> ${className}</p>
       <p><strong>Address:</strong> ${address}</p>
-      <!--<p><strong>UserId:</strong> ${userId}</p>-->
-      // <p><strong>Mobile Number:</strong> ${mobileNumber || "N/A"}</p>
       <p><strong>Message:</strong><br/>${message}</p>
       <p>This is a Free Trial enquiry.</p>
       <br>
@@ -692,18 +717,34 @@ const freeTrialEnquiry = async (req, res) => {
     `,
   };
 
-  try {
-    await transporter.sendMail(mailOptions);
+  // Compose thank you/feedback request email for parent
+  const parentName = `${firstName} ${lastName}`;
+  const feedbackMailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: `We’d love your feedback on ${childName}’s trial lunch!`,
+    html: `
+      <p>Hi ${parentName},</p>
+      <p>We hope ${childName} enjoyed their trial meal from Lunch Bowl today!</p>
+      <p>Could you take a moment to share your feedback? Your opinion helps us serve your child better every day.</p>
+      <p>🔗 <a href="https://lunchbowl.co.in/contact-us" target="_blank">Click here to give feedback</a></p>
+      <p>Thank you for trying the Lunch Bowl!</p>
+      <p>– Lunch Bowl Kitchen Team</p>
+    `,
+  };
 
-    // Send SMS confirmation for free trial requests
+  try {
+    await transporter.sendMail(mailOptions); // Admin mail
+
+    // Send SMS confirmation for free trial (optional, as before)
     if (mobileNumber) {
       try {
         const date = new Date().toLocaleDateString('en-IN');
         const location = "as per your preference";
-        const childName = `${firstName}'s child`;
+        const smsChildName = childName || `${firstName}'s child`;
 
-        const smsResult = await sendSMS(mobileNumber, 'TRIAL_FOOD_CONFIRMATION', [childName, date, location]);
-        
+        const smsResult = await sendSMS(mobileNumber, 'TRIAL_FOOD_CONFIRMATION', [smsChildName, date, location]);
+
         const smsLog = new SmsLog({
           mobile: mobileNumber,
           messageType: 'TRIAL_FOOD_CONFIRMATION',
@@ -713,23 +754,30 @@ const freeTrialEnquiry = async (req, res) => {
           status: smsResult.success ? 'sent' : 'failed',
           error: smsResult.error || undefined,
           customerId: _id,
-          variables: [childName, date, location],
+          variables: [smsChildName, date, location],
           sentAt: new Date()
         });
         await smsLog.save();
         console.log('Trial food confirmation SMS sent to:', mobileNumber);
       } catch (smsError) {
         console.error('Error sending trial food confirmation SMS:', smsError);
-        // Do not fail the main process if SMS fails
       }
     }
 
-    res.status(200).json({ success: true, message: "Free trial request submitted successfully. We will contact you soon." });
+    // Send thank you/feedback mail to user
+    await transporter.sendMail(feedbackMailOptions);
+    console.log("Thank you/feedback email sent to user:", email);
+
+    res.status(200).json({
+      success: true,
+      message: "Free trial request submitted successfully. We will contact you soon.",
+    });
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).json({ success: false, error: "Failed to send email." });
   }
 };
+
 
 // Controller for "Get in Touch" email enquiries
 const getInTouch = async (req, res) => {
@@ -759,15 +807,31 @@ const getInTouch = async (req, res) => {
     `,
   };
 
+   // Compose thank you email for the user
+  const thankYouMailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Thank you for getting in touch with Lunch Bowl!",
+    html: `
+      <p>Hello ${firstName} ${lastName},</p>
+      <p>Thank you for contacting us. We’ve received your enquiry and our team will get back to you shortly.</p>
+      <p>Best regards,<br/>Team Lunch Bowl</p>
+    `,
+  };
+
   try {
     await transporter.sendMail(mailOptions);
     console.log("General enquiry email sent successfully --------->", mailOptions);
+    
+    await transporter.sendMail(thankYouMailOptions);
+    console.log("Thank you email sent successfully --------->", thankYouMailOptions);
 
     res.status(200).json({ success: true, message: "Enquiry sent successfully." });
   } catch (error) {
     console.error("Email send error:", error);
     res.status(500).json({ success: false, error: "Failed to send email." });
   }
+
 };
 
 const contactUs = async (req, res) => {
@@ -818,9 +882,23 @@ const contactUs = async (req, res) => {
     `,
   };
 
+  const userMailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Thank you for your enquiry!",
+    html: `
+      <p>Hello ${firstName},</p>
+      <p>Thank you for reaching out to us through our enquiry form. We’ve received your request, and our team will get back to you shortly with the details.</p>
+      <p>We look forward to assisting you soon.</p>
+      <p>Best regards,<br/>Team LunchBowl</p>
+    `,
+  };
+
   try {
     await transporter.sendMail(mailOptions);
     console.log("Contact Us enquiry email sent successfully --------->", mailOptions);
+
+     await transporter.sendMail(userMailOptions);
     res.status(200).json({ success: true, message: "Enquiry sent successfully." });
   } catch (error) {
     console.error("Email send error:", error);
@@ -869,9 +947,25 @@ const schoolServiceEnquiry = async (req, res) => {
     `,
   };
 
+   // Thank you mail options for the user
+  const userMailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Thank you for your enquiry!",
+    html: `
+      <p>Hello ${firstName},</p>
+      <p>Thank you for reaching out to us through our enquiry form. We’ve received your request, and our team will get back to you shortly with the details.</p>
+      <p>We look forward to assisting you soon.</p>
+      <p>Best regards,<br/>Team LunchBowl</p>
+    `,
+  };
+
   try {
     await transporter.sendMail(mailOptions);
     console.log("School service enquiry email sent successfully", mailOptions);
+
+    await transporter.sendMail(userMailOptions);
+    console.log("Thank you email sent successfully", userMailOptions);
 
     res.status(200).json({ success: true, message: "Enquiry sent successfully." });
   } catch (error) {
