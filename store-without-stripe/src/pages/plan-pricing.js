@@ -105,9 +105,94 @@ const PlanPricingPage = () => {
                 </section>
                 <section className='ppricesec relative'>
                     <div className='container mx-auto' >
-                        <div className='ppriceinrow w-full relative py-[12vh]' >
+                        <div className='ppriceinrow w-full relative secpaddblock' >
                             <div className='ppriceTitle combtntb comtilte mb-[4vh] text-center'>
                                 <h4>Wholesome food choices supporting active <strong>kids with energy and strength</strong></h4>
+                            </div>
+                            <div className='ppricebox flex'>
+                                <div className='ppriceitem'>
+                                  <div className='ppricetbox'>
+                                    <h4 className='permnt'>Per Month</h4>
+                                    <h2><small>₹</small>4,400</h2>
+                                    <h6>22 Working Days</h6>
+                                  </div>
+                                  <div className='ppricembox'>
+                                    <ul>
+                                      <li>200 per meal (22 meals)</li>
+                                      <li>Pre-planned, dietician-approved 30-day meal plan</li>
+                                      <li>Add a sibling & save (5% off)</li>
+                                      <li>Diet & allergy-friendly choices</li>
+                                      <li>Flexible menu choices</li>
+                                      <li>Multi-child subscription options</li>
+                                    </ul>
+                                  </div>
+                                  <div className='ppricebbox'>
+                                    <button>Get Started</button>
+                                  </div>
+                                </div>
+                                <div className='ppriceitem'>
+                                  <div className='ppricetbox'>
+                                    <h4><del>₹ 13,200</del> / 3 months</h4>
+                                    <h2><small>₹</small>12,540</h2>
+                                    <h6>66 Working Days</h6>
+                                  </div>
+                                  <div className='ppricembox'>
+                                    <ul>
+                                      <li>200 per meal (66 meals)</li>
+                                      <li>Pre-planned, dietician-approved 30-day meal plan </li>
+                                      <li>Already includes 5% savings</li>
+                                      <li>Add a sibling & save even more (extra 5%)</li>
+                                      <li>Diet & allergy-friendly choices</li>
+                                      <li>Multi-child subscription options</li>
+                                    </ul>
+                                  </div>
+                                  <div className='ppricebbox'>
+                                    <button>Get Started</button>
+                                  </div>
+                                  <div className="offerbox">
+                                      <strong>5</strong><small>% <br/>OFF</small>
+                                  </div>
+                                </div>
+                                <div className='ppriceitem'>
+                                  <div className='ppricetbox'>
+                                    <h4><del>₹ 26,400</del> / 6 months</h4>
+                                    <h2><small>₹</small>23,760</h2>
+                                    <h6>132 Working Days</h6>
+                                  </div>
+                                  <div className='ppricembox'>
+                                    <ul>
+                                      <li>200 per meal (132 meals)</li>
+                                      <li>Pre-planned, dietician-approved 30-day meal plan </li>
+                                      <li>Already includes 10% savings</li>
+                                      <li>Add a sibling & save even more (extra 5%)</li>
+                                      <li>Diet & allergy-friendly choices</li>
+                                      <li>Multi-child subscription options</li>
+                                    </ul>
+                                  </div>
+                                  <div className='ppricebbox'>
+                                    <button>Get Started</button>
+                                  </div>
+                                </div>
+                                <div className='ppriceitem customitem'>
+                                  <div className='ppricetbox'>
+                                    <h4>Popular</h4>
+                                    <h2>Custom</h2>
+                                    <h6>Plan</h6>
+                                  </div>
+                                  <div className='ppricembox'>
+                                    <ul>
+                                      <li>200 per meal (flexible count)</li>
+                                      <li>Adjust for holidays/special events</li>
+                                      <li>Pre-planned, dietician-approved 30-day meal plan </li>
+                                      <li>Personalized dietician-suggested meal plan</li>
+                                      <li>Diet & allergy-friendly choices</li>
+                                      <li>Multi-child subscription options</li>
+                                    </ul>
+                                  </div>
+                                  <div className='ppricebbox'>
+                                    <button>Get Started</button>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
