@@ -172,6 +172,9 @@ const PlanPricingPage = () => {
                                   <div className='ppricebbox'>
                                     <button>Get Started</button>
                                   </div>
+                                  <div className="offerbox">
+                                      <strong>10</strong><small>% <br/>OFF</small>
+                                  </div>
                                 </div>
                                 <div className='ppriceitem customitem'>
                                   <div className='ppricetbox'>

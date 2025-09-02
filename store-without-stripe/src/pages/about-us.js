@@ -108,7 +108,7 @@ const AboutUs = () => {
                   <p>Let’s be honest—packing lunch every single day is hard work. Between picky eaters, tight mornings, and the never-ending quest for something that’s both healthy and kid-approved, parents (especially moms) are juggling a lot.</p>
                   <div className="hintroIntb">
                     <p>That’s where the idea for <strong>Lunch Bowl</strong> was born.</p>
-                    <p>We asked ourselves: <br /><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
+                    <p className="mobspilt">We asked ourselves: <br /><strong>“What if lunch didn’t have to be another daily stress?”</strong></p>
                     <p>So, we cooked up a solution: <strong>Lunch Bowl</strong> is your lunchtime lifesaver. We deliver fresh, delicious, and nutritious meals straight to your child—hot and ready to enjoy. No last-minute chopping, no repeat sandwich cycles, and no lunchbox guilt.</p>
                     <p><strong>Here’s what we bring to the table:</strong></p>
                     <ul className="list-disc pl-5">

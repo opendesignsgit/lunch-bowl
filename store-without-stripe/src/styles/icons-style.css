@@ -205,14 +205,24 @@
 .MyAccbanersec .psfbanIconss .iconfour{width: 4vw;}
 
 
+@media screen and (max-width:1200px) {
+  .ateamIconss .icontwo,.ateamIconss .iconthree,.ateamIconss .iconfive,.ateamIconss .iconsix, .ateamIconss .iconseven{width: 34px;}
+  .ateamIconss .icontwo,.ateamIconss .iconthree,.ateamIconss .iconfour{right: 0px;}
+  .ateamIconss .iconfive,.ateamIconss .iconsix,.ateamIconss .iconseven{left: 0px;}
+  .menulIconss .icontwo {top: 64%;}
+  .menulIconss .iconone,.menulIconss .icontwo{width: 40px;}
+
+}
 @media screen and (max-width:1100px) {
   .hbanIconss .iconsix {width: 22px;}
   .hbanIconss .iconone {width: 28px;}
   .hteamIconss .iconsix{-webkit-transform: translateX(-65%);-ms-transform: translateX(-65%);transform: translateX(-65%);width: 60px;}
   .hfformIconss .iconthree,.hfformIconss .iconsix{width: 60px;}
   .hteamIconss .iconthree{-webkit-transform: translateX(90%);-ms-transform: translateX(90%);transform: translateX(90%);}
-  .ateamIconss .icontwo,.ateamIconss .iconthree,.ateamIconss .iconfive,.ateamIconss .iconsix, .ateamIconss .iconseven{width: 50px;}
-  .ateamIconss .iconone{width: 50px;top: 4%;}
+  .ateamIconss .icontwo,.ateamIconss .iconthree,.ateamIconss .iconfive,.ateamIconss .iconsix, .ateamIconss .iconseven{width: 34px;}
+  .ateamIconss .icontwo,.ateamIconss .iconthree,.ateamIconss .iconfour{    right: -20px;}
+  .ateamIconss .iconfive,.ateamIconss .iconsix,.ateamIconss .iconseven{left: -20px;}
+  .ateamIconss .iconone{width: 50px;top: 4%;right: 6%;}
   .ateamIconss .iconeight{width: 75px;}
   .menulIconss .icontwo, .menulIconss .iconone{width: 50px;}
   .hfformIconss .iconfive {bottom: 10%;   left: 25%;}
@@ -229,6 +239,7 @@
   .hteamIconss .iconthree{width: 38px;}
   .hteamIconss .iconfour{width: 38px;}
   .hteamIconss .iconsix{width: 45px;top: 30%;}
+  .ateamIconss .iconeight{    left: 4%;}
 
 }
 
@@ -273,6 +284,8 @@
   .psfbanIconss .iconone,.psfbanIconss .icontwo,.psfbanIconss .iconfive,.psfbanIconss .iconseven,.psfbanIconss .iconeight{width:24px;}
   .hbanIconss .iconthree { width: 46px;}
   .hbanIconss .iconfive {width: 22px;}
+  .menulIconss .icontwo, .menulIconss .iconone {width: 37px;}
+  .menulIconss .icontwo {top: 76%;}
 }
 
 @media screen and (max-width:650px){
@@ -282,7 +295,7 @@
   .hbanIconss .iconfive {right: 13%;}
   .hbanIconss .iconsix {bottom: 10%;left: 10%;}
   .hintroIconss .iconone,.hintroIconss .icontwo,.hintroIconss .iconthree,.hintroIconss .iconfour{width: 40px;}
-  .hintroIconss .iconthree {left: 37px;bottom: 46%;}
+  .hintroIconss .iconthree {left: 37px;bottom: 61%;}
   .hteamIconss .iconthree,.hteamIconss .iconfour{display: none;}
   .hteamIconss .iconsix {transform: translateX(0%);left: auto;right: 0;top: 24%;width: 60px;}
   .hteamIconss .iconone {left: 1%;top: 21%;width: 75px;transform: rotate(296deg);}
@@ -320,7 +333,7 @@
   .hintroIconss .iconnine{top: -4%;left: 95%;}
   .hDoctIconss .iconseven{display: none;}
   .MyAccbanersec .psfbanIconss .iconfour{display: none;}
-
+  .abbanIconss .iconone, .abbanIconss .icontwo {width: 34px;}
 }
 
 @media screen and (max-width:420px){
