@@ -754,7 +754,7 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .propetilpopus .Prodeilsliders .slick-prev {background: url(/home/slideArrowPrev.png) no-repeat center center;background-size: 100%;}
 .propetilpopus .Prodeilsliders .slick-next {background: url(/home/slideArrowNext.png) no-repeat center center;background-size: 100%;}
 .propetilpopus .Prodeilsliders .slick-list .slick-track{display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
-.compopups .popClose{border: 2px solid #383838;border-radius: 0;padding: 5px;box-shadow: 0 0 10px #000000;right: 30px;}
+.compopups .popClose{border: 2px solid #383838;border-radius: 0;padding: 5px;right: 30px;}
 .compopups .popClose:hover{background: #db4b00;border-color: #ffffff;}
 .compopups .popClose:hover svg{fill: #ffffff;}
 .popvideodialog .popClose{border: 2px solid #383838;border-radius: 0;padding: 5px;background: #ffffff;opacity: 1;z-index: 9999999;pointer-events: all;box-shadow: 0 0 10px #000000;right: 30px;}
@@ -1043,6 +1043,12 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .lfooutfild h6 {font-size: 15px;}
   .lfooutfild h6 small{display: block;font-size: 90%;margin-top: 5px;}
   .hLFOintrow {width: 46%;}
+  .poptitles p{font-size: 14px;}
+}
+
+@media screen and (min-width:1100px)  and (max-width:1200px) {
+  .compopups .gintRCol {padding-top: 60px;}
+  .compopups .popClose{top: 10px;right: 15px;}
 }
 
 @media screen and (max-width:1100px) {
@@ -1108,7 +1114,6 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .ppricebox{overflow-x: scroll;overflow-y: hidden;white-space: nowrap;width: 100%;}
   .ppricebox .ppriceitem{flex: 0 0 35%;margin-inline: 0 15px;}
   .ppricebox .ppricembox ul {white-space: normal;}
- 
 }
 
 @media screen and (max-width:1023px){
@@ -1158,7 +1163,9 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .HProlistSec{padding-inline: 30px;}
   .HProlistSec .container {max-width: 100%;}
   .sliderRef1 .rfbox p br{display: none;}
-
+  .HfaqSec::after{background: url(/faqbeforeMobImg.png) no-repeat bottom right;background-size: 100%;}
+ul.footmenu li{margin-inline: 10px;}
+ul.footmenu li a{font-size: 12px;}
 
 }
 @media screen and (max-width:880px){
@@ -1256,6 +1263,13 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .produtMobView{display: none;}
 }
 
+@media screen and (max-width:768px){
+  .combtntb p.parabtn button span{font-size: 15px;line-height: 40px;padding-inline: 20px;}
+  ul.footmenu li a{font-size: 12px;}
+  .footcopyrow .copycol p{font-size: 12px;}
+  
+}
+
 @media screen and (max-width:700px){
   .banimgss img {height: 400px;}
   .HbanSec .hbanLeft {padding-top: 3rem;}
@@ -1263,6 +1277,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 }
 
 @media screen and (max-width:650px){
+  .logsinul>li.mobhidpplink{display: none;}
   body .SetpContainer {padding-block: 55px;}
   .produtDeskView{display: none;}
   .menulistpage .produtDeskView{display: block;}
@@ -1459,13 +1474,13 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .loginfiledss button.sotpbtn span::after{width: 10px;}
   .signboxrow{flex-direction: column;}
   .signboxrow .signbLcol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
-  .signboxrow .signbRcol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 92%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+  .signboxrow .signbRcol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 95%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
   .nutriBoxRow{flex-direction: column;}
   .nutriBoxRow .nutriLCol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
-  .nutriBoxRow .nutriRCol {width: 100%;height: 100%;padding: 20px;background:rgb(255 255 255 / 92%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding-top: 65px;}
+  .nutriBoxRow .nutriRCol {width: 100%;height: 100%;padding: 20px;background:rgb(255 255 255 / 95%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding-top: 65px;}
   .gintPopRow {flex-direction: column;}
   .gintPopRow .gintLCol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
-  .gintPopRow .gintRCol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 92%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding-top: 65px;}
+  .gintPopRow .gintRCol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 95%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding-top: 65px;}
   .gintPopRow .gintRCol form label{font-size: 14px;transform: translate(10px, 10px);}
   .gintPopRow .gintRCol form input{font-size: 14px;padding-block: 8px;}
   .loginfiledss label {font-size: 14px;}
