@@ -230,7 +230,7 @@ export default function FreeTrialPage() {
               <Box className="freetrilCol ftLCol">
                 <ImageBox className="ftLImg">
                   <Image
-                    src={"/LogInSignUp/signuppopimg.jpg"}
+                    src={"/LogInSignUp/free-trial-img.jpg"}
                     alt="Free Trial"
                     layout="fill"
                     objectFit="cover"
