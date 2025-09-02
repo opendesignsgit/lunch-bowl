@@ -72,7 +72,7 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
       const pageWidth = window.innerWidth;
       const body = document.body;
 
-      if (pageWidth > 701) {
+      if (pageWidth > 650) {
         const scrollUp = "scroll-up";
         const scrollDown = "scroll-down";
         const scrollanimi = "sscroll-animi";
@@ -153,6 +153,7 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
           </div>
           <div className="navbox">
             <ul className="flex items-center logsinul">
+              <li className="nodesign mobhidpplink"><Link href="/plan-pricing">Plan & Pricing</Link></li>
               {/* Only show login button if user is not logged in */}
               {!session && (
                 <li className="logbtn">
@@ -274,6 +275,9 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
                   <li className="nav__item hamnavlink">
                     <Link href="/about-us">About Us</Link>
                   </li>
+                  <li className="nav__item hamnavlink">
+                    <Link href="/plan-pricing">Plan & Pricing</Link>
+                    </li>
                   <li className="nav__item hamnavlink">
                     <Link href="/Menulist">Food Menu</Link>
                   </li>
