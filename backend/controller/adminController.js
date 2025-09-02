@@ -656,17 +656,21 @@ const talkNutrition = async (req, res) => {
 
 
 const freeTrialEnquiry = async (req, res) => {
-  const {
+   const {
     firstName,
     lastName,
     email,
     mobileNumber,
-    address,
+    altMobileNumber, // new alternative mobile
+    address,        // full combined address string from frontend (optional fallback)
+    doorNo,         // new door no/building/street
+    areaCity,       // new area/city
+    pincode,        // new pincode
     schoolName,
     className,
     message,
     userId,
-    childName, // <-- child name received from frontend
+    childName,
   } = req.body;
 
   // Update/create customer with freeTrial: true
@@ -688,6 +692,14 @@ const freeTrialEnquiry = async (req, res) => {
     }
   }
 
+   // Compose full address from parts if provided  
+  let fullAddress = "";
+  if (doorNo || areaCity || pincode) {
+    fullAddress = `Door No./Building/Street: ${doorNo || ''}\nArea/City: ${areaCity || ''}\nPincode: ${pincode || ''}`;
+  } else {
+    fullAddress = address || "";
+  }
+
   // Configure nodemailer
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -707,9 +719,11 @@ const freeTrialEnquiry = async (req, res) => {
       <p><strong>Name:</strong> ${firstName} ${lastName}</p>
       <p><strong>Child Name:</strong> ${childName}</p>
       <p><strong>Email:</strong> ${email}</p>
-      <p><strong>School:</strong> ${schoolName}</p>
+      
       <p><strong>Class:</strong> ${className}</p>
-      <p><strong>Address:</strong> ${address}</p>
+      <p><strong>Address:</strong><br/>${fullAddress.replace(/\n/g, "<br/>")}</p>
+      <p><strong>Primary Mobile:</strong> ${mobileNumber}</p>
+      <p><strong>Alternative Mobile:</strong> ${altMobileNumber || "N/A"}</p>
       <p><strong>Message:</strong><br/>${message}</p>
       <p>This is a Free Trial enquiry.</p>
       <br>
