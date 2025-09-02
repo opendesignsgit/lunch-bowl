@@ -28,7 +28,7 @@ const PaymentFailed = () => {
         color="error"
         onClick={() => router.push("/user/profile-Step-Form")} // Replace with retry or form page
       >
-        Menu Calendar  
+        Payment Details
       </Button>
     </Box>
   );
