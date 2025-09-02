@@ -26,6 +26,10 @@ header{padding: 2vh 5vw 1vh;position: fixed;width: 100%;top: 0;left: 0;z-index: 
 .logsinul li.trialbtn button{background: #FF6514;color: #ffffff;}
 .logsinul li.trialbtn button::after{-webkit-filter: invert(1);filter: invert(1);}
 
+.logsinul>li.nodesign:before{opacity: 0;visibility: hidden;}
+.logsinul>li.nodesign a:hover{background: #ff6514;color: #ffffff;}
+.logsinul>li.nodesign>a::after{opacity: 0;visibility: hidden;width: 0;height: 0;}
+
 .logsinul>li:hover::before{right: 0;bottom: 0;}
 .logsinul li:hover a::after{top: -3px;right: -3px;}
 .logsinul .submenuul {position: absolute;top: 100%;right:0;background: #ffffff;box-shadow: 0 0 10px #33333336;z-index: 999;opacity: 0;pointer-events: none;visibility: hidden;-webkit-transform: translateY(30px);-ms-transform: translateY(30px);transform: translateY(30px);-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
@@ -340,7 +344,7 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .inputbox button:hover span::after{top: -3px;right: -3px;}
 
 .HworktabSec{background: url(/home/hworkbg.jpg) no-repeat center center;background-size: cover;}
-.HworktabSec .comtilte h3,.HteamSec .comtilte h3,.HNutritionSec .comtilte h3,.HfaqSec .comtilte h3{text-transform: capitalize;}
+.HworktabSec .comtilte h3,.HteamSec .comtilte h3,.HNutritionSec .comtilte h3,.HfaqSec .comtilte h3,.HProlistSec .comtilte h3{text-transform: capitalize;}
 .HworktabSec .slider-container{margin-inline: 4vw;}
 .sliderRef1 {}
 .sliderRef1 .rfbox h4{font-family: 'Baloo';margin-bottom: 10px;font-size: 1.5vw;letter-spacing: 1px;}
@@ -492,16 +496,18 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .mteamitembox{border: 0px solid #ffffff;justify-content: center;}
 .mteambox {border: 1px solid #ffffff;overflow: hidden;width: 33.333%;}
 .mteamfront {position: relative;top: 0;}
-.mteamfront h3{background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 1.2vw;text-transform: uppercase;letter-spacing: 0.5px;padding: 6px 10px;}
+.mteamfront h3{background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 1.2vw;text-transform: uppercase;letter-spacing: 0.5px;padding: 6px 10px;position: absolute;
+bottom: 0;width: 100%;pointer-events: none;}
+.mteambox:hover .mteamfront h3{opacity: 0;}
 .mteamimg{}
 .mteamimg img{}
 .mteamback {z-index: 99;position: absolute;width: 100%;height: 100%;top: 100%;left: 0;transition: all 0.5s ease-in-out;pointer-events: none;display: flex;flex-direction: column;justify-content: center;align-items: center;background-color: transparent;text-align: center;padding: 2vw;}
 .mteambox:hover .mteamback {top: 0;pointer-events: all;}
-.mteamback.ravishankarbg{background: url(/about/team/RavishankarNImg.jpg) no-repeat top center;background-size: cover;}
+/*.mteamback.ravishankarbg{background: url(/about/team/RavishankarNImg.jpg) no-repeat top center;background-size: cover;}
 .mteamback.muruganbg{background: url(/about/team/SMuruganImg.jpg) no-repeat top center;background-size: cover;}
 .mteamback.arulmathanbg{background: url(/about/team/ArulMadhanImg.jpg) no-repeat top center;background-size: cover;}
 .mteamback.vijayvellbg{background: url(/about/team/VijayVImg.jpg) no-repeat top center;background-size: cover;}
-.mteamback.vijayantonybg{background: url(/about/team/VijayAntonyImg.jpg) no-repeat top center;background-size: cover;}
+.mteamback.vijayantonybg{background: url(/about/team/VijayAntonyImg.jpg) no-repeat top center;background-size: cover;}*/
 .mteamback::before{content: '';position: absolute; width: 100%; height: 100%; top: 0; left:0; background: rgb(255 101 20 / 78%);opacity: 1;backdrop-filter: blur(4px);pointer-events: none;}
 .mteamback h3 {position: relative;color: #ffffff;font-family: 'Baloo';font-size: 1.2vw;text-transform: uppercase;letter-spacing: 0.5px;margin-bottom: 15px;}
 .mteamback p {position: relative;color: #ffffff;}
@@ -551,13 +557,17 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .hOEnvirorow .image_wrapper.imgsmlbox{width: 16vw;border-radius: 200px;}
 .hOEnvirorow .image_wrapper img{width: 100%;}
 
+.aboutuspage .HmteamSec .comtilte h3{text-transform: capitalize;}
+.aboutuspage .HmvisionSec .comtilte h3{text-transform: capitalize;}
+.aboutuspage .HOEnviroSec .comtilte h3{text-transform: capitalize;}
+
 .contuspage .HctaSec {display: none;}
 .contmapssec iframe{width: 100%;aspect-ratio: 2/0.6;}
 .contaddsboxs{margin-bottom: 10vh;}
 .addsboxss{background: #FFF4D7;padding: 30px;text-align: center;margin-inline: 10px;position: relative;height: 100%;border-radius: 20px;border: 1px solid rgb(255 101 20 / 20%);}
 .addsIcon{width: 2.5vw;margin-inline: auto;margin-bottom: 10px;}
 .addsboxss h3{line-height: 1;font-family: 'Baloo';font-size: 1.2vw;margin-bottom: 8px;text-transform: uppercase;}
-.addsboxss h4{line-height: 1;font-family: 'Baloo';font-size: 1vw;margin-bottom: 8px;text-transform: uppercase;}
+.addsboxss h4{line-height: 1;font-family: 'Baloo';font-size: 1vw;margin-bottom: 8px;}
 .addsboxss p{margin-bottom: 0px;line-height: 1;}
 .addsboxss p.parabtn{margin-top: 10px;}
 .addsboxss p.parabtn a{color: #FF6514;font-weight: 600;line-height: 1.4;}
@@ -959,6 +969,12 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .ppricebox .ppriceitem:hover .ppricembox ul li{color: #ffefe7;}
 .ppricebox .ppriceitem:hover .ppricembox ul li::before{background: #ffefe7;}
 
+body .propetilpopus {z-index: 99999;}
+
+.termscondipage .comtilte p address{  font-style: normal;}
+.PolicyCont{padding-inline: 20px;}
+
+
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
 }
@@ -990,6 +1006,8 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .faqcontain::after {    height: 34px;  }
   .HLFOlistSec{padding-block: 16vh 12vh;}
   .logsinul>li a,.logsinul .submenuul li button{padding-inline: 24px;font-size: 15px;line-height: 45px;}
+  .menulistpage .hworkTitle {width:40%;}
+  .menulistpage .hworkTitle p br{display: none;}
 }
 
 @media screen and (max-width:1520px) {
@@ -1038,12 +1056,25 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   html body {font-size: 15px;  }
   .HLFOlistSec {padding-block: 80px;}
   .logsinul li button, .combtntb p.parabtn a span {line-height: 32px;padding-inline: 15px;font-size: 13px;}
+  .logsinul>li a{line-height: 32px;padding-inline: 15px;font-size: 13px;}
   .logsinul li button::after {width: 10px;}
   .HintroSec .hbanLeft:before{width: 45px;left: -18px;}
   .lfooutfild h6 {font-size: 15px;}
   .lfooutfild h6 small{display: block;font-size: 90%;margin-top: 5px;}
   .hLFOintrow {width: 46%;}
   .poptitles p{font-size: 14px;}
+  .sliderRef2 h3{    font-size: 20px;}
+  .menulistpage .HProlistSec{padding-block: 60px;}
+  .hProListTitle {margin-bottom: 30px;}
+  .progroupitem .proboxfront{padding-block: 30px;}
+  .proboxtitle h5 {font-size: 18px;}
+  .fontanimi{opacity: 0.2;}
+  .popbcont h3{font-size: 24px;letter-spacing: -0px;}
+  .propetilpopus .popClose{}
+  .propetilpopus .popbcont {padding-top: 60px;}
+  .propetPopBox .popbimg{padding-inline: 30px;}
+  .propetilpopus .Prodeilsliders .slick-arrow{width: 30px;height: 30px;}
+  .contmapssec iframe {aspect-ratio: 2 / 1;}
 }
 
 @media screen and (min-width:1100px)  and (max-width:1200px) {
@@ -1114,11 +1145,17 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .ppricebox{overflow-x: scroll;overflow-y: hidden;white-space: nowrap;width: 100%;}
   .ppricebox .ppriceitem{flex: 0 0 35%;margin-inline: 0 15px;}
   .ppricebox .ppricembox ul {white-space: normal;}
+  .TeamMemberPopSec h2{font-size: 24px;}
+  .mteamback h3{font-size: 22px;} 
+  .pagebansec.Policysbanersec {height: 300px;}
+  .loginfiledss h6 {font-size: 16px;}
+  .sendotpbox h6{font-size: 16px;}
 }
 
 @media screen and (max-width:1023px){
-
+.contusmid{display: block;}
   .contuslast {width: 100%;}
+  .formsec .container {max-width: 100%;}
 }
 
 @media screen and (max-width:1000px){
@@ -1164,8 +1201,15 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
   .HProlistSec .container {max-width: 100%;}
   .sliderRef1 .rfbox p br{display: none;}
   .HfaqSec::after{background: url(/faqbeforeMobImg.png) no-repeat bottom right;background-size: 100%;}
-ul.footmenu li{margin-inline: 10px;}
-ul.footmenu li a{font-size: 12px;}
+  ul.footmenu li{margin-inline: 10px;}
+  ul.footmenu li a{font-size: 12px;}
+  .aboutintrosec .comtilte p.mobspilt br{display: block;}
+  .ProdfilterBox ul {overflow-x: scroll;overflow-y: hidden;white-space: nowrap;justify-content: flex-start;}
+  .fontanimi .animiintext span{font-size: 58px;}
+  .addsboxss h4{font-size: 16px;}
+  .loginfiledss button.sotpbtn span{font-size: 14px;}
+  .loginfiledss label {font-size: 16px;}
+  .sfrmrow {flex-direction: column;}
 
 }
 @media screen and (max-width:880px){
@@ -1175,6 +1219,8 @@ ul.footmenu li a{font-size: 12px;}
   .ppricebox .offerbox strong {font-size: 25px;}
   .ppricebox .ppricetbox h2{font-size: 45px;}
   .ppricebox .ppricetbox h2 small{font-size: 35px;}
+  .Prodeilsliders  .teamboximg {padding-inline: 20px;}
+  
 }
 @media screen and (max-width:820px){
   .myLogo{width: 60px;}
@@ -1194,7 +1240,7 @@ ul.footmenu li a{font-size: 12px;}
   .sliderRef1 .slick-prev {transform: translateX(-0%);}
   .sliderRef1 .slick-next{    transform: translateX(0%);}
   .pagebansec::before{height: 28px;bottom: -9px;}
-  .pagebansec, .pagebansec.setpbanersec{ height: 320px;}
+  .pagebansec, .pagebansec.setpbanersec{ height: 350px;}
   body .secpaddblock, .HctaSec, .aboutuspage .HintroSec, .HmteamSec, .HOEnviroSec, .formsec, .menulistpage .HProlistSec {padding-block: 45px;}
   body .secpaddblock.HNutritionSec {padding-block: 80px;}
   .HOEnviroSec .hOEnviroTitle {padding-inline: 20px;}
@@ -1202,6 +1248,8 @@ ul.footmenu li a{font-size: 12px;}
   .addsboxss p.parabtn {margin-top: 10px;}
   .pagebansec p br{display: none;}
   .pagebansec .hworkTitle {width: 70%;}
+  .contuspage .pagebansec .hworkTitle {width:50%;}
+  .menulistpage .hworkTitle {width: 52%;margin-bottom: 0;}
   .freetrilpage .pagebansec .hworkTitle {width: 40%;}
   .pagebansec.MyAccbanersec .hworkTitle {display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
   .menulIconss .iconone{right: -11px;}
@@ -1247,7 +1295,9 @@ ul.footmenu li a{font-size: 12px;}
   .steptitles h5 {font-size: 22px;}
   .DetlsSepBox h3 {font-size: 22px;}
   .LogoutMpops .LogoutMCoont h3 {font-size: 22px;}
-  .contusmid{display: none;}
+  .contaddsboxs{order: 1;}
+  .contusmid{order: 3;width: 100%;}
+  .formbox.contuslast{order: 2;}
   .formbox.contuslast {width: 100%;}
   .progroupitem .proboxfront{padding-block: 35px;}
   .comtilte h3{letter-spacing: -1px;}
@@ -1257,6 +1307,10 @@ ul.footmenu li a{font-size: 12px;}
   .calandySecs{padding-inline: 0px;}
   .MCLeftPanel .childslidebox button{padding: 0;}
   .sliderRef1 .rfbox h4 {font-size: 26px;}
+  .mteambox { width: 50%;}
+  .resendbtn {width: 100%;}
+  .loginfiledss label {font-size: 14px;}
+  .loginfiledss button.sotpbtn span {font-size: 13px;padding-inline: 30px;    }
 }
 
 @media screen and (min-width:651px){
@@ -1280,7 +1334,7 @@ ul.footmenu li a{font-size: 12px;}
   .logsinul>li.mobhidpplink{display: none;}
   body .SetpContainer {padding-block: 55px;}
   .produtDeskView{display: none;}
-  .menulistpage .produtDeskView{display: block;}
+  .menulistpage .produtDeskView{display: block;width: 80%;margin-inline: auto;}
   .menulistpage .produtMobView {display: none;}
   body {font-size: 15px;letter-spacing: 0;}
   header{background: #FFF4D7;padding: 10px 15px;}
@@ -1376,20 +1430,20 @@ ul.footmenu li a{font-size: 12px;}
   .myaccontpage .pagebansec .hworkTitle {width: 80%;text-align: center;}
   .pagebansec h1{font-size: 40px;}
   .pagebansec .breadcrumbs ol {justify-content: center;}
-  .pagebansec{height: 600px;padding-inline: 30px;}
+  .pagebansec{height: 660px;padding-inline: 30px;padding-top: 100px;}
   .pagebansec .pageinconter{padding-bottom: 70%;}
-  .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 420px;overflow: hidden;}
+  .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 520px;overflow: hidden;}
   .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter,.pagebansec.Policysbanersec .pageinconter{padding-bottom: 0%;}
   .pagebansec.Policysbanersec {height: 200px;}
   .PolicyCont{padding-inline: 30px;}
-
+  .contuspage .pagebansec .hworkTitle {width:100%;}
 
   .aboutbanersec .pageinconter::after,.MenusLbanersec .pageinconter::after{width: 90%;}
   .Dashboardbanersec .pageinconter::after{width: 86%;}
   .contusbanersec .pageinconter::after{width: 60%;right:15%;}
   .MenusLbanersec .pageinconter::after{}
-  .pagebansec::before {height: 18px;bottom: -9px;}
-  .mteambox{width:100%;margin-block: 5px;}
+  .pagebansec::before {height: 18px;bottom: -9px;}  
+  .mteambox{width: 50%;margin-block: 0;}
   .mteamitembox {border: 0px solid #ffffff;}
   .HmvisionSec{padding-block: 40px 0;padding-inline: 30px;overflow: hidden;}
   .HmvisionSec .Hmvisioninrow{-webkit-box-orient: vertical;-webkit-box-direction: reverse;-ms-flex-direction: column-reverse;flex-direction: column-reverse;}
@@ -1463,7 +1517,8 @@ ul.footmenu li a{font-size: 12px;}
   .propetilpopus .Prodeilsliders .slick-next {right: 0;}
   .logboxrow{flex-direction: column;}
   .logboxrow .logbLcol {width: 100%;position: absolute;height: 100%;left: 0;top: 0;}
-  .logboxrow .logbRcol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 78%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+  .logboxrow .logbRcol {width: 100%;height: 100%;padding: 20px;background: rgb(255 255 255 / 90%);position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+  .logboxInrow,.sendotpbox{width: 100%;}
   .logbRcol .poptitles {margin-bottom: 15px;}
   .poptitles h4{font-size: 26px;margin-bottom: 0;}
   .poptitles p {font-size: 15px;}
@@ -1515,7 +1570,7 @@ ul.footmenu li a{font-size: 12px;}
   .teamboxcont h4{font-size: 18px;}
   .TeamMemberPopSec h4{font-size: 18px;}
   .hNutritionintImg .hDocInImg{padding: 12px;}
-  .hintroimgone{padding: 8px;}  
+  .hintroimgone{padding: 13px;}  
   .steptitles h5 {font-size: 18px;}
   .DetlsSepBox .formboxrow .formboxcol {width: 100%;}
   .radiogroub>.MuiBox-root {padding: 5px 10px;}
@@ -1534,6 +1589,12 @@ ul.footmenu li a{font-size: 12px;}
   .Hfaqinrow {padding-block: 60px;}
   .faqAccordionitems button{font-size: 13px;line-height: 1.4;}  
   .ppricebox .ppriceitem {flex: 0 0 80%;}
+  .HmteamSec {padding-inline: 20px;}
+  .abtvidosliders .avidoplaybtns button {width: 56px;}
+  .abtvideoSec:after{height: 10px;bottom: 0px;transform: translateY(0%);background: url(/about/howrkitbefimg.png) repeat-x bottom center;background-size: 70%;        background-position-y: bottom !important;}
+  .addsboxss h4 {font-size: 21px;}
+  .signboxInrow{width: 100%;}
+
 }
 @media screen and (min-width:501px) and (max-width:650px){ 
    .produtMobView {width: 80%;margin-inline: auto;}
@@ -1541,6 +1602,13 @@ ul.footmenu li a{font-size: 12px;}
 @media screen and (max-width:550px){  
   .resendbtn {width: 100%;}
   .resendbtn button::after{width: 12px;margin-left: 6px;}
+  .pagebansec{height: 580px;}
+}
+
+@media screen and (max-width:500px){
+  .mteambox{width:100%;margin-block: 5px;}
+  .HmteamSec {padding-inline: 30px;}
+  .menulistpage .produtDeskView{display: block;width: 100%;margin-inline: auto;}
 }
 @media screen and (max-width:420px){
   body {font-size: 14px;letter-spacing: 0;}
