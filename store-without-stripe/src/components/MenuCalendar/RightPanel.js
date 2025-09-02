@@ -54,6 +54,7 @@ const RightPanel = ({
   setUseMealPlan,
   selectedPlans,
   setSelectedPlans,
+  canPay,
 }) => {
   const { data: session } = useSession();
 
@@ -74,6 +75,9 @@ const RightPanel = ({
   const { submitHandler, loading } = useRegistration();
 
   const isSaturday = selectedDateObj.day() === 6;
+
+  const [showSaveWarning, setShowSaveWarning] = useState(false);
+
 
 
   // Load paid meal data from API, fallback to localStorage
@@ -176,6 +180,7 @@ const RightPanel = ({
     if (typeof saveSelectedMeals === "function") {
       saveSelectedMeals();
       setSnackbarOpen(true); // Show snackbar
+      
     }
   };
 
@@ -371,6 +376,10 @@ const RightPanel = ({
                               className="paysavebtn"
                               color="warning"
                               onClick={() => {
+                                if (canPay) {
+                                  setShowSaveWarning(true);
+                                  return;
+                                }
                                 const dish = menuSelections[formatDate(selectedDate)]?.[child.id];
                                 if (!dish) {
                                   alert("Select a dish first");
@@ -448,6 +457,11 @@ const RightPanel = ({
         childrenData={holidayPaymentData}
       />
 
+      <Snackbar open={showSaveWarning} autoHideDuration={4000} onClose={() => setShowSaveWarning(false)}>
+        <Alert severity="warning" sx={{ width: '100%' }}>
+          Please save working days menu before paying holidays.
+        </Alert>
+      </Snackbar>
 
       <Snackbar
         open={snackbarOpen}
