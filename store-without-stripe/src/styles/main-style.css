@@ -451,6 +451,8 @@ ul.footmenu li a:hover{text-decoration: underline;}
 .HfaqSec.senddesfaq::after{opacity: 0;}
 .HfaqSec.senddesfaq .Hfaqinrow::before{opacity: 0;}
 
+html body .compopups .logbLcol {background-position: top center;}
+
 .pagebansec {height: 520px;padding-top: 10vh;}
 .pagebansec {background: url(/about/aboutbanbg.jpg) no-repeat bottom center;background-size: cover;}
 .pagebansec h1{font-family: 'Baloo';font-size: 3.5vw;line-height: 1;text-transform: uppercase;}
