@@ -974,6 +974,8 @@ body .propetilpopus {z-index: 99999;}
 .termscondipage .comtilte p address{  font-style: normal;}
 .PolicyCont{padding-inline: 20px;}
 
+.setpbanersec .comtilte {padding-block: 10px;}
+
 
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
@@ -1075,6 +1077,8 @@ body .propetilpopus {z-index: 99999;}
   .propetPopBox .popbimg{padding-inline: 30px;}
   .propetilpopus .Prodeilsliders .slick-arrow{width: 30px;height: 30px;}
   .contmapssec iframe {aspect-ratio: 2 / 1;}
+  .steptitles h5{font-size: 20px;}
+  .DetlsSepBox h6 {font-size: 13px;}
 }
 
 @media screen and (min-width:1100px)  and (max-width:1200px) {
@@ -1115,7 +1119,7 @@ body .propetilpopus {z-index: 99999;}
   .HctaSec .HctatImg {width: 60%;}
   .HctaTitle h3{margin-block: -10px -15px;}
   ul.footmenu li {margin-inline: 15px;}
-  .SetpTabli p {font-size: 13px;height: 36px;}
+  .SetpTabli p {font-size: 16px;height: 36px;}
   .SetpTabli p:before{border-top: 18px solid transparent;border-bottom: 18px solid transparent;border-left: 15px solid #ffffff;left: -1px;}
   .SetpTabli p:after{border-top: 18px solid transparent;border-bottom: 18px solid transparent;}
   .proboxtitle h5 {font-size: 24px;}
@@ -1150,6 +1154,8 @@ body .propetilpopus {z-index: 99999;}
   .pagebansec.Policysbanersec {height: 300px;}
   .loginfiledss h6 {font-size: 16px;}
   .sendotpbox h6{font-size: 16px;}
+  .setpbanersec  .comtilte{text-align: center;padding-block: 8px;}
+  .setpbanersec  .comtilte h1{justify-content: center;}
 }
 
 @media screen and (max-width:1023px){
@@ -1490,7 +1496,7 @@ body .propetilpopus {z-index: 99999;}
   .MCcalendy {border: 0px solid #EAEAEC;}
   .MCcalendy .MCMainPanel, .MCcalendy .MCLeftPanel {min-height: auto;box-shadow: none;}
   .MCcalendy .MCLeftPanel{border: 0px solid #EAEAEC;height: auto;}
-  .popmenuselt {}
+  html body .popmenuselt {z-index: 99999;}
   .popmenuselt .MuiDialog-container{}
   .popmenuselt .MuiDialog-container .MuiPaper-root{margin: 0;width: 100%;height: 100%;max-height: 100%;}
   .popmenuselt .MCRightPanel {padding:20px;position: relative;height: 100%;}
@@ -1594,6 +1600,8 @@ body .propetilpopus {z-index: 99999;}
   .abtvideoSec:after{height: 10px;bottom: 0px;transform: translateY(0%);background: url(/about/howrkitbefimg.png) repeat-x bottom center;background-size: 70%;        background-position-y: bottom !important;}
   .addsboxss h4 {font-size: 21px;}
   .signboxInrow{width: 100%;}
+  .MCcalendy .MCMiddlePanel {padding: 20px;}
+  .holylicolor {justify-content: flex-start;}
 
 }
 @media screen and (min-width:501px) and (max-width:650px){ 

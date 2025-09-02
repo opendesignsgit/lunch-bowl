@@ -160,7 +160,7 @@
 .menulIconss .menulicn{aspect-ratio: 1;pointer-events: none;}
 .menulIconss .menulicn img{width: 100%;height: 100%;}
 .menulIconss .iconone{top: 26%;right: -4%;}
-.menulIconss .icontwo{top: 43%;right: 47%;}
+.menulIconss .icontwo{top: 29%;right: 47%;}
 
 @media screen and (max-width:1420px) {
   .hbanIconss .iconone {
@@ -254,6 +254,7 @@
   .ateamIconss{display: none;}  
   .hintroIconss .iconeight{width: 10px;}
   .hbanIconss .iconseven {bottom: 0%;left: 61%;}
+  .psfbanIconss .iconfive {bottom: -59%;}
 }
 
 @media screen and (max-width:920px){
@@ -322,11 +323,11 @@
   .psfbanIconss .iconone {top: 0;left: -10%;}
   .psfbanIconss .icontwo {top: -55px;left: 33%;}
   .psfbanIconss .iconthree {top: -27%;right: 26%;}
-  .psfbanIconss .iconfour {top: 4%;right: -15%;width: 70px;}
+  .psfbanIconss .iconfour {top: 4%;right: -10%;width: 40px;}
   .psfbanIconss .iconfive {bottom: -28%;right: 1%;}
   .psfbanIconss .iconsix {bottom: -31%;right: 36%;}
   .psfbanIconss .iconseven {bottom: -31%;left: 25%;}
-  .psfbanIconss .iconeight {bottom: -8%;left: -12%;}
+  .psfbanIconss .iconeight {bottom: -8%;left: -6%;}
   .hbanIconss .iconseven {bottom: 18%;}
 
   .hintroIconss .iconseven{top: 3%;left: 0%;width: 20px;}
