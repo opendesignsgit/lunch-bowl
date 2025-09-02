@@ -11,9 +11,25 @@ import abbanicon5 from "../../public/enterrequireddetails/violetyellow-star.svg"
 import abbanicon6 from "../../public/enterrequireddetails/redtriangle.svg";
 import abbanicon7 from "../../public/enterrequireddetails/redlittleflower.svg";
 import abbanicon8 from "../../public/enterrequireddetails/layerflower.svg";
+import LoginPopup from "../components/logInSignUp/LoginPopup";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 
 const PlanPricingPage = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [showLogin, setShowLogin] = useState(false);
+
+
+  const handleGetStartedClick = () => {
+    if (session) {
+      router.push("/user/profile-Step-Form");
+    } else {
+      setShowLogin(true);
+    }
+  };
 
   const faqItems = [
     {
@@ -127,7 +143,7 @@ const PlanPricingPage = () => {
                                     </ul>
                                   </div>
                                   <div className='ppricebbox'>
-                                    <button>Get Started</button>
+                                    <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
                                 </div>
                                 <div className='ppriceitem'>
@@ -147,7 +163,7 @@ const PlanPricingPage = () => {
                                     </ul>
                                   </div>
                                   <div className='ppricebbox'>
-                                    <button>Get Started</button>
+                                    <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
                                   <div className="offerbox">
                                       <strong>5</strong><small>% <br/>OFF</small>
@@ -170,7 +186,7 @@ const PlanPricingPage = () => {
                                     </ul>
                                   </div>
                                   <div className='ppricebbox'>
-                                    <button>Get Started</button>
+                                    <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
                                   <div className="offerbox">
                                       <strong>10</strong><small>% <br/>OFF</small>
@@ -193,7 +209,7 @@ const PlanPricingPage = () => {
                                     </ul>
                                   </div>
                                   <div className='ppricebbox'>
-                                    <button>Get Started</button>
+                                    <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
                                 </div>
                             </div>
@@ -217,6 +233,9 @@ const PlanPricingPage = () => {
                 </section>
             </div>
             <Mainfooter/>
+            {showLogin && (
+        <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
+      )}
         </div>
     );
 };

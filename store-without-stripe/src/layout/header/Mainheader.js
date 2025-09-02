@@ -173,7 +173,11 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
           </div>
           <div className="navbox">
             <ul className="flex items-center logsinul">
-              <li className="nodesign mobhidpplink"><Link href="/plan-pricing">Plan & Pricing</Link></li>
+              {stepCheck !== 4 && (
+                <li className="nodesign mobhidpplink">
+                  <Link href="/plan-pricing">Plan & Pricing</Link>
+                </li>
+              )}
               {/* Only show login button if user is not logged in */}
               {!session && (
                 <li className="logbtn">
