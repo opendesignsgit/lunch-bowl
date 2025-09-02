@@ -14,9 +14,13 @@ import { useRouter } from "next/router";
 import LogoutConfirmationPopup from "../../components/logInSignUp/LogoutConfirmationPopup";
 import { signOut } from "next-auth/react";
 import useRegistration from "@hooks/useRegistration";
+import FreeTrialSchoolPopup from "../../components/logInSignUp/FreeTrialSchoolPopup";
+import useAsync from "../../hooks/useAsync";
+import CategoryServices from "../../services/CategoryServices";
 
 
-const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
+
+const Mainheader = ({ title, description, children, freeTrialTaken }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [openLogin, setOpenLogin] = useState(false);
@@ -36,6 +40,10 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
 
   const userId = session?.user?.id;
   const freeTrial = session?.user?.freeTrial;
+
+  const { data: schools, loading: loadingSchools, error: errorSchools } = useAsync(CategoryServices.getAllSchools);
+
+  const [showFreeTrialPopup, setShowFreeTrialPopup] = useState(false);
 
   useEffect(() => {
     const fetchDataAndRoute = async () => {
@@ -117,6 +125,18 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
     sessionStorage.clear();
   };
 
+  const handleFreeTrialSubmit = (selectedSchool) => {
+    setShowFreeTrialPopup(false);
+
+    // Run your existing flow here after school selection
+    if (session) {
+      router.push("/free-trial");
+    } else {
+      setIsFreeTrial(true);
+      setShowSignUp(true);
+    }
+  };
+
   // detect mobile screen size
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -173,16 +193,7 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
                 </li> */}
               {!(apiFreeTrial == true || stepCheck == 4 || freeTrialTaken == true) && (
                 <li className="trialbtn">
-                  <button
-                    onClick={() => {
-                      if (session) {
-                        router.push("/free-trial");
-                      } else {
-                        setIsFreeTrial(true);
-                        setShowSignUp(true);
-                      }
-                    }}
-                  >
+                  <button onClick={() => setShowFreeTrialPopup(true)}>
                     <span>Start Free Trial</span>
                   </button>
                 </li>
@@ -277,7 +288,7 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
                   </li>
                   <li className="nav__item hamnavlink">
                     <Link href="/plan-pricing">Plan & Pricing</Link>
-                    </li>
+                  </li>
                   <li className="nav__item hamnavlink">
                     <Link href="/Menulist">Food Menu</Link>
                   </li>
@@ -313,6 +324,16 @@ const Mainheader = ({ title, description, children ,freeTrialTaken}) => {
         onClose={() => setShowLogoutConfirm(false)}
         onConfirm={handleLogout}
       />
+      <FreeTrialSchoolPopup
+        open={showFreeTrialPopup}
+        onClose={() => setShowFreeTrialPopup(false)}
+        onSubmit={handleFreeTrialSubmit}
+        schools={schools}
+        loadingSchools={loadingSchools} // updated variable name here
+        errorLoadingSchools={errorSchools} // updated variable name here
+      />
+
+
     </>
   );
 };

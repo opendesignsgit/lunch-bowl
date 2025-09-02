@@ -9,14 +9,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import config from "@components/product/config";
 import Breadcrumbs from "@layout/Breadcrumbs";
 import Mainheader from "@layout/header/Mainheader";
@@ -26,7 +23,6 @@ import Mainfooter from "@layout/footer/Mainfooter";
 import CategoryServices from "@services/CategoryServices";
 import useAsync from "@hooks/useAsync";
 import useEmail from "@hooks/useEmail";
-
 
 import abbanicon1 from "../../public/about/icons/herosec/pink-rounded-lines.svg";
 import abbanicon2 from "../../public/about/icons/herosec/pink-smileflower.svg";
@@ -65,16 +61,18 @@ export default function FreeTrialPage() {
   } = useAsync(CategoryServices.getAllSchools);
 
   const [formData, setFormData] = useState({
-    date: null,
     food: "",
-    address: "",
+    doorNo: "",
+    areaCity: "",
+    pincode: "",
     message: "",
     email: session?.user?.email || "",
+    mobile: session?.user?.mobile || "", // Assuming mobile stored here
+    altMobile: "",
     name: session?.user?.name || "",
     userId: session?.user?.id || "",
-    school: "",
     class: "",
-    childName: "", // ✅ new field
+    childName: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -83,19 +81,20 @@ export default function FreeTrialPage() {
   const [freeTrialTaken, setFreeTrialTaken] = useState(false);
   const { sendEmail, loading: emailLoading, error: emailError } = useEmail();
 
-
   useEffect(() => {
     setFormData({
-      date: null,
       food: "",
-      address: "",
+      doorNo: "",
+      areaCity: "",
+      pincode: "",
       message: "",
       email: session?.user?.email || "",
+      mobile: session?.user?.phone || "",
+      altMobile: "",
       name: session?.user?.name || "",
       userId: session?.user?.id || "",
-      school: "",
       class: "",
-      childName: "", // ✅ reset
+      childName: "",
     });
     setErrors({});
     setSubmitted(false);
@@ -109,43 +108,47 @@ export default function FreeTrialPage() {
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
-  const handleDateChange = (value) => {
-    setFormData((prev) => ({ ...prev, date: value }));
-    setErrors((prev) => ({ ...prev, date: "" }));
-  };
-
   const validate = () => {
     const newErrors = {};
-    if (!formData.name || !formData.name.trim())
-      newErrors.name = "Full Name is required";
-    if (!formData.childName || !formData.childName.trim())
-      newErrors.childName = "Child Name is required"; // ✅ validation
+    // Name validation - alphabets and spaces only
+    if (!formData.name || !/^[A-Za-z\s]+$/.test(formData.name.trim()))
+      newErrors.name = "Full Name is required and alphabets only";
+
+    // Child Name validation - alphabets and spaces only
+    if (!formData.childName || !/^[A-Za-z\s]+$/.test(formData.childName.trim()))
+      newErrors.childName = "Child Name is required and alphabets only";
+
+    // Email validation
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Valid email is required";
-    if (!formData.school)
-      newErrors.school = "School is required";
-    if (!formData.class)
-      newErrors.class = "Class is required";
-    if (!formData.date) {
-      newErrors.date = "Please select a date";
-    } else if (formData.date.isSame(dayjs(), "day")) {
-      const currentHour = dayjs().hour();
-      const currentMinute = dayjs().minute();
-      if (currentHour > 12 || (currentHour === 12 && currentMinute >= 0)) {
-        newErrors.date = "Same-day delivery is closed after 12 PM";
-      }
-    }
+
+    // Class validation
+    if (!formData.class) newErrors.class = "Class is required";
+
+    // Food validation
     if (!formData.food) newErrors.food = "Please select a dish";
-    if (!formData.address.trim()) newErrors.address = "Address is required";
+
+    // Door No./Building/Street validation - required, no whitespace only
+    if (!formData.doorNo || !formData.doorNo.trim())
+      newErrors.doorNo = "Door no./Building/Street is required";
+
+    // Area/City validation - required, no whitespace only
+    if (!formData.areaCity || !formData.areaCity.trim())
+      newErrors.areaCity = "Area/City is required";
+
+    // Pincode validation - numbers only, typically 6 digits in India (adjust if needed)
+    if (!formData.pincode || !/^\d{6}$/.test(formData.pincode))
+      newErrors.pincode = "Pincode must be exactly 6 digits";
+
+    // Alternative Mobile Number validation if entered
+    if (formData.altMobile) {
+      if (!/^[6789]\d{9}$/.test(formData.altMobile))
+        newErrors.altMobile =
+          "Alternative Mobile Number must be 10 digits and start with 6,7,8 or 9";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const shouldDisableDate = (date) => {
-    const currentHour = dayjs().hour();
-    const currentMinute = dayjs().minute();
-    const isAfterNoon = currentHour > 12 || (currentHour === 12 && currentMinute >= 0);
-    return date.isSame(dayjs(), "day") && isAfterNoon;
   };
 
   const handleSubmit = async (e) => {
@@ -156,21 +159,23 @@ export default function FreeTrialPage() {
     const [firstName, ...lastNameParts] = (formData.name || "").split(" ");
     const lastName = lastNameParts.join(" ");
 
+    const addressCombined = `Door No./Building/Street: ${formData.doorNo}\nArea/City: ${formData.areaCity}\nPincode: ${formData.pincode}`;
+
     const emailData = {
       firstName,
       lastName,
       email: formData.email,
-      mobileNumber: "",
-      address: formData.address,
-      schoolName: formData.school,
+      mobileNumber: formData.mobile,
+      altMobileNumber: formData.altMobile,
+      address: addressCombined,
       className: formData.class,
       childName: formData.childName,
-      message: `Dish: ${formData.food}\nDelivery Date: ${formData.date?.format("YYYY-MM-DD")}\n${formData.message}`,
+      message: `Dish: ${formData.food}\n${formData.message}`,
       userId: formData.userId,
     };
 
     try {
-      await sendEmail(emailData); // ✔️ replaces axios.post
+      await sendEmail(emailData);
       setSubmitted(true);
       setFreeTrialTaken(true);
     } catch (err) {
@@ -180,7 +185,6 @@ export default function FreeTrialPage() {
       setLoading(false);
     }
   };
-
 
   // Schools rendering
   const renderSchoolOptions = () => {
@@ -262,14 +266,18 @@ export default function FreeTrialPage() {
                       <Typography variant="h6" color="success.main" gutterBottom>
                         Your order will be delivered on time.
                       </Typography>
-                      <Typography>
-                        Delivery scheduled for: {formData.date?.format("MMMM D, YYYY")}
-                      </Typography>
-                      <Typography mt={1}>Child Name: {formData.childName}</Typography>
+                      <Typography>Child Name: {formData.childName}</Typography>
                       <Typography>Dish: {formData.food}</Typography>
-                      <Typography>School: {formData.school}</Typography>
                       <Typography>Class: {formData.class}</Typography>
-                      <Typography>Address: {formData.address}</Typography>
+                      <Typography>Address:</Typography>
+                      <Typography>{`Door No./Building/Street: ${formData.doorNo}`}</Typography>
+                      <Typography>{`Area/City: ${formData.areaCity}`}</Typography>
+                      <Typography>{`Pincode: ${formData.pincode}`}</Typography>
+                      <Typography>Email: {formData.email}</Typography>
+                      <Typography>Mobile: {formData.mobile}</Typography>
+                      {formData.altMobile && (
+                        <Typography>Alternative Mobile: {formData.altMobile}</Typography>
+                      )}
                       <Button
                         sx={{ mt: 3 }}
                         variant="contained"
@@ -295,8 +303,6 @@ export default function FreeTrialPage() {
                         sx={{ mt: 1 }}
                       />
 
-
-
                       {/* Email */}
                       <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
                         EMAIL ADDRESS*
@@ -309,6 +315,35 @@ export default function FreeTrialPage() {
                         error={!!errors.email}
                         helperText={errors.email}
                         sx={{ mt: 1 }}
+                      />
+
+                      {/* Mobile (not editable) */}
+                      <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
+                        MOBILE NUMBER*
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        value={formData.mobile}
+                        size="small"
+                        sx={{ mt: 1 }}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+
+                      {/* Alternative Mobile */}
+                      <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
+                        ALTERNATIVE MOBILE NUMBER
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        value={formData.altMobile}
+                        onChange={handleChange("altMobile")}
+                        size="small"
+                        error={!!errors.altMobile}
+                        helperText={errors.altMobile}
+                        sx={{ mt: 1 }}
+                        inputProps={{ maxLength: 10 }}
                       />
 
                       {/* Child Name */}
@@ -324,25 +359,6 @@ export default function FreeTrialPage() {
                         helperText={errors.childName}
                         sx={{ mt: 1 }}
                       />
-
-                      {/* School */}
-                      <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
-                        SELECT SCHOOL*
-                      </Typography>
-                      <TextField
-                        select
-                        fullWidth
-                        value={formData.school}
-                        onChange={handleChange("school")}
-                        size="small"
-                        error={!!errors.school}
-                        helperText={errors.school}
-                        sx={{ mt: 1 }}
-                        disabled={schoolsLoading || schoolsError}
-                      >
-                        <MenuItem value="">Select School</MenuItem>
-                        {renderSchoolOptions()}
-                      </TextField>
 
                       {/* Class */}
                       <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
@@ -364,32 +380,7 @@ export default function FreeTrialPage() {
                         ))}
                       </TextField>
 
-                      {/* Date */}
-                      <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
-                        SELECT YOUR PREFERRED DATE FOR DELIVERY*
-                      </Typography>
-                      <Box display="flex" gap={2} mt={1} flexWrap="wrap">
-                        <Box flex={1}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              value={formData.date}
-                              onChange={handleDateChange}
-                              minDate={dayjs()}
-                              shouldDisableDate={shouldDisableDate}
-                              slotProps={{
-                                textField: {
-                                  fullWidth: true,
-                                  size: "small",
-                                  error: !!errors.date,
-                                },
-                              }}
-                            />
-                          </LocalizationProvider>
-                          {errors.date && (
-                            <FormHelperText error>{errors.date}</FormHelperText>
-                          )}
-                        </Box>
-                      </Box>
+                      {/* Remove date picker section */}
 
                       {/* Food */}
                       <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
@@ -419,21 +410,43 @@ export default function FreeTrialPage() {
                         </MenuItem>
                       </TextField>
 
-                      {/* Address */}
+                      {/* Address split into three fields */}
                       <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
                         RESIDENTIAL ADDRESS*
                       </Typography>
+                      {/* Door no./Building/Street */}
                       <TextField
                         fullWidth
-                        multiline
-                        rows={3}
-                        value={formData.address}
-                        onChange={handleChange("address")}
+                        value={formData.doorNo}
+                        onChange={handleChange("doorNo")}
                         size="small"
-                        error={!!errors.address}
-                        helperText={errors.address}
-                        placeholder="Enter your delivery address"
+                        error={!!errors.doorNo}
+                        helperText={errors.doorNo}
+                        placeholder="Door no./Building/Street"
                         sx={{ mt: 1 }}
+                      />
+                      {/* Area/City */}
+                      <TextField
+                        fullWidth
+                        value={formData.areaCity}
+                        onChange={handleChange("areaCity")}
+                        size="small"
+                        error={!!errors.areaCity}
+                        helperText={errors.areaCity}
+                        placeholder="Area/City"
+                        sx={{ mt: 1 }}
+                      />
+                      {/* Pincode */}
+                      <TextField
+                        fullWidth
+                        value={formData.pincode}
+                        onChange={handleChange("pincode")}
+                        size="small"
+                        error={!!errors.pincode}
+                        helperText={errors.pincode}
+                        placeholder="Pincode"
+                        sx={{ mt: 1 }}
+                        inputProps={{ maxLength: 6 }}
                       />
 
                       {/* Message */}
