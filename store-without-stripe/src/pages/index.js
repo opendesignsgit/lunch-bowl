@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Mainheader from '@layout/header/Mainheader';
 import Mainfooter from '@layout/footer/Mainfooter';
@@ -53,12 +53,36 @@ import hfoodicon6 from "../../public/home/icons/hfoodsec/sunIcon.svg";
 import hfoodicon7 from "../../public/home/icons/hfoodsec/wmIcon.svg";
 import hfoodicon8 from "../../public/home/icons/hfoodsec/starssIcon.svg";
 import hfoodicon9 from "../../public/home/icons/hfoodsec/redflowerIcon.svg";
+import { useSession } from "next-auth/react";
+import useRegistration from "@hooks/useRegistration";
 
 
 
 const Home = () => {
  const [open, setOpen] = useState(false);
-  
+
+  const { data: session, status } = useSession();
+  const { submitHandler } = useRegistration();
+
+  const [stepCheck, setStepCheck] = useState(null);
+
+  useEffect(() => {
+    const fetchStepCheck = async () => {
+      if (status === "authenticated" && session?.user?.id) {
+        try {
+          const result = await submitHandler({
+            path: 'Step-Check',
+            _id: session.user.id
+          });
+          setStepCheck(result?.data?.step);
+        } catch (error) {
+          console.error("Error fetching step check:", error);
+        }
+      }
+    };
+    fetchStepCheck();
+  }, [session?.user?.id, status, submitHandler]);
+
       const handleOpenDialog = () => {
         setOpen(true);
       };
@@ -222,6 +246,7 @@ const Home = () => {
             </div>
                 </div>
             </section>
+        {stepCheck != 4 && (
               <section className='HLFOlistSec bg-FFE6E6 relative flex'>
                   <div className='container mx-auto flex flex-col items-start relative' >
                     <div className='hLFOTitle combtntb comtilte mb-[5vh]'>
@@ -239,6 +264,7 @@ const Home = () => {
                       </div>
                 </div>
             </section>
+        )}
               <section className='HworktabSec relative bg-white flex secpaddblock'>
                 <div className='container mx-auto' >
                     <div className='hworkTitle combtntb comtilte textcenter  mb-[5vh]'>
