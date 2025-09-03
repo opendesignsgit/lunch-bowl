@@ -13,7 +13,7 @@ import * as yup from "yup";
 import stepOne from "../../../public/profileStepImages/stepOne.png";
 import useRegistration from "@hooks/useRegistration";
 
-const nameRegex = /^[A-Za-z\s]+$/; // allows only letters and spaces
+const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/; 
 
 const schema = yup.object().shape({
   fatherFirstName: yup

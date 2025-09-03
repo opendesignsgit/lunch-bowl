@@ -19,10 +19,19 @@ import useRegistration from "@hooks/useRegistration";
 import CategoryServices from "@services/CategoryServices";
 import useAsync from "@hooks/useAsync";
 
+const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+
+
 // Validation schema
 const schema = yup.object().shape({
-  childFirstName: yup.string().required("Child's first name is required"),
-  childLastName: yup.string().required("Child's last name is required"),
+  childFirstName: yup
+    .string()
+    .matches(nameRegex, "Enter a valid name")
+    .required("Child's first name is required"),
+  childLastName: yup
+    .string()
+    .matches(nameRegex, "Enter a valid name")
+    .required("Child's last name is required"),
   dob: yup
     .date()
     .nullable()

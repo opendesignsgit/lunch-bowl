@@ -170,9 +170,9 @@ const CenterPanel = ({
                       width: 15,
                       height: 15,
                       borderRadius: "50%",
-                      border: "2px solid green",
+                      // border: "2px solid green",
                       verticalAlign: "middle",
-                      background: "rgba(0,128,0,0.10)",
+                      // background: "rgba(0,128,0,0.10)",
                     }}
                     title="Saved Menu"
                   />
