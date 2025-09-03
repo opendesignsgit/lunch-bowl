@@ -11,6 +11,7 @@ import {
   IconButton,
   LinearProgress,
   Divider,
+  Checkbox,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -162,6 +163,10 @@ const SubscriptionPlanStep = ({
 
   const [hideMessage, setHideMessage] = useState(false);
 
+  const [agreed, setAgreed] = useState(false);
+  const [agreedError, setAgreedError] = useState(false);
+
+
   // Properly initialize state from initialSubscriptionPlan prop or defaults
   useEffect(() => {
     const computedPlans = calculatePlans(holidays, numberOfChildren);
@@ -258,6 +263,12 @@ const SubscriptionPlanStep = ({
       : null;
 
   const handleNext = async () => {
+    if (!agreed) {
+      setAgreedError(true);
+      return;
+    }
+    setAgreedError(false);
+
     if (selectedPlan === "byDate") {
       const newErrors = {
         startDate: !startDate,
@@ -528,6 +539,43 @@ const SubscriptionPlanStep = ({
                 {selectedPlan === "byDate" && " No discounts apply to custom date selections."}
               </strong>
             </Typography>
+
+            <Box mt={2}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={agreed}
+                    onChange={(e) => {
+                      setAgreed(e.target.checked);
+                      if (agreedError) setAgreedError(false);
+                    }}
+                    sx={{ color: "#FF6A00" }}
+                  />
+                }
+                label={
+                  <Typography fontSize={14}>
+                    I agree with the{" "}
+                    <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6A00", textDecoration: "underline" }}>
+                      terms and conditions
+                    </a>{" "}
+                    /{" "}
+                    <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6A00", textDecoration: "underline" }}>
+                      privacy policy
+                    </a>{" "}
+                    /{" "}
+                    <a href="/refund-cancellation-policy" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6A00", textDecoration: "underline" }}>
+                      refund cancellation policy
+                    </a>
+                  </Typography>
+                }
+              />
+              {agreedError && (
+                <FormHelperText error>
+                  You must agree to the terms and conditions to proceed.
+                </FormHelperText>
+              )}
+            </Box>
+
 
             <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
               <Button variant="outlined" onClick={prevStep} className="backbtn">

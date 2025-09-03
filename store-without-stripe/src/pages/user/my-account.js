@@ -317,20 +317,100 @@ const MyAccount = () => {
                   </Box>
                   <Box className="myaccboxlist boxthree ">
                     <Box className="ChildlistBoxs flex">
-                      <Box className="ChildlistItems">
+                      <Box className="ChildlistItems" sx={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'flex-start' }}>
                         <h4>Children </h4>
                         {userDetails.children && userDetails.children.length > 0 ? (
                           userDetails.children.map((child, idx) => (
-                            <ul key={child._id || idx} sx={{ mb: 2, pl: 2 }}>
-                              <li><b>Name:</b> {child.childFirstName}{" "} {child.childLastName}</li>
-                              <li><b>Date of Birth:</b> {formatDate(child.dob)}</li>
-                              <li><b>School:</b> {child.school}</li>
-                              <li><b>Class:</b> {child.childClass}</li>
-                              <li><b>Section:</b> {child.section}</li>
-                              <li><b>Lunch Time:</b> {child.lunchTime}</li>
-                              <li><b>Location:</b> {child.location}</li>
-                              <li><b>Allergies:</b> {child.allergies || "None"}</li>
-                            </ul>
+                            <table
+                              key={child._id || idx}
+                              style={{
+                                width: '300px',
+                                borderCollapse: 'collapse',
+                                border: '1px solid #ddd',
+                              }}
+                            >
+                              <thead>
+                                <tr>
+                                  <th
+                                    colSpan={2}
+                                    style={{
+                                      backgroundColor: "#f4f4f4",
+                                      padding: "8px",
+                                      textAlign: "left",
+                                      borderBottom: "1px solid #ddd",
+                                    }}
+                                  >
+                                    Child {idx + 1} Details
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    <b>Name:</b>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    {child.childFirstName} {child.childLastName}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    <b>Date of Birth:</b>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    {formatDate(child.dob)}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    <b>School:</b>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    {child.school}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    <b>Class:</b>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    {child.childClass}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    <b>Section:</b>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    {child.section}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    <b>Lunch Time:</b>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    {child.lunchTime}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    <b>Location:</b>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #ddd" }}>
+                                    {child.location}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={{ padding: "8px" }}>
+                                    <b>Allergies:</b>
+                                  </td>
+                                  <td style={{ padding: "8px" }}>
+                                    {child.allergies || "None"}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           ))
                         ) : (
                           <h6>No children details available.</h6>
@@ -338,6 +418,7 @@ const MyAccount = () => {
                       </Box>
                     </Box>
                   </Box>
+
               </Box>
             ) : (
                   <Box className="notfetchbox">
