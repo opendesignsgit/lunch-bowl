@@ -26,7 +26,9 @@ const LoginPopup = ({ open, onClose }) => {
   const [message, setMessage] = useState(null);
   const [errors, setErrors] = useState({ mobileNumber: "", otp: "" });
   const otpRefs = useRef([]);
-  const { submitHandler, loading } = useLoginSubmit();
+  const { submitHandler } = useLoginSubmit();
+  const [loading, setLoading] = useState(false);
+
 
   // Countdown effect
   useEffect(() => {
@@ -78,19 +80,25 @@ const LoginPopup = ({ open, onClose }) => {
       return;
     }
     try {
+      setLoading(true);
       const res = await submitHandler({ phone: mobileNumber, path: "logIn" });
       console.log("sendOtp res:", res);
 
       if (res.success) {
+        setLoading(false);
         setMessage({ type: "success", text: res.message || "OTP sent successfully!" });
         if (res.otp) setOtp(res.otp);
         if (res.expiresAt) startTimerFromExpiresAt(res.expiresAt);
       } else {
+        setLoading(false);
         setMessage({ type: "error", text: res.message || "Failed to send OTP" });
       }
     } catch (error) {
       console.error("Error sending OTP:", error);
       setMessage({ type: "error", text: "Failed to send OTP. Please try again." });
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,18 +111,22 @@ const LoginPopup = ({ open, onClose }) => {
       return;
     }
     try {
+      setLoading(true);
       const res = await submitHandler({ phone: mobileNumber, path: "logIn" });
       console.log("resendOtp res:", res);
 
       if (res.success) {
+        setLoading(false);
         setMessage({ type: "success", text: res.message || "OTP resent successfully!" });
         if (res.otp) setOtp(res.otp);
         if (res.expiresAt) startTimerFromExpiresAt(res.expiresAt);
       } else {
         setMessage({ type: "error", text: res.message || "Failed to resend OTP" });
+        setLoading(false);
       }
     } catch (error) {
       setMessage({ type: "error", text: "Failed to resend OTP. Please try again." });
+      setLoading(false);
     }
   };
 
@@ -124,6 +136,7 @@ const LoginPopup = ({ open, onClose }) => {
       return;
     }
     try {
+      setLoading(true);
       const res = await submitHandler({
         otp: userOtp,
         phone: mobileNumber,
@@ -132,12 +145,17 @@ const LoginPopup = ({ open, onClose }) => {
       console.log("verifyOtp res:", res);
 
       if (res.success) {
+        setLoading(false);
         setMessage({ type: "success", text: res.message || "OTP verified successfully!" });
       } else {
+        setLoading(false);
         setMessage({ type: "error", text: res.message || "OTP verification failed" });
       }
     } catch (error) {
       setMessage({ type: "error", text: "Error verifying OTP" });
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -285,6 +303,7 @@ const LoginPopup = ({ open, onClose }) => {
                   </Typography>
                   <div className="resendbtn">
                     <Button
+                        disabled={loading}
                       fullWidth
                       sx={{
                         backgroundColor: resendEnabled ? "#FF6B00" : "#e85f00",
@@ -331,6 +350,7 @@ const LoginPopup = ({ open, onClose }) => {
                   <Button
                     className="sotpbtn"
                     fullWidth
+                        disabled={loading}
                     sx={{
                       backgroundColor: "#FF6B00",
                       color: "#fff",

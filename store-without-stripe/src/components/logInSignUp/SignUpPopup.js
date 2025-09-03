@@ -38,7 +38,8 @@ const SignUpPopup = ({ open, onClose, freeTrial }) => {
     otp: "",
   });
   const otpRefs = useRef([]);
-  const { submitHandler, loading } = useLoginSubmit();
+  const { submitHandler } = useLoginSubmit();
+  const [loading, setLoading] = useState(false);
   const { sendOTPSMS, sendSignupConfirmationSMS, isSending: isSendingSMS } = useSMS();
 
   // Countdown effect
@@ -121,10 +122,12 @@ const validateForm = () => {
   const handleSendOtp = async () => {
     if (validateForm()) {
       try {
+        setLoading(true);
         const res = await submitHandler({ email: form.email, phone: form.mobile, path: "signUp" });
         console.log("sendOtp response:", res);
 
         if (res.success) {
+          setLoading(false);
           setMessage({ type: "success", text: res.message || "OTP sent successfully!" });
           if (res.otp) setOtp(res.otp); // store otp if needed
           if (res.expiresAt) startTimerFromExpiresAt(res.expiresAt);
@@ -137,11 +140,13 @@ const validateForm = () => {
             }
           }
         } else {
+          setLoading(false);
           setMessage({ type: "error", text: res.message || "Failed to send OTP" });
         }
       } catch (error) {
         setMessage({ type: "error", text: "Something went wrong while sending OTP" });
         console.error("Error sending OTP:", error);
+        setLoading(false);
       }
     }
   };
@@ -155,10 +160,12 @@ const validateForm = () => {
       return;
     }
     try {
+      setLoading(true);
       const res = await submitHandler({ phone: form.mobile, path: "signUp" });
       console.log("resendOtp response:", res);
 
       if (res.success) {
+        setLoading(false);
         setMessage({ type: "success", text: res.message || "OTP resent successfully!" });
         if (res.otp) setOtp(res.otp); // store otp if needed
         if (res.expiresAt) startTimerFromExpiresAt(res.expiresAt);
@@ -171,10 +178,13 @@ const validateForm = () => {
           }
         }
       } else {
+        setLoading(false);
         setMessage({ type: "error", text: res.message || "Failed to resend OTP" });
       }
     } catch (error) {
       setMessage({ type: "error", text: "Something went wrong while resending OTP" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -183,6 +193,7 @@ const validateForm = () => {
       setErrors({ ...errors, otp: "Please enter a valid 4-digit OTP" });
       return;
     } else {
+      setLoading(true);
       const res = await submitHandler({
         otp: userOtp,
         phone: form.mobile,
@@ -195,8 +206,10 @@ const validateForm = () => {
       console.log("verifyOtp---->", res);
 
       if (res.success) {
+        setLoading(false);
         setMessage({ type: "success", text: res.message || "OTP verified successfully!" });
       } else {
+        setLoading(false);
         setMessage({ type: "error", text: res.message || "OTP verification failed" });
       }
     }
@@ -354,6 +367,7 @@ const validateForm = () => {
                     {resendEnabled ? (
                       <Button
                         fullWidth
+                          disabled={loading}
                         sx={{
                           backgroundColor: "#FF6B00",
                           color: "#fff",
@@ -366,6 +380,7 @@ const validateForm = () => {
                     ) : (
                       <Button
                         fullWidth
+                            disabled={loading}
                         sx={{
                           backgroundColor: "#FF6B00",
                           color: "#fff",
@@ -487,6 +502,7 @@ const validateForm = () => {
                   <Button
                     className="sotpbtn"
                     fullWidth
+                        disabled={loading}
                     sx={{
                       backgroundColor: "#FF6B00",
                       color: "#fff",

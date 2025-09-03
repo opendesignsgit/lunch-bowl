@@ -36,7 +36,7 @@ const Mainfooter = () => {
           path: 'Step-Check',
           _id: session.user.id
         });
-        setStepCheck(result?.data);
+        setStepCheck(result?.data?.step);
       } catch (err) {
         console.error("Error fetching stepCheck:", err);
       }
