@@ -12,6 +12,7 @@ import abbanicon6 from "../../public/enterrequireddetails/redtriangle.svg";
 import abbanicon7 from "../../public/enterrequireddetails/redlittleflower.svg";
 import abbanicon8 from "../../public/enterrequireddetails/layerflower.svg";
 import LoginPopup from "../components/logInSignUp/LoginPopup";
+import SignUpPopup from "../components/logInSignUp/SignUpPopup"; // Corrected import name
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -19,15 +20,18 @@ import { useState } from "react";
 
 const PlanPricingPage = () => {
   const { data: session } = useSession();
-  const router = useRouter();
+  const router = useRouter(); 
   const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
+
 
 
   const handleGetStartedClick = () => {
     if (session) {
       router.push("/user/profile-Step-Form");
     } else {
-      setShowLogin(true);
+     // setShowLogin(true);
+      setShowSignUp(true);
     }
   };
 
@@ -236,8 +240,11 @@ const PlanPricingPage = () => {
             {showLogin && (
         <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
       )}
+       {showSignUp  && (
+        <SignUpPopup open={showSignUp} onClose={() => setShowSignUp(false)} />
+      )}
         </div>
     );
 };
 
-export default PlanPricingPage;
+export default PlanPricingPage; 
