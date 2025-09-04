@@ -121,7 +121,7 @@ const UserDashboard = () => {
                 <h1 className="flex flex-col textFF6514">
                   {" "}
                   <span className="block firstspan">HEALTHY BITES </span>{" "}
-                  <span className="block">JOYFULL SMILES</span>{" "}
+                  <span className="block">JOYFUL SMILES</span>{" "}
                 </h1>
                 <p className="">!HEY! CONFUSED ALREADY? — We are here with full pack of protein fiber <br />and also an appetizing meal bowl for your little one; so no more worries <br />of lunch bowl for our little smiles.</p>
                 <Breadcrumbs />
@@ -199,7 +199,7 @@ const UserDashboard = () => {
                       </div>
                     </div>
                     <div className="mt-4 text-sm text-gray-500 curplan flex">
-                      <span> Current plan: </span>
+                      <span> <strong>Current plan:</strong> </span>
                       <strong
                         className={`ml-1 ${dashboardData.subscriptionCount > 0 ? "planactive" : "planinactive"}`}
                       >

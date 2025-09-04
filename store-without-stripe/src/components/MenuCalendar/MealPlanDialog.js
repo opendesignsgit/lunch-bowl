@@ -132,7 +132,7 @@ const MealPlanDialog = ({
   };
 
   return (
-    <Dialog
+    <Dialog className="MenuplanDialogpop"
       open={open}
       onClose={onClose}
       fullScreen={isMobile}
@@ -149,7 +149,7 @@ const MealPlanDialog = ({
         },
       }}
     >
-      <DialogTitle
+      <DialogTitle className="poptitle"
         sx={{
           width: "100%",
           textAlign: "center",
@@ -163,7 +163,7 @@ const MealPlanDialog = ({
         }}
       >
         {mealPlans[planId]?.name}
-        <IconButton
+        <IconButton className="popclose"
           aria-label="close"
           onClick={onClose}
           sx={{

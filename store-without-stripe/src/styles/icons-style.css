@@ -287,6 +287,8 @@
   .hbanIconss .iconfive {width: 22px;}
   .menulIconss .icontwo, .menulIconss .iconone {width: 37px;}
   .menulIconss .icontwo {top: 76%;}
+  .abbanIconss .iconone{top: 65%;}
+  .abbanIconss .iconone, .abbanIconss .icontwo {width: 38px;}
 }
 
 @media screen and (max-width:650px){
