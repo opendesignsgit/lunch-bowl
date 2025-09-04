@@ -32,7 +32,7 @@ const Menulist = () => {
                 <section className='HProlistSec inProListsec bg-FFF4D7 relative  flex py-[12vh]'>
                     <div className='container mx-auto' >
                         <div className='hProListTitle combtntb comtilte textcenter mb-[8vh]'>
-                            <h3>The Mission Behind</h3>
+                            <h3>Little Plates, Big Flavors</h3>
                             <h2 className='flex flex-col textFF6514'>
                                 <span className='block'>30+ Nutritious Picks</span> 
                             </h2>
