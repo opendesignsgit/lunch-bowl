@@ -1445,7 +1445,7 @@ body .propetilpopus {z-index: 99999;}
   .pagebansec .pageinconter{padding-bottom: 70%;}
   .pagebansec.MyAccbanersec, .pagebansec.setpbanersec  {height: 520px;overflow: hidden;}
   .pagebansec.MyAccbanersec .pageinconter,.pagebansec.setpbanersec .pageinconter,.pagebansec.Policysbanersec .pageinconter{padding-bottom: 0%;}
-  .pagebansec.Policysbanersec {height: 200px;}
+  .pagebansec.Policysbanersec {height: 300px;}
   .PolicyCont{padding-inline: 30px;}
   .contuspage .pagebansec .hworkTitle {width:100%;}
 
