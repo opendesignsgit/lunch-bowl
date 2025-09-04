@@ -1344,7 +1344,7 @@ body .propetilpopus {z-index: 99999;}
 @media screen and (max-width:650px){
   .logsinul>li.mobhidpplink{display: none;}
   body .SetpContainer {padding-block: 55px;}
-  .produtDeskView{display: none;}
+  .produtDeskView{display: none!important;}
   .menulistpage .produtDeskView{display: block;width: 80%;margin-inline: auto;}
   .menulistpage .produtMobView {display: none;}
   body {font-size: 15px;letter-spacing: 0;}
