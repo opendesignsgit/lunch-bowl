@@ -1344,9 +1344,9 @@ body .propetilpopus {z-index: 99999;}
 @media screen and (max-width:650px){
   .logsinul>li.mobhidpplink{display: none;}
   body .SetpContainer {padding-block: 55px;}
-  .produtDeskView{display: none!important;}
+  .homepage .produtDeskView{display: none!important;}
   .menulistpage .produtDeskView{display: block;width: 80%;margin-inline: auto;}
-  .menulistpage .produtMobView {display: none;}
+  .menulistpage .produtMobView {display: none!important;}
   body {font-size: 15px;letter-spacing: 0;}
   header{background: #FFF4D7;padding: 10px 15px;}
   .sscroll-animi header{background: #FFF4D7;padding: 10px 15px;}
