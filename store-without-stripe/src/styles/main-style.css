@@ -345,6 +345,7 @@ ul.footmenu li a:hover{text-decoration: underline;}
 
 .HworktabSec{background: url(/home/hworkbg.jpg) no-repeat center center;background-size: cover;}
 .HworktabSec .comtilte h3,.HteamSec .comtilte h3,.HNutritionSec .comtilte h3,.HfaqSec .comtilte h3,.HProlistSec .comtilte h3{text-transform: capitalize;}
+.menulistpage .HProlistSec .comtilte h3{text-transform: uppercase;}
 .HworktabSec .slider-container{margin-inline: 4vw;}
 .sliderRef1 {}
 .sliderRef1 .rfbox h4{font-family: 'Baloo';margin-bottom: 10px;font-size: 1.5vw;letter-spacing: 1px;}
@@ -366,7 +367,7 @@ ul.footmenu li a:hover{text-decoration: underline;}
 
 .HteamSec{}
 .HteamSec::before{content: '';position: absolute;width: 100%;height: 40px;top: 12px;left: 0;background: url(/home/topWaveVector.png) repeat-x bottom center;background-size: auto 85%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);z-index: 9;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;pointer-events: none;}
-.HteamSec::after{content: '';position: absolute;width: 100%;height: 45px;bottom: 0;left: 0;background: url(/home/teambgbeforimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;pointer-events: none;}
+.HteamSec::after{content: '';position: absolute;width: 100%;height: 45px;bottom: 2px;left: 0;background: url(/home/teambgbeforimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;pointer-events: none;}
 .teambox {
   width: calc(100% - 30px);
   margin-inline: auto;

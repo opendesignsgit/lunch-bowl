@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import LogIn from "../../../public/LogInSignUp/LogIn.jpg";
+import GetintouchPopimg from "../../../public/GetintouchPopimg.jpg";
 
 const GetinTouch = ({ open, onClose }) => {
   const [formData, setFormData] = useState({
@@ -127,7 +128,7 @@ const GetinTouch = ({ open, onClose }) => {
           <Box
             className="w-[50%] gintPopCol gintLCol"
             sx={{
-              backgroundImage: `url(${LogIn.src})`,
+              backgroundImage: `url(${GetintouchPopimg.src})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
