@@ -465,9 +465,10 @@ const RightPanel = ({
 
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        autoHideDuration={2000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        sx={{ top: 28 }}
       >
         <Alert
           onClose={handleSnackbarClose}
@@ -475,7 +476,7 @@ const RightPanel = ({
           sx={{ width: "100%" }}
           variant="filled"
         >
-          Your selected menu has been saved
+          ✅ You have successfully selected the meals! Thanks for joining Lunch Bowl  Now sit back, relax — we’ve got lunchtime covered!
         </Alert>
       </Snackbar>
     </Box>

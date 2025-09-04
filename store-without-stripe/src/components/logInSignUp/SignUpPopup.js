@@ -493,9 +493,13 @@ const validateForm = () => {
                     <Link href="/terms-and-conditions" color="#FF6B00">
                       T&C 
                     </Link>
-                    {" & "}
-                    <Link href="/privacy-policy" color="#FF6B00">
-                      Privacy Policy
+                        {" / "}
+                        <Link href="/privacy-policy" color="#FF6B00">
+                          Privacy Policy
+                        </Link>
+                        {" / "}
+                        <Link href="/refund-cancellation-policy" color="#FF6B00">
+                          Refund Policy
                     </Link>
                   </Typography>
 
