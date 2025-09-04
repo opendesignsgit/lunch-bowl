@@ -291,10 +291,22 @@ const HomeProductCard = ({ limit }) => {
                   <p>{item.shortDescription}</p>
                 </div>
                 <div className="proImage">
-                  <Image
+                   <Image
                     className="w-full h-auto"
                     priority
-                    src={biriyaniImg}
+                    unoptimized
+                    crossorigin="anonymous"
+                    src={
+                      item.dishImage2
+                        ? item.dishImage2.startsWith("http")
+                          ? item.dishImage2
+                          : `${config.BASE_URL}${
+                          item.dishImage2.startsWith("/")
+                            ? item.dishImage2
+                            : `/${item.dishImage2}`
+                            }`
+                        : Proimgtwobiriyani
+                    }
                     alt={`${item.primaryDishTitle} ${item.subDishTitle}`}
                     width={500}
                     height={500}
@@ -315,11 +327,25 @@ const HomeProductCard = ({ limit }) => {
               {/* Animation text sections remain the same */}
               <div className="profbboxs relative h-full flex flex-col">
                 <div className="proImage px-[2vw] h-full flex items-center">
-                  <Image
+                    <Image
                     className="w-full h-auto"
+                    crossorigin="anonymous"
                     priority
-                    src={Proimgtwobiriyani}
-                    alt={`${item.primaryDishTitle} ${item.subDishTitle}`}
+                    unoptimized
+                    src={
+                      item.image
+                        ? item.image.startsWith("http")
+                          ? item.image
+                          : `${config.BASE_URL}${
+                              item.image.startsWith("/")
+                                ? item.image
+                                : `/${item.image}`
+                            }`
+                        : Proimgtwobiriyani
+                    }
+                    alt={`${item.primaryDishTitle || ""} ${
+                      item.subDishTitle || ""
+                    }`.trim()}
                     width={500}
                     height={500}
                   />
