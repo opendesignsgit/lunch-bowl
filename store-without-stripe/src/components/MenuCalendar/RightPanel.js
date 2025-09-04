@@ -468,7 +468,7 @@ const RightPanel = ({
         autoHideDuration={2000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        sx={{ top: 28 }}
+        sx={{ mb: 25 }}
       >
         <Alert
           onClose={handleSnackbarClose}
