@@ -57,12 +57,39 @@ const MenuCalendar = () => {
   const [selectedPlans, setSelectedPlans] = useState({});
   const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
   const [canPay, setCanPay] = useState(false);
+  const [paidHolidays, setPaidHolidays] = useState([]);
 
 
 
   const _id = session?.user?.id;
 
   const { submitHandler, loading } = useRegistration();
+
+  useEffect(() => {
+    if (_id) {
+      fetchPaidHolidays();
+    }
+  }, [_id]);
+
+
+  const fetchPaidHolidays = async () => {
+    try {
+      const res = await submitHandler({
+        _id: _id,
+        path: "get-paid-holidays",
+      });
+      console.log("Paid holidays response:", res);
+
+      if (res.success) {
+        setPaidHolidays(res.data); // Set paid holidays state
+
+      } else {
+        console.error("Failed to fetch paid holidays:", res.message);
+      }
+    } catch (error) {
+      console.error("Error fetching paid holidays:", error);
+    }
+  };
 
   useEffect(() => {
     if (data && Array.isArray(data) && subscriptionStart && subscriptionEnd) {

@@ -35,6 +35,10 @@ const useRegistration = () => {
       } else if (path == "get-holiday-payments") {
         const res = await CustomerServices.getHolidayPayments(data);
         return res;
+      } else if (path == "get-paid-holidays") {
+        // New case for paid holidays API call
+        const res = await CustomerServices.getPaidHolidays({ userId: _id });
+        return res;
       } else if (path == "get-customer-form") {
         const res = await CustomerServices.getCustomerFormData(_id);
         return res;

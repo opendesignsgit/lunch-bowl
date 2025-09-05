@@ -19,6 +19,7 @@ const SmsLog = require("../models/SmsLog");
 const Otp = require("../models/Otp");
 const Form = require("../models/Form");
 const mongoose = require("mongoose");
+const HolidayPayment = require("../models/HolidayPayment");
 
 const verifyEmailAddress = async (req, res) => {
   const isAdded = await Customer.findOne({ email: req.body.email });
@@ -1331,6 +1332,43 @@ const getFormData = async (req, res) => {
   }
 };
 
+const getPaidHolidays = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    // Find all paid holiday records for the user where paymentStatus is "Paid"
+    const paidHolidays = await HolidayPayment.find({
+      userId,
+      paymentStatus: "Paid",
+    }).lean();
+
+    if (!paidHolidays || paidHolidays.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No paid holidays found for this user",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: paidHolidays,
+    });
+  } catch (error) {
+    console.error("Error fetching paid holidays:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 // Helper function to check if date is in current month
 function isDateInCurrentMonth(date, currentMonth) {
   const mealDate = new Date(date);
@@ -1367,4 +1405,5 @@ module.exports = {
   stepCheck,
   accountDetails,
   getFormData,
+  getPaidHolidays
 };

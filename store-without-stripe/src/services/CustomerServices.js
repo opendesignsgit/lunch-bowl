@@ -83,6 +83,10 @@ const CustomerServices = {
   return requests.post("/ccavenue/holiday-payments", body);
 },
 
+  getPaidHolidays: async (body) => {
+    return requests.post("/customer/get-paid-holidays", body);
+  },
+
   getCustomerFormData: async (id) => {
     return requests.get(`/customer/form/${id}`);
   },
