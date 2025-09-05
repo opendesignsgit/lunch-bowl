@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   TextField,
   MenuItem,
@@ -19,7 +19,6 @@ import Breadcrumbs from "@layout/Breadcrumbs";
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
 
-// Import your hook and service:
 import CategoryServices from "@services/CategoryServices";
 import useAsync from "@hooks/useAsync";
 import useEmail from "@hooks/useEmail";
@@ -53,6 +52,9 @@ export default function FreeTrialPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
+  // Added ref for scrolling
+  const formSectionRef = useRef(null);
+
   // Fetch schools async
   const {
     data: schools,
@@ -67,7 +69,7 @@ export default function FreeTrialPage() {
     pincode: "",
     message: "",
     email: session?.user?.email || "",
-    mobile: session?.user?.mobile || "", // Assuming mobile stored here
+    mobile: session?.user?.mobile || "",
     altMobile: "",
     name: session?.user?.name || "",
     userId: session?.user?.id || "",
@@ -110,43 +112,33 @@ export default function FreeTrialPage() {
 
   const validate = () => {
     const newErrors = {};
-    // Name validation - alphabets and spaces only
     if (!formData.name || !/^[A-Za-z\s]+$/.test(formData.name.trim()))
       newErrors.name = "Full Name is required and alphabets only";
 
-    // Child Name validation - alphabets and spaces only
     if (!formData.childName || !/^[A-Za-z\s]+$/.test(formData.childName.trim()))
       newErrors.childName = "Child Name is required and alphabets only";
 
-    // Email validation
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Valid email is required";
 
-    // Class validation
     if (!formData.class) newErrors.class = "Class is required";
 
-    // Food validation
     if (!formData.food) newErrors.food = "Please select a dish";
 
-    // Door No./Building/Street validation - required, no whitespace only
     if (!formData.doorNo || !formData.doorNo.trim())
       newErrors.doorNo = "Door no./Building/Street is required";
 
-    // Area/City validation - required, no whitespace only
     if (!formData.areaCity || !formData.areaCity.trim())
       newErrors.areaCity = "Area/City is required";
 
-    // Pincode validation - numbers only, typically 6 digits in India (adjust if needed)
     if (!formData.pincode || !/^\d{6}$/.test(formData.pincode))
       newErrors.pincode = "Pincode must be exactly 6 digits";
 
-    // Alternative Mobile Number validation if entered
     if (formData.altMobile) {
       if (!/^[6789]\d{9}$/.test(formData.altMobile))
         newErrors.altMobile =
           "Alternative Mobile Number must be 10 digits and start with 6,7,8 or 9";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -178,15 +170,22 @@ export default function FreeTrialPage() {
       await sendEmail(emailData);
       setSubmitted(true);
       setFreeTrialTaken(true);
+      // Scroll to form section after submit
+      if (formSectionRef.current) {
+        formSectionRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     } catch (err) {
-      alert("Thank you for your enquiry! We'll get back to you soon."); // Optionally show error from hook
+      alert("Thank you for your enquiry! We'll get back to you soon.");
       setSubmitted(true);
+      // Also scroll in error case
+      if (formSectionRef.current) {
+        formSectionRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // Schools rendering
   const renderSchoolOptions = () => {
     if (schoolsLoading) {
       return <MenuItem value="" disabled>Loading schools...</MenuItem>;
@@ -253,14 +252,17 @@ export default function FreeTrialPage() {
 
               {/* Right Form */}
               <Box className="freetrilCol ftRCol">
-                <FormBox component="form" onSubmit={handleSubmit}>
+                <FormBox
+                  component="form"
+                  onSubmit={handleSubmit}
+                  ref={formSectionRef}
+                >
                   <Typography variant="h4" fontWeight="bold" mb={2}>
                     START YOUR FREE TRIAL
                   </Typography>
                   <Typography variant="body2" gutterBottom>
                     Provide the required information in the form to get started
                   </Typography>
-
                   {submitted ? (
                     <Box mt={5}>
                       <Typography variant="h6" color="success.main" gutterBottom>
@@ -301,8 +303,7 @@ export default function FreeTrialPage() {
                         error={!!errors.name}
                         helperText={errors.name}
                         sx={{ mt: 1 }}
-                      />
-
+                        />
                       {/* Email */}
                       <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
                         EMAIL ADDRESS*
@@ -315,8 +316,7 @@ export default function FreeTrialPage() {
                         error={!!errors.email}
                         helperText={errors.email}
                         sx={{ mt: 1 }}
-                      />
-
+                        />
                       {/* Mobile (not editable) */}
                       <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
                         MOBILE NUMBER*
@@ -329,8 +329,7 @@ export default function FreeTrialPage() {
                         InputProps={{
                           readOnly: true,
                         }}
-                      />
-
+                        />
                       {/* Alternative Mobile */}
                       <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
                         ALTERNATIVE MOBILE NUMBER
@@ -344,8 +343,7 @@ export default function FreeTrialPage() {
                         helperText={errors.altMobile}
                         sx={{ mt: 1 }}
                         inputProps={{ maxLength: 10 }}
-                      />
-
+                        />
                       {/* Child Name */}
                       <Typography variant="subtitle2" className="text-[#FF6514]" mt={2}>
                         CHILD NAME*
@@ -358,8 +356,7 @@ export default function FreeTrialPage() {
                         error={!!errors.childName}
                         helperText={errors.childName}
                         sx={{ mt: 1 }}
-                      />
-
+                        />
                       {/* Class */}
                       <Typography variant="subtitle2" mt={2} className="text-[#FF6514]">
                         SELECT CLASS*
@@ -378,10 +375,7 @@ export default function FreeTrialPage() {
                         {classOptions.map((cls) => (
                           <MenuItem key={cls} value={cls}>{cls}</MenuItem>
                         ))}
-                      </TextField>
-
-                      {/* Remove date picker section */}
-
+                        </TextField>
                       {/* Food */}
                       <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
                         SELECT YOUR PREFERRED FOOD*
@@ -408,13 +402,11 @@ export default function FreeTrialPage() {
                         <MenuItem value="Paneer Bao - with Butter garlic Sautte Vegetables">
                           PANEER BAO - WITH BUTTER GARLIC SAUTTE VEGETABLES
                         </MenuItem>
-                      </TextField>
-
+                        </TextField>
                       {/* Address split into three fields */}
                       <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
                         RESIDENTIAL ADDRESS*
-                      </Typography>
-                      {/* Door no./Building/Street */}
+                        </Typography>
                       <TextField
                         fullWidth
                         value={formData.doorNo}
@@ -424,8 +416,7 @@ export default function FreeTrialPage() {
                         helperText={errors.doorNo}
                         placeholder="Door no./Building/Street"
                         sx={{ mt: 1 }}
-                      />
-                      {/* Area/City */}
+                        />
                       <TextField
                         fullWidth
                         value={formData.areaCity}
@@ -435,8 +426,7 @@ export default function FreeTrialPage() {
                         helperText={errors.areaCity}
                         placeholder="Area/City"
                         sx={{ mt: 1 }}
-                      />
-                      {/* Pincode */}
+                        />
                       <TextField
                         fullWidth
                         value={formData.pincode}
@@ -447,8 +437,7 @@ export default function FreeTrialPage() {
                         placeholder="Pincode"
                         sx={{ mt: 1 }}
                         inputProps={{ maxLength: 6 }}
-                      />
-
+                        />
                       {/* Message */}
                       <Typography variant="subtitle2" mt={3} className="text-[#FF6514]">
                         MESSAGE
@@ -462,12 +451,10 @@ export default function FreeTrialPage() {
                         placeholder="Optional message"
                         size="small"
                         sx={{ mt: 1 }}
-                      />
-
+                        />
                       {errors.submit && (
                         <FormHelperText error>{errors.submit}</FormHelperText>
-                      )}
-
+                        )}
                       <Button
                         type="submit"
                         variant="contained"
