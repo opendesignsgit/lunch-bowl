@@ -563,6 +563,8 @@ const MenuCalendar = () => {
             selectedPlans={selectedPlans}
             setSelectedPlans={setSelectedPlans}
             canPay = {canPay}
+            subscriptionStart={subscriptionStart}
+            subscriptionEnd={subscriptionEnd}
           />
         </>
       )}
@@ -599,6 +601,8 @@ const MenuCalendar = () => {
           selectedPlans={selectedPlans}
           setSelectedPlans={setSelectedPlans}
           canPay={canPay}
+          subscriptionStart={subscriptionStart}
+          subscriptionEnd={subscriptionEnd}
         />
       </Dialog>
 

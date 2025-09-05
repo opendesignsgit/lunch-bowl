@@ -55,6 +55,8 @@ const RightPanel = ({
   selectedPlans,
   setSelectedPlans,
   canPay,
+  subscriptionStart,   // ⬅️ add this
+  subscriptionEnd,     // ⬅️ add this
 }) => {
   const { data: session } = useSession();
 
@@ -77,6 +79,8 @@ const RightPanel = ({
   const isSaturday = selectedDateObj.day() === 6;
 
   const [showSaveWarning, setShowSaveWarning] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
 
 
 
@@ -120,6 +124,31 @@ const RightPanel = ({
 
     },
   ];
+
+  const checkAllWorkingDaysFilled = () => {
+    let currentDate = dayjs(subscriptionStart);
+    const endDate = dayjs(subscriptionEnd);
+
+    while (currentDate.isSameOrBefore(endDate, "day")) {
+      const day = currentDate.date();
+      const month = currentDate.month();
+      const year = currentDate.year();
+      const dateKey = currentDate.format("YYYY-MM-DD");
+
+      // skip weekends and holidays
+      if (!isHoliday(day, month, year)) {
+        for (const child of dummyChildren) {
+          const meal = menuSelections[dateKey]?.[child.id];
+          if (!meal) {
+            return false; // missing a meal
+          }
+        }
+      }
+      currentDate = currentDate.add(1, "day");
+    }
+    return true;
+  };
+
 
   const handlePlanChange = (childId, planId) => {
     if (isWithin48Hours) return;
@@ -177,12 +206,19 @@ const RightPanel = ({
     childrenWithSelectedMeals.every((child) => isChildPaid(child.id));
 
   const handleSaveClick = () => {
+    const allWorkingDaysFilled = checkAllWorkingDaysFilled();
+
     if (typeof saveSelectedMeals === "function") {
       saveSelectedMeals();
-      setSnackbarOpen(true); // Show snackbar
-      
+      setSnackbarMessage(
+        allWorkingDaysFilled
+          ? "✅ You have successfully selected ALL meals! Thanks for joining Lunch Bowl. Now sit back, relax — we've got lunchtime covered!"
+          : "✅ Meals saved successfully! Don't forget to select meals for all working days."
+      );
+      setSnackbarOpen(true);
     }
   };
+
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -476,7 +512,7 @@ const RightPanel = ({
           sx={{ width: "100%" }}
           variant="filled"
         >
-          ✅ You have successfully selected the meals! Thanks for joining Lunch Bowl  Now sit back, relax — we’ve got lunchtime covered!
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </Box>
