@@ -15,7 +15,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight, Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
 import HolidayPayment from "./HolidayPayment";
@@ -57,6 +57,8 @@ const RightPanel = ({
   canPay,
   subscriptionStart,   // ⬅️ add this
   subscriptionEnd,     // ⬅️ add this
+  goToPrevDate,   // ✅ add
+  goToNextDate,   // ✅ add
 }) => {
   const { data: session } = useSession();
 
@@ -265,12 +267,21 @@ const RightPanel = ({
           />
         </div>
       )}
-
       <div className="fixdatesboxs">
-        <h2>{String(selectedDate).padStart(2, "0")}</h2>
+        {isSmall ? (
+          // 📱 Mobile → Full Date
+          <h2 style={{ fontSize: "100px" }}>
+            {dayjs(formatDate(selectedDate)).format("DD MMM YYYY")}
+          </h2>
+        ) : (
+        // 💻 Desktop → Only Day Number
+            <h2>{String(selectedDate).padStart(2, "0")}</h2>
+        )}
         <h4>{getDayName(selectedDate).toUpperCase()}</h4>
         <h5>SELECT YOUR CHILD'S MENU</h5>
       </div>
+
+
 
       {isWithin48Hours ? (
         <Box bgcolor="#fff" color="#000" borderRadius={2} p={2} textAlign="center" mb={2}>
@@ -479,6 +490,19 @@ const RightPanel = ({
                 )}
               </Box>
             </div>
+                {isSmall && (
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <IconButton onClick={goToPrevDate} sx={{ color: "#fff" }}>
+                      <ChevronLeft />
+                    </IconButton>
+                    <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+                      <Close />
+                    </IconButton>
+                    <IconButton onClick={goToNextDate} sx={{ color: "#fff" }}>
+                      <ChevronRight />
+                    </IconButton>
+                  </Box>
+                )}
           </div>
         </>
       )}

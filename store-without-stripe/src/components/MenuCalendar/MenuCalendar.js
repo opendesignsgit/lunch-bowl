@@ -603,6 +603,34 @@ const MenuCalendar = () => {
           canPay={canPay}
           subscriptionStart={subscriptionStart}
           subscriptionEnd={subscriptionEnd}
+
+          goToPrevDate={() => {
+            let prev = dayjs(`${currentYear}-${currentMonth + 1}-${selectedDate}`).subtract(1, "day");
+
+            // ⛔ skip Sundays
+            while (prev.day() === 0) {
+              prev = prev.subtract(1, "day");
+            }
+
+            if (prev.isBefore(subscriptionStart, "day")) return;
+            setCurrentMonth(prev.month());
+            setCurrentYear(prev.year());
+            setSelectedDate(prev.date());
+          }}
+
+          goToNextDate={() => {
+            let next = dayjs(`${currentYear}-${currentMonth + 1}-${selectedDate}`).add(1, "day");
+
+            // ⛔ skip Sundays
+            while (next.day() === 0) {
+              next = next.add(1, "day");
+            }
+
+            if (next.isAfter(subscriptionEnd, "day")) return;
+            setCurrentMonth(next.month());
+            setCurrentYear(next.year());
+            setSelectedDate(next.date());
+          }}
         />
       </Dialog>
 
