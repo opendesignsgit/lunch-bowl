@@ -57,12 +57,39 @@ const MenuCalendar = () => {
   const [selectedPlans, setSelectedPlans] = useState({});
   const [selectedMealPlanMeals, setSelectedMealPlanMeals] = useState([]);
   const [canPay, setCanPay] = useState(false);
+  const [paidHolidays, setPaidHolidays] = useState([]);
 
 
 
   const _id = session?.user?.id;
 
   const { submitHandler, loading } = useRegistration();
+
+  useEffect(() => {
+    if (_id) {
+      fetchPaidHolidays();
+    }
+  }, [_id]);
+
+
+  const fetchPaidHolidays = async () => {
+    try {
+      const res = await submitHandler({
+        _id: _id,
+        path: "get-paid-holidays",
+      });
+      console.log("Paid holidays response:", res);
+
+      if (res.success) {
+        setPaidHolidays(res.data); // Set paid holidays state
+
+      } else {
+        console.error("Failed to fetch paid holidays:", res.message);
+      }
+    } catch (error) {
+      console.error("Error fetching paid holidays:", error);
+    }
+  };
 
   useEffect(() => {
     if (data && Array.isArray(data) && subscriptionStart && subscriptionEnd) {
@@ -536,6 +563,8 @@ const MenuCalendar = () => {
             selectedPlans={selectedPlans}
             setSelectedPlans={setSelectedPlans}
             canPay = {canPay}
+            subscriptionStart={subscriptionStart}
+            subscriptionEnd={subscriptionEnd}
           />
         </>
       )}
@@ -572,6 +601,36 @@ const MenuCalendar = () => {
           selectedPlans={selectedPlans}
           setSelectedPlans={setSelectedPlans}
           canPay={canPay}
+          subscriptionStart={subscriptionStart}
+          subscriptionEnd={subscriptionEnd}
+
+          goToPrevDate={() => {
+            let prev = dayjs(`${currentYear}-${currentMonth + 1}-${selectedDate}`).subtract(1, "day");
+
+            // ⛔ skip Sundays
+            while (prev.day() === 0) {
+              prev = prev.subtract(1, "day");
+            }
+
+            if (prev.isBefore(subscriptionStart, "day")) return;
+            setCurrentMonth(prev.month());
+            setCurrentYear(prev.year());
+            setSelectedDate(prev.date());
+          }}
+
+          goToNextDate={() => {
+            let next = dayjs(`${currentYear}-${currentMonth + 1}-${selectedDate}`).add(1, "day");
+
+            // ⛔ skip Sundays
+            while (next.day() === 0) {
+              next = next.add(1, "day");
+            }
+
+            if (next.isAfter(subscriptionEnd, "day")) return;
+            setCurrentMonth(next.month());
+            setCurrentYear(next.year());
+            setSelectedDate(next.date());
+          }}
         />
       </Dialog>
 

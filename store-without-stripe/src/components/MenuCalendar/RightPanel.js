@@ -15,7 +15,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight, Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 import MealPlanDialog from "./MealPlanDialog";
 import HolidayPayment from "./HolidayPayment";
@@ -55,6 +55,10 @@ const RightPanel = ({
   selectedPlans,
   setSelectedPlans,
   canPay,
+  subscriptionStart,   // ⬅️ add this
+  subscriptionEnd,     // ⬅️ add this
+  goToPrevDate,   // ✅ add
+  goToNextDate,   // ✅ add
 }) => {
   const { data: session } = useSession();
 
@@ -77,6 +81,8 @@ const RightPanel = ({
   const isSaturday = selectedDateObj.day() === 6;
 
   const [showSaveWarning, setShowSaveWarning] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
 
 
 
@@ -120,6 +126,31 @@ const RightPanel = ({
 
     },
   ];
+
+  const checkAllWorkingDaysFilled = () => {
+    let currentDate = dayjs(subscriptionStart);
+    const endDate = dayjs(subscriptionEnd);
+
+    while (currentDate.isSameOrBefore(endDate, "day")) {
+      const day = currentDate.date();
+      const month = currentDate.month();
+      const year = currentDate.year();
+      const dateKey = currentDate.format("YYYY-MM-DD");
+
+      // skip weekends and holidays
+      if (!isHoliday(day, month, year)) {
+        for (const child of dummyChildren) {
+          const meal = menuSelections[dateKey]?.[child.id];
+          if (!meal) {
+            return false; // missing a meal
+          }
+        }
+      }
+      currentDate = currentDate.add(1, "day");
+    }
+    return true;
+  };
+
 
   const handlePlanChange = (childId, planId) => {
     if (isWithin48Hours) return;
@@ -177,12 +208,19 @@ const RightPanel = ({
     childrenWithSelectedMeals.every((child) => isChildPaid(child.id));
 
   const handleSaveClick = () => {
+    const allWorkingDaysFilled = checkAllWorkingDaysFilled();
+
     if (typeof saveSelectedMeals === "function") {
       saveSelectedMeals();
-      setSnackbarOpen(true); // Show snackbar
-      
+      setSnackbarMessage(
+        allWorkingDaysFilled
+          ? "✅ You have successfully selected ALL meals! Thanks for joining Lunch Bowl. Now sit back, relax — we've got lunchtime covered!"
+          : "✅ Meals saved successfully! Don't forget to select meals for all working days."
+      );
+      setSnackbarOpen(true);
     }
   };
+
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -229,12 +267,21 @@ const RightPanel = ({
           />
         </div>
       )}
-
       <div className="fixdatesboxs">
-        <h2>{String(selectedDate).padStart(2, "0")}</h2>
+        {isSmall ? (
+          // 📱 Mobile → Full Date
+          <h2 style={{ fontSize: "100px" }}>
+            {dayjs(formatDate(selectedDate)).format("DD MMM YYYY")}
+          </h2>
+        ) : (
+        // 💻 Desktop → Only Day Number
+            <h2>{String(selectedDate).padStart(2, "0")}</h2>
+        )}
         <h4>{getDayName(selectedDate).toUpperCase()}</h4>
         <h5>SELECT YOUR CHILD'S MENU</h5>
       </div>
+
+
 
       {isWithin48Hours ? (
         <Box bgcolor="#fff" color="#000" borderRadius={2} p={2} textAlign="center" mb={2}>
@@ -443,6 +490,19 @@ const RightPanel = ({
                 )}
               </Box>
             </div>
+                {isSmall && (
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <IconButton onClick={goToPrevDate} sx={{ color: "#fff" }}>
+                      <ChevronLeft />
+                    </IconButton>
+                    <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+                      <Close />
+                    </IconButton>
+                    <IconButton onClick={goToNextDate} sx={{ color: "#fff" }}>
+                      <ChevronRight />
+                    </IconButton>
+                  </Box>
+                )}
           </div>
         </>
       )}
@@ -476,7 +536,7 @@ const RightPanel = ({
           sx={{ width: "100%" }}
           variant="filled"
         >
-          ✅ You have successfully selected the meals! Thanks for joining Lunch Bowl  Now sit back, relax — we’ve got lunchtime covered!
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </Box>

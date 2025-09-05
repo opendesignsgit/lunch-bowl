@@ -30,6 +30,7 @@ const {
   verifyCCAvenuePayment,
   handleCCAvenueResponse,
   getFormData, // Add this new controller method
+  getPaidHolidays,
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -123,5 +124,7 @@ router.post("/payment/verify", verifyCCAvenuePayment);
 
 // CCAvenue Response Handler
 router.post("/payment/response", handleCCAvenueResponse);
+
+router.post("/get-paid-holidays", getPaidHolidays);
 
 module.exports = router;
