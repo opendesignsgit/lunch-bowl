@@ -90,6 +90,7 @@ const MenuCalendar = () => {
       console.error("Error fetching paid holidays:", error);
     }
   };
+  console.log("Paid holidays:", paidHolidays);
 
   useEffect(() => {
     if (data && Array.isArray(data) && subscriptionStart && subscriptionEnd) {
@@ -206,22 +207,16 @@ const MenuCalendar = () => {
   const getAllMenuData = () => {
     const allMenuData = [];
 
-    // Create a dayjs object for the subscription start date
     let currentDate = dayjs(subscriptionStart);
     const endDate = dayjs(subscriptionEnd);
 
-    // Loop through each day from subscription start to end
-    while (
-      currentDate.isBefore(endDate) ||
-      currentDate.isSame(endDate, "day")
-    ) {
+    while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, "day")) {
       const dateKey = currentDate.format("YYYY-MM-DD");
       const day = currentDate.date();
       const month = currentDate.month();
       const year = currentDate.year();
 
       children.forEach((child) => {
-        // Find or create the child's data object
         let childData = allMenuData.find((c) => c.childId === child.id);
         if (!childData) {
           childData = {
@@ -232,10 +227,26 @@ const MenuCalendar = () => {
           allMenuData.push(childData);
         }
 
-        // Check if the date is not a holiday
-        if (!isHoliday(day, month, year)) {
-          const dish = menuSelections[dateKey]?.[child.id];
-          if (dish) {
+        const dish = menuSelections[dateKey]?.[child.id];
+
+        if (!dish) return;
+
+        const isHolidayDate = isHoliday(day, month, year);
+
+        if (!isHolidayDate) {
+          // ✅ Normal working day → allow saving
+          childData.meals.push({
+            mealDate: currentDate.toDate(),
+            mealName: dish,
+          });
+        } else {
+          // ✅ Holiday/weekend → only save if it’s in paidHolidays
+          const isPaid = paidHolidays.some(
+            (ph) =>
+              ph.childId === child.id &&
+              dayjs(ph.mealDate).isSame(currentDate, "day")
+          );
+          if (isPaid) {
             childData.meals.push({
               mealDate: currentDate.toDate(),
               mealName: dish,
@@ -244,12 +255,12 @@ const MenuCalendar = () => {
         }
       });
 
-      // Move to the next day
       currentDate = currentDate.add(1, "day");
     }
 
     return allMenuData;
   };
+
 
 
   const handleMealPlanChange = (planId) => {
@@ -264,6 +275,8 @@ const MenuCalendar = () => {
 
   const saveSelectedMeals = async () => {
     const allMenuData = getAllMenuData();
+    console.log("All menu data to save:----->", allMenuData);
+
     const payload = {
       userId: _id,
       children: allMenuData.map((child) => ({
@@ -271,6 +284,8 @@ const MenuCalendar = () => {
         meals: child.meals,
       })),
     };
+    console.log("Payload to save:----->", payload);
+
     try {
       const res = await submitHandler({
         _id: _id,
@@ -280,6 +295,42 @@ const MenuCalendar = () => {
 
       if (res.success) {
         setCanPay(false);
+
+        setMenuSelections((prev) => {
+          const updatedSelections = { ...prev };
+
+          let currentDate = dayjs(subscriptionStart);
+          const endDate = dayjs(subscriptionEnd);
+
+          while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, "day")) {
+            const day = currentDate.date();
+            const month = currentDate.month();
+            const year = currentDate.year();
+            const dateKey = currentDate.format("YYYY-MM-DD");
+
+            // Only clear if it's a holiday and NOT paid for this child
+            if (isHoliday(day, month, year)) {
+              // For each child, check payment
+              for (const child of children) {
+                const isPaid = paidHolidays.some(
+                  (ph) =>
+                    ph.childId === child.id &&
+                    dayjs(ph.mealDate).isSame(currentDate, "day")
+                );
+
+                if (!isPaid) {
+                  // If unpaid, clear the dish for this child on this holiday
+                  if (updatedSelections[dateKey]?.[child.id]) {
+                    updatedSelections[dateKey][child.id] = "";
+                  }
+                }
+              }
+            }
+
+            currentDate = currentDate.add(1, "day");
+          }
+          return updatedSelections;
+        });
         // Show success notification
       } else {
         console.error("Failed to save meals:", res.message);
