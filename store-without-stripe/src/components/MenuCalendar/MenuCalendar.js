@@ -295,6 +295,42 @@ const MenuCalendar = () => {
 
       if (res.success) {
         setCanPay(false);
+
+        setMenuSelections((prev) => {
+          const updatedSelections = { ...prev };
+
+          let currentDate = dayjs(subscriptionStart);
+          const endDate = dayjs(subscriptionEnd);
+
+          while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, "day")) {
+            const day = currentDate.date();
+            const month = currentDate.month();
+            const year = currentDate.year();
+            const dateKey = currentDate.format("YYYY-MM-DD");
+
+            // Only clear if it's a holiday and NOT paid for this child
+            if (isHoliday(day, month, year)) {
+              // For each child, check payment
+              for (const child of children) {
+                const isPaid = paidHolidays.some(
+                  (ph) =>
+                    ph.childId === child.id &&
+                    dayjs(ph.mealDate).isSame(currentDate, "day")
+                );
+
+                if (!isPaid) {
+                  // If unpaid, clear the dish for this child on this holiday
+                  if (updatedSelections[dateKey]?.[child.id]) {
+                    updatedSelections[dateKey][child.id] = "";
+                  }
+                }
+              }
+            }
+
+            currentDate = currentDate.add(1, "day");
+          }
+          return updatedSelections;
+        });
         // Show success notification
       } else {
         console.error("Failed to save meals:", res.message);
