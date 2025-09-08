@@ -145,7 +145,10 @@ const MultiStepForm = () => {
     setStep((prev) => prev + 1);
     window.scrollTo({ top: 250, behavior: "smooth" });
   }
-  const prevStep = () => setStep((prev) => prev - 1);
+  const prevStep = () => {
+    setStep((prev) => prev - 1);
+    window.scrollTo({ top: 250, behavior: "smooth" });
+  };
 
   if (loading) {
     return (
