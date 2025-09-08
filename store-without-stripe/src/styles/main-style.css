@@ -980,6 +980,8 @@ body .propetilpopus {z-index: 99999;}
 
 .setpbanersec .comtilte {padding-block: 10px;}
 
+html body .seletallmenu{position: absolute;bottom: 0;margin-bottom: 0;}
+html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
 
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }

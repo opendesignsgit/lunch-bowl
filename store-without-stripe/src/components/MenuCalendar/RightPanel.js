@@ -545,6 +545,7 @@ const RightPanel = ({
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         sx={{ mb: 25 }}
+        className="seletallmenu"
       >
         <Alert
           onClose={handleSnackbarClose}
