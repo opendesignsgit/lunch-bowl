@@ -170,8 +170,8 @@ const PaymentSuccess = () => {
               fontWeight: 500
             }}
           >
-            Yum! Your subscription is now <b>active</b>.<br />
-            Are you ready to pick your next yummy bowl?
+            !Yayy! Your holiday payment is successful <br/>
+Enjoy your requested meal bowl happily
           </Typography>
         </Box>
         <Typography
