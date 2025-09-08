@@ -282,15 +282,16 @@ const RightPanel = ({
           />
         </div>
       )}
+      <div className="fixdatesboxwarrow">
       {isSmall && (
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <IconButton onClick={goToPrevDate} sx={{ color: "#fff" }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" className="datearrow">
+          <IconButton onClick={goToPrevDate} sx={{ color: "#fff" }} className="arrowprew">
             <ChevronLeft />
           </IconButton>
           {/* <IconButton onClick={onClose} sx={{ color: "#fff" }}>
                       <Close />
                     </IconButton> */}
-          <IconButton onClick={goToNextDate} sx={{ color: "#fff" }}>
+          <IconButton onClick={goToNextDate} sx={{ color: "#fff" }} className="arrownext">
             <ChevronRight />
           </IconButton>
         </Box>
@@ -298,7 +299,7 @@ const RightPanel = ({
       <div className="fixdatesboxs">
         {isSmall ? (
           // 📱 Mobile → Full Date
-          <h2 style={{ fontSize: "100px" }}>
+          <h2>
             {dayjs(formatDate(selectedDate)).format("DD MMM YYYY")}
           </h2>
         ) : (
@@ -308,7 +309,7 @@ const RightPanel = ({
         <h4>{getDayName(selectedDate).toUpperCase()}</h4>
         <h5>SELECT YOUR CHILD'S MENU</h5>
       </div>
-
+      </div>
 
 
       {isWithin48Hours ? (

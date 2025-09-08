@@ -1510,11 +1510,11 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .popmenuselt .MCRightPanel>.MuiBox-root{margin-bottom: 10px;}
   .popmenuselt .MCRightPanel>.MuiBox-root button{padding: 5px;border: 1px solid #ffffff;border-radius: 0;}
   .popmenuselt .MCRightPanel>.MuiBox-root button svg{}
-  .fixdatesboxs h2 {font-size: 100px;}
-  .fixdatesboxs h4 {font-size: 26px;margin-top: 10px;}
-  .fixdatesboxs h5 {font-size: 20px;margin-block: 20px 0;}
+  .fixdatesboxs h2 {font-size: 70px;text-transform: uppercase;}
+  .fixdatesboxs h4 {font-size: 21px;font-weight: 700;letter-spacing: 2px;margin-top: 10px;}
+  .fixdatesboxs h5 {font-size: 20px;margin-block: 10px 0;}
   .fixcheckboxs{margin-bottom: 10px;}
-  .fixdatesboxs{margin-block: 0 14px;}
+  .fixdatesboxs{margin-block: 0 14px;padding-inline: 30px;}
   .childlistbox{}
   .childlistbox>.childinputbox>p{text-align: left;margin-bottom: 10px;font-size: 14px;}
   .childlistbox .childbtnsbox{}
@@ -1614,6 +1614,10 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   body .MenuplanDialogpop .button.popclose {}
   body .MenuplanDialogpop .css-9koabo{width: 100%;}
   body .MuiMenu-root{z-index: 99999;}
+  .fixdatesboxwarrow{position: relative;}
+  .fixdatesboxwarrow .datearrow  button{position: absolute;top: 50%;transform: translateY(-50%);z-index: 99;background: rgb(51 51 51 / 44%);}
+  .fixdatesboxwarrow .datearrow  button.arrowprew{left:0}
+  .fixdatesboxwarrow .datearrow  button.arrownext{right: 0;}
 
 }
 @media screen and (min-width:501px) and (max-width:650px){ 
