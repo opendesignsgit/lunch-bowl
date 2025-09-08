@@ -267,6 +267,19 @@ const RightPanel = ({
           />
         </div>
       )}
+      {isSmall && (
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <IconButton onClick={goToPrevDate} sx={{ color: "#fff" }}>
+            <ChevronLeft />
+          </IconButton>
+          {/* <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+                      <Close />
+                    </IconButton> */}
+          <IconButton onClick={goToNextDate} sx={{ color: "#fff" }}>
+            <ChevronRight />
+          </IconButton>
+        </Box>
+      )}
       <div className="fixdatesboxs">
         {isSmall ? (
           // 📱 Mobile → Full Date
@@ -490,19 +503,7 @@ const RightPanel = ({
                 )}
               </Box>
             </div>
-                {isSmall && (
-                  <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <IconButton onClick={goToPrevDate} sx={{ color: "#fff" }}>
-                      <ChevronLeft />
-                    </IconButton>
-                    <IconButton onClick={onClose} sx={{ color: "#fff" }}>
-                      <Close />
-                    </IconButton>
-                    <IconButton onClick={goToNextDate} sx={{ color: "#fff" }}>
-                      <ChevronRight />
-                    </IconButton>
-                  </Box>
-                )}
+
           </div>
         </>
       )}
