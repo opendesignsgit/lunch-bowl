@@ -290,9 +290,9 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
                   <li className="nav__item hamnavlink">
                     <Link href="/about-us">About Us</Link>
                   </li>
-                  <li className="nav__item hamnavlink">
+                  {/* <li className="nav__item hamnavlink">
                     <Link href="/plan-pricing">Plan & Pricing</Link>
-                  </li>
+                  </li> */}
                   <li className="nav__item hamnavlink">
                     <Link href="/Menulist">Food Menu</Link>
                   </li>
