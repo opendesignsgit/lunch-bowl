@@ -208,6 +208,21 @@ const RightPanel = ({
     childrenWithSelectedMeals.every((child) => isChildPaid(child.id));
 
   const handleSaveClick = () => {
+    const dateKey = formatDate(selectedDate);
+    const allMenusEmpty = dummyChildren.every(
+      (child) =>
+        !menuSelections[dateKey] ||
+        !menuSelections[dateKey][child.id] ||
+        menuSelections[dateKey][child.id] === ""
+    );
+
+    if (allMenusEmpty) {
+      // setSnackbarMessage("Please select at least one menu to save");
+      // setSnackbarOpen(true);
+      alert("Please select at least one menu to save");
+      return; // Prevent save if nothing is selected
+    }
+
     const allWorkingDaysFilled = checkAllWorkingDaysFilled();
 
     if (typeof saveSelectedMeals === "function") {
