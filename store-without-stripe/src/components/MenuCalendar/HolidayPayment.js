@@ -144,7 +144,7 @@ const HolidayPayment = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth className="holidaypaysec">
       <DialogTitle>Confirm Holiday Payment</DialogTitle>
       <DialogContent dividers>
         {loading && <LinearProgress sx={{ mb: 2 }} />}
