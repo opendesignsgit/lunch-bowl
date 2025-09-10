@@ -19,7 +19,25 @@ const useEmail = () => {
     }
   };
 
-  return { sendEmail, loading, error };
+  const sendSchoolEnquiryEmail = async (emailData) => {
+    setLoading(true);
+    setError(null);
+    console.log("Sending school enquiry email with data:", emailData);
+
+    try {
+      const response = await EmailService.sendSchoolEnquiryEmail(emailData);
+      console.log("School enquiry response:", response);
+
+      setLoading(false);
+      return response;
+    } catch (err) {
+      setError(err.message || "Failed to send school enquiry");
+      setLoading(false);
+      throw err;
+    }
+  };
+
+  return { sendEmail, sendSchoolEnquiryEmail, loading, error };
 };
 
 export default useEmail;

@@ -11,7 +11,7 @@ const {
   updateStaff,
   deleteStaff,
   updatedStatus,
-  sendSchoolEnquiryMail,
+  // sendSchoolEnquiryMail,
   talkNutrition,
   freeTrialEnquiry,
   getInTouch,
@@ -33,7 +33,7 @@ router.put("/forget-password", passwordVerificationLimit, forgetPassword);
 //reset-password
 router.put("/reset-password", resetPassword);
 
-router.post("/school-enquiry", sendSchoolEnquiryMail);
+// router.post("/school-enquiry", sendSchoolEnquiryMail);
 
 router.post("/talk-nutrition", talkNutrition);
 
