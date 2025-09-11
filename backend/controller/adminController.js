@@ -847,7 +847,9 @@ const getInTouch = async (req, res) => {
 };
 
 const contactUs = async (req, res) => {
-  const { firstName, lastName, mobileNumber, email, message, consent } = req.body;
+  const { firstname, Lastname, phone, email, message, consent } = req.body;
+  // console.log("res----->", req.body);
+
 
 
   // Set up nodemailer transporter (Gmail with env variables)
@@ -866,10 +868,9 @@ const contactUs = async (req, res) => {
     subject: "New Contact Us Enquiry",
     html: `
       <h2>Contact Us Enquiry Details</h2>
-      <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+      <p><strong>Name:</strong> ${firstname} ${Lastname}</p>
       <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Mobile:</strong> ${mobileNumber}</p>
-      <p><strong>Consent:</strong> ${consent ? "Yes" : "No"}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
       <p><strong>Message:</strong> ${message}</p>
     `,
   };
@@ -880,7 +881,7 @@ const contactUs = async (req, res) => {
     to: email,
     subject: "Thank you for your enquiry!",
     html: `
-      <p>Hello ${firstName},</p>
+      <p>Hello ${firstname},</p>
       <p>Thank you for reaching out to us through our enquiry form. We’ve received your request, and our team will get back to you shortly with the details.</p>
       <p>We look forward to assisting you soon.</p>
       <p>Best regards,<br/>Team LunchBowl</p>
