@@ -470,126 +470,126 @@ const deleteHoliday = async (req, res) => {
   }
 };
 
-const sendSchoolEnquiryMail = async (req, res) => {
-  try {
-    const {
-      firstName,
-      lastName,
-      mobileNumber,
-      schoolName,
-      message,
-      email,
-      address,
-      userId,
-    } = req.body;
+// const sendSchoolEnquiryMail = async (req, res) => {
+//   try {
+//     const {
+//       firstName,
+//       lastName,
+//       mobileNumber,
+//       schoolName,
+//       message,
+//       email,
+//       address,
+//       userId,
+//     } = req.body;
 
-    // Is this a free trial?
-    const isFreeTrial = schoolName === "Free Trial";
-    let _id = userId;
+//     // Is this a free trial?
+//     const isFreeTrial = schoolName === "Free Trial";
+//     let _id = userId;
 
-    // If it's a free trial, update customer with freeTrial: true
-    if (isFreeTrial && email) {
-      // Update existing customer or create new one if needed
-      await Customer.findOneAndUpdate(
-        { _id },
-        { freeTrial: true, email, firstName, lastName, mobileNumber },
-        { upsert: true, new: true }
-      );
-    }
+//     // If it's a free trial, update customer with freeTrial: true
+//     if (isFreeTrial && email) {
+//       // Update existing customer or create new one if needed
+//       await Customer.findOneAndUpdate(
+//         { _id },
+//         { freeTrial: true, email, firstName, lastName, mobileNumber },
+//         { upsert: true, new: true }
+//       );
+//     }
 
-    // Email setup
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+//     // Email setup
+//     const transporter = nodemailer.createTransport({
+//       service: "gmail",
+//       auth: {
+//         user: process.env.EMAIL_USER,
+//         pass: process.env.EMAIL_PASS,
+//       },
+//     });
 
-    const enquiryType = isFreeTrial
-      ? "Free Trial"
-      : schoolName === "Nutrition Enquiry"
-      ? "Nutrition"
-      : "School Service";
+//     const enquiryType = isFreeTrial
+//       ? "Free Trial"
+//       : schoolName === "Nutrition Enquiry"
+//       ? "Nutrition"
+//       : "School Service";
 
-    const subject = isFreeTrial
-      ? `New Free Trial Request from ${firstName} ${lastName}`
-      : `New ${enquiryType} Enquiry from ${firstName} ${lastName}`;
+//     const subject = isFreeTrial
+//       ? `New Free Trial Request from ${firstName} ${lastName}`
+//       : `New ${enquiryType} Enquiry from ${firstName} ${lastName}`;
 
-    // Email content
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: "shivarex.c@gmail.com, maniyarasanodi20@gmail.com",
-      subject,
-      html: `
-        <h2>${enquiryType} Enquiry</h2>
-        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-        ${email ? `<p><strong>Email:</strong> ${email}</p>` : ""}
-        <p><strong>Mobile Number:</strong> ${mobileNumber}</p>
-        ${address ? `<p><strong>Address:</strong> ${address}</p>` : ""}
-        ${
-          !isFreeTrial && schoolName && schoolName !== "Nutrition Enquiry"
-            ? `<p><strong>School Name:</strong> ${schoolName}</p>`
-            : ""
-        }
-        <p><strong>Message:</strong> ${
-          message || "No additional message provided"
-        }</p>
-        ${isFreeTrial ? "<p>This is a Free Trial enquiry.</p>" : ""}
-        <br>
-        <p>This enquiry was submitted through the website contact form.</p>
-      `,
-    };
+//     // Email content
+//     const mailOptions = {
+//       from: process.env.EMAIL_USER,
+//       to: "shivarex.c@gmail.com, maniyarasanodi20@gmail.com",
+//       subject,
+//       html: `
+//         <h2>${enquiryType} Enquiry</h2>
+//         <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+//         ${email ? `<p><strong>Email:</strong> ${email}</p>` : ""}
+//         <p><strong>Mobile Number:</strong> ${mobileNumber}</p>
+//         ${address ? `<p><strong>Address:</strong> ${address}</p>` : ""}
+//         ${
+//           !isFreeTrial && schoolName && schoolName !== "Nutrition Enquiry"
+//             ? `<p><strong>School Name:</strong> ${schoolName}</p>`
+//             : ""
+//         }
+//         <p><strong>Message:</strong> ${
+//           message || "No additional message provided"
+//         }</p>
+//         ${isFreeTrial ? "<p>This is a Free Trial enquiry.</p>" : ""}
+//         <br>
+//         <p>This enquiry was submitted through the website contact form.</p>
+//       `,
+//     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+//     // Send email
+//     await transporter.sendMail(mailOptions);
 
-    // Send SMS confirmation for free trial requests
-    if (isFreeTrial && mobileNumber) {
-      try {
-        const date = new Date().toLocaleDateString('en-IN');
-        const location = "as per your preference"; // This could be dynamic based on school/location
-        const childName = `${firstName}'s child`; // Generic since child name might not be available
+//     // Send SMS confirmation for free trial requests
+//     if (isFreeTrial && mobileNumber) {
+//       try {
+//         const date = new Date().toLocaleDateString('en-IN');
+//         const location = "as per your preference"; // This could be dynamic based on school/location
+//         const childName = `${firstName}'s child`; // Generic since child name might not be available
         
-        const smsResult = await sendSMS(mobileNumber, 'TRIAL_FOOD_CONFIRMATION', [childName, date, location]);
+//         const smsResult = await sendSMS(mobileNumber, 'TRIAL_FOOD_CONFIRMATION', [childName, date, location]);
         
-        // Log SMS
-        const smsLog = new SmsLog({
-          mobile: mobileNumber,
-          messageType: 'TRIAL_FOOD_CONFIRMATION',
-          message: smsResult.message || '',
-          templateId: smsResult.templateId || '',
-          messageId: smsResult.messageId || '',
-          status: smsResult.success ? 'sent' : 'failed',
-          error: smsResult.error || undefined,
-          customerId: _id,
-          variables: [childName, date, location],
-          sentAt: new Date()
-        });
+//         // Log SMS
+//         const smsLog = new SmsLog({
+//           mobile: mobileNumber,
+//           messageType: 'TRIAL_FOOD_CONFIRMATION',
+//           message: smsResult.message || '',
+//           templateId: smsResult.templateId || '',
+//           messageId: smsResult.messageId || '',
+//           status: smsResult.success ? 'sent' : 'failed',
+//           error: smsResult.error || undefined,
+//           customerId: _id,
+//           variables: [childName, date, location],
+//           sentAt: new Date()
+//         });
         
-        await smsLog.save();
-        console.log('Trial food confirmation SMS sent to:', mobileNumber);
-      } catch (smsError) {
-        console.error('Error sending trial food confirmation SMS:', smsError);
-        // Don't fail the enquiry process if SMS fails
-      }
-    }
+//         await smsLog.save();
+//         console.log('Trial food confirmation SMS sent to:', mobileNumber);
+//       } catch (smsError) {
+//         console.error('Error sending trial food confirmation SMS:', smsError);
+//         // Don't fail the enquiry process if SMS fails
+//       }
+//     }
 
-    res.status(200).json({
-      success: true,
-      message: isFreeTrial
-        ? "Free trial request submitted successfully. We will contact you soon."
-        : "Enquiry submitted successfully. We will contact you soon.",
-    });
-  } catch (err) {
-    console.error("Error sending email:", err);
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: err.message,
-    });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       message: isFreeTrial
+//         ? "Free trial request submitted successfully. We will contact you soon."
+//         : "Enquiry submitted successfully. We will contact you soon.",
+//     });
+//   } catch (err) {
+//     console.error("Error sending email:", err);
+//     res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//       error: err.message,
+//     });
+//   }
+// };
 
 
 const talkNutrition = async (req, res) => {
@@ -734,18 +734,16 @@ const freeTrialEnquiry = async (req, res) => {
   // Compose thank you/feedback request email for parent
   const parentName = `${firstName} ${lastName}`;
   const feedbackMailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: `We’d love your feedback on ${childName}’s trial lunch!`,
-    html: `
-      <p>Hi ${parentName},</p>
-      <p>We hope ${childName} enjoyed their trial meal from Lunch Bowl today!</p>
-      <p>Could you take a moment to share your feedback? Your opinion helps us serve your child better every day.</p>
-      <p>🔗 <a href="https://lunchbowl.co.in/contact-us" target="_blank">Click here to give feedback</a></p>
-      <p>Thank you for trying the Lunch Bowl!</p>
-      <p>– Lunch Bowl Kitchen Team</p>
-    `,
-  };
+  from: process.env.EMAIL_USER,
+  to: email,
+  subject: "ONE BOWL, ENDLESS FRESHNESS—FREE TRIAL INSIDE",
+  html: `
+    <p>Dear ${parentName},</p>
+    <p>Thank you for enquiring about our Lunch Bowl FREE TRIAL.</p>
+    <p>As you requested, after verification we will provide you a free trial for your first bowl. Experience the wholesome freshness and taste in one bowl.</p>
+    <p>Warm regards,<br/>The Lunch Bowl Team</p>
+  `,
+};
 
   try {
     await transporter.sendMail(mailOptions); // Admin mail
@@ -851,29 +849,8 @@ const getInTouch = async (req, res) => {
 const contactUs = async (req, res) => {
   const { firstName, lastName, mobileNumber, email, message, consent } = req.body;
 
-  // Check required fields
-  if (
-    !firstName ||
-    !lastName ||
-    !mobileNumber ||
-    !email ||
-    !message ||
-    consent !== true
-  ) {
-    return res.status(400).json({ success: false, error: "All fields are required and consent must be true." });
-  }
 
-  // Validate mobile number
-  if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
-    return res.status(400).json({ success: false, error: "Invalid mobile number." });
-  }
-
-  // Validate email
-  if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)) {
-    return res.status(400).json({ success: false, error: "Invalid email address." });
-  }
-
-  // Setup email transporter
+  // Set up nodemailer transporter (Gmail with env variables)
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -882,6 +859,7 @@ const contactUs = async (req, res) => {
     },
   });
 
+  // Email to admins
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: "csivarex.odi@gmail.com, maniyarasanodi20@gmail.com",
@@ -891,11 +869,12 @@ const contactUs = async (req, res) => {
       <p><strong>Name:</strong> ${firstName} ${lastName}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Mobile:</strong> ${mobileNumber}</p>
-      <p><strong>Consent:</strong> Yes</p>
+      <p><strong>Consent:</strong> ${consent ? "Yes" : "No"}</p>
       <p><strong>Message:</strong> ${message}</p>
     `,
   };
 
+  // Email to user
   const userMailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -910,9 +889,7 @@ const contactUs = async (req, res) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log("Contact Us enquiry email sent successfully --------->", mailOptions);
-
-     await transporter.sendMail(userMailOptions);
+    await transporter.sendMail(userMailOptions);
     res.status(200).json({ success: true, message: "Enquiry sent successfully." });
   } catch (error) {
     console.error("Email send error:", error);
@@ -922,23 +899,37 @@ const contactUs = async (req, res) => {
 
 
 const schoolServiceEnquiry = async (req, res) => {
-  const { firstName, lastName, mobileNumber, schoolName, message } = req.body;
+  const { firstName, lastName, mobileNumber, schoolName, pincode, message, email } = req.body;
 
-  // Basic validation (server-side for extra security)
+  // Trim values for reliability
+  const cleanFirstName = firstName?.trim();
+  const cleanLastName = lastName?.trim();
+  const cleanMobileNumber = mobileNumber?.trim();
+  const cleanSchoolName = schoolName?.trim();
+  const cleanEmail = email?.trim();
+  const cleanPincode = pincode?.trim();
+  const cleanMessage = message?.trim();
+
+  // Server-side validation
   if (
-    !firstName?.trim() ||
-    !lastName?.trim() ||
-    !mobileNumber?.trim() ||
-    !schoolName?.trim()
+    !cleanFirstName ||
+    !cleanLastName ||
+    !cleanMobileNumber ||
+    !cleanSchoolName
   ) {
     return res.status(400).json({ success: false, error: "All required fields must be filled." });
   }
 
-  if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
+  if (!/^[6-9]\d{9}$/.test(cleanMobileNumber)) {
     return res.status(400).json({ success: false, error: "Invalid mobile number." });
   }
 
-  // Setup transporter
+  // Optionally validate pincode if it's required
+  // if (!cleanPincode || !/^\d{6}$/.test(cleanPincode)) {
+  //   return res.status(400).json({ success: false, error: "Invalid pincode." });
+  // }
+
+  // Email setup
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -947,39 +938,43 @@ const schoolServiceEnquiry = async (req, res) => {
     },
   });
 
-  // Compose the email
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: "csivarex.odi@gmail.com, maniyarasanodi20@gmail.com",
     subject: "New School Service Enquiry Received",
     html: `
       <h2>School Service Enquiry Details</h2>
-      <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-      <p><strong>Mobile:</strong> ${mobileNumber}</p>
-      <p><strong>School Name:</strong> ${schoolName}</p>
-      <p><strong>Message:</strong> ${message || 'N/A'}</p>
+      <p><strong>Name:</strong> ${cleanFirstName} ${cleanLastName}</p>
+      <p><strong>Mobile:</strong> ${cleanMobileNumber}</p>
+      <p><strong>School Name:</strong> ${cleanSchoolName}</p>
+      ${cleanPincode ? `<p><strong>Pincode:</strong> ${cleanPincode}</p>` : ""}
+      <p><strong>Message:</strong> ${cleanMessage || 'N/A'}</p>
     `,
   };
 
-   // Thank you mail options for the user
-  const userMailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Thank you for your enquiry!",
-    html: `
-      <p>Hello ${firstName},</p>
-      <p>Thank you for reaching out to us through our enquiry form. We’ve received your request, and our team will get back to you shortly with the details.</p>
-      <p>We look forward to assisting you soon.</p>
-      <p>Best regards,<br/>Team LunchBowl</p>
-    `,
-  };
+  // Thank-you mail to user, only if email is provided
+  const userMailOptions = cleanEmail
+    ? {
+        from: process.env.EMAIL_USER,
+        to: cleanEmail,
+        subject: "Thank you for your enquiry!",
+        html: `
+          <p>Hello ${cleanFirstName},</p>
+          <p>Thank you for reaching out to us through our enquiry form. We’ve received your request, and our team will get back to you shortly with the details.</p>
+          <p>We look forward to assisting you soon.</p>
+          <p>Best regards,<br/>Team LunchBowl</p>
+        `,
+      }
+    : null;
 
   try {
     await transporter.sendMail(mailOptions);
     console.log("School service enquiry email sent successfully", mailOptions);
 
-    await transporter.sendMail(userMailOptions);
-    console.log("Thank you email sent successfully", userMailOptions);
+    if (userMailOptions) {
+      await transporter.sendMail(userMailOptions);
+      console.log("Thank you email sent successfully", userMailOptions);
+    }
 
     res.status(200).json({ success: true, message: "Enquiry sent successfully." });
   } catch (error) {
@@ -1008,7 +1003,7 @@ module.exports = {
   getAllHolidays,
   updateHoliday,
   deleteHoliday,
-  sendSchoolEnquiryMail,
+  // sendSchoolEnquiryMail,
   talkNutrition,
   freeTrialEnquiry,
   getInTouch,

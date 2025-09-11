@@ -9,6 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import axios from "axios";
+import useEmail from "@hooks/useEmail";
 
 const NutritiousEnquire = ({ open, onClose }) => {
   const [formData, setFormData] = useState({
@@ -19,6 +20,7 @@ const NutritiousEnquire = ({ open, onClose }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const { sendNutritionEnquiryEmail, loading } = useEmail(); 
 
   // Reset form and errors whenever dialog opens
   useEffect(() => {
@@ -72,10 +74,7 @@ const NutritiousEnquire = ({ open, onClose }) => {
         email: formData.email,
       };
 
-      await axios.post(
-        "https://api.lunchbowl.co.in/api/admin/talk-nutrition",
-        enquiryData
-      );
+      await sendNutritionEnquiryEmail(enquiryData);
 
       alert("Thank you for your enquiry! We'll get back to you soon.");
       onClose();
@@ -192,6 +191,7 @@ const NutritiousEnquire = ({ open, onClose }) => {
               />
               <Button
                 color="primary"
+                disabled={loading}
                 variant="contained"
                 fullWidth
                 type="submit"

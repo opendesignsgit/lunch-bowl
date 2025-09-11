@@ -10,6 +10,8 @@ const Letsfindout = () => {
   const [selectedSchool, setSelectedSchool] = useState("");
   const [showSchoolForm, setShowSchoolForm] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [schoolError, setSchoolError] = useState(false);
+
   const {
     data: schools,
     loading,
@@ -26,11 +28,14 @@ const Letsfindout = () => {
   };
 
   const handleSelectSubmit = (e) => {
+    console.log(("error----->", schoolError));
     e.preventDefault();
-    if (selectedSchool) {
-      console.log("Selected school:", selectedSchool);
-      setShowSignUp(true);
+    if (!selectedSchool) {
+      setSchoolError(true);
+      return;
     }
+    setSchoolError(false);
+    setShowSignUp(true);
   };
 
   const handleSubmit = (e) => {
@@ -68,19 +73,33 @@ const Letsfindout = () => {
           <select
             name="schoolname"
             value={selectedSchool}
-            onChange={handleSchoolSelect}
+            onChange={(e) => {
+              handleSchoolSelect(e);
+              setSchoolError(false);
+            }}
+            className={`flex-1 p-2 rounded outline-none ${schoolError ? "border-2 border-red-500 bg-red-50" : "border-2 border-gray-200"
+              }`}
           >
             <option value="">Select School Name</option>
             {renderSchoolOptions()}
           </select>
+
           <button
             className="btn"
             onClick={handleSelectSubmit}
-            disabled={!selectedSchool}
+            // disabled={!selectedSchool}
           >
             <span>Next</span>
           </button>
         </div>
+        {schoolError && (
+          <div className="flex justify-start mt-2">
+            <div className="bg-red-100 text-red-600 text-sm rounded px-4 py-2">
+              School is required
+            </div>
+          </div>
+        )}
+
       </div>
       <div className="orfild flex items-center justify-center my-[2vh]">
         <h6>or</h6>

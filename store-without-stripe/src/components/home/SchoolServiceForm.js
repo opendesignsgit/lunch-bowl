@@ -4,6 +4,7 @@ import { Dialog, DialogTitle, DialogContent, TextField, Button, Typography, Box}
 import addSchoolPopUp from "../../../public/home/ready-to-serve-your-school.jpg";
 import closeicon from "../../../public/menuclose-icon.svg";
 import axios from "axios";
+import useEmail from '@hooks/useEmail';
 
 const SchoolServiceForm = ({ prefillSchool, onClose }) => {
   const [formData, setFormData] = useState({
@@ -11,10 +12,12 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
     lastName: "",
     mobileNumber: "",
     schoolName: prefillSchool || "",
+    pincode: "",  
     message: "",
   });
 
   const [errors, setErrors] = useState({});
+  const { sendSchoolEnquiryEmail, loading } = useEmail();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +37,12 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
     } else if (!/^[6-9]\d{9}$/.test(formData.mobileNumber)) {
     newErrors.mobileNumber = "Enter a valid 10-digit mobile number";
   }
+    // Validate pincode - must be exactly 6 digits numeric
+    if (!formData.pincode.trim()) {
+      newErrors.pincode = "Pincode is required";
+    } else if (!/^\d{6}$/.test(formData.pincode)) {
+      newErrors.pincode = "Pincode must be exactly 6 digits";
+    }
     if (!formData.schoolName.trim())
       newErrors.schoolName = "School name is required";
 
@@ -43,16 +52,13 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
     }
 
     try {
-      await axios.post(
-        "https://api.lunchbowl.co.in/api/admin/get-school-enquiry",
-        formData
-      );
+      await sendSchoolEnquiryEmail(formData);
       alert("Thank you for your enquiry! We'll get back to you soon.");
       // Optionally show success toast/message here
       onClose();
     } catch (err) {
       // Optionally show error toast/message here
-      alert("Thank you for your enquiry! We'll get back to you soon.");
+      alert("error sending enquiry. Please try again later.");
       onClose();
 
     }
@@ -212,6 +218,30 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
               </Box>
               </Box>
 
+              <Box className="formrows">
+                <Box className="formcol ffullcol">
+                  <Typography
+                    className="comffamily"
+                    variant="subtitle2"
+                    sx={{ fontWeight: "600", mb: 1, color: "#f97316" }}
+                  >
+                    PINCODE*
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    name="pincode"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    error={!!errors.pincode}
+                    helperText={errors.pincode}
+                    placeholder="Enter 6-digit Pincode"
+                    inputProps={{ maxLength: 6, inputMode: "numeric", pattern: "[0-9]*" }}
+                  />
+                </Box>
+              </Box>
+
               {/* MESSAGE */}
               <Box className="formrows">
                 <Box className="formcol ffullcol">
@@ -242,6 +272,7 @@ const SchoolServiceForm = ({ prefillSchool, onClose }) => {
               {/* SUBMIT */}
               <Button
                 type="submit"
+                    disabled={loading}
                 variant="contained"
                 fullWidth
                 sx={{
