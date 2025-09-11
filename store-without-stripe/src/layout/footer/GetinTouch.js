@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import LogIn from "../../../public/LogInSignUp/LogIn.jpg";
 import GetintouchPopimg from "../../../public/GetintouchPopimg.jpg";
+import useEmail from "@hooks/useEmail";
 
 const GetinTouch = ({ open, onClose }) => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ const GetinTouch = ({ open, onClose }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const { sendGetInTouchEmail, loading } = useEmail();
 
   // Reset form and errors whenever dialog opens
   useEffect(() => {
@@ -75,10 +77,7 @@ const GetinTouch = ({ open, onClose }) => {
         email: formData.email,
       };
 
-      await axios.post(
-        "https://api.lunchbowl.co.in/api/admin/get-in-touch",
-        enquiryData
-      );
+      await sendGetInTouchEmail(enquiryData);
 
       alert("Thank you for your enquiry! We'll get back to you soon.");
       onClose();
@@ -201,6 +200,7 @@ const GetinTouch = ({ open, onClose }) => {
                 />
                 <Button
                   color="primary"
+                  disabled={loading}
                   variant="contained"
                   fullWidth
                   type="submit"

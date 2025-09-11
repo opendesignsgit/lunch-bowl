@@ -1,130 +1,140 @@
 import React from "react";
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@layout/Breadcrumbs";
 import Mainheader from '@layout/header/Mainheader';
 import Mainfooter from '@layout/footer/Mainfooter';
 import Accordion from '@components/faq/Accordion';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import useTranslation from "next-translate/useTranslation";
-import Label from "@components/form/Label";
-import Error from "@components/form/Error";
 import { notifySuccess } from "@utils/toast";
-import InputArea from "@components/form/InputArea";
 import contforming from '../../public/contus/contforming.png'
 import phoneicon from '../../public/contus/phone-icon.png'
 import mailicon from '../../public/contus/mail-icon.png'
 import locaticon from '../../public/contus/locat-icon.png'
 import ateamicon1 from "../../public/menulist/icons/ban/yellowround-flower.svg";
 import ateamicon2 from "../../public/menulist/icons/ban/redstar.svg";
-import axios from "axios";
+import useEmail from "@hooks/useEmail";
+import { TextField, Checkbox, FormControlLabel } from '@mui/material';
 
 const ContactUs = () => {
   const { t } = useTranslation();
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { errors },
     reset,
-  } = useForm();
-
-  const [formData, setFormData] = useState({
-    consent: false,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      firstname: "",
+      Lastname: "",
+      email: "",
+      phone: "",
+      message: "",
+      consent: false,
+    },
   });
 
-  // Checkbox handler
-  const handleChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
-  };
+  const { sendContactUsEmail, loading } = useEmail();
 
-  // API call with validation
   const submitHandler = async (data) => {
-    if (!formData.consent) {
-      alert("Please agree to be contacted by Lunch Bowl.");
+    const errs = {};
+    if (!data.firstname.trim()) errs.firstname = "First name is required!";
+    if (!data.Lastname.trim()) errs.Lastname = "Last name is required!";
+    if (!data.email.trim()) {
+      errs.email = "Email is required!";
+    } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(data.email)) {
+      errs.email = "Enter a valid email.";
+    }
+    if (!data.phone.trim()) {
+      errs.phone = "Mobile Number is required!";
+    } else if (!/^[6-9]\d{9}$/.test(data.phone)) {
+      errs.phone = "Enter a valid 10-digit Indian mobile number starting with 6,7,8, or 9";
+    }
+    if (!data.message.trim()) {
+      errs.message = "Message is required!";
+    } else if (data.message.trim().length < 5) {
+      errs.message = "Message must be at least 5 characters.";
+    }
+    if (!data.consent) {
+      errs.consent = "Please agree to be contacted by Lunch Bowl.";
+    }
+    if (Object.keys(errs).length > 0) {
+      alert(Object.values(errs).join("\n"));
       return;
     }
     try {
-      const payload = {
-        firstName: data.firstname,
-        lastName: data.Lastname,
-        mobileNumber: data.phone,
-        email: data.email,
-        message: data.message,
-        consent: formData.consent,
-      };
-      await axios.post("https://api.lunchbowl.co.in/api/admin/contact-us", payload);
-      notifySuccess("your message sent successfully. We will contact you shortly.");
+      await sendContactUsEmail(data);
+      alert("your message sent successfully. We will contact you shortly.");
       reset();
-      setFormData({ consent: false });
     } catch (error) {
       alert("Something went wrong! Please try again.");
     }
   };
 
-	const faqItems = [
-  {
-    title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
-    content:
-      "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters. To preserve freshness and maintain the right temperature until noon, we use insulated bags for delivery.",
-  },
-  {
-    title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
-    content:
-      "We provide a varied and ever-changing menu to keep your child engaged. Our culinary team regularly introduces new recipes and seasonal ingredients to ensure a range of wholesome and appealing options.",
-  },
-  {
-    title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
-    content:
-      "Our cooking facilities follow the highest hygiene standards. All surfaces and equipment are routinely sterilized, staff wear protective gear, and adhere to strict handwashing guidelines. Regular inspections are conducted in line with food safety regulations.",
-  },
-  {
-    title: "How can I share feedback or resolve any issues with the lunch bowl?",
-    content:
-      (<>
-	  We value your feedback. Please contact our customer service team by phone at <strong><a href="tel:+919176917602">+91 91769 17602</a></strong> or email us at <strong><a href="mailto:contactus@lunchbowl.co.in">contactus@lunchbowl.co.in</a></strong>. We take all complaints seriously and are committed to resolving them quickly to ensure your child’s satisfaction.
-	  </>),
-  },
-  {
-    title: "How do you ensure the food is nutritious and safe for my child?",
-    content:
-      "Our meals are nutritionist-designed, prepared with fresh, high-quality ingredients, and made under strict hygiene standards. We also customize meals for dietary needs and take extra care to avoid allergens.",
-  },
-  {
-    title: "How does the delivery process work, and can I trust it will arrive on time?",
-    content:
-      "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. You’ll receive delivery confirmations, and in the rare event of a delay, we’ll notify you immediately.",
-  },
-  {
-    title: "What if my child has specific dietary restrictions or allergies?",
-    content:
-      "We take special care to accommodate dietary restrictions and allergies. Our team follows strict preparation practices to ensure meals are safe and free from cross-contamination.",
-  },
-  {
-    title: "What if I need food on Sunday?",
-    content:(<>
-      Our regular service is available Monday to Friday. If you need meals on a Sunday, please call us at <strong><a href="tel:+919176917602">+91 91769 17602</a></strong> in advance. Our team will confirm availability and make special arrangements based on your request and location.</>),
-  },
-  {
-    title: "Can I get a free trial on Sunday?",
-    content:
-      "We don’t offer free trials on Sundays. Please choose any weekday or Saturday slot for your trial.",
-  },
-  {
-    title: "What if I don’t need a meal on a day during my subscription? Will I get a refund?",
-    content:
-      "Any unused meal days will be credited to your wallet and can be redeemed during your next subscription.",
-  },
-  {
-    title: "What if I want to terminate the service?",
-    content:
-      "You can request service termination at any time. The unconsumed meal days will be calculated, and a refund will be processed. Please contact customer service for termination assistance.",
-  },
-];
+  const faqItems = [
+    {
+      title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
+      content:
+        "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters. To preserve freshness and maintain the right temperature until noon, we use insulated bags for delivery.",
+    },
+    {
+      title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
+      content:
+        "We provide a varied and ever-changing menu to keep your child engaged. Our culinary team regularly introduces new recipes and seasonal ingredients to ensure a range of wholesome and appealing options.",
+    },
+    {
+      title: "What safeguards are in place to guarantee a clean atmosphere for food preparation?",
+      content:
+        "Our cooking facilities follow the highest hygiene standards. All surfaces and equipment are routinely sterilized, staff wear protective gear, and adhere to strict handwashing guidelines. Regular inspections are conducted in line with food safety regulations.",
+    },
+    {
+      title: "How can I share feedback or resolve any issues with the lunch bowl?",
+      content: (
+        <>
+          We value your feedback. Please contact our customer service team by phone at <strong><a href="tel:+919176917602">+91 91769 17602</a></strong> or email us at <strong><a href="mailto:contactus@lunchbowl.co.in">contactus@lunchbowl.co.in</a></strong>. We take all complaints seriously and are committed to resolving them quickly to ensure your child’s satisfaction.
+        </>
+      ),
+    },
+    {
+      title: "How do you ensure the food is nutritious and safe for my child?",
+      content:
+        "Our meals are nutritionist-designed, prepared with fresh, high-quality ingredients, and made under strict hygiene standards. We also customize meals for dietary needs and take extra care to avoid allergens.",
+    },
+    {
+      title: "How does the delivery process work, and can I trust it will arrive on time?",
+      content:
+        "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. You’ll receive delivery confirmations, and in the rare event of a delay, we’ll notify you immediately.",
+    },
+    {
+      title: "What if my child has specific dietary restrictions or allergies?",
+      content:
+        "We take special care to accommodate dietary restrictions and allergies. Our team follows strict preparation practices to ensure meals are safe and free from cross-contamination.",
+    },
+    {
+      title: "What if I need food on Sunday?",
+      content: (
+        <>
+          Our regular service is available Monday to Friday. If you need meals on a Sunday, please call us at <strong><a href="tel:+919176917602">+91 91769 17602</a></strong> in advance. Our team will confirm availability and make special arrangements based on your request and location.
+        </>
+      ),
+    },
+    {
+      title: "Can I get a free trial on Sunday?",
+      content:
+        "We don’t offer free trials on Sundays. Please choose any weekday or Saturday slot for your trial.",
+    },
+    {
+      title: "What if I don’t need a meal on a day during my subscription? Will I get a refund?",
+      content:
+        "Any unused meal days will be credited to your wallet and can be redeemed during your next subscription.",
+    },
+    {
+      title: "What if I want to terminate the service?",
+      content:
+        "You can request service termination at any time. The unconsumed meal days will be calculated, and a refund will be processed. Please contact customer service for termination assistance.",
+    },
+  ];
 
   return (
     <div className="contuspage">
@@ -205,7 +215,7 @@ const ContactUs = () => {
                     <h3>Where to Find Us</h3>
                     <h4>Lunchbowl by Earth Tech Concepts Private Limited</h4>
                     <p className="parabtn">
-                      <Link href="https://maps.app.goo.gl/wHSi6cLKhQBkKd1q8">
+                      <Link href="https://maps.app.goo.gl/wHSi6cLKhQBkKd1q8" target="_blank" rel="noopener noreferrer">
                         1B, KG Natraj Palace, 53/22, <br />Saravana Street, T Nagar, <br />Chennai - 600017
                       </Link>
                     </p>
@@ -224,115 +234,217 @@ const ContactUs = () => {
                     <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
                       <div className="w-full md:w-1/2 inputbox">
                         <label>
-                          First Name<sub>*</sub>
+                          FIRST NAME<sub>*</sub>
                         </label>
-                        <InputArea
-                          register={register}
+                        <Controller
                           name="firstname"
-                          validation={{
-                            required: "First name is required",
-                            minLength: { value: 2, message: "First name must be at least 2 characters" },
-                          }}
-                          type="text"
-                          placeholder="Enter First Name"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              placeholder="Enter First Name"
+                              fullWidth
+                              InputProps={{
+                                disableUnderline: true,
+                                sx: {
+                                  height: 48,
+                                  border: '1.5px solid #ccc',
+                                  borderRadius: 2,
+                                  fontSize: '1rem',
+                                  paddingLeft: '10px',
+                                  backgroundColor: '#fff'
+                                }
+                              }}
+                              sx={{ mt: 0.4 }}
+                              error={!!errors.firstname}
+                            />
+                          )}
                         />
-                        <Error errorName={errors.firstname?.message} />
+                        {errors.firstname && (
+                          <p className="text-red-600 text-sm">{errors.firstname.message || "First name is required!"}</p>
+                        )}
                       </div>
                       <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
                         <label>
-                          Last name<sub>*</sub>
+                          LAST NAME<sub>*</sub>
                         </label>
-                        <InputArea
-                          register={register}
+                        <Controller
                           name="Lastname"
-                          validation={{
-                            required: "Last name is required",
-                            minLength: { value: 2, message: "Last name must be at least 2 characters" },
-                          }}
-                          type="text"
-                          placeholder="Enter Last Name"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              placeholder="Enter Last Name"
+                              fullWidth
+                              InputProps={{
+                                disableUnderline: true,
+                                sx: {
+                                  height: 48,
+                                  border: '1.5px solid #ccc',
+                                  borderRadius: 2,
+                                  fontSize: '1rem',
+                                  paddingLeft: '10px',
+                                  backgroundColor: '#fff'
+                                }
+                              }}
+                              sx={{ mt: 0.4 }}
+                              error={!!errors.Lastname}
+                            />
+                          )}
                         />
-                        <Error errorName={errors.Lastname?.message} />
+                        {errors.Lastname && (
+                          <p className="text-red-600 text-sm">{errors.Lastname.message || "Last name is required!"}</p>
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
                       <div className="w-full md:w-1/2 inputbox">
                         <label>
-                          Mobile Number<sub>*</sub>
+                          MOBILE NUMBER<sub>*</sub>
                         </label>
-                        <InputArea
-                          register={register}
+                        <Controller
                           name="phone"
-                          validation={{
-                            required: "Mobile number is required",
-                            pattern: {
-                              value: /^[6-9]\d{9}$/,
-                              message: "Enter a valid 10-digit Indian mobile number starting with 6,7,8, or 9",
-                            },
+                          control={control}
+                          rules={{
+                            required: true,
+                            pattern: /^[6-9]\d{9}$/,
                           }}
-                          type="tel"
-                          placeholder="Enter Mobile Number"
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              placeholder="Enter Mobile Number"
+                              fullWidth
+                              type="tel"
+                              InputProps={{
+                                disableUnderline: true,
+                                sx: {
+                                  height: 48,
+                                  border: '1.5px solid #ccc',
+                                  borderRadius: 2,
+                                  fontSize: '1rem',
+                                  paddingLeft: '10px',
+                                  backgroundColor: '#fff'
+                                }
+                              }}
+                              sx={{ mt: 0.4 }}
+                              error={!!errors.phone}
+                            />
+                          )}
                         />
-                        <Error errorName={errors.phone?.message} />
+                        {errors.phone && (
+                          <p className="text-red-600 text-sm">{errors.phone.message || "Enter a valid 10-digit Indian mobile number."}</p>
+                        )}
                       </div>
                       <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
                         <label>
-                          Email<sub>*</sub>
+                          EMAIL<sub>*</sub>
                         </label>
-                        <InputArea
-                          register={register}
+                        <Controller
                           name="email"
-                          validation={{
-                            required: "Email is required",
-                            pattern: {
-                              value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-                              message: "Enter a valid email address",
-                            },
+                          control={control}
+                          rules={{
+                            required: true,
+                            pattern: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
                           }}
-                          type="email"
-                          placeholder="Enter Email"
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              placeholder="Enter Email"
+                              fullWidth
+                              type="email"
+                              InputProps={{
+                                disableUnderline: true,
+                                sx: {
+                                  height: 48,
+                                  border: '1.5px solid #ccc',
+                                  borderRadius: 2,
+                                  fontSize: '1rem',
+                                  paddingLeft: '10px',
+                                  backgroundColor: '#fff'
+                                }
+                              }}
+                              sx={{ mt: 0.4 }}
+                              error={!!errors.email}
+                            />
+                          )}
                         />
-                        <Error errorName={errors.email?.message} />
+                        {errors.email && (
+                          <p className="text-red-600 text-sm">{errors.email.message || "Enter a valid email address."}</p>
+                        )}
                       </div>
                     </div>
                     <div className="relative mb-4 inputbox">
                       <label>
-                        Message<sub>*</sub>
+                        MESSAGE<sub>*</sub>
                       </label>
-                      <textarea
-                        {...register("message", {
-                          required: `Message is required!`,
-                          minLength: { value: 5, message: "Message must be at least 5 characters" },
-                        })}
+                      <Controller
                         name="message"
-                        className="px-4 py-3 flex items-center w-full rounded appearance-none opacity-75 transition duration-300 ease-in-out text-sm focus:ring-0 bg-white border border-gray-300 focus:shadow-none focus:outline-none focus:border-gray-500 placeholder-body"
-                        autoComplete="off"
-                        spellCheck="false"
-                        rows="2"
-                        placeholder="Feel free to type here if you'd like to share something with us."
-                      ></textarea>
-                      <Error errorName={errors.message?.message} />
+                        control={control}
+                        rules={{
+                          required: true,
+                          minLength: 5,
+                        }}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            placeholder="Feel free to type here if you'd like to share something with us."
+                            fullWidth
+                            multiline
+                            rows={2}
+                            InputProps={{
+                              disableUnderline: true,
+                              sx: {
+                                border: '1.5px solid #ccc',
+                                borderRadius: 2,
+                                fontSize: '1rem',
+                                paddingLeft: '10px',
+                                backgroundColor: '#fff'
+                              }
+                            }}
+                            sx={{ mt: 0.4 }}
+                            error={!!errors.message}
+                          />
+                        )}
+                      />
+                      {errors.message && (
+                        <p className="text-red-600 text-sm mt-1">
+                          {errors.message.message || "Message must be at least 5 characters."}
+                        </p>
+                      )}
                     </div>
                     <div className="relative mb-4 agreebox">
-                      <div className="flex items-start">
-                        <input
-                          id="consent"
+                      <div className="agreebox">
+                        <Controller
                           name="consent"
-                          type="checkbox"
-                          checked={formData.consent}
-                          onChange={handleChange}
-                          className="mt-1 mr-2"
-                          required
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  {...field}
+                                  checked={field.value}
+                                  onChange={(e) => field.onChange(e.target.checked)}
+                                  sx={{ padding: 0 }}
+                                />
+                              }
+                              label={
+                                <label htmlFor="consent" className="text-sm cursor-pointer">
+                                  I agree to be contacted by <strong>Lunch Bowl</strong> via call, SMS, email, or WhatsApp...
+                                </label>
+                              }
+                            />
+                          )}
                         />
-                        <label htmlFor="consent" className="text-sm">
-                          I agree to be contacted by <strong>Lunch Bowl</strong>{" "}
-                          via call, SMS, email, or WhatsApp regarding their
-                          services.
-                        </label>
+                        {errors.consent && (
+                          <p className="text-red-600 text-sm mt-1">{errors.consent.message || "Please agree to be contacted by Lunch Bowl."}</p>
+                        )}
                       </div>
                     </div>
                     <div className="relative">
-                      <button data-variant="flat" className="" type="submit">
+                      <button disabled={loading} data-variant="flat" className="" type="submit">
                         <span>Submit</span>
                       </button>
                     </div>

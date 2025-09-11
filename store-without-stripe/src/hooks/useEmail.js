@@ -37,7 +37,51 @@ const useEmail = () => {
     }
   };
 
-  return { sendEmail, sendSchoolEnquiryEmail, loading, error };
+  const sendNutritionEnquiryEmail = async (emailData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await EmailService.sendNutritionEnquiryEmail(emailData);
+      setLoading(false);
+      return response;
+    } catch (err) {
+      setError(err.message || "Failed to send nutrition enquiry");
+      setLoading(false);
+      throw err;
+    }
+  };
+
+  const sendGetInTouchEmail = async (emailData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await EmailService.sendGetInTouchEmail(emailData);
+      setLoading(false);
+      return response;
+    } catch (err) {
+      setError(err.message || "Failed to send get-in-touch enquiry");
+      setLoading(false);
+      throw err;
+    }
+  };
+
+  const sendContactUsEmail = async (emailData) => {
+    console.log("Sending contact us email with data:", emailData);
+
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await EmailService.sendContactUsEmail(emailData);
+      setLoading(false);
+      return response;
+    } catch (err) {
+      setError(err.message || "Failed to send contact us message");
+      setLoading(false);
+      throw err;
+    }
+  };
+
+  return { sendEmail, sendSchoolEnquiryEmail, sendNutritionEnquiryEmail, sendGetInTouchEmail, sendContactUsEmail, loading, error };
 };
 
 export default useEmail;

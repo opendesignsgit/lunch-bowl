@@ -849,29 +849,8 @@ const getInTouch = async (req, res) => {
 const contactUs = async (req, res) => {
   const { firstName, lastName, mobileNumber, email, message, consent } = req.body;
 
-  // Check required fields
-  if (
-    !firstName ||
-    !lastName ||
-    !mobileNumber ||
-    !email ||
-    !message ||
-    consent !== true
-  ) {
-    return res.status(400).json({ success: false, error: "All fields are required and consent must be true." });
-  }
 
-  // Validate mobile number
-  if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
-    return res.status(400).json({ success: false, error: "Invalid mobile number." });
-  }
-
-  // Validate email
-  if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)) {
-    return res.status(400).json({ success: false, error: "Invalid email address." });
-  }
-
-  // Setup email transporter
+  // Set up nodemailer transporter (Gmail with env variables)
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -880,6 +859,7 @@ const contactUs = async (req, res) => {
     },
   });
 
+  // Email to admins
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: "csivarex.odi@gmail.com, maniyarasanodi20@gmail.com",
@@ -889,11 +869,12 @@ const contactUs = async (req, res) => {
       <p><strong>Name:</strong> ${firstName} ${lastName}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Mobile:</strong> ${mobileNumber}</p>
-      <p><strong>Consent:</strong> Yes</p>
+      <p><strong>Consent:</strong> ${consent ? "Yes" : "No"}</p>
       <p><strong>Message:</strong> ${message}</p>
     `,
   };
 
+  // Email to user
   const userMailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -908,9 +889,7 @@ const contactUs = async (req, res) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log("Contact Us enquiry email sent successfully --------->", mailOptions);
-
-     await transporter.sendMail(userMailOptions);
+    await transporter.sendMail(userMailOptions);
     res.status(200).json({ success: true, message: "Enquiry sent successfully." });
   } catch (error) {
     console.error("Email send error:", error);
