@@ -579,9 +579,11 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .formbox{}
 .formbox.contuslast{width: 48%;}
 .formbox .inputbox label{color: #FF6514;text-transform: uppercase;font-weight: 700;font-size: 16px;position: relative;}
+.formbox .inputbox .MuiInputBase-formControl{padding: 0;border-radius: 0; border: none;}
+.formbox .inputbox .MuiInputBase-formControl fieldset{border:none;}
 .formbox .inputbox label sub{line-height: 0;vertical-align: super;margin-left: 1px;}
-.formbox .inputbox input{border:1px solid #cccccc;border-radius: 4px;}
-.formbox .inputbox textarea{border:1px solid #cccccc;}
+.formbox .inputbox input{border: 1px solid #cccccc;    border-radius: 0px;    margin: 0;    width: 100%;    height: auto;}
+.formbox .inputbox textarea{border:1px solid #cccccc;padding: 5px 20px;}
 
 .formbox button{position: relative;}
 .formbox button::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
