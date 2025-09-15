@@ -583,7 +583,7 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .formbox .inputbox .MuiInputBase-formControl fieldset{border:none;}
 .formbox .inputbox label sub{line-height: 0;vertical-align: super;margin-left: 1px;}
 .formbox .inputbox input{border: 1px solid #cccccc;    border-radius: 0px;    margin: 0;    width: 100%;    height: auto;}
-.formbox .inputbox textarea{border:1px solid #cccccc;padding: 5px 20px;}
+.formbox .inputbox textarea{border:1px solid #cccccc;padding: 5px 20px; }
 
 .formbox button{position: relative;}
 .formbox button::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
@@ -591,6 +591,10 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .formbox button span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;font-family: 'Baloo';font-size: 16px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;}
 .formbox button span::after{content: '';position: relative;display: block;width: 14px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
 .formbox button:hover span::after{top: -3px;right: -3px;}
+.formbox .agreebox{}
+.formbox .agreebox>label{margin: 0;display: flex;}
+.formbox .agreebox>label span{display: block;}
+.formbox .agreebox>label span>label{line-height: 1;display: block;}
 
 .SetpTabul .SetpTabli{}
 .SetpTabli p{font-family: 'Baloo';line-height: 0;font-size: 1vw;padding: 0px 15px 0px 35px;white-space: nowrap;position: relative;height: 40px;display: flex;align-items: center;}
@@ -755,7 +759,7 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .radiobtngroup .radiobtrow .radiobtnsinput {padding: 0;color: #ffffff;}
 .radiobtngroup .radiobtrow .radiobtnstext  {color: #ffffff;padding-left: 6px;font-size: 14px;font-weight: 500;}
 
-.popbcont h3{font-size: 1.1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: -0.5px;margin-bottom: 10px;}
+.popbcont h3{font-size: 1.1vw;color: #000000;line-height: 1;text-transform: uppercase;font-family: 'Baloo';letter-spacing: 0.5px;margin-bottom: 10px;}
 .popbcont p{font-size: 16px;}
 .popbcont ul{list-style: none;margin-inline: -5px;display: flex;flex-wrap: wrap;}
 .popbcont ul li{background: rgb(255 101 20 / 12%);padding: 5px 10px;font-size: 14px;color: #FF6514;letter-spacing: 0;border-radius: 5px;margin: 5px;}
@@ -776,6 +780,7 @@ ul.holylisul li::before{content:"";position: absolute;width: 6px;height: 6px;bac
 .popvideodialog .popClose{border: 2px solid #383838;border-radius: 0;padding: 5px;background: #ffffff;opacity: 1;z-index: 9999999;pointer-events: all;box-shadow: 0 0 10px #000000;right: 30px;}
 .popvideodialog .popClose:hover{background: #db4b00;border-color: #ffffff;}
 .popvideodialog .popClose:hover svg{fill: #ffffff;}
+.popvideodialog .homeframebox{position: relative;width: 100%;height: 100%;z-index: 99999;}
 .popvideodialog iframe{position: relative;width: 100%;height: 100%;z-index: 99999;}
 
 
@@ -976,6 +981,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .ppricebox .ppriceitem:hover .ppricembox ul li::before{background: #ffefe7;}
 
 body .propetilpopus {z-index: 99999;}
+body .popvideodialog  {z-index: 99999;}
 
 .termscondipage .comtilte p address{  font-style: normal;}
 .PolicyCont{padding-inline: 20px;}
@@ -1056,7 +1062,10 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .DetlsSepBox input,   .DetlsSepBox .formboxrow .formboxcol .MuiSelect-select {line-height: 45px;font-size: 13px;   height: 45px;  }
   .DetlsSepBox textarea {font-size: 13px;}
   .DetlsSepBox .formboxrow .formboxcol .MuiTextField-root .MuiInputLabel-formControl {font-size: 14px}
+  .DetlsSepBox .formboxrow .formboxcol .MuiTextField-root .MuiInputLabel-formControl.MuiInputLabel-shrink {opacity: 0;}
   .DetlsSepBox .formboxrow .formboxcol .MuiFormControl-root .MuiPickersInputBase-root {}
+  .DetlsSepBox .formboxrow .formboxcol fieldset{top:0}
+  .DetlsSepBox .formboxrow .formboxcol fieldset legend{opacity: 0;}
   .SetpTabli p {font-size: 14px;}
   .radiogroub>.MuiBox-root {padding: 8px 20px;}
   .ProdfilterBox ul li button {  font-size: 15px;}
@@ -1164,6 +1173,7 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .sendotpbox h6{font-size: 16px;}
   .setpbanersec  .comtilte{text-align: center;padding-block: 8px;}
   .setpbanersec  .comtilte h1{justify-content: center;}
+  .HintroSec  .comtilte p br {display: none;}
 }
 
 @media screen and (max-width:1023px){
@@ -1194,7 +1204,7 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .MCcalendy .MCMiddlePanel .childslidebox {margin-bottom: 1vh;}
   .MCLeftPanel .dataListbox p {font-size: 12px;}
   .MCcalendy .MCMiddlePanel .daybox {aspect-ratio: 1 / 1;width: 100%;}
-  .calandySecs{padding-block: 40px 80px;}
+  .calandySecs{padding-block: 40px 80px;        padding-inline: 0px;}
   .calandySecs .container {max-width: 96%;}
   .MCcalendy p.sycmenu{font-size: 13px;}
   .childmlist p.menuddtitle{font-size: 14px;}
@@ -1224,8 +1234,15 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .loginfiledss button.sotpbtn span{font-size: 14px;}
   .loginfiledss label {font-size: 16px;}
   .sfrmrow {flex-direction: column;}
-  .logsinul>li.mobhidpplink{display: none;}
-
+  .logsinul>li.mobhidpplink{display: none;}    
+  .contaddsboxs{flex-wrap: wrap;}
+  .contaddsboxs .flex-1:nth-child(1){width: 50%; flex: auto;}
+  .contaddsboxs .flex-1:nth-child(2){width: 50%; flex: auto;}
+  .contaddsboxs .flex-1:nth-child(3){width: 100%; flex: auto;margin-top: 20px;}  
+  .formbox .agreebox>label span>label{font-size: 12.5px;}
+  .inputbox select, .inputbox input {font-size: 13px;line-height: 36px;}
+  .formbox .inputbox textarea {font-size: 13px;}
+  .ppriceinrow {padding-inline: 0px;}
 }
 @media screen and (max-width:880px){
   .progroupitem {width: calc(50% - 20px);}
@@ -1262,7 +1279,7 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .HmteamSec {padding-inline: 40px;}
   .addsboxss p.parabtn {margin-top: 10px;}
   .pagebansec p br{display: none;}
-  .pagebansec .hworkTitle {width: 70%;}
+  .pagebansec .hworkTitle {width: 62%;}
   .contuspage .pagebansec .hworkTitle {width:50%;}
   .menulistpage .hworkTitle {width: 52%;margin-bottom: 0;}
   .freetrilpage .pagebansec .hworkTitle {width: 40%;}
@@ -1274,9 +1291,9 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .aboutintroRow .aboutintroRCol{position: relative;width: 65%;margin-top: 30px;}
   .aboutintroRow{-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;}
   .Hworktabitems{padding-inline: 40px;}
-  .rfboximg {width: 35%;margin-inline: auto;flex: auto;}
+  .Hworktabitems .rfboximg {width: 35%;margin-inline: auto;flex: auto;}
   .rfboximg img{width: 100%;}
-  .rfboxcoint{width: 65%;flex: auto;padding-left: 20px;}
+  .Hworktabitems .rfboxcoint{width: 65%;flex: auto;padding-left: 20px;}
   .rfboxcoint p br{display: none;}
   .freetrilsec {padding-inline: 30px;}
   .freetrilRow{flex-direction: column;}
@@ -1290,10 +1307,6 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .faqcontain::after {height: 25px;}
   .hbanCont h1{font-size: 28px;letter-spacing: 0px;}
   .HLFOlistSec:before{height: 26px;bottom: 4px;}
-  .contaddsboxs{flex-wrap: wrap;}
-  .contaddsboxs .flex-1:nth-child(1){width: 50%; flex: auto;}
-  .contaddsboxs .flex-1:nth-child(2){width: 50%; flex: auto;}
-  .contaddsboxs .flex-1:nth-child(3){width: 100%; flex: auto;margin-top: 20px;}
   .contmapssec iframe {aspect-ratio: 2 / 1;}
   footer::before{height: 21px;background-size: auto 45%;top: 13px;}
   footer ul.Somediaul li a {width: 30px;}
@@ -1321,11 +1334,18 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .teamsliders .slick-arrow::before {font-size: 32px;}
   .calandySecs{padding-inline: 0px;}
   .MCLeftPanel .childslidebox button{padding: 0;}
-  .sliderRef1 .rfbox h4 {font-size: 26px;}
+  .sliderRef1 .rfbox h4 {font-size: 26px;line-height: 1;margin-bottom: 5px;}
   .mteambox { width: 50%;}
   .resendbtn {width: 100%;}
   .loginfiledss label {font-size: 14px;}
   .loginfiledss button.sotpbtn span {font-size: 13px;padding-inline: 30px;    }
+  .teamsliders .slick-prev {left: calc(50% - 130px);}
+  .teamsliders .slick-next {right: calc(50% - 130px);}
+  .DashboardTBoxss{gap: 10px;}
+  .DashboardTBoxss .DashboardTItems{padding: 15px;}
+  .myaccboxitems .ChildlistBoxs{width: 100%;}
+  .myaccboxitems .ChildlistBoxs .ChildlistItems {width: calc(100% - 0px);display: block;}
+  .myaccboxitems .ChildlistBoxs .ChildlistItems table{min-width: 100%;}
 }
 
 @media screen and (min-width:651px){
@@ -1484,7 +1504,7 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .addsboxss{margin-inline: 0;border-radius: 5px;height: auto;}
   .addsIcon {width: 40px;}
   .addsboxss h3 {font-size: 22px;letter-spacing: -0.5px;}
-  .addsboxss.adboxthree p.parabtn a br{display: none;}
+  .addsboxss.adboxthree p.parabtn a br{/*display: none;*/}
   .contuslast {padding-inline: 0;}
   .faqAccordionitems button span.faqarrows{font-size: 19px;    margin-right: 8px;}
   .contmapssec iframe {aspect-ratio: 1;}
@@ -1506,7 +1526,7 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .MCcalendy .MCMainPanel, .MCcalendy .MCLeftPanel {min-height: auto;box-shadow: none;}
   .MCcalendy .MCLeftPanel{border: 0px solid #EAEAEC;height: auto;padding: 20px;}
   html body .popmenuselt {z-index: 99999;}
-  .popmenuselt .MuiDialog-container{}
+  .popmenuselt .MuiDialog-container{padding: 10px;}
   .popmenuselt .MuiDialog-container .MuiPaper-root{margin: 0;width: 100%;height: 100%;max-height: 100%;}
   .popmenuselt .MCRightPanel {padding:20px;position: relative;height: 100%;}
   .popmenuselt .MCRightPanel>.MuiBox-root{margin-bottom: 10px;}
@@ -1609,8 +1629,8 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .abtvideoSec:after{height: 10px;bottom: 0px;transform: translateY(0%);background: url(/about/howrkitbefimg.png) repeat-x bottom center;background-size: 70%;        background-position-y: bottom !important;}
   .addsboxss h4 {font-size: 21px;}
   .signboxInrow{width: 100%;}
-  .MCcalendy .MCMiddlePanel {padding: 20px;}
-  .holylicolor {justify-content: flex-start;}
+  .MCcalendy .MCMiddlePanel {padding: 20px;        padding-top: 0;}
+  .calandySecs  .holylicolor {justify-content: flex-start;}
   body .MenuplanDialogpop {z-index: 999999;}
   body .MenuplanDialogpop .poptitle {padding-top: 0;}
   body .MenuplanDialogpop .button.popclose {}
@@ -1621,7 +1641,6 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .fixdatesboxwarrow .datearrow  button.arrowprew{left:0}
   .fixdatesboxwarrow .datearrow  button.arrownext{right: 0;}
   html body .holidaypaysec {z-index: 99999;}
-
 }
 @media screen and (min-width:501px) and (max-width:650px){ 
    .produtMobView {width: 80%;margin-inline: auto;}
@@ -1701,6 +1720,9 @@ html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
   .faqAccordionitems button{font-size: 13px;padding-inline: 10px;}
   .HctaTitle P{margin-bottom: 0;}
   .combtntb p.parabtn {margin-top: 20px;}
+  .fixdatesboxs h2 {font-size: 52px;}
+  .fixdatesboxs h4 {font-size: 16px;}
+  .fixdatesboxs h5 {font-size: 15px;}
 }
 
 @media screen and (max-width:400px){

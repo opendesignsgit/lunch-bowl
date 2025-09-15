@@ -75,48 +75,44 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
   }, [session?.user?.id, status]);
 
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const pageWidth = window.innerWidth;
-      const body = document.body;
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const pageWidth = window.innerWidth;
+    const body = document.body;
 
-      if (pageWidth > 650) {
-        const scrollUp = "scroll-up";
-        const scrollDown = "scroll-down";
-        const scrollanimi = "sscroll-animi";
-        let lastScroll = 0;
+    if (pageWidth > 650) {
+      const scrollUp = "scroll-up";
+      const scrollDown = "scroll-down";
+      const scrollanimi = "sscroll-animi";
+      let lastScroll = 0;
 
-        const handleScroll = () => {
-          const currentScroll = window.pageYOffset;
-          if (currentScroll <= 0) {
-            body.classList.remove(scrollUp);
-            body.classList.remove(scrollanimi);
-            return;
-          }
+      const handleScroll = () => {
+        const currentScroll = window.pageYOffset;
+        if (currentScroll <= 0) {
+          body.classList.remove(scrollUp, scrollDown, scrollanimi);
+          return;
+        }
 
-          if (
-            currentScroll > lastScroll &&
-            !body.classList.contains(scrollDown)
-          ) {
-            body.classList.remove(scrollUp);
-            body.classList.add(scrollDown);
-            body.classList.add(scrollanimi);
-          } else if (
-            currentScroll < lastScroll &&
-            body.classList.contains(scrollDown)
-          ) {
-            body.classList.remove(scrollDown);
-            body.classList.add(scrollUp);
-            body.classList.add(scrollanimi);
-          }
-          lastScroll = currentScroll;
-        };
+        if (currentScroll > lastScroll && !body.classList.contains(scrollDown)) {
+          body.classList.remove(scrollUp);
+          body.classList.add(scrollDown, scrollanimi);
+        } else if (currentScroll < lastScroll && body.classList.contains(scrollDown)) {
+          body.classList.remove(scrollDown);
+          body.classList.add(scrollUp, scrollanimi);
+        }
+        lastScroll = currentScroll;
+      };
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-      }
+      window.addEventListener("scroll", handleScroll);
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+        // 🔹 Remove all classes on unmount (page change)
+        body.classList.remove(scrollUp, scrollDown, scrollanimi);
+      };
     }
-  }, []);
+  }
+}, []);
 
   const handleLogout = async () => {
     setShowLogoutConfirm(false);
@@ -182,7 +178,7 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
               {!session && (
                 <li className="logbtn">
                   <button onClick={() => setOpenLogin(true)}>
-                    <span>Log In</span>
+                    <span>Sign In</span>
                   </button>
                 </li>
               )}

@@ -143,21 +143,19 @@ const GetinTouch = ({ open, onClose }) => {
                   fullWidth
                   id="fullName"
                   name="fullName"
-                  label="Full Name"
                   value={formData.fullName}
                   onChange={handleChange}
                   error={!!errors.fullName}
                   helperText={errors.fullName}
                   margin="normal"
                   variant="outlined"
-                  placeholder="Joe Bloggs"
+                  placeholder="Full Name"
                   className="fieldbox"
                 />
                 <TextField
                   fullWidth
                   id="email"
                   name="email"
-                  label="Email"
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -165,14 +163,13 @@ const GetinTouch = ({ open, onClose }) => {
                   helperText={errors.email}
                   margin="normal"
                   variant="outlined"
-                  placeholder="example@domain.com"
+                  placeholder="Email"
                   className="fieldbox"
                 />
                 <TextField
                   fullWidth
                   id="mobile"
                   name="mobile"
-                  label="Mobile Number"
                   type="tel"
                   value={formData.mobile}
                   onChange={handleChange}
@@ -180,14 +177,13 @@ const GetinTouch = ({ open, onClose }) => {
                   helperText={errors.mobile}
                   margin="normal"
                   variant="outlined"
-                  placeholder="1234567890"
+                  placeholder="Mobile Number"
                   className="fieldbox"
                 />
                 <TextField
                   fullWidth
                   id="message"
                   name="message"
-                  label="Message"
                   type="text"
                   value={formData.message}
                   onChange={handleChange}

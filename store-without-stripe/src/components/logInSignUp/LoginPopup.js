@@ -249,7 +249,7 @@ const LoginPopup = ({ open, onClose }) => {
                       setShowSignUp(true);   // Open the SignUpPopup
                     }}
                   >
-                    Create an Account
+                    <strong>Sign Up</strong>
                   </Typography>
                 </Typography>
               )}
