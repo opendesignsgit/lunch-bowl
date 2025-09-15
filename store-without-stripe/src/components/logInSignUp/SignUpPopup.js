@@ -349,6 +349,7 @@ const SignUpPopup = ({ open, onClose, freeTrial }) => {
                           key={index}
                           variant="outlined"
                           size="small"
+                          type="tel" 
                           inputProps={{
                             maxLength: 1,
                             style: { textAlign: "center", fontSize: "24px" },

@@ -278,6 +278,7 @@ const LoginPopup = ({ open, onClose }) => {
                       <TextField
                         key={index}
                         variant="outlined"
+                        type="tel" 
                         size="small"
                         inputProps={{
                           maxLength: 1,
