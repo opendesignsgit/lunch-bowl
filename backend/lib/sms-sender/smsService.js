@@ -4,7 +4,7 @@ require("dotenv").config();
 const SMS_TEMPLATES = {
   OTP: {
     templateId: '1607100000000356197',
-    template: 'Your Lunch Bowl OTP is {#var#}. It is valid for 2 minutes. Do not share this with anyone.\n\nEarth Tech Concepts Pvt Ltd'
+    template: 'Your Lunch Bowl OTP is {#var#}. It is valid for 10 minutes. Do not share this with anyone.\n\nEarth Tech Concepts Pvt Ltd'
   },
   SIGNUP_CONFIRMATION: {
     templateId: '1607100000000356198',
