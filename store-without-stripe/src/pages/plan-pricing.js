@@ -15,15 +15,41 @@ import LoginPopup from "../components/logInSignUp/LoginPopup";
 import SignUpPopup from "../components/logInSignUp/SignUpPopup"; // Corrected import name
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useRegistration from "@hooks/useRegistration";
 
 
 const PlanPricingPage = () => {
   const { data: session } = useSession();
+  const { submitHandler, loading, error } = useRegistration();
+  const [stepCheck, setStepCheck] = useState(null);
+  const [apiFreeTrial, setApiFreeTrial] = useState(false);
   const router = useRouter(); 
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
 
+
+  useEffect(() => {
+    const fetchStepCheck = async () => {
+      try {
+        if (!session?.user?.id) throw new Error("User ID not available");
+
+        const result = await submitHandler({
+          path: "Step-Check",
+          _id: session.user.id,
+        });
+
+        setStepCheck(result?.data?.step);
+        setApiFreeTrial(result?.data?.freeTrial);
+
+        console.log("Step Check Result:hjhdsgvyfshj", result.data.step);
+      } catch (err) {
+        console.error("Error fetching step check:", err);
+      }
+    };
+
+    fetchStepCheck();
+  }, [session?.user?.id, status]);
 
 
   const handleGetStartedClick = () => {
@@ -159,9 +185,13 @@ const PlanPricingPage = () => {
                                       <li>Multi-child subscription options</li>
                                     </ul>
                                   </div>
+                    {stepCheck !== 4 && (
+
                                   <div className='ppricebbox'>
                                     <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
+                    )}
+
                                 </div>
                                 <div className='ppriceitem'>
                                   <div className='ppricetbox'>
@@ -179,9 +209,12 @@ const PlanPricingPage = () => {
                                       <li>Multi-child subscription options</li>
                                     </ul>
                                   </div>
+                    {stepCheck !== 4 && (
+
                                   <div className='ppricebbox'>
                                     <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
+                    )}
                                   <div className="offerbox">
                                       <strong>5</strong><small>% <br/>OFF</small>
                                   </div>
@@ -202,9 +235,12 @@ const PlanPricingPage = () => {
                                       <li>Multi-child subscription options</li>
                                     </ul>
                                   </div>
+                    {stepCheck !== 4 && (
+
                                   <div className='ppricebbox'>
                                     <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
+                    )}
                                   <div className="offerbox">
                                       <strong>10</strong><small>% <br/>OFF</small>
                                   </div>
@@ -225,9 +261,12 @@ const PlanPricingPage = () => {
                                       <li>Multi-child subscription options</li>
                                     </ul>
                                   </div>
+                    {stepCheck !== 4 && (
+
                                   <div className='ppricebbox'>
                                     <button onClick={handleGetStartedClick}>Get Started</button>
                                   </div>
+                    )}
                                 </div>
                             </div>
                         </div>

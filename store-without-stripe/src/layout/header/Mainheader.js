@@ -173,11 +173,14 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
           </div>
           <div className="navbox">
             <ul className="flex items-center logsinul">
-              {stepCheck !== 4 && (
+              {/* {stepCheck !== 4 && (
                 <li className="nodesign mobhidpplink">
                   <Link href="/plan-pricing">Plan & Pricing</Link>
                 </li>
-              )}
+              )} */}
+              <li className="nodesign mobhidpplink">
+                <Link href="/plan-pricing">Plan & Pricing</Link>
+              </li>
               {/* Only show login button if user is not logged in */}
               {!session && (
                 <li className="logbtn">
@@ -290,9 +293,9 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
                   <li className="nav__item hamnavlink">
                     <Link href="/about-us">About Us</Link>
                   </li>
-                  {/* <li className="nav__item hamnavlink">
+                  <li className="nav__item hamnavlink">
                     <Link href="/plan-pricing">Plan & Pricing</Link>
-                  </li> */}
+                  </li>
                   <li className="nav__item hamnavlink">
                     <Link href="/Menulist">Food Menu</Link>
                   </li>
