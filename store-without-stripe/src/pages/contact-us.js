@@ -243,7 +243,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter First Name"
+                              // placeholder="Enter First Name"
                               fullWidth
                               InputProps={{
                                 disableUnderline: true,
@@ -276,7 +276,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter Last Name"
+                              // placeholder="Enter Last Name"
                               fullWidth
                               InputProps={{
                                 disableUnderline: true,
@@ -314,7 +314,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter Mobile Number"
+                              // placeholder="Enter Mobile Number"
                               fullWidth
                               type="tel"
                               InputProps={{
@@ -351,7 +351,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter Email"
+                              // placeholder="Enter Email"
                               fullWidth
                               type="email"
                               InputProps={{
@@ -389,7 +389,7 @@ const ContactUs = () => {
                         render={({ field }) => (
                           <TextField
                             {...field}
-                            placeholder="Feel free to type here if you'd like to share something with us."
+                            // placeholder="Feel free to type here if you'd like to share something with us."
                             fullWidth
                             multiline
                             rows={2}

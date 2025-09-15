@@ -556,15 +556,15 @@ const SubscriptionPlanStep = ({
                   <Typography fontSize={14}>
                     I agree with the{" "}
                     <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6A00", textDecoration: "underline" }}>
-                      terms and conditions
+                      Terms and Conditions
                     </a>{" "}
                     /{" "}
                     <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6A00", textDecoration: "underline" }}>
-                      privacy policy
+                      Privacy Policy
                     </a>{" "}
                     /{" "}
                     <a href="/refund-cancellation-policy" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6A00", textDecoration: "underline" }}>
-                      refund cancellation policy
+                      Refund Cancellation Policy
                     </a>
                   </Typography>
                 }
