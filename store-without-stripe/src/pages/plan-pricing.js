@@ -202,7 +202,7 @@ const PlanPricingPage = () => {
                                   <div className='ppricembox'>
                                     <ul>
                                       <li>200 per meal (66 meals)</li>
-                                      <li>Pre-planned, dietician-approved 30-day meal plan </li>
+                                      <li>Pre-planned, dietician-approved 30-day meal plan (renewed monthly)</li>
                                       <li>Already includes 5% savings</li>
                                       <li>Add a sibling & save even more (extra 5%)</li>
                                       <li>Diet & allergy-friendly choices</li>
@@ -228,7 +228,7 @@ const PlanPricingPage = () => {
                                   <div className='ppricembox'>
                                     <ul>
                                       <li>200 per meal (132 meals)</li>
-                                      <li>Pre-planned, dietician-approved 30-day meal plan </li>
+                                      <li>Pre-planned, dietician-approved 30-day meal plan (renewed monthly)</li>
                                       <li>Already includes 10% savings</li>
                                       <li>Add a sibling & save even more (extra 5%)</li>
                                       <li>Diet & allergy-friendly choices</li>
@@ -255,7 +255,7 @@ const PlanPricingPage = () => {
                                     <ul>
                                       <li>200 per meal (flexible count)</li>
                                       <li>Adjust for holidays/special events</li>
-                                      <li>Pre-planned, dietician-approved 30-day meal plan </li>
+                                      <li>Pre-planned, dietician-approved 30-day meal plan (renewed monthly)</li>
                                       <li>Personalized dietician-suggested meal plan</li>
                                       <li>Diet & allergy-friendly choices</li>
                                       <li>Multi-child subscription options</li>

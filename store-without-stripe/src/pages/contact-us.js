@@ -213,7 +213,7 @@ const ContactUs = () => {
                       <Image src={locaticon} alt="" />
                     </div>
                     <h3>Where to Find Us</h3>
-                    <h4>Lunchbowl by Earth Tech Concepts Private Limited</h4>
+                    <p>Lunchbowl by Earth Tech Concepts Private Limited</p>
                     <p className="parabtn">
                       <Link href="https://maps.app.goo.gl/wHSi6cLKhQBkKd1q8" target="_blank" rel="noopener noreferrer">
                         1B, KG Natraj Palace, 53/22, <br />Saravana Street, T Nagar, <br />Chennai - 600017

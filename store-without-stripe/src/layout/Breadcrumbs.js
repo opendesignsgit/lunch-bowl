@@ -3,6 +3,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Breadcrumbs = () => {
+    const breadcrumbNames = {
+      "about-us": "About Us",
+      "Menulist": "Menu List",
+      "contact-us": "Contact Us",
+      "userDashBoard": "User DashBoard",
+      "userDashBoard": "User DashBoard",
+      "about-us#aboutmissionsec": "About Us",
+      "about-us#HmteamSec": "About Us",
+    };
+
     const router = useRouter();
     const pathnames = router.asPath.split("/").filter((x) => x);
   return ( <nav className="breadcrumbs" aria-label="Breadcrumb">
@@ -14,7 +24,12 @@ const Breadcrumbs = () => {
       </li>
       {pathnames.map((segment, index) => {
         const href = "/" + pathnames.slice(0, index + 1).join("/");
-        const label = decodeURIComponent(segment.replace(/-/g, " "));
+        let label =
+      breadcrumbNames[segment] ||
+      decodeURIComponent(segment.replace(/-/g, " ")).replace(
+        /\b\w/g,
+        (char) => char.toUpperCase()
+      );
 
         const isLast = index === pathnames.length - 1;
 

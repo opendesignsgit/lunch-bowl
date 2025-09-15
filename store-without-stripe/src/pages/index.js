@@ -210,7 +210,7 @@ const Home = () => {
                                     <span className='block'>Lunch Bowl</span> 
                                 </h3>
                   <p>We strive to simplify mealtime for parents by delivering <br />thoughtfully crafted, nutritionist- approved lunch boxes <br />that are fresh, flavourful and tailored to children’s <br />preferences. Our commitment to high-quality ingredients, <br />eco-friendly packaging and timely delivery ensures that every <br />meal is a blend of convenience, health and happiness.</p>
-                                <p className="parabtn flex"><Link href="/about-us" className="emenulink relative" ><span className='block flex items-center relative'>Read More</span></Link></p>
+                                <p className="parabtn flex"><Link href="/about-us#aboutmissionsec" className="emenulink relative" ><span className='block flex items-center relative'>Read More</span></Link></p>
                             </div>
                         </div>
                     </div>
