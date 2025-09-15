@@ -190,6 +190,7 @@ body .secpaddblock {
 .DashboardSecss .comtilte h3 small{font-size: 1.6vw;color: #000000;letter-spacing: 0;}
 .DashboardTBoxss{}
 .DashboardTBoxss .DashboardTItems{}
+.DashboardTBoxss .DashboardTItems:nth-child(2){display: none;}
 .DashboardTBoxss .DashboardTItems h5{color: #000000;line-height: 1;font-family: 'Baloo';letter-spacing: -0px;font-weight: 100;margin-bottom: 10px;}
 .DashboardTBoxss .DashboardTItems button{background: #FF6514;color: #ffffff;}
 .DashboardTBoxss .DashboardTItems button:hover{background: #ffffff;color: #FF6514;}
@@ -889,6 +890,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .myaccboxitems {display: flex;flex-wrap: wrap;margin-inline: -10px;}
 .myaccboxitems .myaccboxlist {margin: 10px;border: 1px solid #e1e1e1;border-radius: 5px;padding: 30px;}
 .myaccboxitems .myaccboxlist h4{font-family: 'Baloo';line-height: 1.6;font-size: 1.3vw;border-bottom: 1px solid #e1e1e1;margin-bottom: 20px;color: #FF6A00;}
+.myaccboxitems .myaccboxlist table{min-width: 100%;}
 .myaccboxitems .myaccboxlist ul{}
 .myaccboxitems .myaccboxlist ul li{display: flex;align-items: center;gap: 10px;font-size: 15px;line-height: 1.6;margin-bottom: 5px;}
 .myaccboxitems .myaccboxlist ul li:last-child{margin-bottom: 0;}
@@ -906,7 +908,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 .myaccboxitems .boxthree {width:calc(100% - 20px);padding:20px 10px;}
 .myaccboxitems .boxfour {width:calc(100% - 20px);}
 .myaccboxitems .ChildlistBoxs {margin-inline: 0px;}
-.myaccboxitems .ChildlistBoxs .ChildlistItems{width:calc(33.333% - 20px);border-right: 1px solid #e1e1e1;padding:0 20px;}
+.myaccboxitems .ChildlistBoxs .ChildlistItems{width:calc(33.333% - 20px);border-right: 1px solid #e1e1e1;padding:0 20px;    gap: unset;}
 .myaccboxitems .ChildlistBoxs .ChildlistItems:last-child{border-right: 0px solid #e1e1e1;}
 
 .myaccContainer .notfetchbox{margin: 10px;border: 1px solid #e1e1e1;border-radius: 5px;padding: 1vw 2vw;}
@@ -990,6 +992,13 @@ body .popvideodialog  {z-index: 99999;}
 
 html body .seletallmenu{position: absolute;bottom: 0;margin-bottom: 0;}
 html body .seletallmenu>.MuiPaper-root{background-color: #ea1a27;}
+
+html body .ftscholpopup {z-index: 99999;}
+html body .ftscholpopup .ftscholpopupbody {padding: 40px;}
+html body .ftscholpopup .ftscholpopupclose {top: 0;right: 0;padding: 5px;border: 2px solid #ccc;border-radius: 0;background: #333333;}
+html body .ftscholpopup .ftscholpopupclose:hover{background: #ffffff;}
+html body .ftscholpopup .ftscholpopupokbtn  {background: #ff6514;border-radius: 0;}
+html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
 
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
