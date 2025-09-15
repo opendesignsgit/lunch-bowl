@@ -34,10 +34,10 @@ const FreeTrialSchoolPopup = ({ open, onClose, onSubmit, schools, loadingSchools
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle sx={{ m: 0, p: 2 }}>
-        To be noted:
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" className="ftscholpopup">
+      <DialogContent dividers className="ftscholpopupbody">
         <IconButton
+          className="ftscholpopupclose"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -50,13 +50,8 @@ const FreeTrialSchoolPopup = ({ open, onClose, onSubmit, schools, loadingSchools
         >
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
-      <DialogContent dividers>
         <Typography gutterBottom>
           Dear user, as you want a free trial we have limited it only for this school. If you are part of this school, you can straight away sign up here and have your free trial of our healthy bowl.
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Thank you.</strong>
         </Typography>
         <FormControl fullWidth margin="normal" required>
           <InputLabel id="school-select-label">Select your school</InputLabel>
@@ -73,12 +68,10 @@ const FreeTrialSchoolPopup = ({ open, onClose, onSubmit, schools, loadingSchools
             {renderSchoolOptions()}
           </Select>
         </FormControl>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => onSubmit(selectedSchool)} disabled={!isButtonEnabled} variant="contained">
+        <Button onClick={() => onSubmit(selectedSchool)} disabled={!isButtonEnabled} variant="contained" className="ftscholpopupokbtn">
           Submit
         </Button>
-      </DialogActions>
+      </DialogContent>
     </Dialog>
   );
 };
