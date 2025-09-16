@@ -132,7 +132,7 @@ export default function FreeTrialPage() {
       newErrors.areaCity = "Area/City is required";
 
     if (!formData.pincode || !/^\d{6}$/.test(formData.pincode))
-      newErrors.pincode = "Pincode must be exactly 6 digits";
+      newErrors.pincode = "Place enter valid pincode";
 
     if (formData.altMobile) {
       if (!/^[6789]\d{9}$/.test(formData.altMobile))
@@ -174,6 +174,9 @@ export default function FreeTrialPage() {
       if (formSectionRef.current) {
         formSectionRef.current.scrollIntoView({ behavior: "smooth" });
       }
+      setTimeout(() => {
+        router.push("/user/profile-Step-Form");
+      }, 5000);
     } catch (err) {
       alert("Thank you for your enquiry! We'll get back to you soon.");
       setSubmitted(true);

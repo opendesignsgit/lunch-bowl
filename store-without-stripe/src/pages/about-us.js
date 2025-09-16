@@ -187,7 +187,7 @@ const AboutUs = () => {
             </div>*/}
           </div>
         </section>
-        <section className="HintroSec aboutmissionsec introbrsec relative bg-FFF4D7 flex py-[12vh]">
+        <section className="HintroSec aboutmissionsec introbrsec relative bg-FFF4D7 flex py-[12vh]" id="aboutmissionsec">
           <div className="container mx-auto relative">
             <div className="flex items-center max-md:flex-col-reverse">
               <div className="flex-1 hbanLeft flex justify-center flex-col">

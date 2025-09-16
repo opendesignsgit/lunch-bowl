@@ -16,6 +16,9 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import SignUpImage from "../../../public/LogInSignUp/signuppopimg.jpg";
 import useLoginSubmit from "@hooks/useLoginSubmit";
 import useSMS from "@hooks/useSMS";
+import { Checkbox, FormControlLabel } from "@mui/material";
+import LoginPopup from "./LoginPopup";
+
 
 const SignUpPopup = ({ open, onClose, freeTrial }) => {
   const [form, setForm] = useState({
@@ -25,6 +28,8 @@ const SignUpPopup = ({ open, onClose, freeTrial }) => {
     email: "",
   });
   const [otpSent, setOtpSent] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+
   const [otp, setOtp] = useState("");
   const [userOtp, setUserOtp] = useState("");
   const [timer, setTimer] = useState(0);
@@ -41,6 +46,8 @@ const SignUpPopup = ({ open, onClose, freeTrial }) => {
   const { submitHandler } = useLoginSubmit();
   const [loading, setLoading] = useState(false);
   const { sendOTPSMS, sendSignupConfirmationSMS, isSending: isSendingSMS } = useSMS();
+  const [acceptTerms, setAcceptTerms] = useState(false);
+
 
   // Countdown effect
   useEffect(() => {
@@ -75,50 +82,50 @@ const SignUpPopup = ({ open, onClose, freeTrial }) => {
     }
   };
 
-// Validation functions
-const validateName = (name) => {
-  return name.trim().length >= 1 && /^[a-zA-Z]+$/.test(name.trim());
-};
-
-const validateMobile = (mobile) => /^[6-9]\d{9}$/.test(mobile);
-
-const validateEmail = (email) => {
-  const trimmedEmail = email.trim();
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
-};
-
-const validateOtp = (otp) => otp.length === 4 && /^\d+$/.test(otp);
-
-const validateForm = () => {
-  const newErrors = {
-    firstName: !form.firstName.trim()
-      ? "First name is required"
-      : !validateName(form.firstName)
-      ? "Minimum 1 letters, no numbers/special chars"
-      : "",
-
-    lastName: !form.lastName.trim()
-      ? "Last name is required"
-      : !validateName(form.lastName)
-      ? "Minimum 1 letters, no numbers/special chars"
-      : "",
-
-    mobile: !form.mobile.trim()
-      ? "Mobile number is required"
-      : !validateMobile(form.mobile.trim())
-      ? "Please enter a valid number"
-      : "",
-
-    email: !form.email.trim()
-      ? "Email is required"
-      : !validateEmail(form.email.trim())
-      ? "Please enter a valid email"
-      : "",
+  // Validation functions
+  const validateName = (name) => {
+    return name.trim().length >= 1 && /^[a-zA-Z]+$/.test(name.trim());
   };
 
-  setErrors(newErrors);
-  return !Object.values(newErrors).some((error) => error);
-};
+  const validateMobile = (mobile) => /^[6-9]\d{9}$/.test(mobile);
+
+  const validateEmail = (email) => {
+    const trimmedEmail = email.trim();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+  };
+
+  const validateOtp = (otp) => otp.length === 4 && /^\d+$/.test(otp);
+
+  const validateForm = () => {
+    const newErrors = {
+      firstName: !form.firstName.trim()
+        ? "First name is required"
+        : !validateName(form.firstName)
+          ? "Minimum 1 letters, no numbers/special chars"
+          : "",
+
+      lastName: !form.lastName.trim()
+        ? "Last name is required"
+        : !validateName(form.lastName)
+          ? "Minimum 1 letters, no numbers/special chars"
+          : "",
+
+      mobile: !form.mobile.trim()
+        ? "Mobile number is required"
+        : !validateMobile(form.mobile.trim())
+          ? "Please enter a valid number"
+          : "",
+
+      email: !form.email.trim()
+        ? "Email is required"
+        : !validateEmail(form.email.trim())
+          ? "Please enter a valid email"
+          : "",
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error);
+  };
   const handleSendOtp = async () => {
     if (validateForm()) {
       try {
@@ -282,6 +289,7 @@ const validateForm = () => {
           setUserOtp("");
           setErrors({ firstName: "", lastName: "", mobile: "", email: "", otp: "" });
           setMessage(null);
+          setAcceptTerms(false);
         }}
         className="compopups"
         maxWidth="lg"
@@ -320,178 +328,179 @@ const validateForm = () => {
             </IconButton>
 
             <div className="signboxInrow">
-            <div className="poptitles">
-              <Typography variant="h4" sx={{ textTransform: "uppercase", mb: 1 }}>
-                {otpSent ? "Enter OTP" : "Sign Up"}
-              </Typography>
-            </div>
-            {otpSent ? (
-              <>
-                <div className="sendotpbox">
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    We've sent an OTP to your mobile number.
-                  </Typography>
-                 
-                  <Typography variant="h6" mb={1} sx={{ color: "#FF6B00" }}>
-                    ONE TIME PASSWORD*
-                  </Typography>
-                  <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
-                    {Array.from({ length: 4 }).map((_, index) => (
-                      <TextField
-                        key={index}
-                        variant="outlined"
-                        size="small"
-                        inputProps={{
-                          maxLength: 1,
-                          style: { textAlign: "center", fontSize: "24px" },
-                        }}
-                        sx={{ width: "56px" }}
-                        onChange={(e) => handleOtpChange(index, e.target.value)}
-                        onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                        inputRef={(ref) => (otpRefs.current[index] = ref)}
-                        error={!!errors.otp}
-                      />
-                    ))}
-                  </Box>
-                  {errors.otp && (
-                    <Typography color="error" variant="caption" sx={{ mb: 2 }}>
-                      {errors.otp}
+              <div className="poptitles">
+                <Typography variant="h4" sx={{ textTransform: "uppercase", mb: 1 }}>
+                  {otpSent ? "Enter OTP" : "Sign Up"}
+                </Typography>
+              </div>
+              {otpSent ? (
+                <>
+                  <div className="sendotpbox">
+                    <Typography variant="body2" sx={{ mb: 2 }}>
+                      We've sent an OTP to your mobile number.
                     </Typography>
-                  )}
-                  <Typography variant="body2" color="textSecondary" mb={2}>
-                    Time remaining: {Math.floor(timer / 60)}:
-                    {timer % 60 < 10 ? "0" : ""}
-                    {timer % 60} minutes
-                  </Typography>
-                  <div className="resendbtn">
-                    {resendEnabled ? (
-                      <Button
-                        fullWidth
+
+                    <Typography variant="h6" mb={1} sx={{ color: "#FF6B00" }}>
+                      ONE TIME PASSWORD*
+                    </Typography>
+                    <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
+                      {Array.from({ length: 4 }).map((_, index) => (
+                        <TextField
+                          key={index}
+                          variant="outlined"
+                          size="small"
+                          type="tel" 
+                          inputProps={{
+                            maxLength: 1,
+                            style: { textAlign: "center", fontSize: "24px" },
+                          }}
+                          sx={{ width: "56px" }}
+                          onChange={(e) => handleOtpChange(index, e.target.value)}
+                          onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                          inputRef={(ref) => (otpRefs.current[index] = ref)}
+                          error={!!errors.otp}
+                        />
+                      ))}
+                    </Box>
+                    {errors.otp && (
+                      <Typography color="error" variant="caption" sx={{ mb: 2 }}>
+                        {errors.otp}
+                      </Typography>
+                    )}
+                    <Typography variant="body2" color="textSecondary" mb={2}>
+                      Time remaining: {Math.floor(timer / 60)}:
+                      {timer % 60 < 10 ? "0" : ""}
+                      {timer % 60} minutes
+                    </Typography>
+                    <div className="resendbtn">
+                      {resendEnabled ? (
+                        <Button
+                          fullWidth
                           disabled={loading}
-                        sx={{
-                          backgroundColor: "#FF6B00",
-                          color: "#fff",
-                          "&:hover": { backgroundColor: "#e85f00" },
-                        }}
-                        onClick={handleResendOtp}
+                          sx={{
+                            backgroundColor: "#FF6B00",
+                            color: "#fff",
+                            "&:hover": { backgroundColor: "#e85f00" },
+                          }}
+                          onClick={handleResendOtp}
+                        >
+                          Resend OTP
+                        </Button>
+                      ) : (
+                        <Button
+                          fullWidth
+                          disabled={loading}
+                          sx={{
+                            backgroundColor: "#FF6B00",
+                            color: "#fff",
+                            "&:hover": { backgroundColor: "#e85f00" },
+                          }}
+                          onClick={handleVerifyOtp}
+                        >
+                          Verify One Time Password
+                        </Button>
+                      )}
+                    </div>
+                    <Typography
+                      className="ephonenolink"
+                      variant="body2"
+                      sx={{
+                        mb: 3,
+                        color: "#FF6B00",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                        "&:hover": {
+                          opacity: 0.8,
+                        },
+                      }}
+                      onClick={() => setOtpSent(false)}
+                    >
+                      Edit phone number
+                    </Typography>
+                    {message && (
+                      <Alert
+                        severity={message.type}
+                        sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}
                       >
-                        Resend OTP
-                      </Button>
-                    ) : (
-                      <Button
-                        fullWidth
-                            disabled={loading}
-                        sx={{
-                          backgroundColor: "#FF6B00",
-                          color: "#fff",
-                          "&:hover": { backgroundColor: "#e85f00" },
-                        }}
-                        onClick={handleVerifyOtp}
-                      >
-                        Verify One Time Password
-                      </Button>
+                        {message.text}
+                      </Alert>
                     )}
                   </div>
-                  <Typography
-                    className="ephonenolink"
-                    variant="body2"
-                    sx={{
-                      mb: 3,
-                      color: "#FF6B00",
-                      textDecoration: "underline",
-                      cursor: "pointer",
-                      "&:hover": {
-                        opacity: 0.8,
-                      },
-                    }}
-                    onClick={() => setOtpSent(false)}
-                  >
-                    Edit phone number
-                  </Typography>
-                  {message && (
-                    <Alert
-                      severity={message.type}
-                      sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}
-                    >
-                      {message.text}
-                    </Alert>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="loginfiledss">
-                  {/* Name Fields */}
-                      <Box sx={{ display: "flex", gap: 2, mb: 1 }} className="sfrmrow">
-                        <Box sx={{ flex: 1 }} className="sfrmcol">
-                      {renderLabel("First Name")}
-                      <TextField
-                        name="firstName"
-                        placeholder="Enter your First Name"
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        value={form.firstName}
-                        onChange={handleChange}
-                        error={!!errors.firstName}
-                        helperText={errors.firstName}
-                        inputProps={{ maxLength: 30 }}
-                      />
-                    </Box>
-                        <Box sx={{ flex: 1 }} className="sfrmcol">
-                      {renderLabel("Last Name")}
-                      <TextField
-                        name="lastName"
-                        placeholder="Enter your Last Name"
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        value={form.lastName}
-                        onChange={handleChange}
-                        error={!!errors.lastName}
-                        helperText={errors.lastName}
-                        inputProps={{ maxLength: 30 }}
-                      />
-                    </Box>
-                  </Box>
-                      <Box className="sfrmrow">
-                        <Box sx={{ mb: 1 }} className="sfrmcol">
-                    {renderLabel("Mobile Number")}
-                    <TextField
-                      name="mobile"
-                      placeholder="Enter your Mobile Number"
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={form.mobile}
-                      onChange={handleChange}
-                      error={!!errors.mobile}
-                      helperText={errors.mobile}
-                      inputProps={{ maxLength: 10 }}
-                    />
-                  </Box>
+                </>
+              ) : (
+                <>
+                  <div className="loginfiledss">
+                    {/* Name Fields */}
+                    <Box sx={{ display: "flex", gap: 2, mb: 1 }} className="sfrmrow">
+                      <Box sx={{ flex: 1 }} className="sfrmcol">
+                        {renderLabel("First Name")}
+                        <TextField
+                          name="firstName"
+                          placeholder="Enter your First Name"
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                          value={form.firstName}
+                          onChange={handleChange}
+                          error={!!errors.firstName}
+                          helperText={errors.firstName}
+                          inputProps={{ maxLength: 30 }}
+                        />
                       </Box>
-                      <Box className="sfrmrow">
-                        <Box sx={{ mb: 2 }} className="sfrmcol">
-                    {renderLabel("Email")}
-                    <TextField
-                      name="email"
-                      placeholder="Enter your Email"
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={form.email}
-                      onChange={handleChange}
-                      error={!!errors.email}
-                      helperText={errors.email}
-                    />
-                  </Box>
+                      <Box sx={{ flex: 1 }} className="sfrmcol">
+                        {renderLabel("Last Name")}
+                        <TextField
+                          name="lastName"
+                          placeholder="Enter your Last Name"
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                          value={form.lastName}
+                          onChange={handleChange}
+                          error={!!errors.lastName}
+                          helperText={errors.lastName}
+                          inputProps={{ maxLength: 30 }}
+                        />
                       </Box>
+                    </Box>
+                    <Box className="sfrmrow">
+                      <Box sx={{ mb: 1 }} className="sfrmcol">
+                        {renderLabel("Mobile Number")}
+                        <TextField
+                          name="mobile"
+                          placeholder="Enter your Mobile Number"
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                          value={form.mobile}
+                          onChange={handleChange}
+                          error={!!errors.mobile}
+                          helperText={errors.mobile}
+                          inputProps={{ maxLength: 10 }}
+                        />
+                      </Box>
+                    </Box>
+                    <Box className="sfrmrow">
+                      <Box sx={{ mb: 2 }} className="sfrmcol">
+                        {renderLabel("Email")}
+                        <TextField
+                          name="email"
+                          placeholder="Enter your Email"
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                          value={form.email}
+                          onChange={handleChange}
+                          error={!!errors.email}
+                          helperText={errors.email}
+                        />
+                      </Box>
+                    </Box>
 
-                  <Typography variant="body2" sx={{ mb: 1 }} className="para-tcpp">
+                      {/* <Typography variant="body2" sx={{ mb: 1 }} className="para-tcpp">
                     By creating an account, I accept the{" "}
                     <Link href="/terms-and-conditions" color="#FF6B00">
-                      T&C 
+                      T&C
                     </Link>
                         {" / "}
                         <Link href="/privacy-policy" color="#FF6B00">
@@ -501,32 +510,73 @@ const validateForm = () => {
                         <Link href="/refund-cancellation-policy" color="#FF6B00">
                           Refund Policy
                     </Link>
-                  </Typography>
+                  </Typography> */}
 
-                  <Button
-                    className="sotpbtn"
-                    fullWidth
-                        disabled={loading}
-                    sx={{
-                      backgroundColor: "#FF6B00",
-                      color: "#fff",
-                      "&:hover": { backgroundColor: "#e85f00" },
-                    }}
-                    onClick={handleSendOtp}
-                  >
-                    <span>Send One Time Password</span>
-                  </Button>
-                  {message && (
-                    <Alert
-                      severity={message.type}
-                      sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}
-                    >
-                      {message.text}
-                    </Alert>
-                  )}
-                </div>
-                {/* Divider & Social */}
-              {/* <Divider className="ordivider" sx={{ my: 2, position: "relative", paddingY: "15px" }}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={acceptTerms}
+                            onChange={(e) => setAcceptTerms(e.target.checked)}
+                            sx={{ color: "#FF6B00" }}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" className="para-tcpp">
+                            I accept the{" "}
+                            <Link href="/terms-and-conditions" color="#FF6B00" target="_blank" rel="noopener noreferrer">
+                              T&C
+                            </Link>{" / "}
+                            <Link href="/privacy-policy" color="#FF6B00" target="_blank" rel="noopener noreferrer">
+                              Privacy Policy
+                            </Link>{" / "}
+                            <Link href="/refund-cancellation-policy" color="#FF6B00" target="_blank" rel="noopener noreferrer">
+                              Refund Policy
+                            </Link>
+                          </Typography>
+
+                        }
+                        sx={{ mb: 1 }}
+                      />
+
+
+                      <Button
+                        className="sotpbtn"
+                        fullWidth
+                        disabled={loading || !acceptTerms}
+                        sx={{
+                          backgroundColor: "#FF6B00",
+                          color: "#fff",
+                          "&:hover": { backgroundColor: "#e85f00" },
+                        }}
+                        onClick={handleSendOtp}
+                      >
+                        <span>Send One Time Password</span>
+                      </Button>
+                      <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
+                        If you already have an account{" "}
+                        <Typography
+                          component="span"
+                          color="#FF6B00"
+                          fontWeight="500"
+                          sx={{ cursor: "pointer", textDecoration: "underline" }}
+                          onClick={() => setShowLogin(true)}
+                        >
+                          log in
+                        </Typography>
+                      </Typography>
+                      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
+
+                      {message && (
+                        <Alert
+                          severity={message.type}
+                          sx={{ mt: 2, fontWeight: "bold", textAlign: "center" }}
+                        >
+                          {message.text}
+                        </Alert>
+                      )}
+                    </div>
+                    {/* Divider & Social */}
+                    {/* <Divider className="ordivider" sx={{ my: 2, position: "relative", paddingY: "15px" }}>
                 <Typography
                   component="span"
                   sx={{
@@ -544,8 +594,8 @@ const validateForm = () => {
                 </Typography>
               </Divider> */}
 
-              {/* Social Login Buttons */}
-              {/* <Box className="wsmideabtn">
+                    {/* Social Login Buttons */}
+                    {/* <Box className="wsmideabtn">
                   <ul className="flex gap-2">
                     <li className="flex-1">
                       <Button className="gglebtn"
@@ -567,11 +617,11 @@ const validateForm = () => {
                     <span>Log In with Facebook</span>
                   </Button></li>
                   </ul>
-                  
-                  
+
+
                 </Box> */}
-              </>
-            )}
+                </>
+              )}
             </div>
           </Box>
         </Box>

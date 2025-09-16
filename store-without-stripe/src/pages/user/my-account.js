@@ -185,7 +185,7 @@ const MyAccount = () => {
               <div className="hworkTitle combtntb comtilte relative">
                 <h1 className="flex flex-row textFF6514">
                   <span className="block">My</span>
-                  <span className="block firstspan ml-2">Account</span>
+                  <span className="block firstspan ml-2">Profile</span>
                 </h1>
                 <p>Here you can view and update your account details.</p>
                 <div className="psfbanIconss">

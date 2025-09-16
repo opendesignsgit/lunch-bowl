@@ -11,7 +11,7 @@ const HomepopVideo = ({ open, onClose }) => {
             } 
          }}>
             <IconButton className="popClose" onClick={onClose} sx={{ position: "absolute", top: 16, right: 16, zIndex: 99, }} > <CloseIcon />  </IconButton>
-        <iframe src="https://www.youtube.com/embed/HwOdzhMsquU?si=T4bmH6qp8j0f5dCU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div className='homeframebox' oncontextmenu="return false;"><iframe src="https://www.youtube.com/embed/HwOdzhMsquU?si=T4bmH6qp8j0f5dCU&modestbranding=1&rel=0&showinfo=0&controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
         </Dialog>
     </>
   )

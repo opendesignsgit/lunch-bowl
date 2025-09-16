@@ -249,7 +249,7 @@ const LoginPopup = ({ open, onClose }) => {
                       setShowSignUp(true);   // Open the SignUpPopup
                     }}
                   >
-                    Create an Account
+                    <strong>Sign Up</strong>
                   </Typography>
                 </Typography>
               )}
@@ -278,6 +278,7 @@ const LoginPopup = ({ open, onClose }) => {
                       <TextField
                         key={index}
                         variant="outlined"
+                        type="tel" 
                         size="small"
                         inputProps={{
                           maxLength: 1,

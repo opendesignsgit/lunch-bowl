@@ -213,7 +213,7 @@ const ContactUs = () => {
                       <Image src={locaticon} alt="" />
                     </div>
                     <h3>Where to Find Us</h3>
-                    <h4>Lunchbowl by Earth Tech Concepts Private Limited</h4>
+                    <p>Lunchbowl by Earth Tech Concepts Private Limited</p>
                     <p className="parabtn">
                       <Link href="https://maps.app.goo.gl/wHSi6cLKhQBkKd1q8" target="_blank" rel="noopener noreferrer">
                         1B, KG Natraj Palace, 53/22, <br />Saravana Street, T Nagar, <br />Chennai - 600017
@@ -243,7 +243,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter First Name"
+                              // placeholder="Enter First Name"
                               fullWidth
                               InputProps={{
                                 disableUnderline: true,
@@ -276,7 +276,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter Last Name"
+                              // placeholder="Enter Last Name"
                               fullWidth
                               InputProps={{
                                 disableUnderline: true,
@@ -314,7 +314,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter Mobile Number"
+                              // placeholder="Enter Mobile Number"
                               fullWidth
                               type="tel"
                               InputProps={{
@@ -351,7 +351,7 @@ const ContactUs = () => {
                           render={({ field }) => (
                             <TextField
                               {...field}
-                              placeholder="Enter Email"
+                              // placeholder="Enter Email"
                               fullWidth
                               type="email"
                               InputProps={{
@@ -389,7 +389,7 @@ const ContactUs = () => {
                         render={({ field }) => (
                           <TextField
                             {...field}
-                            placeholder="Feel free to type here if you'd like to share something with us."
+                            // placeholder="Feel free to type here if you'd like to share something with us."
                             fullWidth
                             multiline
                             rows={2}

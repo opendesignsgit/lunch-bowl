@@ -198,6 +198,7 @@ const ChildDetailsStep = ({
   };
 
   const addChild = () => {
+    if (children.length < 3) {
     const newChild = {
       childFirstName: "",
       childLastName: "",
@@ -211,6 +212,7 @@ const ChildDetailsStep = ({
     };
     setChildren([...children, newChild]);
     setActiveTab(children.length);
+    }
   };
 
   const removeChild = (index) => {
@@ -338,15 +340,18 @@ const ChildDetailsStep = ({
                     color: activeTab === index ? "#fff" : "inherit",
                   }}
                 />
-              ))}
+              ))} 
             </Tabs>
+            {children.length < 3 && (
             <Button
               variant="outlined"
               onClick={addChild}
               className="addanochildbtn"
+                disabled={children.length >= 3}
             >
               Add Another Child
             </Button>
+            )}
           </Box>
         </div>
 
@@ -550,18 +555,18 @@ const ChildDetailsStep = ({
                   {[
                     "LKG",
                     "UKG",
-                    "Grade 1",
-                    "Grade 2",
-                    "Grade 3",
-                    "Grade 4",
-                    "Grade 5",
-                    "Grade 6",
-                    "Grade 7",
-                    "Grade 8",
-                    "Grade 9",
-                    "Grade 10",
-                    "Grade 11",
-                    "Grade 12",
+                    "Class 1",
+                    "Class 2",
+                    "Class 3",
+                    "Class 4",
+                    "Class 5",
+                    "Class 6",
+                    "Class 7",
+                    "Class 8",
+                    "Class 9",
+                    "Class 10",
+                    "Class 11",
+                    "Class 12",
                   ].map((grade) => (
                     <MenuItem key={grade} value={grade}>
                       {grade}

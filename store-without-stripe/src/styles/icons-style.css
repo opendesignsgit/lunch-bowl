@@ -255,6 +255,7 @@
   .hintroIconss .iconeight{width: 10px;}
   .hbanIconss .iconseven {bottom: 0%;left: 61%;}
   .psfbanIconss .iconfive {bottom: -59%;}
+  .psfbanIconss .iconfour {top: 13%;right: -11%;width: 56px;}
 }
 
 @media screen and (max-width:920px){
@@ -267,8 +268,8 @@
 }
 
 @media screen and (max-width:820px){
-  .hteamIconss .iconone {left: 2%;top: 5%;}
-  .hteamIconss .icontwo{right: 7%;width: 30px;}
+  .hteamIconss .iconone {left: 0;top: 5%;width: 45px;}
+  .hteamIconss .icontwo{right: 0;width: 30px;}
   .hteamIconss .iconthree{width: 30px;}
   .hteamIconss .iconfour{width: 30px;}
   .hDoctIconss .iconfive{width: 80px;}
@@ -298,7 +299,7 @@
   .hbanIconss .iconfive {right: 13%;}
   .hbanIconss .iconsix {bottom: 10%;left: 10%;}
   .hintroIconss .iconone,.hintroIconss .icontwo,.hintroIconss .iconthree,.hintroIconss .iconfour{width: 40px;}
-  .hintroIconss .iconthree {left: 37px;bottom: 61%;}
+  .hintroIconss .iconthree {left: 37px;bottom: 55%;}
   .hteamIconss .iconthree,.hteamIconss .iconfour{display: none;}
   .hteamIconss .iconsix {transform: translateX(0%);left: auto;right: 0;top: 24%;width: 60px;}
   .hteamIconss .iconone {left: 1%;top: 21%;width: 75px;transform: rotate(296deg);}

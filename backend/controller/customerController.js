@@ -644,7 +644,7 @@ const sendOtp = async (req, res) => {
 
     // Generate OTP
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min expiry
+    const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 min expiry
 
     // Remove old OTPs for this mobile
     await Otp.deleteMany({ mobile });
