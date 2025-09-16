@@ -3,3 +3,6 @@
 
 # Ignore dist folder inside dashtar
 /dashtar/dist/
+
+# Ignore environment variables file
+.env
