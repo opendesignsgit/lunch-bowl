@@ -1,14 +1,14 @@
 import React from 'react';
 import { useRef, useState } from "react";
 import Slider from "react-slick";
-import ReactPlayer from "react-player/youtube";
+//import ReactPlayer from "react-player/youtube";
 const AboutVideoSlider = () => {
 
   const playerRefs = useRef([]);
   const [playingIndex, setPlayingIndex] = useState(null);
 
   const videoList = [
-    { id: "video1", url: "https://www.youtube.com/watch?v=HwOdzhMsquU" },
+    { id: "video1", url: "/video/lunchbowl.mp4" },
   ];
   const settings = {
     dots: true,
@@ -27,34 +27,30 @@ const AboutVideoSlider = () => {
     <div className="w-full mx-auto">
       <Slider {...settings} className='abtvidosliders'>
         {videoList.map((video, index) => (
-          <div key={video.id} className="aspect-video relative">
+          <div key={video.id} className="aspect-video relative Videobox">
             {playingIndex === index ? (
-              <ReactPlayer
+              <video
                 ref={(el) => (playerRefs.current[index] = el)}
-                url={video.url}
+                src={video.url}
                 width="100%"
                 height="100%"
                 controls
-                playing
+                autoPlay
+                className="w-full h-full object-cover"
               />
             ) : (
               <div
-                className="w-full bg-black relative cursor-pointer"
+                className="w-full h-full bg-black relative cursor-pointer"
                 onClick={() => handlePlay(index)}
               >
-                {/* Custom thumbnail or black box */}
-                  <img
-                    key={video.id}
-                    src={`https://img.youtube.com/vi/${new URL(video.url).searchParams.get('v')}/hqdefault.jpg`}
-                    alt="Video thumbnail"
-                    className="w-full h-full object-cover"
-                  />
-                  {/*<img
-                  src={`https://img.youtube.com/vi/${video.url.split("v=")[1]}/hqdefault.jpg`}
+                {/* Thumbnail */}
+                <img
+                  key={video.id}
+                  src='/lunchbowl-poster.jpg'
                   alt="Video thumbnail"
                   className="w-full h-full object-cover"
-                />*/}
-                  <div className="avidoplaybtns absolute inset-0 flex items-center justify-center">
+                />
+                <div className="avidoplaybtns absolute inset-0 flex items-center justify-center">
                   <button className="bg-white p-4 rounded-full shadow-lg text-black font-bold text-xl">
                     ▶
                   </button>
@@ -63,6 +59,7 @@ const AboutVideoSlider = () => {
             )}
           </div>
         ))}
+                
       </Slider>
     </div>
   )

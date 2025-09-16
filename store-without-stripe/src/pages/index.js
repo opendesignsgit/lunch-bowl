@@ -187,8 +187,14 @@ const Home = () => {
                           </div>
                     </div>
                 </div>
-                <div className='hbanRight relative'>
-            <div className='banimgss'><div className='banvideobox' onClick={handleOpenDialog}><div className='banvideoinbox'>&nbsp;</div></div><Image className="w-full h-auto" priority src={Homebanimg} alt="Banimg" onClick={handleOpenDialog} /></div>
+                <div className='hbanRight relative'>  
+                  <div className="w-full h-screen bg-black videoscreenbox">
+                    <video className="absolute w-full object-cover" autoPlay muted loop playsInline poster="/lunchbowl-poster.jpg">
+                      <source src="/video/lunchbowl.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                  <div className='banimgss displaynone'><div className='banvideobox' onClick={handleOpenDialog}><div className='banvideoinbox'>&nbsp;</div></div><Image className="w-full h-auto" priority src={Homebanimg} alt="Banimg" onClick={handleOpenDialog} /></div>
                 </div>
             </section>
 
