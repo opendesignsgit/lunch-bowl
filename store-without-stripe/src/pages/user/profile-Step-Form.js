@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import { Box, Typography, Divider } from "@mui/material";
 import Image from "next/image";
 import Mainheader from "@layout/header/Mainheader";
@@ -83,7 +84,7 @@ const StepHeader = ({ step }) => {
 const MultiStepForm = () => {
   const { data: session } = useSession();
   const _id = session?.user?.id;
-
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [childCount, setChildCount] = useState(1);
   const [formData, setFormData] = useState({
@@ -108,6 +109,8 @@ const MultiStepForm = () => {
         if (response.success && response.data) {
           const data = response.data;
 
+          console.log("Fetched account data:", data);
+
           setFormData({
             ...formData,
             ...data.parentDetails,
@@ -119,6 +122,11 @@ const MultiStepForm = () => {
 
           // resume on saved step
           if (data.step) setStep(data.step);
+
+          // Redirect if step is 4 and paymentStatus is Success
+          if (data.step === 4 && data.paymentStatus === "Success") {
+            router.push('/user/menuCalendarPage');
+          }
         }
       } catch (error) {
         console.error("Error fetching account details:", error);
