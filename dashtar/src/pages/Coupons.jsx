@@ -52,8 +52,8 @@ const SubscriptionTable = () => {
       const hasFilter =
         fatherNameVal.trim() || mobileVal.trim() || emailVal.trim();
       const url = hasFilter
-        ? "http://localhost:5055/api/orders/get-All/user-Subscription/search"
-        : "http://localhost:5055/api/orders/get-All/user-Subscription";
+        ? "https://api.lunchbowl.co.in/api/orders/get-All/user-Subscription/search"
+        : "https://api.lunchbowl.co.in/api/orders/get-All/user-Subscription";
 
       const res = await axios.get(url, {
         params: {
