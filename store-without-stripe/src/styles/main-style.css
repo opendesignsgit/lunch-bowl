@@ -108,11 +108,12 @@ body .secpaddblock {
 }
 
 .HbanSec{}
-.HbanSec::before{content:'';position: absolute;width: 100%;height:7%;left: 0px;bottom: -3px;background: url(/home/banbtmpattern.png) no-repeat top center;background-size: 100%;pointer-events: none;z-index: 9;}
+.HbanSec::before{content:'';position: absolute;width: 100%;height:7%;left: 0px;bottom: -3px;background: url(/home/banbtmpattern.png) no-repeat top center;background-size: 100%;pointer-events: none;z-index: 99;}
 .hbanLeft{width: 43%;position: relative;}
 .HbanSec .hbanLeft::after{content:'';position: absolute;width: 6vw;aspect-ratio: 2/0.7; right: 3vw;bottom: 3vw;background: url(/home/vegicon.svg) no-repeat center center;background-size: auto 100%;pointer-events: none;}
 .hbanRight{width: 57%;}
-.hbanRight::before{content:'';position: absolute;width: 15%;height:100%;left: -2px;top: 0;background: url(/home/banleftpattern.png) no-repeat left center;background-size: auto 100%;pointer-events: none;}
+.hbanRight video{aspect-ratio: 1 / 1.15;top: 50%;left: 50%;transform: translate(-50%, -50%);}
+.hbanRight::before{content:'';position: absolute;width: 15%;height:100%;left: -2px;top: 0;background: url(/home/banleftpattern.png) no-repeat left center;background-size: auto 100%;pointer-events: none;z-index: 9;}
 .banvideobox{position: absolute;width: 6.5vw;aspect-ratio: 1; left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);padding: 5px;z-index: 99;line-height: 0;cursor: pointer;border-radius: 50%;filter: brightness(0) invert(1);overflow: hidden;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .banvideobox .banvideoinbox{position: relative;border-top: 1.1vw solid transparent;border-bottom: 1.1vw solid transparent;border-left: 1.6vw solid #FF6514;z-index: 99;letter-spacing: -6px;left: 4px;}
 .hbanRight:hover .banvideobox{filter: brightness(1) invert(0);}
@@ -541,10 +542,12 @@ bottom: 0;width: 100%;pointer-events: none;}
 .HOEnviroSec::before{content: '';position: absolute;width: 100%;height: 70px;top: 12px;left: 0;background: url(/about/HOEnvirotopimg.png) no-repeat top center;background-size: 100%;-webkit-transform: translateY(-100%);-ms-transform: translateY(-100%);transform: translateY(-100%);z-index: 9;pointer-events: none;}
 .HOEnviroSec::after{content: '';position: absolute;width: 100%;height: 70px;bottom: 12px;left: 0;background: url(/about/HOEnvirobtmimg.png) no-repeat bottom center;background-size: 100%;-webkit-transform: translateY(100%);-ms-transform: translateY(100%);transform: translateY(100%);z-index: 9;pointer-events: none;}
 .abtvideoSec {overflow: hidden;}
+.abtvideoSec .Videobox{aspect-ratio: 2 / 1;overflow: hidden;}
+.abtvideoSec .Videobox video{height: 100%;}
 .abtvideoSec:after {content: '';position: absolute;bottom: 10px;left: 0;right: 0;height: 40px;background: url(/about/howrkitbefimg.png) repeat-x top center;background-size: 70%;
 transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-webkit-animation: slide 50s linear infinite;}
 .abtvidosliders iframe{aspect-ratio: 2 / 1.125;}
-.abtvidosliders img{aspect-ratio: 2 / 1.125;}
+.abtvidosliders img{height: 100%;}
 .abtvidosliders .avidoplaybtns{}
 .abtvidosliders .avidoplaybtns button{width: 3.2vw;aspect-ratio: 1;padding: 0;padding-left: 4px;color: #ff6514;border: 2px solid #ff6514;}
 .abtvidosliders .avidoplaybtns button:hover{background: #ff6514;color: #ffffff;border-color:#ffffff;}
@@ -999,6 +1002,7 @@ html body .ftscholpopup .ftscholpopupclose {top: 0;right: 0;padding: 5px;border:
 html body .ftscholpopup .ftscholpopupclose:hover{background: #ffffff;}
 html body .ftscholpopup .ftscholpopupokbtn  {background: #ff6514;border-radius: 0;}
 html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
+html body .displaynone{display: none!important;}
 
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
@@ -1105,6 +1109,7 @@ html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
   .contmapssec iframe {aspect-ratio: 2 / 1;}
   .steptitles h5{font-size: 20px;}
   .DetlsSepBox h6 {font-size: 13px;}
+  .hbanRight .videoscreenbox{height: 550px;}
 }
 
 @media screen and (min-width:1100px)  and (max-width:1200px) {
@@ -1183,6 +1188,7 @@ html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
   .setpbanersec  .comtilte{text-align: center;padding-block: 8px;}
   .setpbanersec  .comtilte h1{justify-content: center;}
   .HintroSec  .comtilte p br {display: none;}
+  .hbanRight .videoscreenbox {height: 495px;}
 }
 
 @media screen and (max-width:1023px){
@@ -1355,6 +1361,8 @@ html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
   .myaccboxitems .ChildlistBoxs{width: 100%;}
   .myaccboxitems .ChildlistBoxs .ChildlistItems {width: calc(100% - 0px);display: block;}
   .myaccboxitems .ChildlistBoxs .ChildlistItems table{min-width: 100%;}
+  .hbanRight .videoscreenbox {height: 450px;}
+  .hbanRight video {    aspect-ratio: 1 / 1.4;}
 }
 
 @media screen and (min-width:651px){
@@ -1394,10 +1402,11 @@ html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
   .HbanSec{flex-wrap: wrap;}
   .hbanLeft {width: 100%;padding-block: 150px 40px;}
   .HbanSec .hbanLeft {width: 100%;padding-block: 150px 40px;padding-inline: 15px;}
-  .hbanRight {width: 100%;}
-  .hbanRight::before{width: 100%;height: 30px;background: url(/home/bantoppattern.png) no-repeat bottom center;background-size: 100%;left: 0;top: -5px;}
+  .hbanRight {width: 100%;        overflow: hidden;        margin-top: -2px;}
+  .hbanRight::before{width: 100%;height: 51px;background: url(/home/bantoppattern.png) no-repeat center top;background-size: 100%;left: 0;top: -20px;}
   .hbanRight::after{content: '';position: absolute;width: 100%;height: 30px;bottom:-5px;left: 0;right: 0;background: url(/home/banMobbtmpattern.png) no-repeat top center;background-size: 100%;pointer-events: none;}
   .hbanCont {text-align: center;}
+  .hbanRight .videoscreenbox {        height: 450px;        overflow: hidden;    }
   .hintroRight {padding-inline: 0;}
   .myLogo {width: 65px;}
   .hmenubox {margin-left: 25px;width: 45px;}
@@ -1444,8 +1453,9 @@ html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
   .hLFOintrow {width: 100%;padding-top: 100%;}
   .rfbox {flex-direction: column;}
   .rfboximg{width: 85%;margin-bottom: 20px;}
-  .rfboximg img{width: 70%;}
-  .rfboxcoint{text-align: center;width: 100%;padding-left: 0;}
+  .Hworktabitems .rfboximg img{width: 70%;}
+  .Hworktabitems .rfboximg {width: 100%;margin-bottom: 20px;}
+  .Hworktabitems .rfboxcoint {width: 100%;padding-left: 0;text-align: center;}
   .rfboxcoint p br{display: none;}
   .sliderRef2 h3 {font-size: 16px;width: 97%;}
   .sliderRef2 h3 span:before{    left: -1px;}
@@ -1720,7 +1730,7 @@ html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
   .aboutintroRow .aboutintroRCol{padding-top: 0;margin-top: 0;}
   .HintroSec.aboutmissionsec .hbanLeft{padding-bottom: 0;}
   .abtvidosliders img {aspect-ratio: auto;height: 200px;}
-  .abtvideoSec:after{height: 5px;bottom: 4px;}
+  .abtvideoSec:after{height: 5px;bottom: 0px;}
   .incomplete-registration-msg .incregbox {font-size: 12px;}
   .HbanSec .hbanLeft{padding-block: 130px 40px;}
   .HfaqSec::before {height: 20px;top: 0;}

@@ -496,7 +496,7 @@ const AboutUs = () => {
             </div>
           </div>
         </section>
-        <section className="HOEnviroSec relative bg-4AB138 flex py-[10vh]">
+        <section className="HOEnviroSec relative bg-4AB138 flex py-[10vh] displaynone">
           <div className="OEnvicontainer">
             <div className="hOEnviroTitle combtntb comtilte textcenter  mb-[5vh]">
               <h4 className="">Our</h4>
