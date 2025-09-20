@@ -252,6 +252,9 @@ exports.holiydayPayment = async (req, res) => {
       if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).send("Invalid user ID");
       if (!mealDate || !/^\d{4}-\d{2}-\d{2}$/.test(mealDate)) return res.status(400).send("Invalid mealDate (should be YYYY-MM-DD)");
 
+
+      await processPaymentResponse(responseData, "holiday");
+
       // Parse children's paid meal data
       let childrenData = [];
       try {

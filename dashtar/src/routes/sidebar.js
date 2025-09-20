@@ -17,11 +17,11 @@ import {
  * `routes/index.js`
  */
 const sidebar = [
-  {
-    path: "/dashboard", // the url
-    icon: FiGrid, // icon
-    name: "Dashboard", // name that appear in Sidebar
-  },
+  // {
+  //   path: "/dashboard", // the url
+  //   icon: FiGrid, // icon
+  //   name: "Dashboard", // name that appear in Sidebar
+  // },
   {
     icon: FiSlack,
     name: "Catalog",
@@ -56,67 +56,67 @@ const sidebar = [
     name: "Orders",
   },
 
-  {
-    path: "/our-staff",
-    icon: FiUser,
-    name: "OurStaff",
-  },
+  // {
+  //   path: "/our-staff",
+  //   icon: FiUser,
+  //   name: "OurStaff",
+  // },
 
-  {
-    path: "/settings?settingTab=common-settings",
-    icon: FiSettings,
-    name: "Settings",
-  },
-  {
-    icon: FiGlobe,
-    name: "International",
-    routes: [
-      {
-        path: "/languages",
-        name: "Languages",
-      },
-      {
-        path: "/currencies",
-        name: "Currencies",
-      },
-    ],
-  },
-  {
-    icon: FiTarget,
-    name: "OnlineStore",
-    routes: [
-      {
-        name: "ViewStore",
-        path: "/store",
-        outside: "store",
-      },
+  // {
+  //   path: "/settings?settingTab=common-settings",
+  //   icon: FiSettings,
+  //   name: "Settings",
+  // },
+  // {
+  //   icon: FiGlobe,
+  //   name: "International",
+  //   routes: [
+  //     {
+  //       path: "/languages",
+  //       name: "Languages",
+  //     },
+  //     {
+  //       path: "/currencies",
+  //       name: "Currencies",
+  //     },
+  //   ],
+  // },
+  // {
+  //   icon: FiTarget,
+  //   name: "OnlineStore",
+  //   routes: [
+  //     {
+  //       name: "ViewStore",
+  //       path: "/store",
+  //       outside: "store",
+  //     },
 
-      {
-        path: "/store/customization",
-        name: "StoreCustomization",
-      },
-      {
-        path: "/store/store-settings",
-        name: "StoreSettings",
-      },
-    ],
-  },
+  //     {
+  //       path: "/store/customization",
+  //       name: "StoreCustomization",
+  //     },
+  //     {
+  //       path: "/store/store-settings",
+  //       name: "StoreSettings",
+  //     },
+  //   ],
+  // },
 
-  {
-    icon: FiSlack,
-    name: "Pages",
-    routes: [
-      // submenu
+  // {
+  //   icon: FiSlack,
+  //   name: "Pages",
+  //   routes: [
+  //     // submenu
 
-      {
-        path: "/404",
-        name: "404",
-      },
-      {
-        path: "/coming-soon",
-        name: "Coming Soon",
-      },
-    ],
-  },
+  //     {
+  //       path: "/404",
+  //       name: "404",
+  //     },
+  //     {
+  //       path: "/coming-soon",
+  //       name: "Coming Soon",
+  //     },
+  //   ],
+  // },
 ];
 export default sidebar;

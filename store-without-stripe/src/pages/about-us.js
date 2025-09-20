@@ -473,11 +473,6 @@ const AboutUs = () => {
             </div>
           </div>
         </section>
-        <section className="abtvideoSec relative">
-          <div className="abtvideorow ">
-            <AboutVideoSlider />
-          </div>
-        </section>
         <section className="HworktabSec relative bg-white flex py-[12vh]">
           <div className="container mx-auto">
             <div className="hworkTitle combtntb comtilte textcenter  mb-[5vh]">
@@ -496,7 +491,12 @@ const AboutUs = () => {
             </div>
           </div>
         </section>
-        <section className="HOEnviroSec relative bg-4AB138 flex py-[10vh]">
+        <section className="abtvideoSec relative">
+          <div className="abtvideorow ">
+            <AboutVideoSlider />
+          </div>
+        </section>
+        <section className="HOEnviroSec relative bg-4AB138 flex py-[10vh] displaynone">
           <div className="OEnvicontainer">
             <div className="hOEnviroTitle combtntb comtilte textcenter  mb-[5vh]">
               <h4 className="">Our</h4>

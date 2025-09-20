@@ -122,7 +122,7 @@ const Home = () => {
   {
     title: "How does the delivery process work, and can I trust it will arrive on time?",
     content:
-      "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. You’ll receive delivery confirmations, and in the rare event of a delay, we’ll notify you immediately.",
+      "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. In the rare event of a delay, we’ll notify you immediately.",
   },
   {
     title: "What if my child has specific dietary restrictions or allergies?",
@@ -187,8 +187,14 @@ const Home = () => {
                           </div>
                     </div>
                 </div>
-                <div className='hbanRight relative'>
-            <div className='banimgss'><div className='banvideobox' onClick={handleOpenDialog}><div className='banvideoinbox'>&nbsp;</div></div><Image className="w-full h-auto" priority src={Homebanimg} alt="Banimg" onClick={handleOpenDialog} /></div>
+                <div className='hbanRight relative'>  
+                  <div className="w-full h-screen bg-black videoscreenbox">
+                    <video className="absolute w-full object-cover" autoPlay muted loop playsInline poster="/lunchbowl-poster.jpg">
+                      <source src="/video/lunchbowl.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                  <div className='banimgss displaynone'><div className='banvideobox' onClick={handleOpenDialog}><div className='banvideoinbox'>&nbsp;</div></div><Image className="w-full h-auto" priority src={Homebanimg} alt="Banimg" onClick={handleOpenDialog} /></div>
                 </div>
             </section>
 
