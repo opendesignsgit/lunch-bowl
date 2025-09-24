@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { ccavenueResponse, holiydayPayment, getHolidayPaymentsByDate } = require("../controller/Payment");
+const { ccavenueResponse, holiydayPayment, getHolidayPaymentsByDate, dummyPaymentResponse } = require("../controller/Payment");
 
 router.post("/response", ccavenueResponse);
+
+// Dummy payment response for development/testing
+router.post("/dummy-response", dummyPaymentResponse);
 
 router.post("/response/holiydayPayment", holiydayPayment);
 

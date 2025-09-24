@@ -60,25 +60,52 @@ const ChildDetailsStep = ({
   prevStep,
   _id,
   setChildCount,
+  // New props for add-children and renewal modes
+  onNext,
+  onPrev,
+  isAddChildrenMode = false,
+  isRenewalMode = false,
+  existingChildrenCount = 0,
+  existingChildren = [],
+  preservedChildrenData = null, // New prop to preserve data during navigation
 }) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [children, setChildren] = useState(
-    formData.children.length > 0
-      ? formData.children
-      : [
-        {
-          childFirstName: "",
-          childLastName: "",
-          dob: null,
-          lunchTime: "",
-          school: "",
-          location: "",
-          childClass: "",
-          section: "",
-          allergies: "",
-        },
-      ]
-  );
+  const [children, setChildren] = useState(() => {
+    // Initialize children based on mode
+    if (isRenewalMode && existingChildren.length > 0) {
+      return existingChildren;
+    } else if (isAddChildrenMode) {
+      // Use preserved data if available, otherwise start with empty child
+      if (preservedChildrenData && preservedChildrenData.length > 0) {
+        return preservedChildrenData;
+      }
+      return [{
+        childFirstName: "",
+        childLastName: "",
+        dob: null,
+        lunchTime: "",
+        school: "",
+        location: "",
+        childClass: "",
+        section: "",
+        allergies: "",
+      }];
+    } else if (formData?.children?.length > 0) {
+      return formData.children;
+    } else {
+      return [{
+        childFirstName: "",
+        childLastName: "",
+        dob: null,
+        lunchTime: "",
+        school: "",
+        location: "",
+        childClass: "",
+        section: "",
+        allergies: "",
+      }];
+    }
+  });
   const { submitHandler, loading } = useRegistration();
 
   // Fetch schools data
@@ -138,11 +165,19 @@ const ChildDetailsStep = ({
   }, [activeTab, reset]);
 
   useEffect(() => {
-    if (formData.children && formData.children.length > 0) {
+    if (formData && formData.children && formData.children.length > 0) {
       setChildren(formData.children);
       setChildCount(formData.children.length);
     }
-  }, [formData.children, setChildCount]);
+  }, [formData?.children, setChildCount]);
+
+  // Update children when preserved data changes (for add-children mode navigation)
+  useEffect(() => {
+    if (isAddChildrenMode && preservedChildrenData && preservedChildrenData.length > 0) {
+      setChildren(preservedChildrenData);
+      setActiveTab(0); // Reset to first tab
+    }
+  }, [preservedChildrenData, isAddChildrenMode]);
 
   // Update filtered locations when school changes
   useEffect(() => {
@@ -198,20 +233,25 @@ const ChildDetailsStep = ({
   };
 
   const addChild = () => {
-    if (children.length < 3) {
-    const newChild = {
-      childFirstName: "",
-      childLastName: "",
-      dob: null,
-      lunchTime: "",
-      school: "",
-      location: "",
-      childClass: "",
-      section: "",
-      allergies: "",
-    };
-    setChildren([...children, newChild]);
-    setActiveTab(children.length);
+    // Calculate total children including existing ones for add-children mode
+    const totalChildrenLimit = isAddChildrenMode 
+      ? existingChildrenCount + children.length 
+      : children.length;
+    
+    if (totalChildrenLimit < 3) {
+      const newChild = {
+        childFirstName: "",
+        childLastName: "",
+        dob: null,
+        lunchTime: "",
+        school: "",
+        location: "",
+        childClass: "",
+        section: "",
+        allergies: "",
+      };
+      setChildren([...children, newChild]);
+      setActiveTab(children.length);
     }
   };
 
@@ -233,17 +273,32 @@ const ChildDetailsStep = ({
         children.map((child) => schema.validate(child, { abortEarly: false }))
       );
 
+      let submitPath = "step-Form-ChildDetails";
+      let submitStep = 2;
+
+      // For add-children mode, use different path
+      if (isAddChildrenMode) {
+        submitPath = "add-children-details";
+      } else if (isRenewalMode) {
+        submitPath = "renewal-children-details";
+      }
+
       const res = await submitHandler({
         formData: children,
-        step: 2,
-        path: "step-Form-ChildDetails",
+        step: submitStep,
+        path: submitPath,
         _id,
       });
 
       if (res) {
-        setFormData({ ...formData, children });
-        setChildCount(children.length);
-        nextStep();
+        // Use legacy navigation if available, otherwise use new props
+        if (setFormData && nextStep) {
+          setFormData({ ...formData, children });
+          if (setChildCount) setChildCount(children.length);
+          nextStep();
+        } else if (onNext) {
+          onNext(children);
+        }
       }
     } catch (err) {
       console.log("Validation errors:", err.inner);
@@ -303,7 +358,13 @@ const ChildDetailsStep = ({
       {/* Form Side */}
       <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
         <div className="steptitles">
-          <Typography variant="h5">CHILD DETAILS :</Typography>
+          <Typography variant="h5">
+            {isRenewalMode 
+              ? "MANAGE CHILDREN :" 
+              : isAddChildrenMode 
+                ? "ADD CHILDREN :" 
+                : "CHILD DETAILS :"}
+          </Typography>
           {/* Tabs */}
           <Box
             sx={{ display: "flex", alignItems: "center", mb: 2 }}
@@ -342,16 +403,23 @@ const ChildDetailsStep = ({
                 />
               ))} 
             </Tabs>
-            {children.length < 3 && (
-            <Button
-              variant="outlined"
-              onClick={addChild}
-              className="addanochildbtn"
-                disabled={children.length >= 3}
-            >
-              Add Another Child
-            </Button>
-            )}
+            {(() => {
+              // Calculate total children including existing ones for add-children mode
+              const totalChildrenLimit = isAddChildrenMode 
+                ? existingChildrenCount + children.length 
+                : children.length;
+              
+              return totalChildrenLimit < 3 && (
+                <Button
+                  variant="outlined"
+                  onClick={addChild}
+                  className="addanochildbtn"
+                  disabled={totalChildrenLimit >= 3}
+                >
+                  Add Another Child
+                </Button>
+              );
+            })()}
           </Box>
         </div>
 
@@ -633,7 +701,11 @@ const ChildDetailsStep = ({
         </Grid>
 
         <Box className="subbtnrow" sx={{ mt: 4, display: "flex", gap: 3 }}>
-          <Button variant="outlined" onClick={prevStep} className="backbtn">
+          <Button 
+            variant="outlined" 
+            onClick={onPrev || prevStep} 
+            className="backbtn"
+          >
             <span className="nextspan">Back</span>
           </Button>
           <Button
