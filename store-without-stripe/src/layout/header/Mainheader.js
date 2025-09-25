@@ -34,6 +34,8 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
   const { submitHandler, loading, error } = useRegistration();
   const [stepCheck, setStepCheck] = useState(null);
   const [apiFreeTrial, setApiFreeTrial] = useState(false);
+  const [stepCheckLoading, setStepCheckLoading] = useState(false);
+  const [stepCheckInitialized, setStepCheckInitialized] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
   const [active, setActive] = useState(false);
@@ -47,11 +49,15 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
 
   useEffect(() => {
     const fetchDataAndRoute = async () => {
+      // Prevent multiple simultaneous calls and only fetch once per session
+      if (stepCheckLoading || stepCheckInitialized) return;
+      
       try {
         if (!session?.user?.id) {
           throw new Error("User ID not available");
         }
 
+        setStepCheckLoading(true);
         const result = await submitHandler({
           path: 'Step-Check', // Adjust the path as needed
           _id: session?.user?.id, // Using the user ID from session
@@ -59,6 +65,7 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
 
         setStepCheck(result?.data?.step);
         setApiFreeTrial(result?.data?.freeTrial);
+        setStepCheckInitialized(true);
 
         console.log("====================================");
         console.log("Step Check Result-->header:", result.data.step);
@@ -66,13 +73,21 @@ const Mainheader = ({ title, description, children, freeTrialTaken }) => {
       } catch (error) {
         console.error("Error:", error);
         // router.push('/error');
+      } finally {
+        setStepCheckLoading(false);
       }
     };
 
-    if (status === "authenticated") {
+    if (status === "authenticated" && !stepCheckInitialized) {
       fetchDataAndRoute();
+    } else if (status === "unauthenticated") {
+      // Reset state when user is not authenticated
+      setStepCheck(null);
+      setApiFreeTrial(false);
+      setStepCheckInitialized(false);
+      setStepCheckLoading(false);
     }
-  }, [session?.user?.id, status]);
+  }, [session?.user?.id, status, stepCheckLoading, stepCheckInitialized]);
 
 
 useEffect(() => {
@@ -116,6 +131,11 @@ useEffect(() => {
 
   const handleLogout = async () => {
     setShowLogoutConfirm(false);
+    // Reset stepCheck state on logout
+    setStepCheck(null);
+    setApiFreeTrial(false);
+    setStepCheckInitialized(false);
+    setStepCheckLoading(false);
     await signOut({ callbackUrl: "/" });
     localStorage.clear();
     sessionStorage.clear();
@@ -204,7 +224,14 @@ useEffect(() => {
 
               {/* Only show user menu if user is logged in */}
               {session && (
-                stepCheck === 4 ? (
+                stepCheckLoading ? (
+                  // Show loading state while fetching step check
+                  <li className="userMenuBtn" style={{ position: "relative" }}>
+                    <button disabled>
+                      <span>Loading...</span>
+                    </button>
+                  </li>
+                ) : stepCheck === 4 ? (
                   // StepCheck === 4 → Full My Account menu
                   <li className="userMenuBtn" style={{ position: "relative" }}>
                     <button onClick={handleClick}>

@@ -31,6 +31,7 @@ const {
   handleCCAvenueResponse,
   getFormData, // Add this new controller method
   getPaidHolidays,
+  getTransactionHistory, // Add transaction history controller
 } = require("../controller/customerController");
 const {
   passwordVerificationLimit,
@@ -126,5 +127,8 @@ router.post("/payment/verify", verifyCCAvenuePayment);
 router.post("/payment/response", handleCCAvenueResponse);
 
 router.post("/get-paid-holidays", getPaidHolidays);
+
+// Get transaction history for a user
+router.get("/transaction-history/:userId", getTransactionHistory);
 
 module.exports = router;

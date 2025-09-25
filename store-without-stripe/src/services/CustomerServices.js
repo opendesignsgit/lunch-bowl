@@ -90,6 +90,10 @@ const CustomerServices = {
   getCustomerFormData: async (id) => {
     return requests.get(`/customer/form/${id}`);
   },
+
+  getTransactionHistory: async (id) => {
+    return requests.get(`/customer/transaction-history/${id}`);
+  },
 };
 
 export default CustomerServices;

@@ -148,6 +148,9 @@ const SubscriptionPlanStep = ({
   numberOfChildren = 1,
   initialSubscriptionPlan = {},
   onSubscriptionPlanChange,
+  isAddChildrenMode = false,
+  existingSubscription = null,
+  restrictedEndDate = null,
 }) => {
   const router = useRouter();
   const { holidays, holidaysLoading } = useHolidays();
@@ -173,7 +176,65 @@ const SubscriptionPlanStep = ({
   const [agreed, setAgreed] = useState(false);
   const [agreedError, setAgreedError] = useState(false);
 
+  // Pro-rated billing calculation for add children mode
+  const calculateProRatedBilling = useCallback(() => {
+    if (!isAddChildrenMode || !restrictedEndDate || !holidays.length) return null;
+
+    // Calculate start date (2 days from today)
+    let billingStartDate = dayjs().add(2, "day");
+    
+    // Ensure billing start date is a working day
+    while (!isWorkingDay(billingStartDate, holidays)) {
+      billingStartDate = billingStartDate.add(1, "day");
+    }
+
+    const billingEndDate = dayjs(restrictedEndDate);
+    const remainingWorkingDays = calculateWorkingDays(billingStartDate, billingEndDate, holidays);
+    const pricePerChild = remainingWorkingDays * BASE_PRICE_PER_DAY;
+    const totalCost = pricePerChild * numberOfChildren;
+
+    return {
+      billingStartDate,
+      billingEndDate,
+      remainingWorkingDays,
+      pricePerChild,
+      totalCost
+    };
+  }, [isAddChildrenMode, restrictedEndDate, holidays, numberOfChildren]);
+
   useEffect(() => {
+    if (isAddChildrenMode && restrictedEndDate) {
+      // For add children mode, create a restricted plan using existing subscription dates
+      let billingStartDate = dayjs().add(2, "day");
+      
+      // Ensure billing start date is a working day
+      while (!isWorkingDay(billingStartDate, holidays)) {
+        billingStartDate = billingStartDate.add(1, "day");
+      }
+
+      const billingEndDate = dayjs(restrictedEndDate);
+      const remainingWorkingDays = calculateWorkingDays(billingStartDate, billingEndDate, holidays);
+      
+      // Create single restricted plan for add children
+      const restrictedPlan = {
+        id: "add-children",
+        label: `Add Children to Existing Subscription (${remainingWorkingDays} Working Days)`,
+        workingDays: remainingWorkingDays,
+        price: Math.round(remainingWorkingDays * BASE_PRICE_PER_DAY * numberOfChildren),
+        discount: 0.05, // 5% discount for adding children
+        isOneMonth: false,
+        startDate: billingStartDate,
+        endDate: billingEndDate,
+        isRestricted: true
+      };
+
+      setPlans([restrictedPlan]);
+      setSelectedPlan("add-children");
+      setStartDate(billingStartDate);
+      setEndDate(billingEndDate);
+      return;
+    }
+
     const computedPlans = calculatePlans(holidays, numberOfChildren);
 
     // Initialize customStartDates from initialSubscriptionPlan startDate if plan is not 'byDate'
@@ -223,7 +284,7 @@ const SubscriptionPlanStep = ({
       setStartDate(computedPlans[0].startDate);
       setEndDate(computedPlans[0].endDate);
     }
-  }, [holidays, numberOfChildren, initialSubscriptionPlan]);
+  }, [holidays, numberOfChildren, initialSubscriptionPlan, isAddChildrenMode, restrictedEndDate]);
 
 
   const handlePlanChange = (e) => {
@@ -311,6 +372,26 @@ const SubscriptionPlanStep = ({
     }
     setAgreedError(false);
 
+    // For add children mode, use the restricted plan details
+    if (isAddChildrenMode) {
+      const currentPlan = plans.find((plan) => plan.id === "add-children");
+      if (currentPlan) {
+        const payload = {
+          selectedPlan: "add-children",
+          workingDays: currentPlan.workingDays,
+          totalPrice: currentPlan.price,
+          startDate: currentPlan.startDate,
+          endDate: currentPlan.endDate,
+          planId: "add-children",
+          isAddChildrenMode: true
+        };
+
+        onSubscriptionPlanChange(payload);
+        nextStep(payload);
+        return;
+      }
+    }
+
     if (selectedPlan === "byDate") {
       const newErrors = {
         startDate: !startDate,
@@ -378,11 +459,54 @@ const SubscriptionPlanStep = ({
 
         <Box className="spboxCont" sx={{ width: { xs: "100%", md: "55%" } }}>
           {holidaysLoading && <LinearProgress />}
+          
+          {/* Pro-rated billing display for add children mode */}
+          {isAddChildrenMode && existingSubscription && (
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" gutterBottom color="primary">
+                Adding Children to Existing Subscription
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
+              
+              <Box sx={{ bgcolor: "#f8f9fa", p: 2, borderRadius: 2, mb: 2 }}>
+                <Typography variant="body2">
+                  <strong>Current Subscription Period:</strong>{" "}
+                  {dayjs(existingSubscription.startDate).format("DD MMM YYYY")} to{" "}
+                  {dayjs(existingSubscription.endDate).format("DD MMM YYYY")}
+                </Typography>
+                
+                {calculateProRatedBilling() && (
+                  <>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      <strong>New Children Billing Period:</strong>{" "}
+                      {calculateProRatedBilling().billingStartDate.format("DD MMM YYYY")} to{" "}
+                      {calculateProRatedBilling().billingEndDate.format("DD MMM YYYY")}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      <strong>Remaining Working Days:</strong> {calculateProRatedBilling().remainingWorkingDays} days
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      <strong>Cost for {numberOfChildren} new child{numberOfChildren > 1 ? 'ren' : ''}:</strong>{" "}
+                      Rs. {calculateProRatedBilling().totalCost.toLocaleString("en-IN")}
+                      <Typography component="span" sx={{ color: 'green', ml: 1, fontSize: '0.85em' }}>
+                        (5% discount applied)
+                      </Typography>
+                    </Typography>
+                  </>
+                )}
+              </Box>
+              
+              <Typography variant="caption" display="block" sx={{ color: "text.secondary", mb: 2 }}>
+                * New children will be added to your existing subscription period with pro-rated billing
+              </Typography>
+            </Box>
+          )}
+          
           <Typography
             sx={{ color: "#FF6A00", fontWeight: 600, mt: 2, mb: 1 }}
             variant="subtitle2"
           >
-            SELECT YOUR SUBSCRIPTION PLAN*{" "}
+            {isAddChildrenMode ? "CONFIRM SUBSCRIPTION DETAILS*" : "SELECT YOUR SUBSCRIPTION PLAN*"}{" "}
             <Typography component="span" variant="caption" color="#888">
               (All Taxes included)
             </Typography>
@@ -450,9 +574,9 @@ const SubscriptionPlanStep = ({
                               </Typography>
                             </>
                           ) : (
-                              <Typography fontSize={13} color="#232323">
-                                Rs. {plan.price.toLocaleString("en-IN")}
-                              </Typography>
+                            <Typography fontSize={13} color="#232323">
+                              Rs. {plan.price.toLocaleString("en-IN")}
+                            </Typography>
                           )}
                         </Box>
                       </Box>
@@ -536,20 +660,22 @@ const SubscriptionPlanStep = ({
               </Paper>
             ))}
 
-            {/* Render Custom By-Date Plan */}
-            {/* <CustomDateSelection
-              selectedPlan={selectedPlan}
-              startDate={startDate}
-              endDate={endDate}
-              errors={errors}
-              onStartDateChange={handleStartDateChange}
-              onEndDateChange={handleEndDateChange}
-              holidays={holidays}
-              isWorkingDay={isWorkingDayMemo}
-              numberOfChildren={numberOfChildren}
-              openCalendar={() => setCalendarOpen(true)}
-              setHideMessage={setHideMessage}
-            /> */}
+            {/* Render Custom By-Date Plan - Disabled for Add Children Mode */}
+            {!isAddChildrenMode && (
+              <CustomDateSelection
+                selectedPlan={selectedPlan}
+                startDate={startDate}
+                endDate={endDate}
+                errors={errors}
+                onStartDateChange={handleStartDateChange}
+                onEndDateChange={handleEndDateChange}
+                holidays={holidays}
+                isWorkingDay={isWorkingDayMemo}
+                numberOfChildren={numberOfChildren}
+                openCalendar={() => setCalendarOpen(true)}
+                setHideMessage={setHideMessage}
+              />
+            )}
           </RadioGroup>
 
           {/* <Typography mt={1} fontSize={12} color="#888">
@@ -569,8 +695,12 @@ const SubscriptionPlanStep = ({
 
           <Typography mt={2} fontSize={12}>
             <strong>
-              Note: Per Day Meal = Rs. {BASE_PRICE_PER_DAY} (No. of Days × Rs. {BASE_PRICE_PER_DAY} × {numberOfChildren} {numberOfChildren > 1 ? "children" : "child"} = Subscription Amount)
-              {selectedPlan === "byDate" && " No discounts apply to custom date selections."}
+              {isAddChildrenMode ? (
+                `Note: Pro-rated billing for ${numberOfChildren} new child${numberOfChildren > 1 ? 'ren' : ''} = Rs. ${BASE_PRICE_PER_DAY} per day × Remaining working days × ${numberOfChildren} child${numberOfChildren > 1 ? 'ren' : ''} (5% discount applied)`
+              ) : (
+                `Note: Per Day Meal = Rs. ${BASE_PRICE_PER_DAY} (No. of Days × Rs. ${BASE_PRICE_PER_DAY} × ${numberOfChildren} ${numberOfChildren > 1 ? "children" : "child"} = Subscription Amount)`
+              )}
+              {selectedPlan === "byDate" && !isAddChildrenMode && " No discounts apply to custom date selections."}
             </strong>
           </Typography>
 

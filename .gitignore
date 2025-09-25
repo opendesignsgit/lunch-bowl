@@ -3,3 +3,7 @@
 
 # Ignore dist folder inside dashtar
 /dashtar/dist/
+
+/backend/.env
+
+/store-without-stripe/.env
