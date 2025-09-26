@@ -866,8 +866,15 @@ const stepFormRegister = async (req, res) => {
     if (path === "step-Form-ParentDetails") {
       update.parentDetails = formData;
     } else if (path === "step-Form-ChildDetails") {
+      // For regular registration, save children directly
       update.children = formData;
-    } else if (path === "step-Form-SubscriptionPlan") {
+    } else if (path === "add-children-details") {
+      // For add-children, store in pending additions until payment is complete
+      update.pendingChildrenAdditions = formData;
+    } else if (path === "renewal-children-details") {
+      // For renewal, store in pending renewal until payment is complete
+      update.pendingChildrenForRenewal = formData;
+    } else if (path === "step-Form-SubscriptionPlan" || path === "renewal-subscription-plan" || path === "add-children-plan") {
       if (
         !payload ||
         !payload.selectedPlan ||
@@ -889,7 +896,7 @@ const stepFormRegister = async (req, res) => {
         price: payload.totalPrice,
       };
     } else if (path === "step-Form-Payment") {
-      // Handle payment status update
+      // Handle payment status update for regular subscription
       if (typeof payload.paymentStatus !== "boolean") {
         return res.status(400).json({
           success: false,
@@ -906,6 +913,140 @@ const stepFormRegister = async (req, res) => {
           transactionId: payload.transactionId || null,
         };
       }
+    } else if (path === "renewal-payment-success") {
+      // Handle successful renewal payment
+      const form = await Form.findOne({ user: _id });
+      if (!form) {
+        return res.status(404).json({
+          success: false,
+          message: "User form not found",
+        });
+      }
+
+      // Set step to 4 for successful renewal payment
+      update.step = 4;
+
+      // Create renewal history entry
+      const hasRenewalChildren = form.pendingChildrenForRenewal && form.pendingChildrenForRenewal.length > 0;
+      const hasAddChildren = form.pendingChildrenAdditions && form.pendingChildrenAdditions.length > 0;
+      
+      let finalChildrenCount;
+      let childrenIds;
+      
+      if (hasRenewalChildren) {
+        // For renewal with modified children, use the count and IDs from the modified children list
+        finalChildrenCount = form.pendingChildrenForRenewal.length;
+        childrenIds = form.pendingChildrenForRenewal.map(child => child._id || new mongoose.Types.ObjectId());
+      } else if (hasAddChildren) {
+        // For add-children during renewal, add to existing count
+        finalChildrenCount = form.children.length + form.pendingChildrenAdditions.length;
+        childrenIds = [
+          ...form.children.map(child => child._id),
+          ...form.pendingChildrenAdditions.map(child => child._id || new mongoose.Types.ObjectId())
+        ];
+      } else {
+        // No changes, keep existing count and IDs
+        finalChildrenCount = form.children.length;
+        childrenIds = form.children.map(child => child._id);
+      }
+
+      const renewalEntry = {
+        numberOfChildren: finalChildrenCount,
+        childrenIds: childrenIds,
+        renewalFromDate: payload.startDate,
+        renewalToDate: payload.endDate,
+        amount: payload.amount,
+        renewedDate: new Date(),
+        offerApplied: payload.offerApplied || "",
+        newChildrenAdded: hasAddChildren,
+        transactionDetails: {
+          orderId: payload.orderId,
+          transactionId: payload.transactionId,
+          paymentStatus: "Success",
+          paymentMethod: payload.paymentMethod || "CCAvenue",
+          paymentDate: new Date()
+        },
+        planId: payload.planId,
+        workingDays: payload.workingDays
+      };
+
+      // Handle children updates based on renewal type
+      if (hasRenewalChildren) {
+        // For renewal with modified children, replace the entire children array
+        update.children = form.pendingChildrenForRenewal;
+        update.$push = { renewalHistory: renewalEntry };
+        update.$unset = { pendingChildrenForRenewal: "" };
+      } else if (hasAddChildren) {
+        // For add-children during renewal, add to existing children
+        update.$push = { 
+          children: { $each: form.pendingChildrenAdditions },
+          renewalHistory: renewalEntry
+        };
+        update.$unset = { pendingChildrenAdditions: "" };
+      } else {
+        // No children changes, just add renewal history
+        update.$push = { renewalHistory: renewalEntry };
+      }
+
+      // Update current subscription plan
+      update.subscriptionPlan = {
+        planId: payload.planId,
+        startDate: payload.startDate,
+        endDate: payload.endDate,
+        workingDays: payload.workingDays,
+        price: payload.amount,
+        orderId: payload.orderId,
+        paymentAmount: payload.amount,
+        paymentDate: new Date(),
+        paymentMethod: payload.paymentMethod || "CCAvenue",
+        transactionId: payload.transactionId,
+      };
+
+    } else if (path === "add-children-payment-success") {
+      // Handle successful add-children payment
+      const form = await Form.findOne({ user: _id });
+      if (!form || !form.pendingChildrenAdditions || form.pendingChildrenAdditions.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "No pending children to add",
+        });
+      }
+
+      // Set step to 4 for successful add-children payment
+      update.step = 4;
+
+      // Move pending children to actual children array
+      update.$push = { children: { $each: form.pendingChildrenAdditions } };
+      update.$unset = { pendingChildrenAdditions: "" };
+
+      // Create renewal history entry for add-children
+      const renewalEntry = {
+        numberOfChildren: form.children.length + form.pendingChildrenAdditions.length,
+        childrenIds: [
+          ...form.children.map(child => child._id),
+          ...form.pendingChildrenAdditions.map(child => child._id || new mongoose.Types.ObjectId())
+        ],
+        renewalFromDate: payload.startDate,
+        renewalToDate: form.subscriptionPlan.endDate, // Keep existing end date
+        amount: payload.amount,
+        renewedDate: new Date(),
+        offerApplied: payload.offerApplied || "",
+        newChildrenAdded: true,
+        transactionDetails: {
+          orderId: payload.orderId,
+          transactionId: payload.transactionId,
+          paymentStatus: "Success",
+          paymentMethod: payload.paymentMethod || "CCAvenue",
+          paymentDate: new Date()
+        },
+        planId: payload.planId,
+        workingDays: payload.workingDays
+      };
+
+      update.$push = { 
+        children: { $each: form.pendingChildrenAdditions },
+        renewalHistory: renewalEntry
+      };
     } else {
       return res.status(400).json({
         success: false,
@@ -913,11 +1054,79 @@ const stepFormRegister = async (req, res) => {
       });
     }
 
+    let updateOperation = {};
+    
+    // Build the update operation based on what we need to do
+    if (update.$push) {
+      updateOperation.$push = update.$push;
+      delete update.$push;
+    }
+    if (update.$unset) {
+      updateOperation.$unset = update.$unset;
+      delete update.$unset;
+    }
+    if (Object.keys(update).length > 0) {
+      updateOperation.$set = update;
+    }
+
     const form = await Form.findOneAndUpdate(
       { user: _id },
-      { $set: update },
+      updateOperation,
       { new: true, upsert: true }
     );
+
+    // Update UserMeal if this is add-children-payment-success or renewal-payment-success
+    if ((path === "add-children-payment-success" || path === "renewal-payment-success") && form?.children) {
+      try {
+        const userMeal = await UserMeal.findOne({ userId: mongoose.Types.ObjectId(_id) });
+        
+        if (userMeal) {
+          if (path === "renewal-payment-success") {
+            // For renewal payment success, sync UserMeal with the updated children array
+            userMeal.children = form.children.map(child => ({
+              childId: child._id,
+              meals: []
+            }));
+            await userMeal.save();
+            console.log("UserMeal updated with children after renewal-payment-success");
+          } else {
+            // Add new children to UserMeal (the ones that were just moved from pendingChildrenAdditions)
+            const existingChildIds = userMeal.children.map(c => c.childId.toString());
+            const newChildren = form.children.filter(child => 
+              !existingChildIds.includes(child._id.toString())
+            );
+            
+            for (const child of newChildren) {
+              const childEntry = {
+                childId: child._id,
+                meals: []
+              };
+              userMeal.children.push(childEntry);
+            }
+            
+            if (newChildren.length > 0) {
+              await userMeal.save();
+              console.log("UserMeal updated with new children after add-children-payment-success");
+            }
+          }
+        } else {
+          // Create new UserMeal if it doesn't exist
+          const childrenEntries = form.children.map(child => ({
+            childId: child._id,
+            meals: []
+          }));
+          
+          const newUserMeal = new UserMeal({
+            userId: mongoose.Types.ObjectId(_id),
+            children: childrenEntries
+          });
+          await newUserMeal.save();
+          console.log(`Created new UserMeal with children after ${path}`);
+        }
+      } catch (userMealError) {
+        console.error(`Error updating UserMeal after ${path}:`, userMealError);
+      }
+    }
 
     res.status(200).json({ success: true, data: form });
   } catch (error) {
@@ -1375,6 +1584,120 @@ function isDateInCurrentMonth(date, currentMonth) {
   return mealDate.getMonth() === currentMonth;
 }
 
+// Get transaction history for a user
+const getTransactionHistory = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        error: "userId is required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid userId format",
+      });
+    }
+
+    // Get user payment data from Payment collection
+    const UserPayment = require("../models/Payment");
+    const userPayments = await UserPayment.findOne({ user: userId });
+    
+    // Get user form data to extract renewal history and children information
+    const userForm = await Form.findOne({ user: userId });
+    
+    let transactions = [];
+
+    // Add payment collection transactions
+    if (userPayments && userPayments.payments && userPayments.payments.length > 0) {
+      const childrenNames = userForm?.children?.map(child => 
+        `${child.childFirstName} ${child.childLastName}`
+      ) || [];
+
+      const paymentTransactions = userPayments.payments.map(payment => ({
+        transactionId: payment.tracking_id || payment.order_id,
+        orderId: payment.order_id,
+        amount: payment.amount,
+        status: payment.order_status,
+        paymentDate: payment.created_at || payment.payment_date,
+        paymentMode: payment.payment_mode,
+        childrenCovered: childrenNames,
+        childrenCount: childrenNames.length,
+        planType: payment.merchant_param2 || "Standard Subscription",
+        transactionType: "Payment",
+        merchant_param2: payment.merchant_param2,
+      }));
+      
+      transactions = [...transactions, ...paymentTransactions];
+    }
+
+    // Add renewal history transactions
+    if (userForm && userForm.renewalHistory && userForm.renewalHistory.length > 0) {
+      const renewalTransactions = userForm.renewalHistory.map(renewal => {
+        // Get children names at the time of renewal using stored childrenIds
+        let childrenNames = [];
+        if (renewal.childrenIds && renewal.childrenIds.length > 0) {
+          // Use the stored children IDs to get the correct children
+          const childrenAtRenewal = userForm.children.filter(child => 
+            renewal.childrenIds.some(renewalChildId => 
+              renewalChildId.toString() === child._id.toString()
+            )
+          );
+          childrenNames = childrenAtRenewal.map(child => 
+            `${child.childFirstName} ${child.childLastName}`
+          );
+        } else {
+          // Fallback for older entries without childrenIds
+          const childrenAtRenewal = userForm.children.slice(0, renewal.numberOfChildren);
+          childrenNames = childrenAtRenewal.map(child => 
+            `${child.childFirstName} ${child.childLastName}`
+          );
+        }
+
+        return {
+          transactionId: renewal.transactionDetails?.transactionId || renewal.transactionDetails?.orderId,
+          orderId: renewal.transactionDetails?.orderId,
+          amount: renewal.amount,
+          status: renewal.transactionDetails?.paymentStatus || "Success",
+          paymentDate: renewal.transactionDetails?.paymentDate || renewal.renewedDate,
+          paymentMode: renewal.transactionDetails?.paymentMethod || "CCAvenue",
+          childrenCovered: childrenNames,
+          childrenCount: renewal.numberOfChildren,
+          planType: renewal.newChildrenAdded ? "Add Children" : "Renewal",
+          transactionType: "Renewal",
+          renewalDetails: {
+            fromDate: renewal.renewalFromDate,
+            toDate: renewal.renewalToDate,
+            workingDays: renewal.workingDays,
+            offerApplied: renewal.offerApplied,
+            newChildrenAdded: renewal.newChildrenAdded
+          }
+        };
+      });
+      
+      transactions = [...transactions, ...renewalTransactions];
+    }
+
+    // Sort transactions by payment date (newest first)
+    transactions.sort((a, b) => new Date(b.paymentDate) - new Date(a.paymentDate));
+
+    return res.json({
+      success: true,
+      data: transactions,
+    });
+  } catch (error) {
+    console.error("Error fetching transaction history:", error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   loginCustomer,
   verifyPhoneNumber,
@@ -1405,5 +1728,6 @@ module.exports = {
   stepCheck,
   accountDetails,
   getFormData,
-  getPaidHolidays
+  getPaidHolidays,
+  getTransactionHistory
 };

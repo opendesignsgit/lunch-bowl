@@ -7,7 +7,7 @@ import Mainfooter from "@layout/footer/Mainfooter";
 import Accordion from "@components/faq/Accordion";
 import ParentDetailsStep from "@components/profile-Step-Form/ParentDetailsStep";
 import ChildDetailsStep from "@components/profile-Step-Form/childDetailsStep";
-import SubscriptionPlanStep from "@components/profile-Step-Form/subscriptionPlanStep";
+import NewSubscriptionPlanStep from "@components/profile-Step-Form/NewSubscriptionPlanStep";
 import PaymentStep from "@components/profile-Step-Form/PaymentStep";
 import { useSession } from "next-auth/react";
 import AccountServices from "@services/AccountServices"; // ✅ integrate API
@@ -170,7 +170,7 @@ const MultiStepForm = () => {
     );
   }
 
-  const faqItems = [
+ 	const faqItems = [
   {
     title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
     content:
@@ -201,7 +201,7 @@ const MultiStepForm = () => {
   {
     title: "How does the delivery process work, and can I trust it will arrive on time?",
     content:
-      "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. You’ll receive delivery confirmations, and in the rare event of a delay, we’ll notify you immediately.",
+      "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. In the rare event of a delay, we’ll notify you immediately.",
   },
   {
     title: "What if my child has specific dietary restrictions or allergies?",
@@ -314,7 +314,7 @@ const MultiStepForm = () => {
             )}
 
             {step === 3 && (
-              <SubscriptionPlanStep
+              <NewSubscriptionPlanStep
                 nextStep={nextStep}
                 prevStep={prevStep}
                 _id={_id}

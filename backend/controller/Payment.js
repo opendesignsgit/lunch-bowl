@@ -113,22 +113,239 @@ exports.ccavenueResponse = async (req, res) => {
           return res.status(400).send("Invalid user ID");
         }
 
-        const updatedForm = await Form.findOneAndUpdate(
-          { user: merchant_param1 },
-          {
+        // Check payment type based on merchant_param2 or order_id
+        const isRenewalPayment = responseData.merchant_param2?.includes("RENEWAL") || 
+                                responseData.order_id?.includes("RENEWAL");
+        const isAddChildrenPayment = responseData.merchant_param2?.includes("ADD_CHILD") || 
+                                    responseData.order_id?.includes("ADD_CHILD");
+
+        let updatedForm;
+
+        if (isRenewalPayment) {
+          // Handle renewal payment success
+          const existingForm = await Form.findOne({ user: merchant_param1 });
+          if (!existingForm) {
+            console.error("Form not found for renewal payment:", merchant_param1);
+            return res.status(404).send("User form not found");
+          }
+
+          // Create renewal history entry
+          const hasRenewalChildren = existingForm.pendingChildrenForRenewal && existingForm.pendingChildrenForRenewal.length > 0;
+          const hasAddChildren = existingForm.pendingChildrenAdditions && existingForm.pendingChildrenAdditions.length > 0;
+          
+          let finalChildrenCount;
+          if (hasRenewalChildren) {
+            // For renewal, use the count from the modified children list
+            finalChildrenCount = existingForm.pendingChildrenForRenewal.length;
+          } else if (hasAddChildren) {
+            // For add-children during renewal, add to existing count
+            finalChildrenCount = existingForm.children.length + existingForm.pendingChildrenAdditions.length;
+          } else {
+            // No changes, keep existing count
+            finalChildrenCount = existingForm.children.length;
+          }
+
+          // The subscriptionPlan should already contain the NEW renewal dates and plan details
+          // from when the user selected their renewal plan via the renewal-subscription-plan endpoint
+          const renewalEntry = {
+            numberOfChildren: finalChildrenCount,
+            renewalFromDate: existingForm.subscriptionPlan.startDate, // These are the NEW renewal dates
+            renewalToDate: existingForm.subscriptionPlan.endDate,     // These are the NEW renewal dates
+            amount: parseFloat(responseData.amount || 0),
+            renewedDate: new Date(),
+            offerApplied: "",
+            newChildrenAdded: hasAddChildren,
+            transactionDetails: {
+              orderId: order_id,
+              transactionId: tracking_id,
+              paymentStatus: "Success",
+              paymentMethod: "CCAvenue",
+              paymentDate: new Date()
+            },
+            planId: existingForm.subscriptionPlan.planId,
+            workingDays: existingForm.subscriptionPlan.workingDays
+          };
+
+          // Update form with renewal data
+          const updateData = {
+            $push: { renewalHistory: renewalEntry },
             $set: {
               paymentStatus: order_status,
               "subscriptionPlan.orderId": order_id,
               "subscriptionPlan.transactionId": tracking_id || "N/A",
               "subscriptionPlan.paymentDate": new Date(),
-              step: 4,
+              step: 4, // Set step to 4 after successful renewal payment
             },
-            $inc: {
-              subscriptionCount: 1,
+            $inc: { subscriptionCount: 1 }
+          };
+
+          // The subscriptionPlan should already have the new renewal dates from when the user
+          // selected their renewal plan via renewal-subscription-plan endpoint
+          // We don't need to modify startDate/endDate here as they should already be set correctly
+
+          // Handle children updates based on renewal type
+          if (hasRenewalChildren) {
+            // For renewal with modified children, replace the entire children array
+            updateData.$set.children = existingForm.pendingChildrenForRenewal;
+            updateData.$unset = { pendingChildrenForRenewal: "" };
+          } else if (hasAddChildren) {
+            // For add-children during renewal, add to existing children
+            updateData.$push.children = { $each: existingForm.pendingChildrenAdditions };
+            updateData.$unset = { pendingChildrenAdditions: "" };
+          }
+
+          updatedForm = await Form.findOneAndUpdate(
+            { user: merchant_param1 },
+            updateData,
+            { new: true }
+          );
+
+          // Update UserMeal to reflect children changes for menu calendar
+          if (updatedForm) {
+            try {
+              const userMeal = await UserMeal.findOne({ userId: mongoose.Types.ObjectId(merchant_param1) });
+              
+              if (userMeal) {
+                if (hasRenewalChildren) {
+                  // For renewal with modified children, replace UserMeal children entirely
+                  userMeal.children = existingForm.pendingChildrenForRenewal.map(child => ({
+                    childId: child._id,
+                    meals: []
+                  }));
+                  await userMeal.save();
+                  console.log("UserMeal updated with modified children after renewal payment");
+                } else if (hasAddChildren) {
+                  // For add-children during renewal, add new children to existing UserMeal
+                  for (const child of existingForm.pendingChildrenAdditions) {
+                    const childEntry = {
+                      childId: child._id,
+                      meals: []
+                    };
+                    userMeal.children.push(childEntry);
+                  }
+                  await userMeal.save();
+                  console.log("UserMeal updated with additional children after renewal payment");
+                }
+              } else {
+                // Create new UserMeal if it doesn't exist
+                const childrenEntries = updatedForm.children.map(child => ({
+                  childId: child._id,
+                  meals: []
+                }));
+                
+                const newUserMeal = new UserMeal({
+                  userId: mongoose.Types.ObjectId(merchant_param1),
+                  children: childrenEntries
+                });
+                await newUserMeal.save();
+                console.log("Created new UserMeal with children after renewal payment");
+              }
+            } catch (userMealError) {
+              console.error("Error updating UserMeal after renewal payment:", userMealError);
+            }
+          }
+
+        } else if (isAddChildrenPayment) {
+          // Handle add-children payment success
+          const existingForm = await Form.findOne({ user: merchant_param1 });
+          if (!existingForm || !existingForm.pendingChildrenAdditions || existingForm.pendingChildrenAdditions.length === 0) {
+            console.error("No pending children found for add-children payment:", merchant_param1);
+            return res.status(400).send("No pending children to add");
+          }
+
+          // Create renewal history entry for add-children
+          const renewalEntry = {
+            numberOfChildren: existingForm.children.length + existingForm.pendingChildrenAdditions.length,
+            renewalFromDate: new Date(), // Start from today for new children
+            renewalToDate: existingForm.subscriptionPlan.endDate, // Keep existing end date
+            amount: parseFloat(responseData.amount || 0),
+            renewedDate: new Date(),
+            offerApplied: "5% Add Children Discount",
+            newChildrenAdded: true,
+            transactionDetails: {
+              orderId: order_id,
+              transactionId: tracking_id,
+              paymentStatus: "Success",
+              paymentMethod: "CCAvenue",
+              paymentDate: new Date()
             },
-          },
-          { new: true }
-        );
+            planId: existingForm.subscriptionPlan.planId,
+            workingDays: existingForm.subscriptionPlan.workingDays
+          };
+
+          updatedForm = await Form.findOneAndUpdate(
+            { user: merchant_param1 },
+            {
+              $push: { 
+                children: { $each: existingForm.pendingChildrenAdditions },
+                renewalHistory: renewalEntry
+              },
+              $unset: { pendingChildrenAdditions: "" },
+              $set: {
+                paymentStatus: order_status,
+                "subscriptionPlan.orderId": order_id,
+                "subscriptionPlan.transactionId": tracking_id || "N/A",
+                "subscriptionPlan.paymentDate": new Date(),
+                step: 4, // Set step to 4 after successful add-children payment
+              }
+            },
+            { new: true }
+          );
+
+          // Update UserMeal to include the new children for menu calendar
+          if (updatedForm && existingForm.pendingChildrenAdditions && existingForm.pendingChildrenAdditions.length > 0) {
+            try {
+              const userMeal = await UserMeal.findOne({ userId: mongoose.Types.ObjectId(merchant_param1) });
+              
+              if (userMeal) {
+                // Add new children to UserMeal
+                for (const child of existingForm.pendingChildrenAdditions) {
+                  const childEntry = {
+                    childId: child._id,
+                    meals: []
+                  };
+                  userMeal.children.push(childEntry);
+                }
+                await userMeal.save();
+                console.log("UserMeal updated with new children after add-children payment");
+              } else {
+                // Create new UserMeal if it doesn't exist
+                const childrenEntries = existingForm.pendingChildrenAdditions.map(child => ({
+                  childId: child._id,
+                  meals: []
+                }));
+                
+                const newUserMeal = new UserMeal({
+                  userId: mongoose.Types.ObjectId(merchant_param1),
+                  children: childrenEntries
+                });
+                await newUserMeal.save();
+                console.log("Created new UserMeal with new children after add-children payment");
+              }
+            } catch (userMealError) {
+              console.error("Error updating UserMeal after add-children payment:", userMealError);
+            }
+          }
+
+        } else {
+          // Handle regular subscription payment
+          updatedForm = await Form.findOneAndUpdate(
+            { user: merchant_param1 },
+            {
+              $set: {
+                paymentStatus: order_status,
+                "subscriptionPlan.orderId": order_id,
+                "subscriptionPlan.transactionId": tracking_id || "N/A",
+                "subscriptionPlan.paymentDate": new Date(),
+                step: 4,
+              },
+              $inc: {
+                subscriptionCount: 1,
+              },
+            },
+            { new: true }
+          );
+        }
 
         console.log("Subscription payment updated form:", updatedForm);
 
@@ -424,6 +641,309 @@ exports.getHolidayPaymentsByDate = async (req, res) => {
     return res.json(payments);
   } catch (err) {
     console.error("Error fetching holiday payments:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// Dummy Payment Response Handler for Development/Testing
+exports.dummyPaymentResponse = async (req, res) => {
+  try {
+    const { userId, paymentType = "subscription", amount = 1 } = req.body;
+    
+    if (!userId) {
+      return res.status(400).json({ error: "userId is required" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid userId format" });
+    }
+
+    // Check if dummy responses are enabled
+    const useDummyResponse = process.env.CCAV_USE_DUMMY_RESPONSE === 'true';
+    const dummySuccess = process.env.CCAV_DUMMY_SUCCESS === 'true';
+
+    if (!useDummyResponse) {
+      return res.status(400).json({ error: "Dummy responses not enabled" });
+    }
+
+    if (!dummySuccess) {
+      return res.json({ 
+        success: false,
+        order_status: "Failed",
+        message: "Payment failed (dummy response)"
+      });
+    }
+
+    // Generate dummy successful payment data
+    const orderId = `DUMMY_${Date.now()}`;
+    const trackingId = `TXN_${Date.now()}`;
+
+    const dummyResponseData = {
+      order_id: orderId,
+      tracking_id: trackingId,
+      order_status: "Success",
+      merchant_param1: userId,
+      merchant_param2: paymentType === "renewal" ? "RENEWAL_PLAN" : 
+                      paymentType === "add_children" ? "ADD_CHILD_PLAN" : "SUBSCRIPTION_PLAN",
+      amount: amount,
+      payment_mode: "Dummy",
+      card_name: "Dummy Card",
+      status_code: "Success",
+      status_message: "Transaction Successful",
+      bank_ref_no: `BANK_${Date.now()}`,
+      billing_name: "Test User",
+      billing_email: "test@example.com",
+    };
+
+    // Process the dummy payment
+    const { order_status, merchant_param1, order_id, tracking_id } =
+      await processPaymentResponse(dummyResponseData, "subscription");
+
+    if (order_status === "Success") {
+      // Check payment type to handle different flows
+      const isAddChildrenPayment = paymentType === "add_children";
+      let updatedForm;
+
+      if (isAddChildrenPayment) {
+        // Handle add-children payment success (same logic as real payments)
+        const existingForm = await Form.findOne({ user: merchant_param1 });
+        if (!existingForm || !existingForm.pendingChildrenAdditions || existingForm.pendingChildrenAdditions.length === 0) {
+          console.error("No pending children found for dummy add-children payment:", merchant_param1);
+          return res.json({
+            success: false,
+            order_status: "Failed",
+            message: "No pending children to add"
+          });
+        }
+
+        // Create renewal history entry for add-children
+        const renewalEntry = {
+          numberOfChildren: existingForm.children.length + existingForm.pendingChildrenAdditions.length,
+          renewalFromDate: new Date(), // Start from today for new children
+          renewalToDate: existingForm.subscriptionPlan.endDate, // Keep existing end date
+          amount: parseFloat(amount || 0),
+          renewedDate: new Date(),
+          offerApplied: "5% Add Children Discount",
+          newChildrenAdded: true,
+          transactionDetails: {
+            orderId: order_id,
+            transactionId: tracking_id,
+            paymentStatus: "Success",
+            paymentMethod: "Dummy",
+            paymentDate: new Date()
+          },
+          planId: existingForm.subscriptionPlan.planId,
+          workingDays: existingForm.subscriptionPlan.workingDays
+        };
+
+        updatedForm = await Form.findOneAndUpdate(
+          { user: merchant_param1 },
+          {
+            $push: { 
+              children: { $each: existingForm.pendingChildrenAdditions },
+              renewalHistory: renewalEntry
+            },
+            $unset: { pendingChildrenAdditions: "" },
+            $set: {
+              paymentStatus: order_status,
+              "subscriptionPlan.orderId": order_id,
+              "subscriptionPlan.transactionId": tracking_id || "N/A",
+              "subscriptionPlan.paymentDate": new Date(),
+              step: 4, // Set step to 4 after successful add-children payment
+            }
+          },
+          { new: true }
+        );
+
+        // Update UserMeal to include the new children for menu calendar
+        if (updatedForm && existingForm.pendingChildrenAdditions && existingForm.pendingChildrenAdditions.length > 0) {
+          try {
+            const userMeal = await UserMeal.findOne({ userId: mongoose.Types.ObjectId(merchant_param1) });
+            
+            if (userMeal) {
+              // Add new children to UserMeal
+              for (const child of existingForm.pendingChildrenAdditions) {
+                const childEntry = {
+                  childId: child._id,
+                  meals: []
+                };
+                userMeal.children.push(childEntry);
+              }
+              await userMeal.save();
+              console.log("UserMeal updated with new children after dummy add-children payment");
+            } else {
+              // Create new UserMeal if it doesn't exist
+              const childrenEntries = existingForm.pendingChildrenAdditions.map(child => ({
+                childId: child._id,
+                meals: []
+              }));
+              
+              const newUserMeal = new UserMeal({
+                userId: mongoose.Types.ObjectId(merchant_param1),
+                children: childrenEntries
+              });
+              await newUserMeal.save();
+              console.log("Created new UserMeal with new children after dummy add-children payment");
+            }
+          } catch (userMealError) {
+            console.error("Error updating UserMeal after dummy add-children payment:", userMealError);
+          }
+        }
+
+      } else if (paymentType === "renewal") {
+        // Handle renewal payment success (same logic as real payments)
+        const existingForm = await Form.findOne({ user: merchant_param1 });
+        if (!existingForm) {
+          console.error("Form not found for dummy renewal payment:", merchant_param1);
+          return res.json({
+            success: false,
+            order_status: "Failed",
+            message: "User form not found"
+          });
+        }
+
+        // Create renewal history entry
+        const hasRenewalChildren = existingForm.pendingChildrenForRenewal && existingForm.pendingChildrenForRenewal.length > 0;
+        const hasAddChildren = existingForm.pendingChildrenAdditions && existingForm.pendingChildrenAdditions.length > 0;
+        
+        let finalChildrenCount;
+        if (hasRenewalChildren) {
+          finalChildrenCount = existingForm.pendingChildrenForRenewal.length;
+        } else if (hasAddChildren) {
+          finalChildrenCount = existingForm.children.length + existingForm.pendingChildrenAdditions.length;
+        } else {
+          finalChildrenCount = existingForm.children.length;
+        }
+
+        // The subscriptionPlan should already contain the NEW renewal dates and plan details
+        // from when the user selected their renewal plan via the renewal-subscription-plan endpoint
+        const renewalEntry = {
+          numberOfChildren: finalChildrenCount,
+          renewalFromDate: existingForm.subscriptionPlan.startDate, // These are the NEW renewal dates
+          renewalToDate: existingForm.subscriptionPlan.endDate,     // These are the NEW renewal dates
+          amount: parseFloat(amount || 0),
+          renewedDate: new Date(),
+          offerApplied: "",
+          newChildrenAdded: hasAddChildren,
+          transactionDetails: {
+            orderId: order_id,
+            transactionId: tracking_id,
+            paymentStatus: "Success",
+            paymentMethod: "Dummy",
+            paymentDate: new Date()
+          },
+          planId: existingForm.subscriptionPlan.planId,
+          workingDays: existingForm.subscriptionPlan.workingDays
+        };
+
+        // Update form with renewal data
+        const updateData = {
+          $push: { renewalHistory: renewalEntry },
+          $set: {
+            paymentStatus: order_status,
+            "subscriptionPlan.orderId": order_id,
+            "subscriptionPlan.transactionId": tracking_id || "N/A",
+            "subscriptionPlan.paymentDate": new Date(),
+            step: 4, // Set step to 4 after successful renewal payment
+          },
+          $inc: { subscriptionCount: 1 }
+        };
+
+        // Handle children updates based on renewal type
+        if (hasRenewalChildren) {
+          updateData.$set.children = existingForm.pendingChildrenForRenewal;
+          updateData.$unset = { pendingChildrenForRenewal: "" };
+        } else if (hasAddChildren) {
+          updateData.$push.children = { $each: existingForm.pendingChildrenAdditions };
+          updateData.$unset = { pendingChildrenAdditions: "" };
+        }
+
+        updatedForm = await Form.findOneAndUpdate(
+          { user: merchant_param1 },
+          updateData,
+          { new: true }
+        );
+
+        // Update UserMeal to reflect children changes for menu calendar
+        if (updatedForm) {
+          try {
+            const userMeal = await UserMeal.findOne({ userId: mongoose.Types.ObjectId(merchant_param1) });
+            
+            if (userMeal) {
+              if (hasRenewalChildren) {
+                userMeal.children = existingForm.pendingChildrenForRenewal.map(child => ({
+                  childId: child._id,
+                  meals: []
+                }));
+                await userMeal.save();
+                console.log("UserMeal updated with modified children after dummy renewal payment");
+              } else if (hasAddChildren) {
+                for (const child of existingForm.pendingChildrenAdditions) {
+                  const childEntry = {
+                    childId: child._id,
+                    meals: []
+                  };
+                  userMeal.children.push(childEntry);
+                }
+                await userMeal.save();
+                console.log("UserMeal updated with additional children after dummy renewal payment");
+              }
+            } else {
+              const childrenEntries = updatedForm.children.map(child => ({
+                childId: child._id,
+                meals: []
+              }));
+              
+              const newUserMeal = new UserMeal({
+                userId: mongoose.Types.ObjectId(merchant_param1),
+                children: childrenEntries
+              });
+              await newUserMeal.save();
+              console.log("Created new UserMeal with children after dummy renewal payment");
+            }
+          } catch (userMealError) {
+            console.error("Error updating UserMeal after dummy renewal payment:", userMealError);
+          }
+        }
+
+      } else {
+        // Handle regular subscription payment
+        updatedForm = await Form.findOneAndUpdate(
+          { user: merchant_param1 },
+          {
+            $set: {
+              paymentStatus: order_status,
+              "subscriptionPlan.orderId": order_id,
+              "subscriptionPlan.transactionId": tracking_id || "N/A",
+              "subscriptionPlan.paymentDate": new Date(),
+              step: 4,
+            },
+            $inc: {
+              subscriptionCount: 1,
+            },
+          },
+          { new: true }
+        );
+      }
+
+      console.log("Dummy payment processed successfully:", updatedForm);
+
+      return res.json({
+        success: true,
+        order_status: "Success",
+        order_id: order_id,
+        tracking_id: tracking_id,
+        message: "Dummy payment processed successfully"
+      });
+    } else {
+      return res.json({
+        success: false,
+        order_status: "Failed", 
+        message: "Dummy payment processing failed"
+      });
+    }
+  } catch (error) {
+    console.error("Dummy payment error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };

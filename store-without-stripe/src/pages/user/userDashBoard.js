@@ -68,11 +68,33 @@ const UserDashboard = () => {
     });
   };
 
-  // TEMPORARY FOR TESTING - Always return true to show renew button
+  // Check if subscription is expired
   const isSubscriptionExpired = () => {
-    if (!dashboardData.subscriptionDates.end) return true;
+    if (!dashboardData.subscriptionDates.end) return false;
     const endDate = new Date(dashboardData.subscriptionDates.end);
     return endDate < new Date();
+  };
+
+  // Check if renewal should be enabled (10 days before expiry)
+  const shouldShowRenewalButton = () => {
+    if (!dashboardData.subscriptionDates.end) return false;
+    const endDate = new Date(dashboardData.subscriptionDates.end);
+    const tenDaysBeforeExpiry = new Date(endDate);
+    tenDaysBeforeExpiry.setDate(endDate.getDate() - 10);
+    const today = new Date();
+    
+    // Show renewal button if we're within 10 days of expiry or expired
+    return today >= tenDaysBeforeExpiry;
+  };
+
+  // Get days remaining until expiry
+  const getDaysUntilExpiry = () => {
+    if (!dashboardData.subscriptionDates.end) return 0;
+    const endDate = new Date(dashboardData.subscriptionDates.end);
+    const today = new Date();
+    const diffTime = endDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return Math.max(0, diffDays);
   };
 
   const handleRenewSuccess = () => {
@@ -208,28 +230,58 @@ const UserDashboard = () => {
                     </div>
                   </div>
 
-                {/* Renew Subscription Button/Card - only show if subscription is expired */}
-                {isSubscriptionExpired() && (
-                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500 flex flex-col items-start DashboardTItems">
+                {/* Transaction History Card */}
+                <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500 ">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h5>Transaction History</h5>
+                      <p className="text-sm text-gray-600 mt-1">
+                        View all your payment records
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-full bg-green-100 text-green-600">
+                      <HiCalendar className="w-6 h-6" />
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      color="primary"
+                      className="bg-green-500 hover:bg-green-600 text-white"
+                      onClick={() => window.location.href = "/user/transaction-history"}
+                    >
+                      View History
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Renew Subscription Button/Card */}
+                {/* {shouldShowRenewalButton() && ( */}
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500 flex flex-col items-start ">
                     <div className="mb-4">
-                      <h5> Your subscription has expired </h5>
+                      <h5>
+                        {isSubscriptionExpired() 
+                          ? "Your subscription has expired" 
+                          : `Subscription expires in ${getDaysUntilExpiry()} days`}
+                      </h5>
                       <p className="text-lg font-semibold text-gray-800">
-                        Renew to continue
+                        {isSubscriptionExpired() ? "Renew to continue" : "Renew now to avoid interruption"}
                       </p>
                     </div>
                     <Button
                       variant="contained"
                       color="primary"
                       className="bg-orange-500 hover:bg-orange-600 text-white"
-                      onClick={() => setShowRenewalForm(true)}
+                      onClick={() => window.location.href = "/user/renewal-subscription"}
                     >
                       Renew Subscription
                     </Button>
                   </div>
-                )}
+                {/* )} */}
 
                   {/* Children Card */}
-                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500 DashboardTItems">
+                  <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500 ">
                     <div className="flex items-center justify-between">
                       <div>
                         <h5> Registered Children </h5>
@@ -241,8 +293,21 @@ const UserDashboard = () => {
                         <HiUserAdd className="w-6 h-6" />
                       </div>
                     </div>
-                    <div className="mt-4 text-sm text-gray-500">
-                      <span>Most recent additions</span>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Most recent additions</span>
+                      {/* Add Children Button - only show if less than 3 children */}
+                      {dashboardData.childrenCount < 3 && (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="primary"
+                          className="bg-purple-500 hover:bg-purple-600 text-white"
+                          onClick={() => window.location.href = "/user/add-children"}
+                          startIcon={<HiUserAdd />}
+                        >
+                          Add Children
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>

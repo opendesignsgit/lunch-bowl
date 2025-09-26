@@ -21,7 +21,11 @@ const useRegistration = () => {
       if (
         path == "step-Form-ParentDetails" ||
         path == "step-Form-ChildDetails" ||
-        path == "step-Form-SubscriptionPlan"
+        path == "step-Form-SubscriptionPlan" ||
+        path == "add-children-details" ||
+        path == "renewal-children-details" ||
+        path == "renewal-subscription-plan" ||
+        path == "add-children-plan"
       ) {
         const res = await CustomerServices.stepFormRegister({
           formData,
@@ -30,6 +34,10 @@ const useRegistration = () => {
           payload,
           _id,
         });
+        return res;
+
+      } else if (path == "get-transaction-history") {
+        const res = await CustomerServices.getTransactionHistory(_id);
         return res;
 
       } else if (path == "get-holiday-payments") {

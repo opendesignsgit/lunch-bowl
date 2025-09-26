@@ -5,7 +5,16 @@ import CryptoJS from "crypto-js";
 import useRegistration from "@hooks/useRegistration";
 import stepFour from "../../../public/profileStepImages/stepFour.png";  
 
-const PaymentStep = ({ prevStep, _id }) => {
+const PaymentStep = ({ 
+  prevStep, 
+  _id, 
+  // New props for different modes
+  onNext,
+  onPrev,
+  isAddChildrenMode = false,
+  isRenewalMode = false,
+  selectedPlan = null,
+}) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -62,6 +71,48 @@ const PaymentStep = ({ prevStep, _id }) => {
       setLoading(true);
       setError(null);
 
+      // Check if dummy payment is enabled
+      const isDummyPayment = process.env.NEXT_PUBLIC_CCAV_USE_DUMMY_RESPONSE === 'true';
+
+      if (isDummyPayment) {
+        // Use backend dummy payment endpoint
+        console.log("Using dummy payment response");
+        
+        const dummyPaymentData = {
+          userId: _id,
+          paymentType: isRenewalMode ? "renewal" : isAddChildrenMode ? "add_children" : "subscription",
+          amount: 1
+        };
+
+        const dummyResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ccavenue/dummy-response`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dummyPaymentData),
+        });
+
+        const dummyResult = await dummyResponse.json();
+        
+        if (dummyResult.success && dummyResult.order_status === 'Success') {
+          // Navigate to success page based on mode
+          if (isAddChildrenMode || isRenewalMode) {
+            if (onNext) {
+              onNext();
+            } else {
+              window.location.href = "/user/menuCalendarPage";
+            }
+          } else {
+            window.location.href = "/user/menuCalendarPage";
+          }
+        } else {
+          // Simulate payment failure
+          setError(dummyResult.message || "Payment failed (dummy response)");
+        }
+        return;
+      }
+
+      // Existing real payment logic
       // Fetch form data
       const response = await submitHandler({
         path: "get-customer-form",
@@ -81,6 +132,15 @@ const PaymentStep = ({ prevStep, _id }) => {
       console.log("====================================");
       // Prepare payment data
       const orderId = generateOrderId();
+      
+      // Determine merchant_param2 based on mode
+      let merchantParam2 = subscriptionPlan.planId;
+      if (isRenewalMode) {
+        merchantParam2 = "RENEWAL_" + subscriptionPlan.planId;
+      } else if (isAddChildrenMode) {
+        merchantParam2 = "ADD_CHILD_" + subscriptionPlan.planId;
+      }
+
       const paymentData = {
         merchant_id: ccavenueConfig.merchant_id,
         order_id: orderId,
@@ -101,7 +161,7 @@ const PaymentStep = ({ prevStep, _id }) => {
         billing_zip: (parentDetails?.pincode || "600001").substring(0, 10),
         billing_country: (parentDetails?.country || "India").substring(0, 50),
         merchant_param1: _id,
-        merchant_param2: subscriptionPlan.planId,
+        merchant_param2: merchantParam2,
         merchant_param3: orderId,
       };
       console.log("====================================");
@@ -173,7 +233,11 @@ const PaymentStep = ({ prevStep, _id }) => {
           <p>We have curated our payment system with the finest level of security ensuring a smooth and dependable experience.</p>
         </div>
         <Box className="subbtnrow" sx={{ display: "flex", gap: 3 }}>
-          <Button className="backbtn" variant="outlined" onClick={prevStep}>
+          <Button 
+            className="backbtn" 
+            variant="outlined" 
+            onClick={onPrev || prevStep}
+          >
             <span className="nextspan">Back</span>
           </Button>
           <Button
