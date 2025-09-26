@@ -46,7 +46,7 @@ const MenuCalendarPage = () => {
   {
     title: "How does the delivery process work, and can I trust it will arrive on time?",
     content:
-      "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. You’ll receive delivery confirmations, and in the rare event of a delay, we’ll notify you immediately.",
+      "We deliver meals directly to schools in temperature-controlled vehicles, scheduled to arrive just before lunchtime. In the rare event of a delay, we’ll notify you immediately.",
   },
   {
     title: "What if my child has specific dietary restrictions or allergies?",

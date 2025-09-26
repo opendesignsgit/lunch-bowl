@@ -71,6 +71,51 @@ const FormSchema = new mongoose.Schema({
     paymentMethod: { type: String, default: "CCAvenue" },
     transactionId: { type: String },
   },
+  // Array to store all renewal history
+  renewalHistory: [{
+    numberOfChildren: { type: Number, required: true },
+    renewalFromDate: { type: Date, required: true },
+    renewalToDate: { type: Date, required: true },
+    amount: { type: Number, required: true },
+    renewedDate: { type: Date, required: true },
+    offerApplied: { type: String, default: "" },
+    newChildrenAdded: { type: Boolean, default: false },
+    transactionDetails: {
+      orderId: { type: String },
+      transactionId: { type: String },
+      paymentStatus: { type: String },
+      paymentMethod: { type: String, default: "CCAvenue" },
+      paymentDate: { type: Date }
+    },
+    planId: { type: String, required: true },
+    workingDays: { type: Number, required: true }
+  }],
+  // Temporary storage for pending children additions (not saved until payment)
+  pendingChildrenAdditions: [{
+    childFirstName: { type: String },
+    childLastName: { type: String },
+    dob: { type: Date },
+    lunchTime: { type: String },
+    school: { type: String },
+    location: { type: String },
+    childClass: { type: String },
+    section: { type: String },
+    allergies: { type: String, default: "" },
+    addedDate: { type: Date, default: Date.now }
+  }],
+  // Temporary storage for pending children during renewal (replaces existing children on payment)
+  pendingChildrenForRenewal: [{
+    childFirstName: { type: String },
+    childLastName: { type: String },
+    dob: { type: Date },
+    lunchTime: { type: String },
+    school: { type: String },
+    location: { type: String },
+    childClass: { type: String },
+    section: { type: String },
+    allergies: { type: String, default: "" },
+    addedDate: { type: Date, default: Date.now }
+  }],
   paymentStatus: { type: String, required: true },
 
   subscriptionCount: {
