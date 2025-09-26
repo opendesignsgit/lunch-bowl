@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Card, CardContent, Stepper, Step, StepLabel, Divider } from "@mui/material";
+import Image from "next/image";
 import dayjs from "dayjs";
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
@@ -11,6 +12,14 @@ import useRegistration from "@hooks/useRegistration";
 import AccountServices from "@services/AccountServices";
 import AttributeServices from "@services/AttributeServices";
 import useAsync from "@hooks/useAsync";
+import abbanicon1 from "../../../public/enterrequireddetails/redroundedandlines.svg";
+import abbanicon2 from "../../../public/enterrequireddetails/yellowroundedflower.svg";
+import abbanicon3 from "../../../public/enterrequireddetails/redlittleheart.svg";
+import abbanicon4 from "../../../public/enterrequireddetails/lighergreenarrow.svg";
+import abbanicon5 from "../../../public/enterrequireddetails/violetyellow-star.svg";
+import abbanicon6 from "../../../public/enterrequireddetails/redtriangle.svg";
+import abbanicon7 from "../../../public/enterrequireddetails/redlittleflower.svg";
+import abbanicon8 from "../../../public/enterrequireddetails/layerflower.svg";
 
 const BASE_PRICE_PER_DAY = 200;
 
@@ -194,90 +203,128 @@ const RenewalSubscriptionPage = () => {
 
   if (loading) {
     return (
-      <div className="steppage">
-        <Mainheader
-          title="Renew Subscription"
-          description="Renew your subscription with updated children details"
-        />
-        <div className="pagebody">
-          <Typography>Loading...</Typography>
-        </div>
-        <Mainfooter />
+      <div className="renewSubpage samepagedesingss">
+          <Mainheader  title="Renew Subscription" description="Renew your subscription with updated children details"  />
+          <div className="pagebody">
+              <Typography>Loading...</Typography>
+          </div>
+          <Mainfooter />
       </div>
     );
   }
 
   return (
-    <div className="steppage">
-      <Mainheader
-        title="Renew Subscription"
-        description="Renew your subscription with updated children details"
-      />
-
+    <div className="renewSubpage samepagedesingss">
+      <Mainheader title="Renew Subscription" description="Renew your subscription with updated children details" />
       <div className="pagebody">
-        <Box className="container mx-auto py-8">
-          {/* Progress Stepper */}
-          <Card className="mb-6">
-            <CardContent>
-              <Stepper activeStep={currentStep - 1} alternativeLabel>
-                {steps.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            </CardContent>
-          </Card>
+        <section className="pagebansec setpbanersec relative">
+          <div className="container mx-auto relative h-full">
+            <div className="pageinconter relative h-full w-full flex items-center justify-center text-center">
+              <div className="hworkTitle combtntb comtilte relative">
+                <h1 className="flex flex-row textFF6514">
+                  <span className="block firstspan">Enter Required </span>
+                  <span className="block ml-2">Details</span>
+                </h1>
+                <p>
+                  We have got you covered. Let us cover you by filling in the
+                  details below.
+                </p>
+                <div className="psfbanIconss">
+                  <div className="psfbanicn iconone absolute">
+                    <Image src={abbanicon1} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn icontwo absolute">
+                    <Image src={abbanicon2} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn iconthree absolute">
+                    <Image src={abbanicon3} priority alt="Icon" className="iconrubberband" />
+                  </div>
+                  <div className="psfbanicn iconfour absolute">
+                    <Image src={abbanicon4} priority alt="Icon" />
+                  </div>
+                  <div className="psfbanicn iconfive absolute">
+                    <Image src={abbanicon5} priority alt="Icon" />
+                  </div>
+                  <div className="psfbanicn iconsix absolute">
+                    <Image src={abbanicon6} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn iconseven absolute">
+                    <Image src={abbanicon7} priority alt="Icon" className="iconrotates" />
+                  </div>
+                  <div className="psfbanicn iconeight absolute">
+                    <Image src={abbanicon8} priority alt="Icon" className="iconrotates" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          {/* Pro-rated Billing Information */}
-          {currentChildCount > initialChildCount && currentSubscriptionEnd && (
-            <ProRatedBillingCard
-              newChildrenCount={currentChildCount - initialChildCount}
-              existingChildrenCount={initialChildCount}
-              subscriptionEnd={currentSubscriptionEnd}
-              holidays={holidays}
-            />
-          )}
+        <Box className="SetpContainer">
+            <div className="container mx-auto">
+              {/* Progress Stepper */}
+              <Card className="mb-6 SetpTabNav">
+                <CardContent className="SetpTabRow">
+                  <Stepper activeStep={currentStep - 1} alternativeLabel>
+                    {steps.map((label) => (
+                      <Step key={label} className="SetpTabli">
+                        <StepLabel className="SetpTablabel">{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </CardContent>
+              </Card>
 
-          {/* Step 1: Child Management */}
-          {currentStep === 1 && (
-            <ChildDetailsStep
-              onNext={handleNext}
-              onPrev={handlePrev}
-              isRenewalMode={true}
-              existingChildrenCount={existingChildren.length}
-              existingChildren={existingChildren}
-              _id={_id}
-            />
-          )}
+              {/* Pro-rated Billing Information */}
+              {currentChildCount > initialChildCount && currentSubscriptionEnd && (
+                <ProRatedBillingCard
+                  newChildrenCount={currentChildCount - initialChildCount}
+                  existingChildrenCount={initialChildCount}
+                  subscriptionEnd={currentSubscriptionEnd}
+                  holidays={holidays}
+                />
+              )}
 
-          {/* Step 2: Subscription Plan Selection */}
-          {currentStep === 2 && (
-            <SubscriptionPlanStep
-              nextStep={handleNext}
-              prevStep={handlePrev}
-              _id={_id}
-              numberOfChildren={currentChildCount}
-              initialSubscriptionPlan={{
-                ...subscriptionPlan,
-                // Pass current subscription end date for proper renewal calculation
-                endDate: userDetails?.subscriptionPlan?.endDate || currentSubscriptionEnd
-              }}
-              onSubscriptionPlanChange={handleSubscriptionPlanChange}
-              isRenewalMode={true}
-            />
-          )}
+              {/* Step 1: Child Management */}
+              {currentStep === 1 && (
+                <ChildDetailsStep
+                  onNext={handleNext}
+                  onPrev={handlePrev}
+                  isRenewalMode={true}
+                  existingChildrenCount={existingChildren.length}
+                  existingChildren={existingChildren}
+                  _id={_id}
+                />
+              )}
 
-          {/* Step 3: Payment */}
-          {currentStep === 3 && (
-            <PaymentStep
-              onNext={handleNext}
-              onPrev={handlePrev}
-              isRenewalMode={true}
-              selectedPlan={selectedPlan}
-              _id={_id}
-            />
-          )}
+              {/* Step 2: Subscription Plan Selection */}
+              {currentStep === 2 && (
+                <SubscriptionPlanStep
+                  nextStep={handleNext}
+                  prevStep={handlePrev}
+                  _id={_id}
+                  numberOfChildren={currentChildCount}
+                  initialSubscriptionPlan={{
+                    ...subscriptionPlan,
+                    // Pass current subscription end date for proper renewal calculation
+                    endDate: userDetails?.subscriptionPlan?.endDate || currentSubscriptionEnd
+                  }}
+                  onSubscriptionPlanChange={handleSubscriptionPlanChange}
+                  isRenewalMode={true}
+                />
+              )}
+
+              {/* Step 3: Payment */}
+              {currentStep === 3 && (
+                <PaymentStep
+                  onNext={handleNext}
+                  onPrev={handlePrev}
+                  isRenewalMode={true}
+                  selectedPlan={selectedPlan}
+                  _id={_id}
+                />
+              )}
+            </div>
         </Box>
       </div>
 

@@ -957,7 +957,7 @@ body .compopups .fieldbox input:hover {  border: none;  outline: none;  box-shad
 
 .ppricesec .comtilte h4 strong{font-weight: 500;display: block;color:#4AB238;}
 .ppricebox {}
-.ppricebox .ppriceitem{padding: 40px 28px;border: 1px solid rgb(0 0 0 / 7%);border-radius: 20px;margin-inline: 10px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;background: #ffffff;position: relative;overflow: hidden;}
+.ppricebox .ppriceitem{padding: 40px 28px;border: 1px solid rgb(0 0 0 / 7%);border-radius: 20px;margin-inline: 10px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;background: #ffffff;position: relative;overflow: hidden;width: calc(25% - 20px);}
 .ppricebox .ppricetbox{}
 .ppricebox .ppricetbox h4{color: #000000;font-weight: 700;font-size: 1vw;}
 .ppricebox .ppricetbox h4 del{color: #888888;}
@@ -1004,6 +1004,63 @@ html body .ftscholpopup .ftscholpopupokbtn  {background: #ff6514;border-radius: 
 html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
 html body .displaynone{display: none!important;}
 html body .MuiPopover-root{z-index: 99999;}
+
+.samepagedesingss .SetpContainer {padding-block: 10vh;}
+.samepagedesingss .SetpContainer .SetpTabNav{border: none;box-shadow: none;border-radius: 0;}
+.samepagedesingss .SetpContainer .SetpTabRow{}
+.samepagedesingss .SetpContainer .SetpTabul{}
+.samepagedesingss .SetpContainer .SetpTablabel{}
+.samepagedesingss .SetpContainer .SetpTablabel span:nth-child(1){}
+.samepagedesingss .SetpContainer .SetpTablabel span:nth-child(1).Mui-active{}
+.samepagedesingss .SetpContainer .SetpTablabel span:nth-child(1).Mui-active svg{color:#FF6514;}
+
+.addchilsamepagedesingssdpage .exitchilddtbox{margin-bottom: 50px;}
+.samepagedesingss .exitchildcntbox{padding: 20px;border: 1px solid #ccc;box-shadow: none;border-radius: 5px;}
+.samepagedesingss .exitchildcntbox h6{font-size: 1vw;line-height: 1;font-family: Baloo;color: #FF6A00;margin-bottom: 5px;}
+.samepagedesingss .exitchildname{padding: 18px;margin-top: 10px;}
+.samepagedesingss .exitchildname h5{font-size: 1vw;line-height: 1;font-family: Baloo;margin-bottom: 5px;}
+.samepagedesingss .exitchildname p{font-size: 16px;margin: 0;}
+.samepagedesingss .ucanaddchild{padding: 10px 0px;}
+.samepagedesingss .ucanaddchild p{font-size: 1vw;line-height: 1;font-family: Baloo;text-transform: uppercase;margin: 0;}
+.samepagedesingss .extcursubionbox{padding: 18px;}
+.samepagedesingss .extcursubionbox h5{font-size: 1vw;line-height: 1;font-family: Baloo;margin-bottom: 5px;}
+.samepagedesingss .extcursubionbox p{font-size: 16px;margin: 0;}
+
+.samepagedesingss .formboxrow {margin-inline: -15px;}
+.samepagedesingss .formboxcol {padding-inline: 15px;margin-bottom: 15px;}
+.samepagedesingss .formboxcol h6{font-family: Baloo;}
+.samepagedesingss .formboxcol textarea:focus{outline: none;box-shadow: none;}
+
+.samepagedesingss .subbtnrow button{position: relative;padding: 0;border: none;width: 10vw;background: transparent;box-shadow: none;}
+.samepagedesingss .subbtnrow button.widthautobtn{width: auto;}
+.samepagedesingss .subbtnrow button.nextbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.samepagedesingss .subbtnrow button.nextbtn:hover::before{right: 0;bottom: 0;}
+.samepagedesingss .subbtnrow button.nextbtn span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;border:1px solid #FF6514;font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;text-transform: capitalize;width: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.samepagedesingss .subbtnrow button.nextbtn span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+.samepagedesingss .subbtnrow button.nextbtn:hover span::after{top: -3px;right: -3px;}
+.samepagedesingss .subbtnrow button.backbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.samepagedesingss .subbtnrow button.backbtn:hover::before{right: 0;bottom: 0;}
+.samepagedesingss .subbtnrow button.backbtn span{line-height: 50px;padding-inline: 30px;background: #ffffff;color: #000000;border:1px solid #000000; font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;text-transform: capitalize;width: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+
+.transhistrySec .transhistryBox{box-shadow: none;border-radius: 0;}
+.transhistryBox .transhistryCol {padding: 0!important;}
+.transhistryBox .transhistryCol h4{font-size: 1.4vw;line-height: 1;font-family: Baloo;margin-bottom: 10px;color: #FF6514;}
+.transhistryNO{}
+.transhistryNO h6{font-size: 1vw;line-height: 1;font-family: Baloo;margin-bottom: 10px;}
+.transhistryNO p{margin-bottom: 0px;}
+
+.transhistryTableBox{}
+.transhistryTableBox table{border: 1px solid #ccc;}
+.transhistryTableBox table thead{}
+.transhistryTableBox table thead tr{}
+.transhistryTableBox table thead tr th{font-family: Baloo;font-size: 16px;font-weight: 100;letter-spacing: 0;line-height: 1.2;}
+.transhistryTableBox table tbody{}
+.transhistryTableBox table tbody tr{}
+.transhistryTableBox table tbody tr td{line-height: 1.2;}
+
+.mainwhatsapbox{position: fixed;width: 60px;bottom: 50px;right:50px;z-index: 9999;}
+.mainwhatsapbox a {}
+.mainwhatsapbox a img{}
 
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
@@ -1259,6 +1316,8 @@ html body .MuiPopover-root{z-index: 99999;}
   .inputbox select, .inputbox input {font-size: 13px;line-height: 36px;}
   .formbox .inputbox textarea {font-size: 13px;}
   .ppriceinrow {padding-inline: 0px;}
+  .transhistrySec {padding-inline: 20px;}
+  .transhistryBox .transhistryCol h4 {font-size: 20px;}
 }
 @media screen and (max-width:880px){
   .progroupitem {width: calc(50% - 20px);}
@@ -1363,7 +1422,9 @@ html body .MuiPopover-root{z-index: 99999;}
   .myaccboxitems .ChildlistBoxs .ChildlistItems {width: calc(100% - 0px);display: block;}
   .myaccboxitems .ChildlistBoxs .ChildlistItems table{min-width: 100%;}
   .hbanRight .videoscreenbox {height: 450px;}
-  .hbanRight video {    aspect-ratio: 1 / 1.4;}
+  .hbanRight video {aspect-ratio: 1 / 1.4;}
+  .transhistryTableBox table thead tr th{white-space: nowrap;}
+  .mainwhatsapbox{width: 40px;bottom: 30px;right: 30px;}
 }
 
 @media screen and (min-width:651px){
@@ -1660,7 +1721,8 @@ html body .MuiPopover-root{z-index: 99999;}
   .fixdatesboxwarrow .datearrow  button{position: absolute;top: 50%;transform: translateY(-50%);z-index: 99;background: rgb(51 51 51 / 44%);}
   .fixdatesboxwarrow .datearrow  button.arrowprew{left:0}
   .fixdatesboxwarrow .datearrow  button.arrownext{right: 0;}
-  html body .holidaypaysec {z-index: 99999;}
+  html body .holidaypaysec {z-index: 99999;}  
+  .mainwhatsapbox{width: 30px;bottom: 10px;right: 10px;}
 }
 @media screen and (min-width:501px) and (max-width:650px){ 
    .produtMobView {width: 80%;margin-inline: auto;}
@@ -1707,7 +1769,7 @@ html body .MuiPopover-root{z-index: 99999;}
   .produtMobView button.slick-arrow{width: 26px;height: 12px;}
   .combtntb.textcenter p.parabtn{padding-bottom: 5px;}
   .combtntb p.parabtn a::before{right: -4px;bottom: -4px;}
-  .inputbox {padding: 5px;border-radius: 5px;}
+  .formsec .formbox .inputbox {padding:0 5px;border-radius: 5px;margin-top: 10px;}
   .inputbox button span::after{width: 10px;margin-left: 6px;}
   .inputbox button::before{right: -2px;bottom: -2px;}
   .inputbox select, .inputbox input {font-size: 13px;line-height: 36px;padding: 0 2px;}
@@ -1737,7 +1799,7 @@ html body .MuiPopover-root{z-index: 99999;}
   .HfaqSec::before {height: 20px;top: 0;}
   .HNutritionSec{padding-block: 40px;}
   .Hfaqinrow {padding-block: 40px;}
-  .faqAccordionitems button{font-size: 13px;padding-inline: 10px;}
+  .faqAccordionitems button{font-size: 14px;padding-inline: 10px;line-height: 1.2;}
   .HctaTitle P{margin-bottom: 0;}
   .combtntb p.parabtn {margin-top: 20px;}
   .fixdatesboxs h2 {font-size: 52px;}

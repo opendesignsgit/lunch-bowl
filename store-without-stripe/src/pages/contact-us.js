@@ -76,7 +76,7 @@ const ContactUs = () => {
     {
       title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
       content:
-        "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters. To preserve freshness and maintain the right temperature until noon, we use insulated bags for delivery.",
+        "Our Lunch dishes are tightly sealed with Plastic free, eco-friendly leak proof and Sugarcane Bagasse Canisters. To preserve freshness and maintain the right temperature until noon, we also use insulated bags for delivery purposes.",
     },
     {
       title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
@@ -231,7 +231,7 @@ const ContactUs = () => {
                   className="w-full mx-auto flex flex-col justify-center"
                 >
                   <div className="flex flex-col space-y-5">
-                    <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
+                    <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 inputboxrow">
                       <div className="w-full md:w-1/2 inputbox">
                         <label>
                           FIRST NAME<sub>*</sub>
@@ -299,7 +299,7 @@ const ContactUs = () => {
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
+                    <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 inputboxrow">
                       <div className="w-full md:w-1/2 inputbox">
                         <label>
                           MOBILE NUMBER<sub>*</sub>
@@ -375,6 +375,7 @@ const ContactUs = () => {
                         )}
                       </div>
                     </div>
+                    <div className="inputboxrow">
                     <div className="relative mb-4 inputbox">
                       <label>
                         MESSAGE<sub>*</sub>
@@ -414,6 +415,8 @@ const ContactUs = () => {
                         </p>
                       )}
                     </div>
+                    </div>
+                    <div className="inputboxrow">
                     <div className="relative mb-4 agreebox">
                       <div className="agreebox">
                         <Controller
@@ -443,10 +446,13 @@ const ContactUs = () => {
                         )}
                       </div>
                     </div>
+                    </div>
+                    <div className="inputboxrow">
                     <div className="relative">
                       <button disabled={loading} data-variant="flat" className="" type="submit">
                         <span>Submit</span>
                       </button>
+                    </div>
                     </div>
                   </div>
                 </form>

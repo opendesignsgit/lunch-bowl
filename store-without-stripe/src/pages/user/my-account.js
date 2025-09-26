@@ -132,7 +132,7 @@ const MyAccount = () => {
   {
     title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
     content:
-      "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters. To preserve freshness and maintain the right temperature until noon, we use insulated bags for delivery.",
+      "Our Lunch dishes are tightly sealed with Plastic free, eco-friendly leak proof and Sugarcane Bagasse Canisters. To preserve freshness and maintain the right temperature until noon, we also use insulated bags for delivery purposes.",
   },
   {
     title: "Over time, what type of variation can I anticipate in the lunch bowl options?",

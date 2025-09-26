@@ -16,6 +16,7 @@ import hldocticon4 from "../../../public/home/icons/footfrom/greenlayer-yellowst
 import hldocticon5 from "../../../public/home/icons/footfrom/greenheart.svg";
 import hldocticon6 from "../../../public/home/icons/footfrom/pinkstar.svg";
 import hldocticon7 from "../../../public/home/icons/footfrom/line-and-pinkround.svg";
+import whatsapp from "../../../public/whatsapp-icon.svg";
 
 const Mainfooter = () => {
   const [open, setOpen] = useState(false);
@@ -147,6 +148,10 @@ const Mainfooter = () => {
         </div>
       )}
         <GetinTouch open={open} onClose={handleCloseDialog}/>
+
+      <div className='mainwhatsapbox'>
+        <a href="https://web.whatsapp.com/send?phone=919176917602&amp;text=" target='_blank'><Image src={whatsapp} alt="Whatsapp"/></a>
+      </div>
     </>
   )
 }

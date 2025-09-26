@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Card, CardContent, Divider, Stepper, Step, StepLabel } from "@mui/material";
+import Image from "next/image";
 import Mainheader from "@layout/header/Mainheader";
 import Mainfooter from "@layout/footer/Mainfooter";
 import ChildDetailsStep from "@components/profile-Step-Form/childDetailsStep";
@@ -8,6 +9,14 @@ import PaymentStep from "@components/profile-Step-Form/PaymentStep";
 import { useSession } from "next-auth/react";
 import useRegistration from "@hooks/useRegistration";
 import AccountServices from "@services/AccountServices";
+import abbanicon1 from "../../../public/enterrequireddetails/redroundedandlines.svg";
+import abbanicon2 from "../../../public/enterrequireddetails/yellowroundedflower.svg";
+import abbanicon3 from "../../../public/enterrequireddetails/redlittleheart.svg";
+import abbanicon4 from "../../../public/enterrequireddetails/lighergreenarrow.svg";
+import abbanicon5 from "../../../public/enterrequireddetails/violetyellow-star.svg";
+import abbanicon6 from "../../../public/enterrequireddetails/redtriangle.svg";
+import abbanicon7 from "../../../public/enterrequireddetails/redlittleflower.svg";
+import abbanicon8 from "../../../public/enterrequireddetails/layerflower.svg";
 
 const AddChildrenPage = () => {
   const { data: session } = useSession();
@@ -66,13 +75,56 @@ const AddChildrenPage = () => {
 
   if (loading) {
     return (
-      <div className="steppage">
-        <Mainheader
-          title="Add Children"
-          description="Add children to your existing subscription"
-        />
+      <div className="addchildpage samepagedesingss">
+        <Mainheader title="Add Children" description="Add children to your existing subscription" />
         <div className="pagebody">
-          <Typography>Loading...</Typography>
+          <section className="pagebansec setpbanersec relative">
+            <div className="container mx-auto relative h-full">
+              <div className="pageinconter relative h-full w-full flex items-center justify-center text-center">
+                <div className="hworkTitle combtntb comtilte relative">
+                  <h1 className="flex flex-row textFF6514">
+                    <span className="block firstspan">Enter Required </span>
+                    <span className="block ml-2">Details</span>
+                  </h1>
+                  <p>
+                    We have got you covered. Let us cover you by filling in the
+                    details below.
+                  </p>
+                  <div className="psfbanIconss">
+                    <div className="psfbanicn iconone absolute">
+                      <Image src={abbanicon1} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn icontwo absolute">
+                      <Image src={abbanicon2} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconthree absolute">
+                      <Image src={abbanicon3} priority alt="Icon" className="iconrubberband" />
+                    </div>
+                    <div className="psfbanicn iconfour absolute">
+                      <Image src={abbanicon4} priority alt="Icon" />
+                    </div>
+                    <div className="psfbanicn iconfive absolute">
+                      <Image src={abbanicon5} priority alt="Icon" />
+                    </div>
+                    <div className="psfbanicn iconsix absolute">
+                      <Image src={abbanicon6} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconseven absolute">
+                      <Image src={abbanicon7} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconeight absolute">
+                      <Image src={abbanicon8} priority alt="Icon" className="iconrotates" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className="loadsec py-10 relative">
+            <div className="container mx-auto">
+              <Typography>Loading...</Typography>
+            </div>
+          </section>
         </div>
         <Mainfooter />
       </div>
@@ -85,13 +137,54 @@ const AddChildrenPage = () => {
 
   if (!canAddChildren) {
     return (
-      <div className="steppage">
-        <Mainheader
-          title="Add Children"
-          description="Add children to your existing subscription"
-        />
+      <div className="addchildpage samepagedesingss">
+        <Mainheader title="Add Children" description="Add children to your existing subscription" />
         <div className="pagebody">
-          <Box className="container mx-auto py-8">
+          <section className="pagebansec setpbanersec relative">
+            <div className="container mx-auto relative h-full">
+              <div className="pageinconter relative h-full w-full flex items-center justify-center text-center">
+                <div className="hworkTitle combtntb comtilte relative">
+                  <h1 className="flex flex-row textFF6514">
+                    <span className="block firstspan">Enter Required </span>
+                    <span className="block ml-2">Details</span>
+                  </h1>
+                  <p>
+                    We have got you covered. Let us cover you by filling in the
+                    details below.
+                  </p>
+                  <div className="psfbanIconss">
+                    <div className="psfbanicn iconone absolute">
+                      <Image src={abbanicon1} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn icontwo absolute">
+                      <Image src={abbanicon2} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconthree absolute">
+                      <Image src={abbanicon3} priority alt="Icon" className="iconrubberband" />
+                    </div>
+                    <div className="psfbanicn iconfour absolute">
+                      <Image src={abbanicon4} priority alt="Icon" />
+                    </div>
+                    <div className="psfbanicn iconfive absolute">
+                      <Image src={abbanicon5} priority alt="Icon" />
+                    </div>
+                    <div className="psfbanicn iconsix absolute">
+                      <Image src={abbanicon6} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconseven absolute">
+                      <Image src={abbanicon7} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconeight absolute">
+                      <Image src={abbanicon8} priority alt="Icon" className="iconrotates" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        
+          <Box className="SetpContainer">
+            <div className="container mx-auto ">
             <Card>
               <CardContent>
                 <Typography variant="h5" className="text-center mb-4">
@@ -103,6 +196,7 @@ const AddChildrenPage = () => {
                 </Typography>
               </CardContent>
             </Card>
+            </div>
           </Box>
         </div>
         <Mainfooter />
@@ -111,21 +205,64 @@ const AddChildrenPage = () => {
   }
 
   return (
-    <div className="steppage">
+    <div className="addchildpage samepagedesingss">
       <Mainheader
         title="Add Children"
         description="Add children to your existing subscription"
       />
 
       <div className="pagebody">
-        <Box className="container mx-auto py-8">
+          <section className="pagebansec setpbanersec relative">
+            <div className="container mx-auto relative h-full">
+              <div className="pageinconter relative h-full w-full flex items-center justify-center text-center">
+                <div className="hworkTitle combtntb comtilte relative">
+                  <h1 className="flex flex-row textFF6514">
+                    <span className="block firstspan">Enter Required </span>
+                    <span className="block ml-2">Details</span>
+                  </h1>
+                  <p>
+                    We have got you covered. Let us cover you by filling in the
+                    details below.
+                  </p>
+                  <div className="psfbanIconss">
+                    <div className="psfbanicn iconone absolute">
+                      <Image src={abbanicon1} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn icontwo absolute">
+                      <Image src={abbanicon2} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconthree absolute">
+                      <Image src={abbanicon3} priority alt="Icon" className="iconrubberband" />
+                    </div>
+                    <div className="psfbanicn iconfour absolute">
+                      <Image src={abbanicon4} priority alt="Icon" />
+                    </div>
+                    <div className="psfbanicn iconfive absolute">
+                      <Image src={abbanicon5} priority alt="Icon" />
+                    </div>
+                    <div className="psfbanicn iconsix absolute">
+                      <Image src={abbanicon6} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconseven absolute">
+                      <Image src={abbanicon7} priority alt="Icon" className="iconrotates" />
+                    </div>
+                    <div className="psfbanicn iconeight absolute">
+                      <Image src={abbanicon8} priority alt="Icon" className="iconrotates" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        <Box  className="SetpContainer">
+          <div class="container mx-auto ">
           {/* Progress Stepper */}
-          <Card className="mb-6">
-            <CardContent>
-              <Stepper activeStep={currentStep - 1} alternativeLabel>
+          <Card className="mb-6 SetpTabNav ">
+            <CardContent className="SetpTabRow">
+              <Stepper activeStep={currentStep - 1} alternativeLabel className="SetpTabul">
                 {steps.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
+                  <Step key={label} className="SetpTabli">
+                    <StepLabel className="SetpTablabel">{label}</StepLabel>
                   </Step>
                 ))}
               </Stepper>
@@ -134,40 +271,28 @@ const AddChildrenPage = () => {
 
           {/* Existing Children Summary */}
           {existingChildren.length > 0 && currentStep === 1 && (
-            <Card className="mb-6">
-              <CardContent>
-                <Typography variant="h6" className="mb-4">
-                  Currently Registered Children ({existingChildren.length}/3)
-                </Typography>
+            <Card className="mb-6 exitchilddtbox">
+              <CardContent className="exitchildcntbox">
+                <h6> Currently Registered Children ({existingChildren.length}/3)</h6>
                 <Divider className="mb-4" />
                 {existingChildren.map((child, index) => (
-                  <Box key={index} className="mb-3 p-3 bg-gray-50 rounded">
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      {child.childFirstName} {child.childLastName}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      {child.school} - Class {child.childClass} ({child.section})
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Lunch Time: {child.lunchTime}
-                    </Typography>
+                  <Box key={index} className="exitchildname bg-gray-50 rounded">
+                    <h5> {child.childFirstName} {child.childLastName}  </h5>
+                    <p> {child.school} - Class {child.childClass} ({child.section}) </p>
+                    <p> Lunch Time: {child.lunchTime} </p>
                   </Box>
                 ))}
-                <Typography variant="body2" className="mt-4 text-green-600">
-                  You can add {remainingSlots} more child{remainingSlots > 1 ? 'ren' : ''}.
-                </Typography>
+                <div className="ucanaddchild"><p className="mt-4 text-green-600"> You can add {remainingSlots} more child{remainingSlots > 1 ? 'ren' : ''}.</p></div>
                 {userDetails?.subscriptionPlan && (
-                  <Box className="mt-4 p-3 bg-blue-50 rounded">
-                    <Typography variant="subtitle2" className="text-blue-800">
-                      Current Subscription: 
-                    </Typography>
-                    <Typography variant="body2" className="text-blue-700">
+                  <Box className="extcursubionbox bg-blue-50 rounded">
+                    <h5 className="text-blue-800">Current Subscription: </h5>
+                    <p className="text-blue-700">
                       {new Date(userDetails.subscriptionPlan.startDate).toLocaleDateString('en-IN')} to{' '}
                       {new Date(userDetails.subscriptionPlan.endDate).toLocaleDateString('en-IN')}
-                    </Typography>
-                    <Typography variant="body2" className="text-blue-700">
+                    </p>
+                    <p className="text-blue-700">
                       New children will be added to this existing subscription period.
-                    </Typography>
+                    </p>
                   </Box>
                 )}
               </CardContent>
@@ -207,6 +332,7 @@ const AddChildrenPage = () => {
               _id={_id}
             />
           )}
+          </div>
         </Box>
       </div>
 
