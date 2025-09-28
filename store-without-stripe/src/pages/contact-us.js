@@ -76,7 +76,7 @@ const ContactUs = () => {
     {
       title: "In what way are the lunch dishes sealed to keep them fresh and stop leaks?",
       content:
-        "Our lunch dishes are tightly sealed with leak-proof, tamper-evident canisters. To preserve freshness and maintain the right temperature until noon, we use insulated bags for delivery.",
+        "Our Lunch dishes are tightly sealed with Plastic free, eco-friendly leak proof and Sugarcane Bagasse Canisters. To preserve freshness and maintain the right temperature until noon, we also use insulated bags for delivery purposes.",
     },
     {
       title: "Over time, what type of variation can I anticipate in the lunch bowl options?",
@@ -230,9 +230,9 @@ const ContactUs = () => {
                   onSubmit={handleSubmit(submitHandler)}
                   className="w-full mx-auto flex flex-col justify-center"
                 >
-                  <div className="flex flex-col space-y-5">
-                    <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
-                      <div className="w-full md:w-1/2 inputbox">
+                  <div className="flex flex-col inputboxform">
+                    <div className="flex flex-wrap inputboxrow">
+                      <div className="inputbox whalf">
                         <label>
                           FIRST NAME<sub>*</sub>
                         </label>
@@ -265,7 +265,7 @@ const ContactUs = () => {
                           <p className="text-red-600 text-sm">{errors.firstname.message || "First name is required!"}</p>
                         )}
                       </div>
-                      <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
+                      <div className="inputbox whalf">
                         <label>
                           LAST NAME<sub>*</sub>
                         </label>
@@ -299,8 +299,8 @@ const ContactUs = () => {
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-col md:flex-row space-y-5 md:space-y-0">
-                      <div className="w-full md:w-1/2 inputbox">
+                    <div className="flex flex-wrap inputboxrow">
+                      <div className="inputbox whalf">
                         <label>
                           MOBILE NUMBER<sub>*</sub>
                         </label>
@@ -337,7 +337,7 @@ const ContactUs = () => {
                           <p className="text-red-600 text-sm">{errors.phone.message || "Enter a valid 10-digit Indian mobile number."}</p>
                         )}
                       </div>
-                      <div className="w-full md:w-1/2 md:ml-2.5 lg:ml-5 mt-2 md:mt-0 inputbox">
+                      <div className="inputbox whalf">
                         <label>
                           EMAIL<sub>*</sub>
                         </label>
@@ -375,78 +375,82 @@ const ContactUs = () => {
                         )}
                       </div>
                     </div>
-                    <div className="relative mb-4 inputbox">
-                      <label>
-                        MESSAGE<sub>*</sub>
-                      </label>
-                      <Controller
-                        name="message"
-                        control={control}
-                        rules={{
-                          required: true,
-                          minLength: 5,
-                        }}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            // placeholder="Feel free to type here if you'd like to share something with us."
-                            fullWidth
-                            multiline
-                            rows={2}
-                            InputProps={{
-                              disableUnderline: true,
-                              sx: {
-                                border: '1.5px solid #ccc',
-                                borderRadius: 2,
-                                fontSize: '1rem',
-                                paddingLeft: '10px',
-                                backgroundColor: '#fff'
-                              }
-                            }}
-                            sx={{ mt: 0.4 }}
-                            error={!!errors.message}
-                          />
-                        )}
-                      />
-                      {errors.message && (
-                        <p className="text-red-600 text-sm mt-1">
-                          {errors.message.message || "Message must be at least 5 characters."}
-                        </p>
-                      )}
-                    </div>
-                    <div className="relative mb-4 agreebox">
-                      <div className="agreebox">
+                    <div className="flex flex-wrap inputboxrow">
+                      <div className="inputbox wfull">
+                        <label>
+                          MESSAGE<sub>*</sub>
+                        </label>
                         <Controller
-                          name="consent"
+                          name="message"
                           control={control}
-                          rules={{ required: true }}
+                          rules={{
+                            required: true,
+                            minLength: 5,
+                          }}
                           render={({ field }) => (
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  {...field}
-                                  checked={field.value}
-                                  onChange={(e) => field.onChange(e.target.checked)}
-                                  sx={{ padding: 0 }}
-                                />
-                              }
-                              label={
-                                <label htmlFor="consent" className="text-sm cursor-pointer">
-                                  I agree to be contacted by <strong>Lunch Bowl</strong> via call, SMS, email, or WhatsApp...
-                                </label>
-                              }
+                            <TextField
+                              {...field}
+                              // placeholder="Feel free to type here if you'd like to share something with us."
+                              fullWidth
+                              multiline
+                              rows={2}
+                              InputProps={{
+                                disableUnderline: true,
+                                sx: {
+                                  border: '1.5px solid #ccc',
+                                  borderRadius: 2,
+                                  fontSize: '1rem',
+                                  paddingLeft: '10px',
+                                  backgroundColor: '#fff'
+                                }
+                              }}
+                              sx={{ mt: 0.4 }}
+                              error={!!errors.message}
                             />
                           )}
                         />
-                        {errors.consent && (
-                          <p className="text-red-600 text-sm mt-1">{errors.consent.message || "Please agree to be contacted by Lunch Bowl."}</p>
+                        {errors.message && (
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.message.message || "Message must be at least 5 characters."}
+                          </p>
                         )}
                       </div>
                     </div>
-                    <div className="relative">
-                      <button disabled={loading} data-variant="flat" className="" type="submit">
-                        <span>Submit</span>
-                      </button>
+                    <div className="flex flex-wrap inputboxrow">
+                        <div className="agreebox wfull">
+                          <Controller
+                            name="consent"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    {...field}
+                                    checked={field.value}
+                                    onChange={(e) => field.onChange(e.target.checked)}
+                                    sx={{ padding: 0 }}
+                                  />
+                                }
+                                label={
+                                  <label htmlFor="consent" className="text-sm cursor-pointer">
+                                    I agree to be contacted by <strong>Lunch Bowl</strong> via call, SMS, email, or WhatsApp...
+                                  </label>
+                                }
+                              />
+                            )}
+                          />
+                          {errors.consent && (
+                            <p className="text-red-600 text-sm mt-1">{errors.consent.message || "Please agree to be contacted by Lunch Bowl."}</p>
+                          )}
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap inputboxrow">
+                      <div className="inputbox wfull butinputbox">
+                        <button disabled={loading} data-variant="flat" className="" type="submit">
+                          <span>Submit</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </form>

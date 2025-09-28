@@ -18,7 +18,7 @@ export const CustomDateDetails = ({
   const totalPrice = pricePerChild * numberOfChildren;
 
   return (
-    <Box mt={2} sx={{ border: "1px solid #eee", p: 2, borderRadius: 1 }}>
+    <Box className="Subscrip" mt={2} sx={{ border: "1px solid #eee", p: 2, borderRadius: 1 }}>
       <Typography variant="body2" gutterBottom>
         <strong>Subscription Details:</strong>
       </Typography>
@@ -58,7 +58,7 @@ export const CustomDateDetails = ({
 };
 
 export const OffersSection = ({ numberOfChildren = 1 }) => (
-  <Box mt={3}>
+  <Box className="Subscrip" mt={1}>
     <Typography sx={{ fontWeight: 600, color: "#FF6A00", mb: 1 }} variant="subtitle2">
       OFFERS AVAILABLE
     </Typography>

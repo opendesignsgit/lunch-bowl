@@ -227,12 +227,12 @@ const PaymentStep = ({
           {error}
         </Typography>
       )}
-        <div className="steptitles">
+        <div className="steptitles comlitsec">
           <h3>Complete Payment</h3>
           <h6>Secure payment via CCAvenue</h6>
           <p>We have curated our payment system with the finest level of security ensuring a smooth and dependable experience.</p>
         </div>
-        <Box className="subbtnrow" sx={{ display: "flex", gap: 3 }}>
+        <Box className="subbtnrow paymntbtnss" sx={{ display: "flex", gap: 3 }}>
           <Button 
             className="backbtn" 
             variant="outlined" 
@@ -245,7 +245,6 @@ const PaymentStep = ({
             variant="contained"
             onClick={initiatePayment}
             disabled={loading}
-            sx={{ bgcolor: "#FF6A00", "&:hover": { bgcolor: "#E55C00" } }}
           >
             <span className="nextspan">Proceed to Payment</span>
           </Button>

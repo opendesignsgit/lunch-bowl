@@ -355,11 +355,11 @@ const RenewalSubscriptionPlanStep = ({
           <RadioGroup
             value={selectedPlan}
             onChange={handlePlanChange}
-            className="radiogroub"
+            className="radiogroub eachplansboxs"
           >
             {/* Render Standard Plans */}
             {plans.map((plan) => (
-              <Paper
+              <Paper  className="eachplansradios"
                 key={plan.id}
                 elevation={selectedPlan === plan.id.toString() ? 8 : 2}
                 sx={{
@@ -379,7 +379,7 @@ const RenewalSubscriptionPlanStep = ({
                   transition: "box-shadow .2s",
                 }}
               >
-                <FormControlLabel
+                <FormControlLabel  className="eachplansradiolabel"
                   value={plan.id.toString()}
                   control={
                     <Radio
@@ -405,7 +405,7 @@ const RenewalSubscriptionPlanStep = ({
 
                 {/* Subscription Details for selected plan */}
                 {selectedPlan === plan.id.toString() && (
-                  <Box mt={2} sx={{ ml: 4 }}>
+                  <Box mt={2} sx={{ ml: 4 }} className="eachpladetls">
                     <Typography fontSize={13} color="#232323">
                       <strong>Start Date:</strong>{" "}
                       {startDate && startDate.format("DD MMM YYYY")}

@@ -433,7 +433,7 @@ const ChildDetailsStep = ({
             ],
             ["CHILD'S LAST NAME*", "childLastName", "Enter Child's Last Name"],
           ].map(([label, name, placeholder]) => (
-            <Grid item className="formboxcol" key={name}>
+            <Grid item className="formboxcol whalf" key={name}>
               <Typography
                 variant="subtitle2"
                 sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -452,7 +452,7 @@ const ChildDetailsStep = ({
           ))}
 
           {/* Date Picker */}
-          <Grid item className="formboxcol" key="dob">
+          <Grid item className="formboxcol whalf" key="dob">
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -489,7 +489,7 @@ const ChildDetailsStep = ({
           </Grid>
 
           {/* School Dropdown */}
-          <Grid item className="formboxcol" key="school">
+          <Grid item className="formboxcol whalf" key="school">
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -524,7 +524,7 @@ const ChildDetailsStep = ({
           </Grid>
 
           {/* Location Dropdown */}
-          <Grid item className="formboxcol" key="location">
+          <Grid item className="formboxcol whalf" key="location">
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -563,7 +563,7 @@ const ChildDetailsStep = ({
           </Grid>
 
           {/* Lunch Time Dropdown (STATIC & mapped with DB values) */}
-          <Grid item className="formboxcol" key="lunchTime">
+          <Grid item className="formboxcol whalf" key="lunchTime">
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -597,7 +597,7 @@ const ChildDetailsStep = ({
           </Grid>
 
           {/* Class Dropdown */}
-          <Grid item className="formboxcol" key="childClass">
+          <Grid item className="formboxcol whalf" key="childClass">
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -646,7 +646,7 @@ const ChildDetailsStep = ({
           </Grid>
 
           {/* Section Dropdown */}
-          <Grid item className="formboxcol" key="section">
+          <Grid item className="formboxcol whalf" key="section">
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}
@@ -680,7 +680,7 @@ const ChildDetailsStep = ({
           </Grid>
 
           {/* Allergies */}
-          <Grid item className="formboxcol">
+          <Grid item className="formboxcol wfull">
             <Typography
               variant="subtitle2"
               sx={{ color: "#FF6A00", fontWeight: 600, mb: 1 }}

@@ -343,20 +343,12 @@ const AddChildrenSubscriptionPlanStep = ({
               />
               
               {/* Show discount information */}
-              <Box mt={2} sx={{ border: "1px solid #4CAF50", p: 2, borderRadius: 1, bgcolor: "#f8fff8" }}>
-                <Typography variant="body2" gutterBottom sx={{ color: "#4CAF50", fontWeight: 600 }}>
-                  <strong>Add Children Discount Applied!</strong>
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Original Cost:</strong> Rs. {baseCost.toLocaleString("en-IN")}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "#4CAF50" }}>
-                  <strong>Discount (5%):</strong> -Rs. {savings.toLocaleString("en-IN")}
-                </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  <strong>Final Cost:</strong> Rs. {discountedCost.toLocaleString("en-IN")}
-                </Typography>
-              </Box>
+              <div className="adchilddapbox">
+                <h5>Add Children Discount Applied!</h5>
+                <p><strong>Original Cost:</strong> Rs. {baseCost.toLocaleString("en-IN")}</p>
+                <p><strong>Discount (5%):</strong> -Rs. {savings.toLocaleString("en-IN")}</p>
+                <p><strong>Final Cost:</strong> Rs. {discountedCost.toLocaleString("en-IN")}</p>
+              </div>
             </>
           )}
 

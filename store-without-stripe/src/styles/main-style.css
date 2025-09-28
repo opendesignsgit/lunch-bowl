@@ -630,6 +630,22 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .DetlsSepBox input{color: #333333;padding: 0;padding-inline: 20px;line-height: 50px;height: 50px;border-color: #EAEAEC;font-family: "Open Sans", sans-serif;font-weight: 400;letter-spacing: 0px;font-family: "Open Sans", sans-serif;}
 .DetlsSepBox textarea{color: #333333;padding: 0;padding-inline: 0px;line-height: 1;max-height: 80px;border-color: #EAEAEC;font-family: "Open Sans", sans-serif;font-weight: 400;letter-spacing: 0px;font-family: "Open Sans", sans-serif;}
 .DetlsSepBox textarea:focus{outline: none;    box-shadow: none;}
+.DetlsSepBox .eachplansboxs {}
+.DetlsSepBox .eachplansradiosBoxs  {}
+.DetlsSepBox .eachplansradiosBoxs label {}
+.DetlsSepBox .eachplansradiosBoxs label .datepicOthers {}
+.DetlsSepBox .eachplansradiosBoxs label .datepicOthers p{margin: 0;}
+.DetlsSepBox .eachplansradiosBoxs .datepicints {}
+.DetlsSepBox .eachplansradiosBoxs .datepicints button{border: 1px solid #ff6514;color: #ff6514;background: #fff;padding: 4px 12px;line-height: 1;}
+.DetlsSepBox .eachplansradiosBoxs .planclendicons {background: #ebdfd1;}
+.DetlsSepBox .eachplansOthbox{}
+.DetlsSepBox .eachplansOthbox p{margin-block: 0 5px;}
+
+.DetlsSepBox .Subscrip{padding: 20px;border: 1px solid #ddd;border-radius: 5px;margin-bottom: 20px;}
+.DetlsSepBox .Subscrip h5{font-size: 16px;line-height: 1;font-family: Baloo;margin-bottom: 10px;color: #FF6514;}
+.DetlsSepBox .Subscrip p{font-size: 14px;line-height: 1.4;margin-bottom: 8px;margin-top: 0;}
+.DetlsSepBox .Subscrip ul li:last-child p{margin-bottom: 0px;}
+.DetlsSepBox .Subscrip p.lastpara{margin-bottom: 0px;}
 
 .DetlsSepBox input::-webkit-input-placeholder{color: #333333;}
 .DetlsSepBox input::-moz-placeholder{color: #333333;}
@@ -1005,6 +1021,112 @@ html body .ftscholpopup .ftscholpopupokbtn:hover{background: #000000;}
 html body .displaynone{display: none!important;}
 html body .MuiPopover-root{z-index: 99999;}
 
+.inputboxform{}
+.inputboxform .inputboxrow{margin-inline: -15px;}
+.inputboxform .inputbox{padding-inline: 15px;margin-bottom: 20px;}
+.inputboxform .agreebox{padding-inline: 15px;margin-bottom: 20px;}
+.inputboxform .whalf{width: 50%;}
+.inputboxform .wfull{width: 100%;}
+
+.samepagedesingss .SetpContainer {padding-block: 10vh;}
+.samepagedesingss .SetpContainer .SetpTabNav{border: none;box-shadow: none;border-radius: 0;}
+.samepagedesingss .SetpContainer .SetpTabRow{}
+.samepagedesingss .SetpContainer .SetpTabul{}
+.samepagedesingss .SetpContainer .SetpTablabel{}
+.samepagedesingss .SetpContainer .SetpTablabel span:nth-child(1){}
+.samepagedesingss .SetpContainer .SetpTablabel span:nth-child(1).Mui-active{}
+.samepagedesingss .SetpContainer .SetpTablabel span:nth-child(1).Mui-active svg{color:#FF6514;}
+
+.addchilsamepagedesingssdpage .exitchilddtbox{margin-bottom: 50px;}
+.samepagedesingss .exitchildcntbox{padding: 20px;border: 1px solid #ccc;box-shadow: none;border-radius: 5px;}
+.samepagedesingss .exitchildcntbox h6{font-size: 1vw;line-height: 1;font-family: Baloo;color: #FF6A00;margin-bottom: 5px;}
+.samepagedesingss .exitchildname{padding: 18px;margin-top: 10px;}
+.samepagedesingss .exitchildname h5{font-size: 1vw;line-height: 1;font-family: Baloo;margin-bottom: 5px;}
+.samepagedesingss .exitchildname p{font-size: 16px;margin: 0;}
+.samepagedesingss .ucanaddchild{padding: 10px 0px;}
+.samepagedesingss .ucanaddchild p{font-size: 1vw;line-height: 1;font-family: Baloo;text-transform: uppercase;margin: 0;}
+.samepagedesingss .extcursubionbox{padding: 18px;}
+.samepagedesingss .extcursubionbox h5{font-size: 1vw;line-height: 1;font-family: Baloo;margin-bottom: 5px;}
+.samepagedesingss .extcursubionbox p{font-size: 16px;margin: 0;}
+
+.samepagedesingss .formboxrow {margin-inline: -15px;}
+.samepagedesingss .formboxcol {padding-inline: 15px;margin-bottom: 15px;}
+.samepagedesingss .formboxcol.whalf {width: 50%;}
+.samepagedesingss .formboxcol.wfull {width: 1000%;}
+.samepagedesingss .formboxcol h6{font-family: Baloo;}
+.samepagedesingss .formboxcol textarea:focus{outline: none;box-shadow: none;}
+.samepagedesingss .formboxcol .MuiFormControl-root{width: 100%;}
+.samepagedesingss .formboxcol .MuiFormControl-root p.Mui-error{margin-inline: 0;background: #d32f2f;color: #ffffff;padding-inline: 10px;padding-block: 3px;text-transform: uppercase;line-height: 1;font-weight: 500;}
+
+.samepagedesingss .subbtnrow button{position: relative;padding: 0;border: none;width: 10vw;background: transparent;box-shadow: none;}
+.samepagedesingss .subbtnrow button.widthautobtn{width: auto;}
+.samepagedesingss .subbtnrow button.nextbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.samepagedesingss .subbtnrow button.nextbtn:hover::before{right: 0;bottom: 0;}
+.samepagedesingss .subbtnrow button.nextbtn span{line-height: 50px;padding-inline: 30px;background: #FF6514;color: #ffffff;border:1px solid #FF6514;font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;text-transform: capitalize;width: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.samepagedesingss .subbtnrow button.nextbtn span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;filter: invert(1);}
+.samepagedesingss .subbtnrow button.nextbtn:hover span::after{top: -3px;right: -3px;}
+.samepagedesingss .subbtnrow button.backbtn::before{content: '';position: absolute;width: 80%;height: 100%;right: -6px;bottom: -6px;border:2px solid #777778;border-width: 0 1px 1px 0;pointer-events: none;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;}
+.samepagedesingss .subbtnrow button.backbtn:hover::before{right: 0;bottom: 0;}
+.samepagedesingss .subbtnrow button.backbtn span{line-height: 50px;padding-inline: 30px;background: #ffffff;color: #000000;border:1px solid #000000; font-family: 'Baloo';font-size: 15px;font-weight: 400;letter-spacing: 0.5px;display: -webkit-box;display: -ms-flexbox;display: flex;text-transform: capitalize;width: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
+.samepagedesingss .subbtnrow button.backbtn span::after{content: '';position: relative;display: block;width: 16px;aspect-ratio: 1;background: url(/logtrial-icon.svg) no-repeat center center;background-size: 100%;margin-left: 15px;-webkit-transition: all 0.5s ease-in-out;-o-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;top:0;right: 0;}
+.samepagedesingss .subbtnrow button.backbtn span:hover span::after{top: -3px;right: -3px;}
+
+.samepagedesingss .subbtnrow button.nextbtn span:nth-child(2){visibility: hidden;}
+.samepagedesingss .subbtnrow button.backbtn span:nth-child(2){visibility: hidden;}
+
+.transhistrySec .transhistryBox{box-shadow: none;border-radius: 0;}
+.transhistryBox .transhistryCol {padding: 0!important;}
+.transhistryBox .transhistryCol h4{font-size: 1.4vw;line-height: 1;font-family: Baloo;margin-bottom: 10px;color: #FF6514;}
+.transhistryNO{}
+.transhistryNO h6{font-size: 1vw;line-height: 1;font-family: Baloo;margin-bottom: 10px;}
+.transhistryNO p{margin-bottom: 0px;}
+
+.transhistryTableBox{}
+.transhistryTableBox table{border: 1px solid #ccc;}
+.transhistryTableBox table thead{}
+.transhistryTableBox table thead tr{}
+.transhistryTableBox table thead tr th{font-family: Baloo;font-size: 16px;font-weight: 100;letter-spacing: 0;line-height: 1.2;}
+.transhistryTableBox table tbody{}
+.transhistryTableBox table tbody tr{}
+.transhistryTableBox table tbody tr td{line-height: 1.2;}
+
+.samepagedesingss .subplnBoxss .custmontplan {}
+.samepagedesingss .subplnBoxss .custmontplan label{}
+.samepagedesingss .subplnBoxss .custmontplan label p{font-weight: 600;}
+.samepagedesingss .subplnBoxss .custdatepick{background: #fff;}
+.samepagedesingss .subplnBoxss .custdatepick h6{margin-bottom: 12px;line-height: 1;}
+.samepagedesingss .subplnBoxss .custdatepick .MuiGrid-container{}
+.samepagedesingss .subplnBoxss .custdatepick .cusdpstart {}
+.samepagedesingss .subplnBoxss .custdatepick .cusdpstart p{margin-bottom: 5px;line-height: 1.2;}
+.samepagedesingss .subplnBoxss .custdatepick .cusdpstart span{display: block;}
+.samepagedesingss .subplnBoxss .custdatepick .cusdpend {}
+.samepagedesingss .subplnBoxss .custdatepick .cusdpend p{margin-bottom: 5px;line-height: 1.2;}
+.samepagedesingss .subplnBoxss .custdatepick .cusdpend span{display: block;}
+.samepagedesingss .subplnBoxss .Subscrip{padding: 20px;border: 1px solid #ddd;border-radius: 5px;margin-bottom: 20px;}
+.samepagedesingss .subplnBoxss .Subscrip h5{font-size: 16px;line-height: 1;font-family: Baloo;margin-bottom: 10px;color: #FF6514;}
+.samepagedesingss .subplnBoxss .Subscrip p{font-size: 14px;line-height: 1.4;margin-bottom: 8px;}
+.samepagedesingss .subplnBoxss .Subscrip p.lastpara{margin-bottom: 0px;}
+.samepagedesingss .subplnBoxss .adchilddapbox{padding: 20px;border: 1px solid #ddd;border-radius: 5px;background: #f1fbf0;}
+.samepagedesingss .subplnBoxss .adchilddapbox h5{font-size: 16px;line-height: 1;font-family: Baloo;margin-bottom: 10px;color: #4CAF50;}
+.samepagedesingss .subplnBoxss .adchilddapbox p{font-size: 14px;line-height: 1.4;margin-bottom: 8px;}
+.samepagedesingss .subplnBoxss .adchilddapbox p:last-child{margin-bottom: 0px;}
+
+.samepagedesingss .subplnBoxss .comlitsec{padding: 20px;border: 1px solid #ddd;border-radius: 5px;}
+.samepagedesingss .subplnBoxss .comlitsec h3{font-size: 22px;line-height: 1;font-family: Baloo;margin-bottom: 10px;color: #FF6514;}
+.samepagedesingss .subplnBoxss .comlitsec h6{font-size: 18px;line-height: 1;font-family: Baloo;margin-bottom: 10px;}
+.samepagedesingss .subplnBoxss .comlitsec p{font-size: 14px;line-height: 1.4;margin-bottom: 0px;}
+
+.samepagedesingss .eachplansboxs {}
+.samepagedesingss .eachplansboxs .eachplansradios {}
+.samepagedesingss .eachplansboxs .eachplansradios label{}
+.samepagedesingss .eachplansboxs .eachplansradios label .MuiFormControlLabel-label{}
+.samepagedesingss .eachplansboxs .eachplansradios label .MuiFormControlLabel-label p{margin: 0;}
+.samepagedesingss .eachplansboxs .eachpladetls p{margin-bottom: 3px;}
+
+.mainwhatsapbox{position: fixed;width: 60px;bottom: 50px;right:50px;z-index: 9999;}
+.mainwhatsapbox a {}
+.mainwhatsapbox a img{}
+
 @media (min-width: 1100px) {
   html body .container {max-width: 980px;  }
 }
@@ -1190,7 +1312,10 @@ html body .MuiPopover-root{z-index: 99999;}
   .setpbanersec  .comtilte h1{justify-content: center;}
   .HintroSec  .comtilte p br {display: none;}
   .hbanRight .videoscreenbox {height: 495px;}
+  .samepagedesingss .exitchildcntbox h6 {font-size: 20px;}
+  .samepagedesingss .SetpContainer{padding-block: 60px;padding-inline: 20px;}
 }
+
 
 @media screen and (max-width:1023px){
 .contusmid{display: block;}
@@ -1259,6 +1384,9 @@ html body .MuiPopover-root{z-index: 99999;}
   .inputbox select, .inputbox input {font-size: 13px;line-height: 36px;}
   .formbox .inputbox textarea {font-size: 13px;}
   .ppriceinrow {padding-inline: 0px;}
+  .transhistrySec {padding: 40px 20px;}
+  .transhistryBox .transhistryCol h4 {font-size: 30px;}
+  .transhistryTableBox table thead tr th{font-size: 14px;white-space: nowrap;}
 }
 @media screen and (max-width:880px){
   .progroupitem {width: calc(50% - 20px);}
@@ -1364,8 +1492,28 @@ html body .MuiPopover-root{z-index: 99999;}
   .myaccboxitems .ChildlistBoxs .ChildlistItems table{min-width: 100%;}
   .hbanRight .videoscreenbox {height: 450px;}
   .hbanRight video {    aspect-ratio: 1 / 1.4;}
+  .transhistryBox .transhistryCol h4 {font-size: 20px;}
+  .samepagedesingss .SetpContainer {padding-block: 50px;}
+  .samepagedesingss .exitchildcntbox h6 {font-size: 18px;}
+  .samepagedesingss .exitchildname h5 {font-size: 16px;}
+  .samepagedesingss .ucanaddchild p {font-size: 16px;}
+  .samepagedesingss .extcursubionbox h5 {font-size: 16px;}
+  .samepagedesingss .exitchildname {padding: 10px;}
+  .samepagedesingss .extcursubionbox {padding: 10px;}
+  .samepagedesingss .SetpContainer .subplnBoxss{padding: 20px 0;}
+  .samepagedesingss .exitchilddtbox  {box-shadow: none;}
+  .samepagedesingss .exitchildcntbox {padding: 15px;}
+  .samepagedesingss .formboxcol .MuiFormControl-root {width: 100%;}
+  .samepagedesingss .subbtnrow button{width: 30%;}
+  .samepagedesingss .SetpContainer .SetpTabRow {padding-inline: 0;}
+  .samepagedesingss .exitchildname h5,.samepagedesingss .extcursubionbox h5{margin-bottom: 8px;}
+  .samepagedesingss .exitchildname p,.samepagedesingss .extcursubionbox p{margin-bottom: 4px;}
+  .samepagedesingss .eachplansboxs .eachplansradios label .MuiFormControlLabel-label p {font-size: 14px;}
+  .DetlsSepBox .eachplansradiosBoxs{flex-wrap: wrap;}
+  .DetlsSepBox .eachplansradiosBoxs label{width: 100%;flex: 1 0 100%;}
+  .DetlsSepBox .eachplansradiosBoxs .datepicints{    margin: 10px 0 0;}
+  .DetlsSepBox .eachplansradiosBoxs .planclendicons {    background: #ebdfd1;    margin-left: auto;    margin-top: 10px;}
 }
-
 @media screen and (min-width:651px){
   .produtMobView{display: none;}
 }
@@ -1383,7 +1531,14 @@ html body .MuiPopover-root{z-index: 99999;}
   .hbanCont h1 {font-size: 26px;}
 }
 
-@media screen and (max-width:650px){
+@media screen and (max-width:650px){  
+  .samepagedesingss .ucanaddchild {padding: 20px 0;}
+  .samepagedesingss .SetpTabul .SetpTabli{overflow: visible;}
+  .SetpTabul .SetpTabli .MuiStepConnector-root{}
+  .paymntbtnss {flex-wrap: wrap;}
+  .samepagedesingss .subbtnrow button{width: 44%;}
+  .samepagedesingss .exitchildcntbox {padding: 12px;}
+  .samepagedesingss .formboxcol.whalf {width: 100%;}
   .logsinul>li.mobhidpplink{display: none;}
   body .SetpContainer {padding-block: 55px;}
   .homepage .produtDeskView{display: none!important;}
@@ -1661,6 +1816,9 @@ html body .MuiPopover-root{z-index: 99999;}
   .fixdatesboxwarrow .datearrow  button.arrowprew{left:0}
   .fixdatesboxwarrow .datearrow  button.arrownext{right: 0;}
   html body .holidaypaysec {z-index: 99999;}
+  .samepagedesingss .eachplansboxs .eachplansradios label{width: 100%;margin: 0;}
+  .samepagedesingss .eachplansboxs .eachplansradios label>span{padding: 4px;}
+  .DetlsSepBox .eachplansradiosBoxs label>span{padding: 4px;}
 }
 @media screen and (min-width:501px) and (max-width:650px){ 
    .produtMobView {width: 80%;margin-inline: auto;}
@@ -1743,6 +1901,7 @@ html body .MuiPopover-root{z-index: 99999;}
   .fixdatesboxs h2 {font-size: 52px;}
   .fixdatesboxs h4 {font-size: 16px;}
   .fixdatesboxs h5 {font-size: 15px;}
+  .samepagedesingss .eachplansboxs .eachplansradios {padding: 10px;}
 }
 
 @media screen and (max-width:400px){

@@ -279,11 +279,11 @@ const NewSubscriptionPlanStep = ({
           <RadioGroup
             value={selectedPlan}
             onChange={handlePlanChange}
-            className="radiogroub"
+            className="radiogroub eachplansboxs"
           >
             {/* Render Standard Plans */}
             {plans.map((plan) => (
-              <Paper
+              <Paper className="eachplansradios"
                 key={plan.id}
                 elevation={selectedPlan === plan.id.toString() ? 8 : 2}
                 sx={{
@@ -306,7 +306,7 @@ const NewSubscriptionPlanStep = ({
                   flexDirection: "column",
                 }}
               >
-                <Box display="flex" alignItems="center" width="100%">
+                <Box display="flex" alignItems="center" width="100%" className="eachplansradiosBoxs">
                   <FormControlLabel
                     value={plan.id.toString()}
                     control={
@@ -320,11 +320,11 @@ const NewSubscriptionPlanStep = ({
                       />
                     }
                     label={
-                      <Box>
+                      <Box className="datepicOthers">
                         <Typography sx={{ fontWeight: 600, color: "#232323" }} variant="body1">
                           {plan.label}
                         </Typography>
-                        <Box display="flex" flexWrap="wrap" alignItems="center" gap={2}>
+                        <Box display="flex" flexWrap="wrap" alignItems="center" gap={1} >
                           <Typography fontSize={13} color="#888">
                             ({plan.workingDays} working days)
                           </Typography>
@@ -350,7 +350,7 @@ const NewSubscriptionPlanStep = ({
 
                   {/* Start Date Picker for selected standard plan */}
                   {selectedPlan === plan.id.toString() && (
-                    <Box sx={{ minWidth: 180, ml: 3 }}>
+                    <Box sx={{ minWidth: 180, ml: 3 }}  className="datepicints">
                       <SubscriptionDatePicker
                         type="start"
                         value={customStartDates[plan.id] || plan.startDate}
@@ -365,7 +365,7 @@ const NewSubscriptionPlanStep = ({
                   )}
 
                   {selectedPlan === plan.id.toString() && (
-                    <IconButton
+                    <IconButton className="planclendicons"
                       onClick={() => {
                         setHideMessage(false);
                         setCalendarOpen(true);
@@ -379,7 +379,7 @@ const NewSubscriptionPlanStep = ({
 
                 {/* Subscription Details */}
                 {selectedPlan === plan.id.toString() && (
-                  <Box mt={2} sx={{ width: "100%" }}>
+                  <Box mt={1} sx={{ width: "100%" }} className="eachplansOthbox">
                     <Typography fontSize={13} color="#232323">
                       <strong>Start Date:</strong>{" "}
                       {startDate && startDate.format("DD MMM YYYY")}
