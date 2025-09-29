@@ -607,7 +607,7 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .SetpTabli.css-njfnnb p:before{opacity: 1;}
 .SetpTabli.css-njfnnb p:after{opacity: 1;}
 
-.steptitles .adchildnav {margin: 0;margin-top: 30px; -webkit-box-align: end;-ms-flex-align: end;align-items: end;}
+.steptitles .adchildnav {margin: 0;margin-top: 30px; -webkit-box-align: center;-ms-flex-align: center;align-items: center;}
 .adchildnav .adchildul {min-height: auto;}
 .adchildnav .adchildul>.MuiTabs-scroller>.MuiTabs-indicator{background: #ff6a00;}
 .adchildnav .adchildul .MuiTabs-scroller{height: auto;}
@@ -617,9 +617,9 @@ transform: translateY(100%);z-index: 9;animation: slide 50s linear infinite;-web
 .adchildnav .adchildul button.Mui-selected{color: #FF6514;}
 .adchildnav .adchildul button.Mui-selected svg{fill: #FF6514;}
 .adchildnav .adchildul button p{font-family: 'Baloo';}
-.adchildnav button.addanochildbtn {margin-left: auto;padding: 0;border: none;text-transform: capitalize;background: transparent;color: #000000;position: relative;}
+.adchildnav button.addanochildbtn {margin-left: auto;border: 2px solid #ff6514;text-transform: capitalize;color: #ffffff;position: relative;background: #ff6514;line-height: 1;padding: 8px 20px 6px;}
 .adchildnav button.addanochildbtn:before{content:'+';position: relative;display: block;margin-right: 5px;}
-.adchildnav button.addanochildbtn:hover{color: #FF6514;}
+.adchildnav button.addanochildbtn:hover{color: #FF6514;background: #ffffff;}
 
 .steptitles{margin-bottom: 25px;padding-bottom: 0px;border-bottom: 1px solid #EAEAEC;}
 .DetlsSepBox h3{font-family: 'Baloo';font-size: 2.5vw;font-weight: 100;line-height: 1;color: #FF6514;margin-bottom: 5px;}
